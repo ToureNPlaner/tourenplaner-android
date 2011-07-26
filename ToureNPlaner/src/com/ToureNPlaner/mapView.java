@@ -4,13 +4,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.mapsforge.android.maps.ArrayWayOverlay;
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
+import org.mapsforge.android.maps.MapViewMode;
 import org.mapsforge.android.maps.Overlay;
 import org.mapsforge.android.maps.OverlayItem;
+import org.mapsforge.android.maps.OverlayWay;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -43,7 +49,9 @@ public class mapView extends MapActivity {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.setMapFile("/sdcard/berlin.map");
+		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
+		mapView.setFpsCounter(true);
+		//mapView.setMapFile("/sdcard/berlin.map");
 		setContentView(mapView);
 		// ----- initialize components of overlays 
 		mapOverlays = mapView.getOverlays();
@@ -86,6 +94,47 @@ public class mapView extends MapActivity {
 
 		
 		mapOverlays.add(mapGestureOverlay);
+		
+		// create some points to be used in the different overlays
+		GeoPoint geoPoint1 = new GeoPoint(52.514446, 13.350150); // Berlin Victory Column
+		GeoPoint geoPoint2 = new GeoPoint(52.516272, 13.377722); // Brandenburg Gate
+		GeoPoint geoPoint3 = new GeoPoint(52.525, 13.369444); // Berlin Central Station
+		GeoPoint geoPoint4 = new GeoPoint(52.52, 13.369444); // German Chancellery
+		// create the default paint objects for overlay ways
+		Paint wayDefaultPaintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
+		wayDefaultPaintFill.setStyle(Paint.Style.STROKE);
+		wayDefaultPaintFill.setColor(Color.BLUE);
+		wayDefaultPaintFill.setAlpha(160);
+		wayDefaultPaintFill.setStrokeWidth(7);
+		wayDefaultPaintFill.setStrokeJoin(Paint.Join.ROUND);
+		wayDefaultPaintFill.setPathEffect(new DashPathEffect(new float[] { 20, 20 }, 0));
+
+		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
+		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
+		wayDefaultPaintOutline.setColor(Color.BLUE);
+		wayDefaultPaintOutline.setAlpha(128);
+		wayDefaultPaintOutline.setStrokeWidth(7);
+		wayDefaultPaintOutline.setStrokeJoin(Paint.Join.ROUND);
+
+		// create an individual paint object for an overlay way
+		Paint wayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		wayPaint.setStyle(Paint.Style.FILL);
+		wayPaint.setColor(Color.YELLOW);
+		wayPaint.setAlpha(192);
+
+		// create the WayOverlay and add the ways
+		ArrayWayOverlay wayOverlay = new ArrayWayOverlay(wayDefaultPaintFill,
+				wayDefaultPaintOutline);
+		OverlayWay way1 = new OverlayWay(new GeoPoint[][] { { geoPoint1, geoPoint2, geoPoint3, geoPoint4 } });
+		//OverlayWay way2 = new OverlayWay(new GeoPoint[][] { { geoPoint1, geoPoint3, geoPoint4,
+		//		geoPoint1 } }, wayPaint, null);
+		wayOverlay.addWay(way1);
+		//wayOverlay.addWay(way2);
+		
+		mapView.getOverlays().add(wayOverlay);
+		
+		mapView.getController().setCenter(geoPoint1);
+
 		
 	}
 	/**
