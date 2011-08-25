@@ -34,7 +34,7 @@ public class loginScreen extends Activity {
 		final SharedPreferences.Editor prefEditor = applicationPreferences.edit();
 
 	
-		setContentView(R.layout.main);
+		setContentView(R.layout.login);
 
 		// ---the button is wired to an event handler---
 		Button btn1 = (Button) findViewById(R.id.btnlogin);

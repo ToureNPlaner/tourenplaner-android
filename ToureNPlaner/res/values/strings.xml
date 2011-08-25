@@ -10,4 +10,6 @@
     <string name="billingr">billing</string>
     <string name="login">login</string>
     <string name="ToureNPlaner">ToureNPlaner</string>
+    <string name="server1">Server1</string>
+    <string name="server2">Server2</string>
 </resources>

@@ -61,8 +61,6 @@ public class algorithmScreen extends Activity {
 								Toast.LENGTH_SHORT).show();
 					}
 				
-				}catch(IOException e){
-
 				}catch(Exception e) {
 					Toast.makeText(
 							getBaseContext(),
