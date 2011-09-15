@@ -10,7 +10,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
 
@@ -36,7 +35,7 @@ public class AlgorithmScreen extends Activity {
 	spinnerArray[2]="CSP";
 	
 	// loads the spinnerArray into the spinnerdropdown
-	Spinner spinner = (Spinner) findViewById(R.id.Spinner01);
+	Spinner spinner = (Spinner) findViewById(R.id.algorithm_spinner);
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ArrayAdapter adapter = new ArrayAdapter(this,
 	android.R.layout.simple_spinner_dropdown_item, spinnerArray);

@@ -1,8 +1,14 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import org.mapsforge.android.maps.ArrayWayOverlay;
+import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.MapViewMode;
+import org.mapsforge.android.maps.Overlay;
+import org.mapsforge.android.maps.OverlayItem;
+import org.mapsforge.android.maps.OverlayWay;
+
 
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import android.os.Bundle;
