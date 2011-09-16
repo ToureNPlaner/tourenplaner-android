@@ -1,20 +1,20 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
+package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.Generic;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
-import android.app.Activity;
+import android.app.LauncherActivity.ListItem;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
-public class NodeScreen extends Activity {
-	private ListView ListviewNodeProperties;
+public class genericList extends ListActivity{
 	
-	private Object listviewPropertiesArray[];
+private ListView ListviewNodeProperties;
+private Object listviewPropertiesArray[];
+private ListItem listViewItems;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -24,7 +24,7 @@ public class NodeScreen extends Activity {
 	//TODO should be dynamic
 	listviewPropertiesArray=new String[3];
 	listviewPropertiesArray[0]="name";
-		listviewPropertiesArray[1]="latitude";
+	listviewPropertiesArray[1]="latitude";
 	listviewPropertiesArray[2]="longitude";
 //	listviewPropertiesArray = new String[3];
 //	listviewPropertiesArray[0] = NodeModel.getNodeVector().get(0).getName();
@@ -48,6 +48,5 @@ public class NodeScreen extends Activity {
 						
 		}
 	});
-	}
 
-}
+}}

@@ -35,7 +35,7 @@ public class AlgorithmScreen extends Activity {
 	spinnerArray[2]="CSP";
 	
 	// loads the spinnerArray into the spinnerdropdown
-	Spinner spinner = (Spinner) findViewById(R.id.algorithm_spinner);
+	Spinner spinner = (Spinner) findViewById(R.id.algorithmSpinner);
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ArrayAdapter adapter = new ArrayAdapter(this,
 	android.R.layout.simple_spinner_dropdown_item, spinnerArray);
@@ -60,8 +60,9 @@ public class AlgorithmScreen extends Activity {
 		
 	});
 	
-	Button btnconfirm = (Button) findViewById(R.id.btnconfirm);
-	btnconfirm.setOnClickListener(new OnClickListener() {
+	//--------------------ButtonConfirm-----------------------
+	Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
+	btnConfirm.setOnClickListener(new OnClickListener() {
 
 		@Override
 		public void onClick(View view) {
@@ -74,6 +75,21 @@ public class AlgorithmScreen extends Activity {
 		
 	});
 	
+	
+	//--------------------ButtonBilling-----------------------
+	Button btnBilling = (Button) findViewById(R.id.btnBilling);
+	btnBilling.setOnClickListener(new OnClickListener() {
+
+		@Override
+		public void onClick(View view) {
+			// generates an intent from the class BillingScreen
+			Intent myIntent = new Intent(view.getContext(),
+					BillingScreen.class);
+			startActivity(myIntent);
+			
+		}
+		
+	});
 	
 	}
 	

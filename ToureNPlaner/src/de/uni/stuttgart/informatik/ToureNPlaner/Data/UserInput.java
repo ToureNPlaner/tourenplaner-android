@@ -1,11 +1,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import android.content.Context;
+import android.app.Application;
+
 //  this class stores all data from the userinput
-public class UserInput extends android.app.Application{
-	
-	    
-	private  static String email ;
+public class UserInput extends Application{
+	private static Integer selectedNode = 0 ;	    
+	private static String email ;
 	private static  String password = "standart";
 	private static String choosenAlgorithm ;
 	
@@ -33,6 +33,11 @@ public class UserInput extends android.app.Application{
 		UserInput.choosenAlgorithm = choosenAlgorithm;
 	}
 
-	
-	
+	public static void setSelectedNode(Integer selectedNode) {
+		UserInput.selectedNode = selectedNode;
+	}
+
+	public static Integer getSelectedNode() {
+		return selectedNode;
+	}
 }
