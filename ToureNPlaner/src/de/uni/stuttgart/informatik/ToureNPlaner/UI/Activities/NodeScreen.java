@@ -1,8 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class NodeScreen extends Activity {
 	private ListView ListviewNodeProperties;
-	
-	private Object listviewPropertiesArray[];
+	private String listviewPropertiesArray[];
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -24,15 +21,15 @@ public class NodeScreen extends Activity {
 	//TODO should be dynamic
 	listviewPropertiesArray=new String[3];
 	listviewPropertiesArray[0]="name";
-		listviewPropertiesArray[1]="latitude";
+	listviewPropertiesArray[1]="latitude";
 	listviewPropertiesArray[2]="longitude";
+	
 //	listviewPropertiesArray = new String[3];
 //	listviewPropertiesArray[0] = NodeModel.getNodeVector().get(0).getName();
 //	listviewPropertiesArray[1] = NodeModel.getNodeVector().get(0).getLatitude();
 //	listviewPropertiesArray[2] = NodeModel.getNodeVector().get(0).getLongitude();
 	//listviewPropertiesArray[3] = NodeModel.getNodeVector().get(UserInput.getSelectedNode()).getName();
-	
-	ListviewNodeProperties=(ListView)findViewById(R.id.listNode);
+		ListviewNodeProperties=(ListView)findViewById(R.id.listNode);
 	// By using setAdpater method in listview we an add string array in list.
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1 , listviewPropertiesArray);

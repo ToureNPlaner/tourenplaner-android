@@ -33,7 +33,7 @@ public class ServerScreen extends Activity {
 		spinnerArray=new String[2];
 		spinnerArray[0]="Free-Server";
 		spinnerArray[1]="Pay-Server";
-	;
+	
 		
 		// loads the spinnerArray into the spinnerdropdown
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_server);

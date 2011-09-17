@@ -2,6 +2,8 @@ package com.ToureNPlaner;
 
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 
 import org.mapsforge.android.maps.ArrayWayOverlay;
@@ -28,7 +30,7 @@ import com.Overlayers.LineOverlay;
 import com.Overlayers.MapGestureDetectorOverlay;
 import com.Overlayers.MapItemOverlay;
 
-public class mapView extends MapActivity {
+public class mapView extends MapActivity implements Observer{
 	/** Called when the activity is first created. */
 	
 	
@@ -44,6 +46,10 @@ public class mapView extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		
+		
+		//adding an observer
+	
 		// setting properties of the mapview
 		mapView = new MapView(this);
 		mapView.setClickable(true);
@@ -162,6 +168,11 @@ public class mapView extends MapActivity {
 		OverlayItem overlayitem = new OverlayItem(gp, title, message);
 		itemizedoverlay.addOverlay(overlayitem);
 		mapOverlays.add(itemizedoverlay);
+	}
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
