@@ -47,7 +47,7 @@ public class Node {
 	}
 
 	public Double getLatitude() {
-		return latitude;
+		return this.latitude;
 	}
 
 	public void setLatitude(Double latitude) {
@@ -55,7 +55,7 @@ public class Node {
 	}
 
 	public Double getLongitude() {
-		return longitude;
+		return this.longitude;
 	}
 
 	public void setLongitude(Double longitude) {

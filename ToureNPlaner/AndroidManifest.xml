@@ -12,7 +12,7 @@
         <activity android:name=".UI.Activities.BillingScreen"></activity>
          <activity android:name=".UI.Activities.NodelistScreen"></activity>
           <activity android:name=".UI.Activities.NodeScreen"></activity>
-        
+              <activity android:name=".UI.Activities.NodePreferences"></activity>
         
         
         <activity android:name=".UI.Activities.ServerScreen">

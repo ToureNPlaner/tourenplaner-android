@@ -29,5 +29,7 @@
             android:singleLine="true"
             android:ellipsize="marquee"
         />
-    </LinearLayout>
+       </LinearLayout>
+
 </LinearLayout>
+ 

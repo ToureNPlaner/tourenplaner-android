@@ -6,8 +6,10 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +25,7 @@ public class NodeListAdapter extends BaseAdapter{
 	}
 	
 	 @Override
-     public View getView(int position, View convertView, ViewGroup parent) {
+     public View getView(final int position, View convertView, ViewGroup parent) {
 		  LinearLayout itemLayout;
 	        Node node = nodeVector.get(position);
 	 
@@ -34,6 +36,17 @@ public class NodeListAdapter extends BaseAdapter{
 	 
 	        TextView tvText = (TextView) itemLayout.findViewById(R.id.bottomtext);
 	        tvText.setText(node.getGeoPoint().toString());
+	        
+//	        Button btnNodeDelete = (Button) itemLayout.findViewById(R.id.btnDelete);
+//	        btnNodeDelete.setOnClickListener(new OnClickListener(){
+//
+//				@Override
+//				public void onClick(View arg0) {
+//					NodeModel.getInstance().removeNodeFromVector(position);
+//					
+//				}
+//	        	
+//	        });
 	        
 	        ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.icon);
 	        Drawable icon = context.getResources().getDrawable(R.drawable.icon);;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/popup_element"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" 
+  android:weightSum="1"
+  android:background="#444444"
+  android:padding="10px"
+  >
+    <TableLayout android:id="@+id/tableLayout1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:baselineAligned="false" android:layout_weight="1" android:layout_height="wrap_content" >
+            <TextView android:text="Name" android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+            <EditText android:id="@+id/etName" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+            <Button android:text="edit" android:id="@+id/btnName" android:layout_gravity="clip_horizontal" android:layout_height="wrap_content" android:layout_width="wrap_content"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow5" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <TextView android:text="Latitude" android:id="@+id/tvLatitude" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+            <EditText android:id="@+id/etLatitude" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+            <Button android:text="edit" android:id="@+id/btnLatitude" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <TextView android:text="Longitude" android:id="@+id/tvLongitude" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+            <EditText android:id="@+id/etLongitude" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+            <Button android:text="edit" android:id="@+id/btnLongitude" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow3" android:baselineAligned="false" android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1">
+            <Spinner android:id="@+id/spinnerConstraints" android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>
+            <EditText android:id="@+id/etConstraints" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+            <Button android:text="edit" android:id="@+id/btnConstraints" android:layout_height="wrap_content" android:layout_width="wrap_content"></Button>
+           
+        </TableRow>
+        <TableRow android:layout_width="wrap_content" android:id="@+id/tableRow4" android:layout_height="0dp" android:layout_weight="1">
+          
+        </TableRow>
+    </TableLayout>
+    
+    <Button android:text="delete" android:id="@+id/btnDelete" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+    <Button android:layout_height="wrap_content" android:text="back" android:id="@+id/btnReturn" android:layout_width="fill_parent"></Button>
+</LinearLayout>

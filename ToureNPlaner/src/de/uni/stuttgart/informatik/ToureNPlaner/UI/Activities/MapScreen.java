@@ -43,7 +43,6 @@ public class MapScreen extends MapActivity {
 	private static Drawable iconNormal;
 	private static Drawable iconEnd;
 	private static Vector<OverlayItem> overlayItemVector = new Vector<OverlayItem>();
-
 	private static ArrayWayOverlay wayOverlay;
 
 	@Override
