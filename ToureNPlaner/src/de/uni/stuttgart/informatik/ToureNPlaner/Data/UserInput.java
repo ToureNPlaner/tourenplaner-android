@@ -8,7 +8,17 @@ public class UserInput extends Application{
 	private static String email ;
 	private static  String password = "standart";
 	private static String choosenAlgorithm ;
+	private static Boolean AlgorithmHasStarAndEndMarker = true;
 	
+	public static Boolean getAlgorithmHasStarAndEndMarker() {
+		return AlgorithmHasStarAndEndMarker;
+	}
+
+	public static void setAlgorithmHasStarAndEndMarker(
+			Boolean algorithmHasStarAndEndMarker) {
+		AlgorithmHasStarAndEndMarker = algorithmHasStarAndEndMarker;
+	}
+
 	public static String getEmail() {
 		return email;
 	}

@@ -8,43 +8,8 @@ public class Node {
 	private String name;
 	private Double latitude;
 	private Double longitude;
-	private List<Constraint> constraintList;
-	private Boolean isStartMarker = false;
-	private Boolean isEndMarker = false;
-	private Boolean hasStartEndMarker = true;
 	private GeoPoint geoPoint;
-
-	public GeoPoint getGeoPoint() {
-		return new GeoPoint(latitude,longitude);
-	}
-
-	public void setGeoPoint(GeoPoint geoPoint) {
-		this.geoPoint = geoPoint;
-	}
-
-	public Boolean getIsStartMarker() {
-		return isStartMarker;
-	}
-
-	public void setIsStartMarker(Boolean isStartMarker) {
-		this.isStartMarker = isStartMarker;
-	}
-
-	public Boolean getIsEndMarker() {
-		return isEndMarker;
-	}
-
-	public void setIsEndMarker(Boolean isEndMarker) {
-		this.isEndMarker = isEndMarker;
-	}
-
-	public Boolean getHasStartEndMarker() {
-		return hasStartEndMarker;
-	}
-
-	public void setHasStartEndMarker(Boolean hasStartEndMarker) {
-		this.hasStartEndMarker = hasStartEndMarker;
-	}
+	private List<Constraint> constraintList;
 
 	public Node(String name, Double latitude, Double longitude,
 			List<Constraint> constraintList) {
@@ -54,10 +19,23 @@ public class Node {
 		this.constraintList = constraintList;
 	}
 
+	public GeoPoint getGeoPoint() {
+		return this.geoPoint;
+	}
+
 	public Node(String name, Double latitude, Double longitude) {
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
+	}
+
+	public Node(String name, GeoPoint gp) {
+		this.name = name;
+		this.geoPoint = gp;
+	}
+
+	public void setGeoPoint(GeoPoint geoPoint) {
+		this.geoPoint = geoPoint;
 	}
 
 	public String getName() {

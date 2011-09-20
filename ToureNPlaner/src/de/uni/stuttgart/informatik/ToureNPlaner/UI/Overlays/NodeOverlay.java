@@ -39,30 +39,30 @@ public class NodeOverlay extends ItemizedOverlay{
 	 */
 	@Override
 	protected boolean onTap(int index) {
-	  OverlayItem item = NodeArray.get(index);
-	  AlertDialog.Builder alert = new AlertDialog.Builder(context);
-
-	  alert.setTitle(item.getTitle());
-	  alert.setMessage("Message");
-
-	  // Set an EditText view to get user input 
-	  final EditText input = new EditText(context);
-	  alert.setView(input);
-
-	  alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	  public void onClick(DialogInterface dialog, int whichButton) {
-	    Editable value = input.getText();
-	    // Do something with value!
-	    }
-	  });
-
-	  alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	    public void onClick(DialogInterface dialog, int whichButton) {
-	      // Canceled.
-	    }
-	  });
-
-	  alert.show();
+//	  OverlayItem item = NodeArray.get(index);
+//	  AlertDialog.Builder alert = new AlertDialog.Builder(context);
+//
+//	  alert.setTitle(item.getTitle());
+//	  alert.setMessage("Message");
+//
+//	  // Set an EditText view to get user input 
+//	  final EditText input = new EditText(context);
+//	  alert.setView(input);
+//
+//	  alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//	  public void onClick(DialogInterface dialog, int whichButton) {
+//	    Editable value = input.getText();
+//	    // Do something with value!
+//	    }
+//	  });
+//
+//	  alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//	    public void onClick(DialogInterface dialog, int whichButton) {
+//	      // Canceled.
+//	    }
+//	  });
+//
+//	  alert.show();
 	  //TODO item porperty 
 	  return true;
 	}
