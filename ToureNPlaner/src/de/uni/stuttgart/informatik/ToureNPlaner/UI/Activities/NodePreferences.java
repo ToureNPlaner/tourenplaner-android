@@ -24,35 +24,45 @@ public class NodePreferences extends Activity {
 					.get(UserInput.getSelectedNode());
 			// -------------- get EditTexts --------------
 			final EditText etName = (EditText) findViewById(R.id.etName);
-			final EditText etLongitude = (EditText) findViewById(R.id.etLongitude);
-
+//			final EditText etLongitude = (EditText) findViewById(R.id.etLongitude);
+//			final EditText etLatitude = (EditText) findViewById(R.id.etLatitude);
 			// -------------- get Buttons --------------
-			Button btnLongitudeEdit = (Button) findViewById(R.id.btnLongitude);
-			Button btnNameEdit = (Button) findViewById(R.id.btnName);
+			Button btnDelete = (Button) findViewById(R.id.btnDelete);
+			Button btnSave = (Button) findViewById(R.id.btnSave);
 			Button btnReturn = (Button) findViewById(R.id.btnReturn);
 
 			etName.setText(node.getName());
-			etLongitude.setText(String.valueOf(node.getLongitude()));
+//			etLongitude.setText(String.valueOf(node.getLongitude()));
+//			etLatitude.setText(String.valueOf(node.getLatitude()));
+			btnSave.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
 
-			btnLongitudeEdit.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					NodeModel
-							.getInstance()
-							.get(UserInput.getSelectedNode())
-							.setLongitude(
-									Double.valueOf(etLongitude.getText()
-											.toString()));
-				}
-			});
-			btnNameEdit.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
+					// -------------set Name------------------
 					NodeModel.getInstance().get(UserInput.getSelectedNode())
 							.setName(etName.getText().toString());
+
+//					// ------------set Longitude--------------
+//					NodeModel
+//							.getInstance()
+//							.get(UserInput.getSelectedNode())
+//							.setLongitude(
+//									Double.valueOf(etLongitude.getText()
+//											.toString()));
+//					// ------------set Latitude--------------
+//					NodeModel
+//							.getInstance()
+//							.get(UserInput.getSelectedNode())
+//							.setLatitude(
+//									Double.valueOf(etLatitude.getText()
+//											.toString()));
+				
+					finish();
 				}
 			});
 
 			btnReturn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
+					
 					finish();
 
 				}

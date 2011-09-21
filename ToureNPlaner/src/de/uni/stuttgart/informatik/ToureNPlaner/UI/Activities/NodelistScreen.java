@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -23,14 +24,25 @@ public class NodelistScreen extends ListActivity {
 	public NodelistScreen nodeListScreenContext = this;
 	private View NodePreferencesLayout;
 	private ListView listView;
-
-	@Override
+	private NodeListAdapter adapter;
+		public NodeListAdapter getAdapter() {
+		return adapter;
+	}
+	public void setAdapter(NodeListAdapter adapter) {
+		this.adapter = adapter;
+	}
+	
+	
+		@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		Vector<Node> nodeList = NodeModel.getInstance().getNodeVector();
-		ListAdapter adapter = new NodeListAdapter(nodeList, this);
+		adapter = new NodeListAdapter(nodeList, this);
+		
 		listView = getListView();
 		listView.setAdapter(adapter);
+		
 		// the context of this activity
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		// Inflate the view from a predefined XML layout
@@ -46,9 +58,14 @@ public class NodelistScreen extends ListActivity {
 				Intent myIntent = new Intent(nodeListScreenContext,
 						NodePreferences.class);
 				startActivity(myIntent);
+				getAdapter().notifyDataSetChanged();
+				
+				
 			}
 
 		});
 	}
+
+
 
 };
