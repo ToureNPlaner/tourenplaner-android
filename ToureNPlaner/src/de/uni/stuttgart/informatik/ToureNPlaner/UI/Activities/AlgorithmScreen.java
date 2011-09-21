@@ -13,85 +13,78 @@ import android.widget.Spinner;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
 
-
-
 public class AlgorithmScreen extends Activity {
 
 	// generates all variables which are set in this activity
 	private String spinnerArray[];
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.algorithmscreen);
-	
-	//TODO get amount of available algorithms  
-	
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.algorithmscreen);
 
-	// TODO should be dynamic
-	//  fills the SpinnerArray
-	spinnerArray=new String[3];
-	spinnerArray[0]="SP";
-	spinnerArray[1]="TSP";
-	spinnerArray[2]="CSP";
-	
-	// loads the spinnerArray into the spinnerdropdown
-	Spinner spinner = (Spinner) findViewById(R.id.algorithmSpinner);
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ArrayAdapter adapter = new ArrayAdapter(this,
-	android.R.layout.simple_spinner_dropdown_item, spinnerArray);
-	spinner.setAdapter(adapter);
-	
-	spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		// TODO get amount of available algorithms
 
-		
-		@Override
-		public void onItemSelected(AdapterView<?> adapter, View view, int pos,
-				long id) {
-			
-			UserInput.setChoosenAlgorithm(adapter.getItemAtPosition(pos).toString());
-			
-		}
+		// TODO should be dynamic
+		// fills the SpinnerArray
+		spinnerArray = new String[3];
+		spinnerArray[0] = "SP";
+		spinnerArray[1] = "TSP";
+		spinnerArray[2] = "CSP";
 
-		@Override
-		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	});
-	
-	//--------------------ButtonConfirm-----------------------
-	Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
-	btnConfirm.setOnClickListener(new OnClickListener() {
+		// loads the spinnerArray into the spinnerdropdown
+		Spinner spinner = (Spinner) findViewById(R.id.algorithmSpinner);
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		ArrayAdapter adapter = new ArrayAdapter(this,
+				android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+		spinner.setAdapter(adapter);
 
-		@Override
-		public void onClick(View view) {
-			// generates an intent from the class MapScreen
-			Intent myIntent = new Intent(view.getContext(),
-					MapScreen.class);
-			startActivity(myIntent);
-			
-		}
-		
-	});
-	
-	
-	//--------------------ButtonBilling-----------------------
-	Button btnBilling = (Button) findViewById(R.id.btnBilling);
-	btnBilling.setOnClickListener(new OnClickListener() {
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-		@Override
-		public void onClick(View view) {
-			// generates an intent from the class BillingScreen
-			Intent myIntent = new Intent(view.getContext(),
-					BillingScreen.class);
-			startActivity(myIntent);
-			
-		}
-		
-	});
-	
+			@Override
+			public void onItemSelected(AdapterView<?> adapter, View view,
+					int pos, long id) {
+
+				UserInput.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
+						.toString());
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
+		// --------------------ButtonConfirm-----------------------
+		Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
+		btnConfirm.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// generates an intent from the class MapScreen
+				Intent myIntent = new Intent(view.getContext(), MapScreen.class);
+				startActivity(myIntent);
+			}
+		});
+
+		// --------------------ButtonBilling-----------------------
+		Button btnBilling = (Button) findViewById(R.id.btnBilling);
+		btnBilling.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// generates an intent from the class BillingScreen
+				Intent myIntent = new Intent(view.getContext(),
+						BillingScreen.class);
+				startActivity(myIntent);
+
+			}
+
+		});
+
 	}
-	
 
 }

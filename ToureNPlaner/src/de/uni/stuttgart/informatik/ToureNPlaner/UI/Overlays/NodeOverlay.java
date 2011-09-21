@@ -13,13 +13,11 @@ import android.widget.EditText;
 
 @SuppressWarnings("rawtypes")
 public class NodeOverlay extends ItemizedOverlay{
-	private Context context;
 	private ArrayList<OverlayItem> NodeArray = new ArrayList<OverlayItem>();
 	
 	public NodeOverlay(Drawable defaultMarker, Context context) {
 			super(boundCenterBottom(defaultMarker));
-			this.context = context;
-		// TODO Auto-generated constructor stub
+				// TODO Auto-generated constructor stub
 	}
 
 	@Override

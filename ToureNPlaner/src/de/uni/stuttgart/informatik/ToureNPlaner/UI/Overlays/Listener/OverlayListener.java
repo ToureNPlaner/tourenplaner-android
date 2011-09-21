@@ -1,4 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.Listener;
+
 import org.mapsforge.android.maps.GeoPoint;
 
 import android.view.GestureDetector.OnGestureListener;
@@ -11,10 +12,10 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen;
  * This Class provides functions depending on user gestures
  * 
  */
-public class OverlayListener implements OnGestureListener{
+public class OverlayListener implements OnGestureListener {
 	String markerName;
 	String markerMessage;
-	
+
 	@Override
 	public boolean onDown(MotionEvent arg0) {
 		// TODO Auto-generated method stub
@@ -30,13 +31,15 @@ public class OverlayListener implements OnGestureListener{
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-				final GeoPoint gp = MapScreen.mapView.getProjection().fromPixels((int) e.getX(),(int) e.getY());
-				markerName = "Marker Nr. " + String.valueOf(NodeModel.getInstance().size() +1 );
-				Node node = new Node(markerName,gp);
-				NodeModel.getInstance().addNodeToVector(node);
+		// Adds an Marker to the Map and Model  
+		final GeoPoint gp = MapScreen.mapView.getProjection().fromPixels(
+				(int) e.getX(), (int) e.getY());
+		markerName = "Marker Nr. "
+				+ String.valueOf(NodeModel.getInstance().size() + 1);
+		Node node = new Node(markerName, gp);
+		NodeModel.getInstance().addNodeToVector(node);
 		MapScreen.addMarkerToMap(node);
-	
+
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class OverlayListener implements OnGestureListener{
 	@Override
 	public void onShowPress(MotionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

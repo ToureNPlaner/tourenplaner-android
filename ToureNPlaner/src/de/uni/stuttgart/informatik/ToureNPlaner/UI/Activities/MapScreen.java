@@ -193,7 +193,7 @@ public class MapScreen extends MapActivity {
 		overlayItemVector.add(overlayitem);
 		setMarkerIconsToNodes();
 		itemizedoverlay.addOverlay(overlayitem);
-	
+
 		mapOverlays.add(itemizedoverlay);
 	}
 
@@ -219,13 +219,7 @@ public class MapScreen extends MapActivity {
 			geoArray[0][i] = NodeModel.getInstance().get(i).getGeoPoint();
 		}
 		way = new OverlayWay(geoArray);
-		// OverlayWay way2 = new OverlayWay(new GeoPoint[][] { { geoPoint1,
-		// geoPoint3, geoPoint4,
-		// geoPoint1 } }, wayPaint, null);
 		wayOverlay.addWay(way);
-
-		// wayOverlay.addWay(way2);
-
 	}
 
 	private static void setMarkerIconsToNodes() {

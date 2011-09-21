@@ -14,53 +14,47 @@ import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class ServerScreen extends Activity {
-	
-	
+
 	private String spinnerArray[];
-	
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.serverscreen);
-	
-	
-	
-	//TODO get amount of available servers 
-		
-	
-	// TODO should be dynamic
-		spinnerArray=new String[2];
-		spinnerArray[0]="Free-Server";
-		spinnerArray[1]="Pay-Server";
-	
-		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.serverscreen);
+
+		// TODO get amount of available servers
+
+		// TODO should be dynamic
+		spinnerArray = new String[2];
+		spinnerArray[0] = "Free-Server";
+		spinnerArray[1] = "Pay-Server";
+
 		// loads the spinnerArray into the spinnerdropdown
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_server);
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		ArrayAdapter adapter = new ArrayAdapter(this,
-		android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+				android.R.layout.simple_spinner_dropdown_item, spinnerArray);
 		spinner.setAdapter(adapter);
-		
+
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			
 			@Override
-			public void onItemSelected(AdapterView<?> adapter, View view, int pos,
-					long id) {
-				
-				UserInput.setChoosenAlgorithm(adapter.getItemAtPosition(pos).toString());
-				
+			public void onItemSelected(AdapterView<?> adapter, View view,
+					int pos, long id) {
+
+				UserInput.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
+						.toString());
+
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
+
 		Button btnconfirm = (Button) findViewById(R.id.btnconfirm);
 		btnconfirm.setOnClickListener(new OnClickListener() {
 
@@ -70,10 +64,10 @@ public class ServerScreen extends Activity {
 				Intent myIntent = new Intent(view.getContext(),
 						LoginScreen.class);
 				startActivity(myIntent);
-				
+
 			}
-			
+
 		});
-		
-		
-}}
+
+	}
+}
