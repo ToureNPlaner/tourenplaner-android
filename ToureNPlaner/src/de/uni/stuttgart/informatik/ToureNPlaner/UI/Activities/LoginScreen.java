@@ -1,7 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,8 +32,8 @@ public class LoginScreen extends Activity {
 				EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
 
 				// set userdata
-				UserInput.setEmail(emailTextfield.getText().toString());
-				UserInput.setPassword(passwordTextfield.getText().toString());
+				SessionData.setEmail(emailTextfield.getText().toString());
+				SessionData.setPassword(passwordTextfield.getText().toString());
 
 				// TODO DB check if user exist and have permissions
 

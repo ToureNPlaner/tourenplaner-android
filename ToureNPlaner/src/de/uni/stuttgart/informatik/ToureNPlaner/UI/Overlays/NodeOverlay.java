@@ -3,21 +3,18 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 import java.util.ArrayList;
 import org.mapsforge.android.maps.ItemizedOverlay;
 import org.mapsforge.android.maps.OverlayItem;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.widget.EditText;
+
 
 @SuppressWarnings("rawtypes")
 public class NodeOverlay extends ItemizedOverlay{
 	private ArrayList<OverlayItem> NodeArray = new ArrayList<OverlayItem>();
-	
+
 	public NodeOverlay(Drawable defaultMarker, Context context) {
 			super(boundCenterBottom(defaultMarker));
 				// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
@@ -62,7 +59,8 @@ public class NodeOverlay extends ItemizedOverlay{
 //
 //	  alert.show();
 	  //TODO item porperty 
-	  return true;
+		
+		  return true;
 	}
 	
 	@Override

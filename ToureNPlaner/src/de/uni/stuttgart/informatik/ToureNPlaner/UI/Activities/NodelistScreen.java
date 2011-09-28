@@ -3,33 +3,29 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import java.util.Vector;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Adapters.NodeListAdapter;
 
 public class NodelistScreen extends ListActivity {
 	public NodelistScreen nodeListScreenContext = this;
-	private View NodePreferencesLayout;
+	
 	private ListView listView;
-	private NodeListAdapter adapter;
-		public NodeListAdapter getAdapter() {
+	private static NodeListAdapter adapter;
+		public static  NodeListAdapter getAdapter() {
 		return adapter;
 	}
 	public void setAdapter(NodeListAdapter adapter) {
-		this.adapter = adapter;
+		NodelistScreen.adapter = adapter;
 	}
 	
 	
@@ -39,33 +35,32 @@ public class NodelistScreen extends ListActivity {
 		
 		Vector<Node> nodeList = NodeModel.getInstance().getNodeVector();
 		adapter = new NodeListAdapter(nodeList, this);
-		
 		listView = getListView();
 		listView.setAdapter(adapter);
-		
-		// the context of this activity
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// Inflate the view from a predefined XML layout
-		NodePreferencesLayout = inflater.inflate(R.layout.nodepreferences,
-				(ViewGroup) findViewById(R.id.popup_element));
-
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> adapter, View view,
 					final int pos, long arg3) {
-				UserInput.setSelectedNode(pos);
+				SessionData.setSelectedNode(pos);
 				// generates an intent from the class NodeListScreen
 				Intent myIntent = new Intent(nodeListScreenContext,
 						NodePreferences.class);
 				startActivity(myIntent);
 				getAdapter().notifyDataSetChanged();
-				
-				
-			}
-
-		});
+				}
+	});
 	}
-
-
-
+		
+		@Override
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+		    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+		        Log.v("back button pressed","back button pressed");
+		        MapScreen.printAllMarkersToMap();
+				}
+		    return super.onKeyDown(keyCode, event);
+		}
+		
+		public static void getNodePreferences(Integer pos){
+		
+		}
 };

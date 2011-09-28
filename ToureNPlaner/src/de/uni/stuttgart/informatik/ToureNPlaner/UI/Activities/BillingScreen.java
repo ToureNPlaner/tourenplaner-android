@@ -17,7 +17,7 @@ public class BillingScreen extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.billingscreen);
-		// TODO should be dynamic
+		// TODO slistviewArray should be generated dynamic
 		listviewArray = new String[3];
 		listviewArray[0] = "Tour1";
 		listviewArray[1] = "Tour2";

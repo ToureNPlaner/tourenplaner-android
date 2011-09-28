@@ -6,5 +6,6 @@
   android:layout_height="fill_parent">
     <Spinner android:layout_width="fill_parent" android:id="@+id/spinner_server" android:layout_height="wrap_content"></Spinner>
     <Button android:text="confirm" android:layout_height="wrap_content" android:id="@+id/btnconfirm" android:layout_width="fill_parent"></Button>
+    <Button android:text="set URL" android:id="@+id/btnSetUrl" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
     
 </LinearLayout>

@@ -1,17 +1,20 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 
 public class ServerScreen extends Activity {
 
@@ -42,20 +45,20 @@ public class ServerScreen extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View view,
 					int pos, long id) {
 
-				UserInput.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
+				SessionData.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
 						.toString());
 
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
+							}
 
 		});
 
 		Button btnconfirm = (Button) findViewById(R.id.btnconfirm);
+		Button btnSetURL = (Button) findViewById(R.id.btnSetUrl);
+
 		btnconfirm.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -68,6 +71,41 @@ public class ServerScreen extends Activity {
 			}
 
 		});
+		//  User can change the server URL
+		btnSetURL.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View arg0) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(
+						ServerScreen.this);
+
+				alert.setTitle("type your URL");
+				alert.setMessage("URL");
+
+				// Set an EditText view to get user input
+				final EditText input = new EditText(ServerScreen.this);
+				input.setText(SessionData.getServerURL());
+				alert.setView(input);
+				alert.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								SessionData.setServerURL(input.getText()
+										.toString());
+							}
+						});
+
+				alert.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Canceled.
+							}
+						});
+
+				alert.show();
+			}
+
+		});
 	}
 }

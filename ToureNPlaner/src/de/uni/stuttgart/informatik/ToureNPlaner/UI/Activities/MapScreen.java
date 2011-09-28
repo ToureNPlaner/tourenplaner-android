@@ -1,8 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Vector;
 import org.mapsforge.android.maps.ArrayWayOverlay;
 import org.mapsforge.android.maps.GeoPoint;
@@ -19,6 +17,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +27,7 @@ import android.view.View.OnTouchListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.MapGestureDetectorOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.Listener.OverlayListener;
@@ -54,8 +53,8 @@ public class MapScreen extends MapActivity {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-	//	mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
-		mapView.setMapFile("/sdcard/berlin.map");
+		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
+		// mapView.setMapFile("/sdcard/berlin.map");
 		mapView.setFpsCounter(true);
 		setContentView(mapView);
 
@@ -91,21 +90,20 @@ public class MapScreen extends MapActivity {
 				return false;
 			}
 		});
-
+		printAllMarkersToMap();
 		// TEMP
+
 		GeoPoint geoPoint1 = new GeoPoint(52.514446, 13.350150); // Berlin
 																	// Victory
 																	// Column
-		GeoPoint geoPoint2 = new GeoPoint(52.516272, 13.377722); // Brandenburg
-																	// Gate
-		GeoPoint geoPoint3 = new GeoPoint(52.525, 13.369444); // Berlin Central
-																// Station
-		GeoPoint geoPoint4 = new GeoPoint(52.52, 13.369444); // German
-																// Chancellery
-		GeoPoint geoPoint5 = new GeoPoint(52516999, 13388900);
+//		GeoPoint geoPoint2 = new GeoPoint(52.516272, 13.377722); // Brandenburg
+//																	// Gate
+//		GeoPoint geoPoint3 = new GeoPoint(52.525, 13.369444); // Berlin Central
+//																// Station
+//		GeoPoint geoPoint4 = new GeoPoint(52.52, 13.369444); // German
+//																// Chancellery
+//		GeoPoint geoPoint5 = new GeoPoint(52516999, 13388900);
 
-		// initialize components of ItemOverlay
-		overlayItemVector.clear();
 		//
 		// addMarkerToMap(geoPoint1, "1", "HH");
 		// addMarkerToMap(geoPoint2, "2", "HH");
@@ -113,9 +111,7 @@ public class MapScreen extends MapActivity {
 		// addMarkerToMap(geoPoint4, "4", "HH");
 		// addMarkerToMap(geoPoint5, "5", "HH");
 		//
-		for (int i = 0; i < NodeModel.getInstance().size(); i++) {
-			addMarkerToMap(NodeModel.getInstance().get(i));
-		}
+
 		// END TEMP
 
 		// ----------------WayOverlay Properties-----------------
@@ -128,7 +124,6 @@ public class MapScreen extends MapActivity {
 		wayDefaultPaintFill.setStrokeJoin(Paint.Join.ROUND);
 		wayDefaultPaintFill.setPathEffect(new DashPathEffect(new float[] { 20,
 				20 }, 0));
-
 		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
 		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
 		wayDefaultPaintOutline.setColor(Color.BLUE);
@@ -146,7 +141,7 @@ public class MapScreen extends MapActivity {
 				wayDefaultPaintOutline);
 
 		mapView.getOverlays().add(wayOverlay);
-		// --------------------------------------------------------
+
 		// set focus of MapScreen
 		mapView.getController().setCenter(geoPoint1);
 	}
@@ -177,6 +172,8 @@ public class MapScreen extends MapActivity {
 		}
 	}
 
+	// ---------------------------------------
+
 	/**
 	 * this methode adds a marker to the mapview ( on the itemmapoverlay)
 	 * 
@@ -200,21 +197,7 @@ public class MapScreen extends MapActivity {
 
 	public static void addPathToMap() {
 		wayOverlay.clear();
-
-		// GeoPoint geoPoint1 = new GeoPoint(52.514446, 13.350150); // Berlin
-		// Victory Column
-		// GeoPoint geoPoint2 = new GeoPoint(52.516272, 13.377722); //
-		// Brandenburg Gate
-		// GeoPoint geoPoint3 = new GeoPoint(52.525, 13.369444); // Berlin
-		// Central Station
-		// GeoPoint geoPoint4 = new GeoPoint(52.52, 13.369444); // German
-		// Chancellery
-		// GeoPoint geoPoint5 = new GeoPoint(52516999, 13388900);
-		// OverlayWay way = new OverlayWay(new GeoPoint[][] { { geoPoint1,
-		// geoPoint2, geoPoint3, geoPoint4,geoPoint5 } });
-
 		OverlayWay way;
-
 		GeoPoint[][] geoArray = new GeoPoint[1][NodeModel.getInstance().size()];
 		for (int i = 0; i < NodeModel.getInstance().size(); i++) {
 			geoArray[0][i] = NodeModel.getInstance().get(i).getGeoPoint();
@@ -224,7 +207,8 @@ public class MapScreen extends MapActivity {
 	}
 
 	private static void setMarkerIconsToNodes() {
-		if (UserInput.getAlgorithmHasStarAndEndMarker()) {
+		//TODO fix Bug EndIcon changes position when transformed into normalIcon 
+		if (SessionData.getAlgorithmHasStarAndEndMarker()) {
 			for (int i = 0; i < overlayItemVector.size(); i++) {
 				if (i == 0) {
 					overlayItemVector.get(i).setMarker(iconStart);
@@ -235,6 +219,17 @@ public class MapScreen extends MapActivity {
 				}
 			}
 
+		}
+	}
+
+	public static void printAllMarkersToMap() {
+		// initialize components of ItemOverlay
+		overlayItemVector.clear();
+		//TODO update view when pressing "backbutton" on "NodeListScreen" Activitiy
+		Log.v("clearMap","ClearMap");
+		for (int i = 0; i < NodeModel.getInstance().size(); i++) {
+			Log.v("add marker","add marker");
+			addMarkerToMap(NodeModel.getInstance().get(i));
 		}
 	}
 

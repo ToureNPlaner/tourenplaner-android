@@ -9,7 +9,7 @@ import android.widget.EditText;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 
 public class NodePreferences extends Activity {
 
@@ -21,51 +21,48 @@ public class NodePreferences extends Activity {
 		// Textviews
 		try {
 			Node node = NodeModel.getInstance()
-					.get(UserInput.getSelectedNode());
+					.get(SessionData.getSelectedNode());
 			// -------------- get EditTexts --------------
 			final EditText etName = (EditText) findViewById(R.id.etName);
-//			final EditText etLongitude = (EditText) findViewById(R.id.etLongitude);
-//			final EditText etLatitude = (EditText) findViewById(R.id.etLatitude);
+			// final EditText etLongitude = (EditText)
+			// findViewById(R.id.etLongitude);
+			// final EditText etLatitude = (EditText)
+			// findViewById(R.id.etLatitude);
 			// -------------- get Buttons --------------
 			Button btnDelete = (Button) findViewById(R.id.btnDelete);
 			Button btnSave = (Button) findViewById(R.id.btnSave);
 			Button btnReturn = (Button) findViewById(R.id.btnReturn);
 
 			etName.setText(node.getName());
-//			etLongitude.setText(String.valueOf(node.getLongitude()));
-//			etLatitude.setText(String.valueOf(node.getLatitude()));
+			// etLongitude.setText(String.valueOf(node.getLongitude()));
+			// etLatitude.setText(String.valueOf(node.getLatitude()));
+
+			// -----------------btnSave-----------------------
 			btnSave.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 
 					// -------------set Name------------------
-					NodeModel.getInstance().get(UserInput.getSelectedNode())
+					NodeModel.getInstance().get(SessionData.getSelectedNode())
 							.setName(etName.getText().toString());
-
-//					// ------------set Longitude--------------
-//					NodeModel
-//							.getInstance()
-//							.get(UserInput.getSelectedNode())
-//							.setLongitude(
-//									Double.valueOf(etLongitude.getText()
-//											.toString()));
-//					// ------------set Latitude--------------
-//					NodeModel
-//							.getInstance()
-//							.get(UserInput.getSelectedNode())
-//							.setLatitude(
-//									Double.valueOf(etLatitude.getText()
-//											.toString()));
-				
+					// notifies the Nodelistscreen for all changes
+					NodelistScreen.getAdapter().notifyDataSetChanged();
 					finish();
 				}
 			});
 
 			btnReturn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
 					finish();
-
 				}
+			});
+			// -----------------btnDelete-----------------------
+			btnDelete.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					NodeModel.getInstance().remove(SessionData.getSelectedNode());
+					// notifies the Nodelistscreen for all changes
+					NodelistScreen.getAdapter().notifyDataSetChanged();
+					finish();
+				};
 			});
 
 		} catch (Exception e) {

@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+
 import java.util.Vector;
 
 public class NodeModel {
@@ -28,13 +29,13 @@ public class NodeModel {
 
 	public void addNodeToVector(Node node) {
 		nodeVector.add(node);
+		
 
 	}
 
-	public void removeNodeFromVector(Integer pos) {
+	public void remove(Integer pos) {
 		nodeVector.removeElementAt(pos);
-
-	}
+		}
 
 	public void swapNodes(Integer pos1, Integer pos2) {
 		Node tempNode = nodeVector.get(pos1);
@@ -42,5 +43,7 @@ public class NodeModel {
 		nodeVector.set(pos2, tempNode);
 
 	}
+
+
 
 }

@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.UserInput;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 
 public class AlgorithmScreen extends Activity {
 
@@ -25,7 +25,7 @@ public class AlgorithmScreen extends Activity {
 
 		// TODO get amount of available algorithms
 
-		// TODO should be dynamic
+		// TODO spinnerarray should be generated dynamic
 		// fills the SpinnerArray
 		spinnerArray = new String[3];
 		spinnerArray[0] = "SP";
@@ -45,7 +45,7 @@ public class AlgorithmScreen extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View view,
 					int pos, long id) {
 
-				UserInput.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
+				SessionData.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
 						.toString());
 
 			}
