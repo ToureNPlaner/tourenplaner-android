@@ -15,6 +15,18 @@ public class LoginScreen extends Activity {
 	// generates the Application preferences for all activities
 	public static final String TPpreferences = "ToureNPlanerPreferences";
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        SessionData.Instance.save(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        SessionData.Instance.load(savedInstanceState);
+    }
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

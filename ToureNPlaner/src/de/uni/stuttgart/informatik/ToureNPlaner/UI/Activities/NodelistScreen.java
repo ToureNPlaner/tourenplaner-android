@@ -18,6 +18,18 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Adapters.NodeListAdapter;
 
 public class NodelistScreen extends ListActivity {
 	public NodelistScreen nodeListScreenContext = this;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        SessionData.Instance.save(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        SessionData.Instance.load(savedInstanceState);
+    }
 	
 	private ListView listView;
 	private static NodeListAdapter adapter;

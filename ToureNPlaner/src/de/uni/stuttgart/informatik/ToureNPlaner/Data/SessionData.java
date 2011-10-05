@@ -1,80 +1,96 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import java.io.Serializable;
-
 //  this class stores all data from the userinput
-public class SessionData implements Serializable {
+public class SessionData {
 
-    public transient static SessionData Instance = new SessionData();
     private static final String BundleString = "SessionData";
+    private static final String PREFS_NAME = "SessionData";
 
-    private Integer selectedNode = 0;
-	private String email;
-	private String password = "";
-	private String choosenAlgorithm;
-    private Boolean AlgorithmHasStarAndEndMarker = true;
-	//TODO get serverURl
-	private String ServerURL = "TestURl";
+    public static SessionData Instance;
 
-    public static void save(Bundle outBundle) {
-        outBundle.putSerializable(BundleString, Instance);
+    private transient final SharedPreferences settings;
+    private Data data = new Data();
+
+    static public void createInstance(Context context) {
+        Instance = new SessionData(context);
     }
 
-    public static void load(Bundle savedInstanceState) {
-        Instance = (SessionData) savedInstanceState.get(BundleString);
+    public SessionData(Context context) {
+        settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    public void save(Bundle outBundle) {
+        outBundle.putSerializable(BundleString, Instance.data);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("ServerURL",data.ServerURL);
+        editor.commit();
+    }
+
+    public void load(Bundle savedInstanceState) {
+        data.ServerURL = settings.getString("ServerURL","");
+
+    	if(savedInstanceState != null) {
+	        Object savedData = savedInstanceState.get(BundleString);
+	        if(savedData != null) {
+                try {
+	                Instance.data = (Data) savedData;
+                } catch (Exception e) {
+                    // Should only happen if the implementation has changed
+                }
+	        }
+    	}
     }
 
 	public String getServerURL() {
-		return ServerURL;
+		return data.ServerURL;
 	}
 
 	public void setServerURL(String serverURL) {
-		ServerURL = serverURL;
+		data.ServerURL = serverURL;
 	}
 
-
-
 	public Boolean getAlgorithmHasStarAndEndMarker() {
-		return AlgorithmHasStarAndEndMarker;
+		return data.AlgorithmHasStarAndEndMarker;
 	}
 
 	public void setAlgorithmHasStarAndEndMarker(
-			Boolean algorithmHasStarAndEndMarker) {
-		AlgorithmHasStarAndEndMarker = algorithmHasStarAndEndMarker;
+		Boolean algorithmHasStarAndEndMarker) {
+		data.AlgorithmHasStarAndEndMarker = algorithmHasStarAndEndMarker;
 	}
 
 	public String getEmail() {
-		return email;
+		return data.email;
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		data.email = email;
 	}
 
 	public String getPassword() {
-		return password;
+		return data.password;
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		data.password = password;
 	}
 
 	public String getChoosenAlgorithm() {
-		return choosenAlgorithm;
+		return data.choosenAlgorithm;
 	}
 
 	public void setChoosenAlgorithm(String choosenAlgorithm) {
-		this.choosenAlgorithm = choosenAlgorithm;
+		data.choosenAlgorithm = choosenAlgorithm;
 	}
 
 	public void setSelectedNode(Integer selectedNode) {
-		this.selectedNode = selectedNode;
+		data.selectedNode = selectedNode;
 	}
 
 	public Integer getSelectedNode() {
-		return selectedNode;
+		return data.selectedNode;
 	}
 }

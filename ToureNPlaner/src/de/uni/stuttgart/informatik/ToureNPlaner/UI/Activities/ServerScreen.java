@@ -17,6 +17,11 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 
 public class ServerScreen extends Activity {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        SessionData.Instance.save(outState);
+        super.onSaveInstanceState(outState);
+    }
 
 	private String spinnerArray[];
 
@@ -24,6 +29,7 @@ public class ServerScreen extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serverscreen);
+        SessionData.Instance.load(savedInstanceState);
 
 		// TODO get amount of available servers
 

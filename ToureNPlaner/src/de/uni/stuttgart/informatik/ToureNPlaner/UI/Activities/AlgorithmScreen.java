@@ -18,7 +18,19 @@ public class AlgorithmScreen extends Activity {
 	// generates all variables which are set in this activity
 	private String spinnerArray[];
 
-	@Override
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        SessionData.Instance.save(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        SessionData.Instance.load(savedInstanceState);
+    }
+
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.algorithmscreen);
@@ -46,7 +58,7 @@ public class AlgorithmScreen extends Activity {
 					int pos, long id) {
 
 				SessionData.Instance.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
-						.toString());
+                        .toString());
 
 			}
 

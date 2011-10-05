@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +13,18 @@ import android.widget.ListView;
 public class BillingScreen extends Activity {
 	private ListView ListviewBilling;
 	private String listviewArray[];
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        SessionData.Instance.save(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        SessionData.Instance.load(savedInstanceState);
+    }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
