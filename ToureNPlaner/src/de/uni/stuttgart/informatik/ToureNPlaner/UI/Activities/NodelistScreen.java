@@ -41,7 +41,7 @@ public class NodelistScreen extends ListActivity {
 
 			public void onItemClick(AdapterView<?> adapter, View view,
 					final int pos, long arg3) {
-				SessionData.setSelectedNode(pos);
+				SessionData.Instance.setSelectedNode(pos);
 				// generates an intent from the class NodeListScreen
 				Intent myIntent = new Intent(nodeListScreenContext,
 						NodePreferences.class);

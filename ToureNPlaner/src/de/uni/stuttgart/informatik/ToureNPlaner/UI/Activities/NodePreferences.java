@@ -21,7 +21,7 @@ public class NodePreferences extends Activity {
 		// Textviews
 		try {
 			Node node = NodeModel.getInstance()
-					.get(SessionData.getSelectedNode());
+					.get(SessionData.Instance.getSelectedNode());
 			// -------------- get EditTexts --------------
 			final EditText etName = (EditText) findViewById(R.id.etName);
 			// final EditText etLongitude = (EditText)
@@ -42,7 +42,7 @@ public class NodePreferences extends Activity {
 				public void onClick(View v) {
 
 					// -------------set Name------------------
-					NodeModel.getInstance().get(SessionData.getSelectedNode())
+					NodeModel.getInstance().get(SessionData.Instance.getSelectedNode())
 							.setName(etName.getText().toString());
 					// notifies the Nodelistscreen for all changes
 					NodelistScreen.getAdapter().notifyDataSetChanged();
@@ -58,7 +58,7 @@ public class NodePreferences extends Activity {
 			// -----------------btnDelete-----------------------
 			btnDelete.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					NodeModel.getInstance().remove(SessionData.getSelectedNode());
+					NodeModel.getInstance().remove(SessionData.Instance.getSelectedNode());
 					// notifies the Nodelistscreen for all changes
 					NodelistScreen.getAdapter().notifyDataSetChanged();
 					finish();

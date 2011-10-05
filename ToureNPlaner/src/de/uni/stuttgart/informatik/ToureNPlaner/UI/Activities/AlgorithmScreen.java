@@ -45,7 +45,7 @@ public class AlgorithmScreen extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View view,
 					int pos, long id) {
 
-				SessionData.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
+				SessionData.Instance.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
 						.toString());
 
 			}

@@ -208,7 +208,7 @@ public class MapScreen extends MapActivity {
 
 	private static void setMarkerIconsToNodes() {
 		//TODO fix Bug EndIcon changes position when transformed into normalIcon 
-		if (SessionData.getAlgorithmHasStarAndEndMarker()) {
+		if (SessionData.Instance.getAlgorithmHasStarAndEndMarker()) {
 			for (int i = 0; i < overlayItemVector.size(); i++) {
 				if (i == 0) {
 					overlayItemVector.get(i).setMarker(iconStart);

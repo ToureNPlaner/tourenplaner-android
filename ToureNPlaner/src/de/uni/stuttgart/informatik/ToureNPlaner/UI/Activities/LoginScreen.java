@@ -32,8 +32,8 @@ public class LoginScreen extends Activity {
 				EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
 
 				// set userdata
-				SessionData.setEmail(emailTextfield.getText().toString());
-				SessionData.setPassword(passwordTextfield.getText().toString());
+				SessionData.Instance.setEmail(emailTextfield.getText().toString());
+				SessionData.Instance.setPassword(passwordTextfield.getText().toString());
 
 				// TODO DB check if user exist and have permissions
 

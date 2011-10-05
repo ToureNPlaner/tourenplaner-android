@@ -45,7 +45,7 @@ public class ServerScreen extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View view,
 					int pos, long id) {
 
-				SessionData.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
+				SessionData.Instance.setChoosenAlgorithm(adapter.getItemAtPosition(pos)
 						.toString());
 
 			}
@@ -84,13 +84,13 @@ public class ServerScreen extends Activity {
 
 				// Set an EditText view to get user input
 				final EditText input = new EditText(ServerScreen.this);
-				input.setText(SessionData.getServerURL());
+				input.setText(SessionData.Instance.getServerURL());
 				alert.setView(input);
 				alert.setPositiveButton("Ok",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
-								SessionData.setServerURL(input.getText()
+								SessionData.Instance.setServerURL(input.getText()
 										.toString());
 							}
 						});
