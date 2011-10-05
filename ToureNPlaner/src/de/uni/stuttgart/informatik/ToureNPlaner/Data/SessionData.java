@@ -1,20 +1,32 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import android.app.Application;
+import android.os.Bundle;
+
+import java.io.Serializable;
 
 //  this class stores all data from the userinput
-public class SessionData  {
-    public static SessionData Instance = new SessionData();
+public class SessionData implements Serializable {
 
-	private Integer selectedNode = 0;
+    public transient static SessionData Instance = new SessionData();
+    private static final String BundleString = "SessionData";
+
+    private Integer selectedNode = 0;
 	private String email;
 	private String password = "";
 	private String choosenAlgorithm;
-	private Boolean AlgorithmHasStarAndEndMarker = true;
+    private Boolean AlgorithmHasStarAndEndMarker = true;
 	//TODO get serverURl
 	private String ServerURL = "TestURl";
 
+    public static void save(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable(BundleString,Instance);
+        savedInstanceState.putSerializable(BundleString,Instance);
+    }
 
+    public static void load(Bundle savedInstanceState) {
+        Instance = (SessionData) savedInstanceState.get(BundleString);
+    }
 
 	public String getServerURL() {
 		return ServerURL;
