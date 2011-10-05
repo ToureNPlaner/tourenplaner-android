@@ -19,9 +19,8 @@ public class SessionData implements Serializable {
 	//TODO get serverURl
 	private String ServerURL = "TestURl";
 
-    public static void save(Bundle savedInstanceState) {
-        savedInstanceState.putSerializable(BundleString,Instance);
-        savedInstanceState.putSerializable(BundleString,Instance);
+    public static void save(Bundle outBundle) {
+        outBundle.putSerializable(BundleString, Instance);
     }
 
     public static void load(Bundle savedInstanceState) {
