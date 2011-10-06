@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 //  this class stores all data from the userinput
 public class SessionData {
-    static class Data implements Serializable {
+    private static class Data implements Serializable {
         public Integer selectedNode = 0;
         public String email;
         public String password = "";

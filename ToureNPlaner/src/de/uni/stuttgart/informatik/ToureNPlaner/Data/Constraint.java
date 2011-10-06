@@ -1,16 +1,17 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-public class Constraint {
+import java.io.Serializable;
+
+public class Constraint implements Serializable {
 	private String name;
 	private Double minimumValue;
 	private Double maximumValue;
+    private String type;
 	
 	Constraint(String name, Double minimumValue, Double maximumValue){//,Type)
 	this.name = name;
 	this.minimumValue = minimumValue;
 	this.maximumValue = maximumValue;
-	//type
-	
 	}
 
 	public String getName() {
@@ -36,4 +37,12 @@ public class Constraint {
 	public void setMaximumValue(Double maximumValue) {
 		this.maximumValue = maximumValue;
 	}
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

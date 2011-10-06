@@ -68,6 +68,8 @@ public class MapScreen extends MapActivity {
 		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
 		// mapView.setMapFile("/sdcard/berlin.map");
 		mapView.setFpsCounter(true);
+        mapView.setMemoryCardCachePersistence(true);
+        mapView.setMemoryCardCacheSize(1000);
 		setContentView(mapView);
 
 		mapOverlays = mapView.getOverlays();
