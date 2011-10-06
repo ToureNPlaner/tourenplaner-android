@@ -4,8 +4,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import java.io.Serializable;
+
 //  this class stores all data from the userinput
 public class SessionData {
+    static class Data implements Serializable {
+        public Integer selectedNode = 0;
+        public String email;
+        public String password = "";
+        public String choosenAlgorithm;
+        public Boolean AlgorithmHasStarAndEndMarker = true;
+        //TODO get serverURl
+        public String ServerURL = "TestURl";
+    }
 
     private static final String BundleString = "SessionData";
     private static final String PREFS_NAME = "SessionData";
