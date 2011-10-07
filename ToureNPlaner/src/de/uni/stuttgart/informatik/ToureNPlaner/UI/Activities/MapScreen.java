@@ -1,27 +1,22 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
-import android.graphics.*;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlay;
 import org.mapsforge.android.maps.*;
 
 import java.util.Vector;
 
 public class MapScreen extends MapActivity {
     public MapView mapView;
-    private ArrayItemizedOverlay itemizedoverlay;
-    private Drawable iconStart;
-    private Drawable iconNormal;
-    private Drawable iconEnd;
     private Vector<OverlayItem> overlayItemVector = new Vector<OverlayItem>();
     private ArrayWayOverlay wayOverlay;
 
@@ -45,53 +40,14 @@ public class MapScreen extends MapActivity {
         mapView.setMemoryCardCacheSize(1000);
         setContentView(mapView);
 
-        setupIcons();
-
-        itemizedoverlay = new ArrayItemizedOverlay(iconNormal, this);
+        ItemOverlay itemizedoverlay = new ItemOverlay(this);
         mapView.getOverlays().add(itemizedoverlay);
 
-        // On TouchListener for mapView handles events and call the
-        // MapGestureOverlay
-        mapView.getOverlays().add(new Overlay() {
-            @Override
-            public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-                String markerName = "Marker Nr. "
-                        + String.valueOf(NodeModel.getInstance().size() + 1);
-                Node node = new Node(markerName, geoPoint);
-                NodeModel.getInstance().addNodeToVector(node);
-                addMarkerToMap(node);
-                return true;
-            }
-
-            @Override
-            protected void drawOverlayBitmap(Canvas canvas, Point drawPosition, Projection projection, byte drawZoomLevel) {
-
-            }
-        });
-        printAllMarkersToMap();
-
-
         setupWayOverlay();
-
 
         // set focus of MapScreen
         GeoPoint geoPoint1 = new GeoPoint(52.514446, 13.350150); // Berlin
         mapView.getController().setCenter(geoPoint1);
-    }
-
-    private void setupIcons() {
-        // initialize the Icons and ItemOverlays
-        iconStart = this.getResources().getDrawable(R.drawable.startmarker);
-        iconStart.setBounds(0, 0, iconStart.getIntrinsicWidth(),
-                iconStart.getIntrinsicHeight());
-
-        iconNormal = this.getResources().getDrawable(R.drawable.marker);
-        iconNormal.setBounds(0, 0, iconNormal.getIntrinsicWidth(),
-                iconNormal.getIntrinsicHeight());
-
-        iconEnd = this.getResources().getDrawable(R.drawable.endmarker);
-        iconEnd.setBounds(0, 0, iconEnd.getIntrinsicWidth(),
-                iconEnd.getIntrinsicHeight());
     }
 
     private void setupWayOverlay() {
@@ -149,15 +105,6 @@ public class MapScreen extends MapActivity {
         }
     }
 
-    public void addMarkerToMap(Node node) {
-        OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(),
-                node.getName(), "");
-        // overlayitem.setMarker(iconNormal);
-        overlayItemVector.add(overlayitem);
-        setMarkerIconsToNodes();
-        itemizedoverlay.addItem(overlayitem);
-    }
-
     public void addPathToMap() {
         wayOverlay.clear();
         OverlayWay way;
@@ -169,23 +116,7 @@ public class MapScreen extends MapActivity {
         wayOverlay.addWay(way);
     }
 
-    private void setMarkerIconsToNodes() {
-        //TODO fix Bug EndIcon changes position when transformed into normalIcon
-        if (SessionData.Instance.getAlgorithmHasStarAndEndMarker()) {
-            for (int i = 0; i < overlayItemVector.size(); i++) {
-                if (i == 0) {
-                    overlayItemVector.get(i).setMarker(iconStart);
-                } else if (i == overlayItemVector.size() - 1) {
-                    overlayItemVector.get(i).setMarker(iconEnd);
-                } else {
-                    overlayItemVector.get(i).setMarker(iconNormal);
-                }
-            }
-
-        }
-    }
-
-    public void printAllMarkersToMap() {
+    /*public void printAllMarkersToMap() {
         // initialize components of ItemOverlay
         overlayItemVector.clear();
         //TODO update view when pressing "backbutton" on "NodeListScreen" Activitiy
@@ -194,6 +125,6 @@ public class MapScreen extends MapActivity {
             Log.v("add marker", "add marker");
             addMarkerToMap(NodeModel.getInstance().get(i));
         }
-    }
+    }*/
 
 }

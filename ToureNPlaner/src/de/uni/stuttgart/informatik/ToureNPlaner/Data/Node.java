@@ -1,18 +1,18 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import java.util.List;
-
 import org.mapsforge.android.maps.GeoPoint;
+
+import java.util.ArrayList;
 
 public class Node {
 	private String name;
 	private Double latitude;
 	private Double longitude;
 	private GeoPoint geoPoint;
-	private List<Constraint> constraintList;
+	private ArrayList<Constraint> constraintList;
 
 	public Node(String name, Double latitude, Double longitude,
-			List<Constraint> constraintList) {
+			ArrayList<Constraint> constraintList) {
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -62,11 +62,11 @@ public class Node {
 		this.longitude = longitude;
 	}
 
-	public List<Constraint> getConstraintList() {
+	public ArrayList<Constraint> getConstraintList() {
 		return constraintList;
 	}
 
-	public void setConstraintList(List<Constraint> constraintList) {
+	public void setConstraintList(ArrayList<Constraint> constraintList) {
 		this.constraintList = constraintList;
 	}
 }

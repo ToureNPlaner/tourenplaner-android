@@ -14,7 +14,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class NodelistScreen extends ListActivity {
 	public NodelistScreen nodeListScreenContext = this;
@@ -49,7 +49,7 @@ public class NodelistScreen extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Vector<Node> nodeList = NodeModel.getInstance().getNodeVector();
+		ArrayList<Node> nodeList = NodeModel.getInstance().getNodeVector();
 		adapter = new NodeListAdapter(nodeList, this);
             ListView listView = getListView();
 		listView.setAdapter(adapter);
@@ -71,7 +71,7 @@ public class NodelistScreen extends ListActivity {
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
 		    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 		        Log.v("back button pressed","back button pressed");
-		        mapScreen.printAllMarkersToMap();
+		        //mapScreen.printAllMarkersToMap();
 				}
 		    return super.onKeyDown(keyCode, event);
 		}

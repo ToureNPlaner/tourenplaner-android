@@ -1,7 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Adapters;
 
-import java.util.Vector;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -11,14 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+
+import java.util.ArrayList;
 
 public class NodeListAdapter extends BaseAdapter{
-	  private  Vector<Node> nodeVector;
+	  private  ArrayList<Node> nodeVector;
 	  private Context context;
-	public NodeListAdapter(Vector<Node> nodeVector, Context context) {
+	public NodeListAdapter(ArrayList<Node> nodeVector, Context context) {
 
 		 this.nodeVector = nodeVector;
 		 this.context = context;
@@ -38,7 +38,7 @@ public class NodeListAdapter extends BaseAdapter{
 	        tvText.setText(node.getGeoPoint().toString());
 	        
 	        ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.icon);
-	        Drawable icon = context.getResources().getDrawable(R.drawable.icon);;
+	        Drawable icon = context.getResources().getDrawable(R.drawable.icon);
 	     
 	        
 	        // sets the icon depending on the index

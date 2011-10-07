@@ -1,11 +1,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class NodeModel {
 
-	private static Vector<Node> nodeVector = new Vector<Node>();
+	private static ArrayList<Node> nodeVector = new ArrayList<Node>();
 	public static NodeModel instance = null;
 
 	public static NodeModel getInstance() {
@@ -15,7 +15,7 @@ public class NodeModel {
 		return instance;
 	}
 
-	public Vector<Node> getNodeVector() {
+	public ArrayList<Node> getNodeVector() {
 		return nodeVector;
 	}
 
@@ -34,7 +34,7 @@ public class NodeModel {
 	}
 
 	public void remove(Integer pos) {
-		nodeVector.removeElementAt(pos);
+		nodeVector.remove(pos);
 		}
 
 	public void swapNodes(Integer pos1, Integer pos2) {
