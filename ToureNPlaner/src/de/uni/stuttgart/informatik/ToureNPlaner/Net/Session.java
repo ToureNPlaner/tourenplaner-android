@@ -1,51 +1,60 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
+import android.os.AsyncTask;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Session {
-
-
-
-    class ConnectionHandler implements Runnable {
+    static class ConnectionHandler extends AsyncTask<Void, Void, Object> {
         Observer listener;
         String url;
 
+        @Override
+        protected void onPostExecute(Object object) {
+            if (object instanceof ServerInfo) {
+                listener.onCompleted(object);
+            } else {
+                listener.onError(object);
+            }
+        }
+
         ConnectionHandler(String url, Observer listener) {
+            super();
             this.listener = listener;
             this.url = url;
         }
 
         @Override
-        public void run() {
-            HttpURLConnection urlConnection = null;
-            JSONObject object = null;
+        protected Object doInBackground(Void... voids) {
             try {
                 URL uri = new URL(url+"/info");
-                urlConnection = (HttpURLConnection) uri.openConnection();
+                HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
 
                 try {
                     String content = Util.streamToString(urlConnection.getInputStream());
-                    object = new JSONObject(content);
+                    return ServerInfo.parse(new JSONObject(content));
                 } finally {
                     urlConnection.disconnect();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if(object != null)
-                listener.onCompleted(object);
-            else {
-                listener.onError(null);
+                return e;
             }
         }
     }
 
     private ServerInfo serverInfo;
 
-    public void connect(String url, Observer listener) throws Exception {
-        new Thread(new ConnectionHandler(url, listener)).start();
+    /**
+     *
+     * @param url The URL to connect to
+     * @param listener the Callback listener
+     * @return Use this to cancel the task with cancel(true)
+     */
+    public static ConnectionHandler connect(String url, Observer listener) {
+        ConnectionHandler handler = new ConnectionHandler(url, listener);
+        handler.execute();
+        return handler;
     }
 }

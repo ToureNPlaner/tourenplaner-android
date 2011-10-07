@@ -1,42 +1,46 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 public class Constraint implements Serializable {
-	private String name;
-	private Double minimumValue;
-	private Double maximumValue;
+    private String name;
     private String type;
-	
-	Constraint(String name, Double minimumValue, Double maximumValue){//,Type)
-	this.name = name;
-	this.minimumValue = minimumValue;
-	this.maximumValue = maximumValue;
-	}
+    private Double minimumValue;
+    private Double maximumValue;
 
-	public String getName() {
-		return name;
-	}
+    Constraint(String name, String type, Double minimumValue, Double maximumValue) {
+        this.name = name;
+        this.type = type;
+        this.minimumValue = minimumValue;
+        this.maximumValue = maximumValue;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Double getMinimumValue() {
-		return minimumValue;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setMinimumValue(Double minimumValue) {
-		this.minimumValue = minimumValue;
-	}
+    public Double getMinimumValue() {
+        return minimumValue;
+    }
 
-	public Double getMaximumValue() {
-		return maximumValue;
-	}
+    public void setMinimumValue(Double minimumValue) {
+        this.minimumValue = minimumValue;
+    }
 
-	public void setMaximumValue(Double maximumValue) {
-		this.maximumValue = maximumValue;
-	}
+    public Double getMaximumValue() {
+        return maximumValue;
+    }
+
+    public void setMaximumValue(Double maximumValue) {
+        this.maximumValue = maximumValue;
+    }
 
     public String getType() {
         return type;
@@ -44,5 +48,13 @@ public class Constraint implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public static Constraint parse(JSONObject object) throws JSONException {
+        String name = object.getString("name");
+        String type = object.getString("type");
+        Double min = object.getDouble("min");
+        Double max = object.getDouble("max");
+        return new Constraint(name,type,min,max);
     }
 }
