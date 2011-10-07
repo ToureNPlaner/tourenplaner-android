@@ -15,6 +15,15 @@ public class ServerInfo implements Serializable {
     private String version;
     private ServerType serverType;
     private int SslPort;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getVersion() {
         return version;

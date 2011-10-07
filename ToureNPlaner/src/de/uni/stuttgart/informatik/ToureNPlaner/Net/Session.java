@@ -34,7 +34,9 @@ public class Session {
 
                 try {
                     String content = Util.streamToString(urlConnection.getInputStream());
-                    return ServerInfo.parse(new JSONObject(content));
+                    ServerInfo info = ServerInfo.parse(new JSONObject(content));
+                    info.setUrl(url);
+                    return info;
                 } finally {
                     urlConnection.disconnect();
                 }
