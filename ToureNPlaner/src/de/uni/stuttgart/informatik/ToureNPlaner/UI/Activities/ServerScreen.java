@@ -89,7 +89,7 @@ public class ServerScreen extends Activity {
                         adapter.notifyDataSetChanged();
                         saveServerList();
                     }
-                });
+                }, "");
             }
         });
     }
@@ -123,10 +123,17 @@ public class ServerScreen extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         switch (item.getItemId()) {
             case 0: // edit
-                saveServerList();
+                showTextDialog(ServerScreen.this,"Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
+                    @Override
+                    public void result(String input) {
+                        servers.set(info.position,input);
+                        adapter.notifyDataSetChanged();
+                        saveServerList();
+                    }
+                }, servers.get(info.position));
                 break;
             case 1: // delete
                 servers.remove(info.position);

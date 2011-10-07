@@ -5,14 +5,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class Util {
     public interface Callback {
         void result(String input);
     }
 
-    public static void showTextDialog(final Context context, String message, final Callback callback) {
+    public static void showTextDialog(final Context context, String message, final Callback callback, String content) {
         final EditText input = new EditText(context);
+        input.setText(content, TextView.BufferType.SPANNABLE);
         new AlertDialog.Builder(context)
                 .setTitle(message)
                 .setView(input)
