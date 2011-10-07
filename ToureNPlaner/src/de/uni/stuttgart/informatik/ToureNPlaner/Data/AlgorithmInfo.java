@@ -1,6 +1,5 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.Net;
+package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

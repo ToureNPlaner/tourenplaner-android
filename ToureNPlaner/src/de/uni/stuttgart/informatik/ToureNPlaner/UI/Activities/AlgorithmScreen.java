@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.AlgorithmInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.ServerInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 

@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.Net;
+package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +43,7 @@ public class ServerInfo implements Serializable {
 
     private ArrayList<AlgorithmInfo> algorithms;
 
-    static ServerInfo parse(JSONObject object) throws JSONException {
+    public static ServerInfo parse(JSONObject object) throws JSONException {
         ServerInfo info = new ServerInfo();
         info.version = object.getString("version");
         info.serverType = ServerType.valueOf(object.getString("servertype").toUpperCase());

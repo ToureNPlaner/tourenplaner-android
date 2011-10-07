@@ -1,6 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.os.AsyncTask;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import org.json.JSONObject;
 
 import java.io.Serializable;

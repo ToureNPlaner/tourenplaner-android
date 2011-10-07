@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import junit.framework.TestCase;
 import org.json.JSONObject;
 
