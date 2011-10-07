@@ -2,12 +2,8 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:orientation="vertical">
-    <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="fill_parent">
-        <Spinner android:layout_weight="1" android:layout_height="wrap_content" android:prompt="@string/choose_server" android:id="@+id/spinner_server" android:layout_width="fill_parent"></Spinner>
-        <Button android:text="+" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/btnAdd"></Button>
-    </LinearLayout>
-    <Button android:text="confirm" android:layout_height="wrap_content" android:id="@+id/btnconfirm" android:layout_width="fill_parent"></Button>
-    <Button android:text="set URL" android:id="@+id/btnSetUrl" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+  android:layout_height="fill_parent" android:orientation="vertical" android:weightSum="1">
+    <Button android:id="@+id/btnAdd" android:text="Add Server" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+    <ListView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/serverListView"></ListView>
     
 </LinearLayout>

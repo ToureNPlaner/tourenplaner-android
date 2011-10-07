@@ -1,16 +1,15 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -29,20 +28,18 @@ public class ServerScreen extends Activity {
 
     final String SERVERLIST_FILENAME = "serverlist";
     private ArrayAdapter adapter;
-    private Spinner spinner;
-    private Button btnconfirm;
+    private ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.serverscreen);
 
-        spinner = (Spinner) findViewById(R.id.spinner_server);
-        btnconfirm = (Button) findViewById(R.id.btnconfirm);
+        listView = (ListView) findViewById(R.id.serverListView);
 
         loadServerList();
 
-        setupSpinner();
+        setupListView();
         setupButtons();
     }
 
@@ -77,8 +74,6 @@ public class ServerScreen extends Activity {
     }
 
     private void setupButtons() {
-        setupConfirmButton();
-        setupSetUrlButton();
         setupAddButton();
     }
 
@@ -99,82 +94,66 @@ public class ServerScreen extends Activity {
         });
     }
 
-    private void setupConfirmButton() {
-        btnconfirm.setOnClickListener(new OnClickListener() {
+    private void setupListView() {
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, servers);
+        listView.setAdapter(adapter);
+
+        listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
-            public void onClick(View view) {
-                String url = "http://" + spinner.getSelectedItem();
-                //TODO make cancelable
-                final ProgressDialog dialog = ProgressDialog.show(ServerScreen.this, "Connecting", url, true);
-                Session.connect(url, new Observer() {
-                    @Override
-                    public void onCompleted(Object object) {
-                        dialog.dismiss();
-                        ServerInfo info = (ServerInfo) object;
-                        Intent myIntent = new Intent(getBaseContext(), LoginScreen.class);
-                        startActivity(myIntent);
-                    }
-
-                    @Override
-                    public void onError(Object object) {
-                        dialog.dismiss();
-                        Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
+            public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                  if (view.getId()==R.id.serverListView) {
+                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)contextMenuInfo;
+                    contextMenu.setHeaderTitle(servers.get(info.position));
+                    String[] menuItems = {"edit", "delete"};
+                    for (int i = 0; i<menuItems.length; i++) {
+                      contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+                  }
+                }
             }
+        });
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String url = "http://" + adapterView.getItemAtPosition(i);
+                serverSelected(url);
+            }
         });
     }
 
-    private void setupSetUrlButton() {
-        Button btnSetURL = (Button) findViewById(R.id.btnSetUrl);
-        //  User can change the server URL
-        btnSetURL.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(ServerScreen.this);
-
-                alert.setTitle("type your URL");
-                alert.setMessage("URL");
-
-                // Set an EditText view to get user input
-                final EditText input = new EditText(ServerScreen.this);
-                input.setText(SessionData.Instance.getServerURL());
-                alert.setView(input);
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        SessionData.Instance.setServerURL(input.getText().toString());
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Canceled.
-                    }
-                });
-
-                alert.show();
-            }
-
-        });
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        switch (item.getItemId()) {
+            case 0: // edit
+                saveServerList();
+                break;
+            case 1: // delete
+                servers.remove(info.position);
+                adapter.notifyDataSetChanged();
+                saveServerList();
+                break;
+        }
+    	return true;
     }
 
-    private void setupSpinner() {
-        // loads the spinnerArray into the spinnerdropdown
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, servers);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+    private void serverSelected(String url) {
+        //TODO make cancelable
+        final ProgressDialog dialog = ProgressDialog.show(this, "Connecting", url, true);
+        Session.connect(url, new Observer() {
             @Override
-            public void onItemSelected(AdapterView<?> adapter, View view, int pos, long id) {
-                SessionData.Instance.setChoosenAlgorithm(adapter.getItemAtPosition(pos).toString());
+            public void onCompleted(Object object) {
+                dialog.dismiss();
+                ServerInfo info = (ServerInfo) object;
+                Intent myIntent = new Intent(getBaseContext(), LoginScreen.class);
+                startActivity(myIntent);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
+            public void onError(Object object) {
+                dialog.dismiss();
+                Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
             }
-
         });
     }
 }
