@@ -16,6 +16,11 @@ public class AlgorithmInfo implements Serializable {
     private int minPoints;
     private boolean sourceIsTarget;
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public static AlgorithmInfo parse(JSONObject object) throws JSONException {
         AlgorithmInfo info = new AlgorithmInfo();
         info.version = object.getString("version");

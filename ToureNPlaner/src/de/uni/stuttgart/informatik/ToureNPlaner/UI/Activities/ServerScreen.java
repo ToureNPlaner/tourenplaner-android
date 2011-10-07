@@ -28,14 +28,11 @@ public class ServerScreen extends Activity {
 
     final String SERVERLIST_FILENAME = "serverlist";
     private ArrayAdapter adapter;
-    private ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.serverscreen);
-
-        listView = (ListView) findViewById(R.id.serverListView);
 
         loadServerList();
 
@@ -95,19 +92,20 @@ public class ServerScreen extends Activity {
     }
 
     private void setupListView() {
+        ListView listView = (ListView) findViewById(R.id.serverListView);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, servers);
         listView.setAdapter(adapter);
 
         listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-                  if (view.getId()==R.id.serverListView) {
-                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)contextMenuInfo;
+                if (view.getId() == R.id.serverListView) {
+                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
                     contextMenu.setHeaderTitle(servers.get(info.position));
                     String[] menuItems = {"edit", "delete"};
-                    for (int i = 0; i<menuItems.length; i++) {
-                      contextMenu.add(Menu.NONE, i, i, menuItems[i]);
-                  }
+                    for (int i = 0; i < menuItems.length; i++) {
+                        contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+                    }
                 }
             }
         });
@@ -126,10 +124,10 @@ public class ServerScreen extends Activity {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         switch (item.getItemId()) {
             case 0: // edit
-                showTextDialog(ServerScreen.this,"Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
+                showTextDialog(ServerScreen.this, "Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
                     @Override
                     public void result(String input) {
-                        servers.set(info.position,input);
+                        servers.set(info.position, input);
                         adapter.notifyDataSetChanged();
                         saveServerList();
                     }
@@ -151,8 +149,14 @@ public class ServerScreen extends Activity {
             @Override
             public void onCompleted(Object object) {
                 dialog.dismiss();
-                ServerInfo info = (ServerInfo) object;
-                Intent myIntent = new Intent(getBaseContext(), LoginScreen.class);
+                Session session = (Session) object;
+                Intent myIntent;
+                if(session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
+                    myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
+                } else {
+                    myIntent = new Intent(getBaseContext(), LoginScreen.class);
+                }
+                myIntent.putExtra(Session.IDENTIFIER, session);
                 startActivity(myIntent);
             }
 
