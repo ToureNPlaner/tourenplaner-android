@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,16 +12,26 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class NodePreferences extends Activity {
 
-	@Override
+    private Node node;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("node",node);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nodepreferences);
-		// generates the NodePreferences layout and fill content in the
-		// Textviews
+		// generates the NodePreferences layout and fill content in the Textviews
 		try {
-            // TODO
-			Node node = new Node("asd",0.0,0.0);//NodeModel.getInstance()
-					//.get(SessionData.Instance.getSelectedNode());
+            if (savedInstanceState != null) {
+                node = (Node) savedInstanceState.getSerializable("node");
+            } else {
+                node = (Node) getIntent().getSerializableExtra("node");
+            }
+
 			// -------------- get EditTexts --------------
 			final EditText etName = (EditText) findViewById(R.id.etName);
 			// final EditText etLongitude = (EditText)
@@ -41,11 +52,11 @@ public class NodePreferences extends Activity {
 				public void onClick(View v) {
 
 					// -------------set Name------------------
-					//NodeModel.getInstance().get(SessionData.Instance.getSelectedNode())
-					//		.setName(etName.getText().toString());
-					// notifies the Nodelistscreen for all changes
-					NodelistScreen.getAdapter().notifyDataSetChanged();
-					finish();
+					node.setName(etName.getText().toString());
+                    Intent data = new Intent();
+                    data.putExtra("node", node);
+                    setResult(RESULT_OK, data);
+                    finish();
 				}
 			});
 
@@ -59,9 +70,9 @@ public class NodePreferences extends Activity {
 				public void onClick(View v) {
 					//NodeModel.getInstance().remove(SessionData.Instance.getSelectedNode());
 					// notifies the Nodelistscreen for all changes
-					NodelistScreen.getAdapter().notifyDataSetChanged();
+					//NodelistScreen.getAdapter().notifyDataSetChanged();
 					finish();
-				};
+				}
 			});
 
 		} catch (Exception e) {

@@ -8,22 +8,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Adapters.NodeListAdapter;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.NodeListAdapter;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
 public class NodelistScreen extends ListActivity {
-    public NodelistScreen nodeListScreenContext = this;
-
-    private static NodeListAdapter adapter;
     private Session session;
+    private NodeListAdapter adapter;
 
-    public static NodeListAdapter getAdapter() {
-        return adapter;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(Session.IDENTIFIER, session);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -36,29 +35,34 @@ public class NodelistScreen extends ListActivity {
             session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
         }
 
-        ArrayList<Node> nodeList = session.getNodeModel().getNodeVector();
-        adapter = new NodeListAdapter(nodeList, this);
+        adapter = new NodeListAdapter(session.getNodeModel().getNodeVector(), this);
         ListView listView = getListView();
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> adapter, View view,
                                     final int pos, long arg3) {
-                SessionData.Instance.setSelectedNode(pos);
-                // generates an intent from the class NodeListScreen
-                Intent myIntent = new Intent(nodeListScreenContext,
+                Intent myIntent = new Intent(NodelistScreen.this,
                         NodePreferences.class);
-                startActivity(myIntent);
-                getAdapter().notifyDataSetChanged();
+                myIntent.putExtra("node", (Serializable) adapter.getItemAtPosition(pos));
+                startActivityForResult(myIntent, pos);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            session.getNodeModel().getNodeVector().set(requestCode, (Node) data.getSerializableExtra("node"));
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Intent data = new Intent();
-            data.putExtra(NodeModel.IDENTIFIER,session.getNodeModel());
+            data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel());
             setResult(RESULT_OK, data);
         }
         return super.onKeyDown(keyCode, event);

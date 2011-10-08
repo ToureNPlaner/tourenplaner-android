@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.Data.Adapters;
+package de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

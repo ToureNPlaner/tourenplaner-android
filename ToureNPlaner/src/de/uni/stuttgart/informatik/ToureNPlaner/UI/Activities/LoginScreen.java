@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class LoginScreen extends Activity {
@@ -32,8 +31,8 @@ public class LoginScreen extends Activity {
 				EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
 
 				// set userdata
-				SessionData.Instance.setEmail(emailTextfield.getText().toString());
-				SessionData.Instance.setPassword(passwordTextfield.getText().toString());
+				//SessionData.Instance.setEmail(emailTextfield.getText().toString());
+				//SessionData.Instance.setPassword(passwordTextfield.getText().toString());
 
 				// TODO DB check if user exist and have permissions
 
