@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.util.ArrayList;
@@ -18,11 +17,12 @@ import java.util.ArrayList;
 public class NodeListAdapter extends BaseAdapter{
 	  private  ArrayList<Node> nodeVector;
 	  private Context context;
-	public NodeListAdapter(ArrayList<Node> nodeVector, Context context) {
+
+    public NodeListAdapter(ArrayList<Node> nodeVector, Context context) {
 
 		 this.nodeVector = nodeVector;
 		 this.context = context;
-	}
+    }
 	
 	 @Override
    public View getView(final int position, View convertView, ViewGroup parent) {
@@ -44,7 +44,7 @@ public class NodeListAdapter extends BaseAdapter{
 	        // sets the icon depending on the index
 	        if (position == 0){
 	        	icon =  context.getResources().getDrawable(R.drawable.startmarker);
-	        }else if(position ==NodeModel.getInstance().size()-1 ){
+	        }else if(position ==nodeVector.size()-1 ){
 	        	icon =  context.getResources().getDrawable(R.drawable.endmarker);
 	        }else{
 	        	icon =  context.getResources().getDrawable(R.drawable.marker);

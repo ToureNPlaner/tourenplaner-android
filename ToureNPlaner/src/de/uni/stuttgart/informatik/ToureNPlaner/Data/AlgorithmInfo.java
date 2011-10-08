@@ -20,6 +20,10 @@ public class AlgorithmInfo implements Serializable {
         return name;
     }
 
+    public boolean sourceIsTarget() {
+        return sourceIsTarget;
+    }
+
     public static AlgorithmInfo parse(JSONObject object) throws JSONException {
         AlgorithmInfo info = new AlgorithmInfo();
         info.version = object.getString("version");

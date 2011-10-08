@@ -1,19 +1,14 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class NodeModel {
+public class NodeModel implements Serializable {
 
-	private static ArrayList<Node> nodeVector = new ArrayList<Node>();
-	public static NodeModel instance = null;
+	private ArrayList<Node> nodeVector = new ArrayList<Node>();
 
-	public static NodeModel getInstance() {
-		if (instance == null) {
-			instance = new NodeModel();
-		}
-		return instance;
-	}
+    public static final String IDENTIFIER = "nodemodel";
 
 	public ArrayList<Node> getNodeVector() {
 		return nodeVector;
@@ -29,8 +24,6 @@ public class NodeModel {
 
 	public void addNodeToVector(Node node) {
 		nodeVector.add(node);
-		
-
 	}
 
 	public void remove(Integer pos) {

@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.os.AsyncTask;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import org.json.JSONObject;
 
@@ -56,6 +57,15 @@ public class Session implements Serializable {
     private ServerInfo serverInfo;
     private String url;
     private AlgorithmInfo selectedAlgorithm;
+    private NodeModel nodeModel = new NodeModel();
+
+    public void setNodeModel(NodeModel nodeModel) {
+        this.nodeModel = nodeModel;
+    }
+
+    public NodeModel getNodeModel() {
+        return nodeModel;
+    }
 
     public AlgorithmInfo getSelectedAlgorithm() {
         return selectedAlgorithm;

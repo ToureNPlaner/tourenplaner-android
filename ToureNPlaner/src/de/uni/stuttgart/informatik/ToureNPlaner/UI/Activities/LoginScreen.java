@@ -1,7 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,23 +7,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.SessionData;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class LoginScreen extends Activity {
 
 	// generates the Application preferences for all activities
 	public static final String TPpreferences = "ToureNPlanerPreferences";
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        SessionData.Instance.save(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        SessionData.Instance.load(savedInstanceState);
-    }
 
 	/** Called when the activity is first created. */
 	@Override

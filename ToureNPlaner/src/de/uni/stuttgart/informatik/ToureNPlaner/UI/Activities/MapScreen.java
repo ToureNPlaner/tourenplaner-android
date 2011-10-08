@@ -9,25 +9,33 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlay;
 import org.mapsforge.android.maps.*;
 
-import java.util.Vector;
-
 public class MapScreen extends MapActivity {
     public MapView mapView;
-    private Vector<OverlayItem> overlayItemVector = new Vector<OverlayItem>();
     private ArrayWayOverlay wayOverlay;
+    private Session session;
+    private ItemOverlay itemizedoverlay;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(Session.IDENTIFIER, session);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // If we get created for the first time we get our data from the intent
+        if(savedInstanceState != null) {
+            session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
+        } else {
+            session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
+        }
+
         // setting properties of the mapview
         mapView = new MapView(this);
         mapView.setClickable(true);
@@ -40,7 +48,7 @@ public class MapScreen extends MapActivity {
         mapView.setMemoryCardCacheSize(1000);
         setContentView(mapView);
 
-        ItemOverlay itemizedoverlay = new ItemOverlay(this);
+        itemizedoverlay = new ItemOverlay(this,session.getNodeModel(),session.getSelectedAlgorithm());
         mapView.getOverlays().add(itemizedoverlay);
 
         setupWayOverlay();
@@ -94,7 +102,8 @@ public class MapScreen extends MapActivity {
             case R.id.calculate:
                 // generates an intent from the class NodeListScreen
                 Intent myIntent = new Intent(this, NodelistScreen.class);
-                startActivity(myIntent);
+                myIntent.putExtra(Session.IDENTIFIER,session);
+                startActivityForResult(myIntent, 0);
 
                 return true;
             case R.id.reset:
@@ -105,26 +114,21 @@ public class MapScreen extends MapActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        session.setNodeModel((NodeModel) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
+        itemizedoverlay.setNodeModel(session.getNodeModel());
+    }
+
     public void addPathToMap() {
         wayOverlay.clear();
         OverlayWay way;
-        GeoPoint[][] geoArray = new GeoPoint[1][NodeModel.getInstance().size()];
-        for (int i = 0; i < NodeModel.getInstance().size(); i++) {
-            geoArray[0][i] = NodeModel.getInstance().get(i).getGeoPoint();
+        NodeModel nodeModel = session.getNodeModel();
+        GeoPoint[][] geoArray = new GeoPoint[1][nodeModel.size()];
+        for (int i = 0; i < nodeModel.size(); i++) {
+            geoArray[0][i] = nodeModel.get(i).getGeoPoint();
         }
         way = new OverlayWay(geoArray);
         wayOverlay.addWay(way);
     }
-
-    /*public void printAllMarkersToMap() {
-        // initialize components of ItemOverlay
-        overlayItemVector.clear();
-        //TODO update view when pressing "backbutton" on "NodeListScreen" Activitiy
-        Log.v("clearMap", "ClearMap");
-        for (int i = 0; i < NodeModel.getInstance().size(); i++) {
-            Log.v("add marker", "add marker");
-            addMarkerToMap(NodeModel.getInstance().get(i));
-        }
-    }*/
-
 }

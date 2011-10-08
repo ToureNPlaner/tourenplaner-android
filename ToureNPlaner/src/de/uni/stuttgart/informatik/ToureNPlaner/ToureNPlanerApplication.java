@@ -8,7 +8,7 @@ public class ToureNPlanerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SessionData.createInstance(this);
+        SessionData.createInstance();
     }
 
     private void disableConnectionReuseIfNecessary() {

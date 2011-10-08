@@ -2,14 +2,15 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import org.mapsforge.android.maps.GeoPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Node {
+public class Node implements Serializable {
 	private String name;
 	private Double latitude;
 	private Double longitude;
-	private GeoPoint geoPoint;
 	private ArrayList<Constraint> constraintList;
+    private transient GeoPoint geoPoint;
 
 	public Node(String name, Double latitude, Double longitude,
 			ArrayList<Constraint> constraintList) {
@@ -19,23 +20,10 @@ public class Node {
 		this.constraintList = constraintList;
 	}
 
-	public GeoPoint getGeoPoint() {
-		return this.geoPoint;
-	}
-
 	public Node(String name, Double latitude, Double longitude) {
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
-	}
-
-	public Node(String name, GeoPoint gp) {
-		this.name = name;
-		this.geoPoint = gp;
-	}
-
-	public void setGeoPoint(GeoPoint geoPoint) {
-		this.geoPoint = geoPoint;
 	}
 
 	public String getName() {
@@ -50,16 +38,8 @@ public class Node {
 		return this.latitude;
 	}
 
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
-
 	public Double getLongitude() {
 		return this.longitude;
-	}
-
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
 	}
 
 	public ArrayList<Constraint> getConstraintList() {
@@ -69,4 +49,11 @@ public class Node {
 	public void setConstraintList(ArrayList<Constraint> constraintList) {
 		this.constraintList = constraintList;
 	}
+
+    public GeoPoint getGeoPoint() {
+        if(geoPoint == null) {
+            geoPoint = new GeoPoint(latitude, longitude);
+        }
+        return geoPoint;
+    }
 }
