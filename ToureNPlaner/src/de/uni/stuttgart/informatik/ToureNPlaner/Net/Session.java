@@ -56,6 +56,8 @@ public class Session implements Serializable {
 
     private ServerInfo serverInfo;
     private String url;
+    private String user;
+    private String password;
     private AlgorithmInfo selectedAlgorithm;
     private NodeModel nodeModel = new NodeModel();
 
@@ -78,6 +80,14 @@ public class Session implements Serializable {
     public ServerInfo getServerInfo() {
         return serverInfo;
     }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setPassword(String password) {
+            this.password = password;
+        }
 
     /**
      *

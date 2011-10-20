@@ -7,41 +7,57 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class LoginScreen extends Activity {
 
-	// generates the Application preferences for all activities
-	public static final String TPpreferences = "ToureNPlanerPreferences";
+    private Session session;
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.loginscreen);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(Session.IDENTIFIER, session);
+        super.onSaveInstanceState(outState);
+    }
 
-			// ---the button is wired to an event handler---
-		Button btnlogin = (Button) findViewById(R.id.btnlogin);
-		btnlogin.setOnClickListener(new OnClickListener() {
+    /**
+     * Called when the activity is first created.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.loginscreen);
 
-			@Override
-			public void onClick(View view) {
-				// gets Values of TextEditors
-				EditText emailTextfield = (EditText) findViewById(R.id.emailTextfield);
-				EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
+        // If we get created for the first time we get our data from the intent
+        if (savedInstanceState != null) {
+            session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
+        } else {
+            session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
+        }
 
-				// set userdata
-				//SessionData.Instance.setEmail(emailTextfield.getText().toString());
-				//SessionData.Instance.setPassword(passwordTextfield.getText().toString());
+        setupLoginButton();
+    }
 
-				// TODO DB check if user exist and have permissions
+    private void setupLoginButton() {
+        Button btnlogin = (Button) findViewById(R.id.btnlogin);
+        btnlogin.setOnClickListener(new OnClickListener() {
 
-				// generates an intent from the class algorithms
-				Intent myIntent = new Intent(view.getContext(),
-						AlgorithmScreen.class);
-				startActivity(myIntent);
+            @Override
+            public void onClick(View view) {
+                // gets Values of TextEditors
+                EditText emailTextfield = (EditText) findViewById(R.id.emailTextfield);
+                EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
 
-			}
-		});
-	}
+                // set userdata
+                session.setUser(emailTextfield.getText().toString());
+                session.setPassword(passwordTextfield.getText().toString());
+
+                // TODO DB check if user exist and have permissions
+                Intent myIntent = new Intent(view.getContext(),
+                        AlgorithmScreen.class);
+                myIntent.putExtra(Session.IDENTIFIER, session);
+                startActivity(myIntent);
+            }
+        });
+    }
 }
