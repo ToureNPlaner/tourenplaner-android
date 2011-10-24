@@ -14,7 +14,7 @@ public class NodeModel implements Serializable {
 		return nodeVector;
 	}
 
-	public Node get(Integer i) {
+	public Node get(int i) {
 		return nodeVector.get(i);
 	}
 
@@ -26,17 +26,14 @@ public class NodeModel implements Serializable {
 		nodeVector.add(node);
 	}
 
-	public void remove(Integer pos) {
+	public void remove(int pos) {
 		nodeVector.remove(pos);
 		}
 
-	public void swapNodes(Integer pos1, Integer pos2) {
+	public void swapNodes(int pos1, int pos2) {
 		Node tempNode = nodeVector.get(pos1);
 		nodeVector.set(pos1, nodeVector.get(pos2));
 		nodeVector.set(pos2, tempNode);
 
 	}
-
-
-
 }
