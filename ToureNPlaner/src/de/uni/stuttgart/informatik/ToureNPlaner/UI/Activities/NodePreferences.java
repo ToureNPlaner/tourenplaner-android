@@ -14,10 +14,19 @@ public class NodePreferences extends Activity {
 
     private Node node;
 
+    public static final int RESULT_DELETE = RESULT_FIRST_USER;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("node",node);
         super.onSaveInstanceState(outState);
+    }
+
+    void finishActivity() {
+        Intent data = new Intent();
+        data.putExtra("node", node);
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override
@@ -50,28 +59,21 @@ public class NodePreferences extends Activity {
 			// -----------------btnSave-----------------------
 			btnSave.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-
-					// -------------set Name------------------
-					node.setName(etName.getText().toString());
-                    Intent data = new Intent();
-                    data.putExtra("node", node);
-                    setResult(RESULT_OK, data);
-                    finish();
+                    finishActivity();
 				}
 			});
 
 			btnReturn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					finish();
+                    setResult(RESULT_CANCELED, null);
+                    finish();
 				}
 			});
 			// -----------------btnDelete-----------------------
 			btnDelete.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					//NodeModel.getInstance().remove(SessionData.Instance.getSelectedNode());
-					// notifies the Nodelistscreen for all changes
-					//NodelistScreen.getAdapter().notifyDataSetChanged();
-					finish();
+                    setResult(RESULT_DELETE, null);
+                    finish();
 				}
 			});
 

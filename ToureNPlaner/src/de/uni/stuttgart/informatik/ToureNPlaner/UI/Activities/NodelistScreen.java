@@ -52,9 +52,14 @@ public class NodelistScreen extends ListActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            session.getNodeModel().getNodeVector().set(requestCode, (Node) data.getSerializableExtra("node"));
-            adapter.notifyDataSetChanged();
+        switch (resultCode) {
+            case RESULT_OK:
+                session.getNodeModel().getNodeVector().set(requestCode, (Node) data.getSerializableExtra("node"));
+                adapter.notifyDataSetChanged();
+                break;
+            case NodePreferences.RESULT_DELETE:
+                session.getNodeModel().getNodeVector().remove(requestCode);
+                adapter.notifyDataSetChanged();
         }
     }
 
