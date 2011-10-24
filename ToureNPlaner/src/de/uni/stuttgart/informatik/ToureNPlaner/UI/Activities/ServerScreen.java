@@ -15,6 +15,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.TextDialog;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,23 +23,64 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.showTextDialog;
-
 public class ServerScreen extends FragmentActivity implements Observer {
     static final String SERVERLIST_FILENAME = "serverlist";
     private ArrayAdapter adapter;
     private Session.ConnectionHandler handler;
     private ArrayList<String> servers;
 
-    private static class ConnectionProgressDialog extends MyProgressDialog {
+    public static class ConnectionProgressDialog extends MyProgressDialog {
         public static ConnectionProgressDialog newInstance(String title, String message) {
             return (ConnectionProgressDialog) MyProgressDialog.newInstance(new ConnectionProgressDialog(), title, message);
         }
 
         @Override
         public void onCancel(DialogInterface dialog) {
-            ((ServerScreen)getActivity()).cancelConnection();
+            ((ServerScreen) getActivity()).cancelConnection();
         }
+    }
+
+    public static class EditDialog extends TextDialog {
+        public static EditDialog newInstance(String title, String content, int id) {
+            EditDialog dialog = (EditDialog) TextDialog.newInstance(new EditDialog(), title, content);
+            dialog.getArguments().putInt("id", id);
+            return dialog;
+        }
+
+        @Override
+        public void doPositiveClick() {
+            ((ServerScreen)getActivity()).editServer(getArguments().getInt("id"),getInputField().getText().toString());
+        }
+
+        @Override
+        public void doNegativeClick() {}
+    }
+
+    public static class NewDialog extends TextDialog {
+            public static NewDialog newInstance(String title, String content) {
+                return (NewDialog) TextDialog.newInstance(new NewDialog(), title, content);
+            }
+
+            @Override
+            public void doPositiveClick() {
+                ((ServerScreen)getActivity()).newServer(getInputField().getText().toString());
+            }
+
+            @Override
+            public void doNegativeClick() {}
+        }
+    
+    
+    private void editServer(int id, String server) {
+        servers.set(id, server);
+        adapter.notifyDataSetChanged();
+        saveServerList();
+    }
+    
+    private void newServer(String server) {
+        servers.add(server);
+        adapter.notifyDataSetChanged();
+        saveServerList();
     }
 
     @Override
@@ -89,30 +131,23 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     private void initializeHandler() {
-            handler = (Session.ConnectionHandler) getLastCustomNonConfigurationInstance();
+        handler = (Session.ConnectionHandler) getLastCustomNonConfigurationInstance();
 
-            if(handler != null)
-                handler.setListener(this);
-            else {
-                MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
-                if(dialog != null)
-                    dialog.dismiss();
-            }
+        if (handler != null)
+            handler.setListener(this);
+        else {
+            MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
+            if (dialog != null)
+                dialog.dismiss();
         }
+    }
 
     private void setupAddButton() {
         Button btnAdd = (Button) findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTextDialog(ServerScreen.this, "Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
-                    @Override
-                    public void result(String input) {
-                        servers.add(input);
-                        adapter.notifyDataSetChanged();
-                        saveServerList();
-                    }
-                }, "");
+                NewDialog.newInstance("New","").show(getSupportFragmentManager(),"new");
             }
         });
     }
@@ -150,14 +185,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case 0: // edit
-                showTextDialog(ServerScreen.this, "Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
-                    @Override
-                    public void result(String input) {
-                        servers.set(info.position, input);
-                        adapter.notifyDataSetChanged();
-                        saveServerList();
-                    }
-                }, servers.get(info.position));
+                EditDialog.newInstance("Choose",servers.get(info.position),info.position).show(getSupportFragmentManager(),"edit");
                 break;
             case 1: // delete
                 servers.remove(info.position);
@@ -169,9 +197,9 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     private void cancelConnection() {
-            handler.cancel(true);
-            handler = null;
-        }
+        handler.cancel(true);
+        handler = null;
+    }
 
     @Override
     public void onCompleted(Object object) {
@@ -203,7 +231,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     private void serverSelected(String url) {
-        ConnectionProgressDialog.newInstance("Connecting",url).show(getSupportFragmentManager(), "connecting");
+        ConnectionProgressDialog.newInstance("Connecting", url).show(getSupportFragmentManager(), "connecting");
         handler = Session.connect(url, this);
     }
 }
