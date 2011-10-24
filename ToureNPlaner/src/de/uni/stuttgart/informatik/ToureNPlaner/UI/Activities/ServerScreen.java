@@ -1,9 +1,12 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,11 +26,37 @@ import java.util.ArrayList;
 
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.showTextDialog;
 
-public class ServerScreen extends Activity {
-    ArrayList<String> servers;
-
-    final String SERVERLIST_FILENAME = "serverlist";
+public class ServerScreen extends FragmentActivity implements Observer {
+    static final String SERVERLIST_FILENAME = "serverlist";
     private ArrayAdapter adapter;
+    private Session.ConnectionHandler handler;
+    private ArrayList<String> servers;
+
+    public static class MyProgressDialog extends DialogFragment {
+        static MyProgressDialog newInstance(String url) {
+            MyProgressDialog dialog = new MyProgressDialog();
+            Bundle b = new Bundle();
+            b.putString("url", url);
+            dialog.setArguments(b);
+            return dialog; 
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            ((ServerScreen)getActivity()).cancelConnection();
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setTitle("Connecting");
+            dialog.setMessage(getArguments().getString("url"));
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(true);
+
+            return dialog;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +67,8 @@ public class ServerScreen extends Activity {
 
         setupListView();
         setupButtons();
+
+        initializeHandler();
     }
 
     private void saveServerList() {
@@ -55,7 +86,7 @@ public class ServerScreen extends Activity {
     }
 
     @SuppressWarnings("unchecked")
-	private void loadServerList() {
+    private void loadServerList() {
         try {
             FileInputStream inputStream = openFileInput(SERVERLIST_FILENAME);
             try {
@@ -74,12 +105,24 @@ public class ServerScreen extends Activity {
         setupAddButton();
     }
 
+    private void initializeHandler() {
+            handler = (Session.ConnectionHandler) getLastCustomNonConfigurationInstance();
+
+            if(handler != null)
+                handler.setListener(this);
+            else {
+                MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
+                if(dialog != null)
+                    dialog.dismiss();
+            }
+        }
+
     private void setupAddButton() {
         Button btnAdd = (Button) findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTextDialog(ServerScreen.this,"Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
+                showTextDialog(ServerScreen.this, "Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
                     @Override
                     public void result(String input) {
                         servers.add(input);
@@ -121,7 +164,7 @@ public class ServerScreen extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case 0: // edit
                 showTextDialog(ServerScreen.this, "Choose", new de.uni.stuttgart.informatik.ToureNPlaner.UI.Util.Callback() {
@@ -139,32 +182,45 @@ public class ServerScreen extends Activity {
                 saveServerList();
                 break;
         }
-    	return true;
+        return true;
+    }
+
+    private void cancelConnection() {
+            handler.cancel(true);
+            handler = null;
+        }
+
+    @Override
+    public void onCompleted(Object object) {
+        handler = null;
+        MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
+        dialog.dismiss();
+        Session session = (Session) object;
+        Intent myIntent;
+        if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
+            myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
+        } else {
+            myIntent = new Intent(getBaseContext(), LoginScreen.class);
+        }
+        myIntent.putExtra(Session.IDENTIFIER, session);
+        startActivity(myIntent);
+    }
+
+    @Override
+    public void onError(Object object) {
+        handler = null;
+        MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
+        dialog.dismiss();
+        Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return handler;
     }
 
     private void serverSelected(String url) {
-        //TODO make cancelable
-        final ProgressDialog dialog = ProgressDialog.show(this, "Connecting", url, true);
-        Session.connect(url, new Observer() {
-            @Override
-            public void onCompleted(Object object) {
-                dialog.dismiss();
-                Session session = (Session) object;
-                Intent myIntent;
-                if(session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
-                    myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
-                } else {
-                    myIntent = new Intent(getBaseContext(), LoginScreen.class);
-                }
-                myIntent.putExtra(Session.IDENTIFIER, session);
-                startActivity(myIntent);
-            }
-
-            @Override
-            public void onError(Object object) {
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+        MyProgressDialog.newInstance(url).show(getSupportFragmentManager(), "connecting");
+        handler = Session.connect(url, this);
     }
 }
