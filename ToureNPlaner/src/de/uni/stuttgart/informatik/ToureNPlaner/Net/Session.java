@@ -13,9 +13,13 @@ import java.net.URL;
 public class Session implements Serializable {
     public static final String IDENTIFIER = "session";
 
-    static class ConnectionHandler extends AsyncTask<Void, Void, Object> {
+    public static class ConnectionHandler extends AsyncTask<Void, Void, Object> {
         Observer listener;
         String url;
+
+        public void setListener(Observer listener) {
+            this.listener = listener;
+        }
 
         @Override
         protected void onPostExecute(Object object) {
