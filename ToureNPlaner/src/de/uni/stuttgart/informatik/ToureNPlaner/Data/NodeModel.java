@@ -25,6 +25,9 @@ public class NodeModel implements Serializable {
 	public void addNodeToVector(Node node) {
 		nodeVector.add(node);
 	}
+	public void clear(){
+		nodeVector.clear();
+	}
 
 	public void remove(Integer pos) {
 		nodeVector.remove(pos);

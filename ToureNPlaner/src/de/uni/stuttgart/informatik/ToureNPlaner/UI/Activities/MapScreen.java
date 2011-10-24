@@ -12,13 +12,16 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlay;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
+
 import org.mapsforge.android.maps.*;
 
 public class MapScreen extends MapActivity {
     public MapView mapView;
     private ArrayWayOverlay wayOverlay;
     private Session session;
-    private ItemOverlay itemizedoverlay;
+    //private ItemOverlay itemizedoverlay;
+    private ItemOverlayDrawable itemizedoverlay;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -48,9 +51,10 @@ public class MapScreen extends MapActivity {
         mapView.setMemoryCardCacheSize(1000);
         setContentView(mapView);
 
-        itemizedoverlay = new ItemOverlay(this,session.getNodeModel(),session.getSelectedAlgorithm());
+//        itemizedoverlay = new ItemOverlay(this,session.getNodeModel(),session.getSelectedAlgorithm());
+//        mapView.getOverlays().add(itemizedoverlay);
+        itemizedoverlay = new ItemOverlayDrawable(this,session.getNodeModel(), mapView);
         mapView.getOverlays().add(itemizedoverlay);
-
         setupWayOverlay();
 
         // set focus of MapScreen
@@ -99,7 +103,7 @@ public class MapScreen extends MapActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.calculate:
+              case R.id.nodelist:
                 // generates an intent from the class NodeListScreen
                 Intent myIntent = new Intent(this, NodelistScreen.class);
                 myIntent.putExtra(Session.IDENTIFIER,session);
@@ -107,8 +111,16 @@ public class MapScreen extends MapActivity {
 
                 return true;
             case R.id.reset:
+            			// clear nodes
+                       	itemizedoverlay.clear();
+                       	// clear path
+                        wayOverlay.clear();
+                        return true;
+            case R.id.calculate:
                 addPathToMap();
-                return true;
+            	return true;
+            	
+            
             default:
                 return super.onOptionsItemSelected(item);
         }
