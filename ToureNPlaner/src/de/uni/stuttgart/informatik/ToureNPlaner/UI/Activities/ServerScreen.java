@@ -1,11 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -17,6 +14,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -32,29 +30,14 @@ public class ServerScreen extends FragmentActivity implements Observer {
     private Session.ConnectionHandler handler;
     private ArrayList<String> servers;
 
-    public static class MyProgressDialog extends DialogFragment {
-        static MyProgressDialog newInstance(String url) {
-            MyProgressDialog dialog = new MyProgressDialog();
-            Bundle b = new Bundle();
-            b.putString("url", url);
-            dialog.setArguments(b);
-            return dialog; 
+    private static class ConnectionProgressDialog extends MyProgressDialog {
+        public static ConnectionProgressDialog newInstance(String title, String message) {
+            return (ConnectionProgressDialog) MyProgressDialog.newInstance(new ConnectionProgressDialog(), title, message);
         }
 
         @Override
         public void onCancel(DialogInterface dialog) {
             ((ServerScreen)getActivity()).cancelConnection();
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setTitle("Connecting");
-            dialog.setMessage(getArguments().getString("url"));
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(true);
-
-            return dialog;
         }
     }
 
@@ -220,7 +203,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     private void serverSelected(String url) {
-        MyProgressDialog.newInstance(url).show(getSupportFragmentManager(), "connecting");
+        ConnectionProgressDialog.newInstance("Connecting",url).show(getSupportFragmentManager(), "connecting");
         handler = Session.connect(url, this);
     }
 }
