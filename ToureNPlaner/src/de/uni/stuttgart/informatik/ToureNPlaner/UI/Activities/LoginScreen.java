@@ -28,6 +28,11 @@ public class LoginScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginscreen);
 
+        EditText emailTextfield = (EditText) findViewById(R.id.emailTextfield);
+        emailTextfield.setText("root@toureNPlaner");
+        EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
+        passwordTextfield.setText("toureNPlaner");
+
         // If we get created for the first time we get our data from the intent
         if (savedInstanceState != null) {
             session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);

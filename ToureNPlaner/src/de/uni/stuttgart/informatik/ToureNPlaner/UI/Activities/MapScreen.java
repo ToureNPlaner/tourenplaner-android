@@ -4,24 +4,30 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
-
 import org.mapsforge.android.maps.*;
 
-public class MapScreen extends MapActivity {
+import java.util.ArrayList;
+
+public class MapScreen extends MapActivity implements Observer {
     public MapView mapView;
     private ArrayWayOverlay wayOverlay;
     private Session session;
     //private ItemOverlay itemizedoverlay;
     private ItemOverlayDrawable itemizedoverlay;
+
+    private AsyncTask<Void, Void, Object> handler;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -117,10 +123,8 @@ public class MapScreen extends MapActivity {
                         wayOverlay.clear();
                         return true;
             case R.id.calculate:
-                addPathToMap();
-            	return true;
-            	
-            
+                handler = new Session.RequestHandler(session,this).execute();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -132,15 +136,27 @@ public class MapScreen extends MapActivity {
         itemizedoverlay.setNodeModel(session.getNodeModel());
     }
 
-    public void addPathToMap() {
+    public void addPathToMap(ArrayList<GeoPoint> points) {
         wayOverlay.clear();
         OverlayWay way;
-        NodeModel nodeModel = session.getNodeModel();
-        GeoPoint[][] geoArray = new GeoPoint[1][nodeModel.size()];
-        for (int i = 0; i < nodeModel.size(); i++) {
-            geoArray[0][i] = nodeModel.get(i).getGeoPoint();
+        GeoPoint[][] geoArray = new GeoPoint[1][points.size()];
+        for (int i = 0; i < points.size(); i++) {
+            geoArray[0][i] = points.get(i);
         }
         way = new OverlayWay(geoArray);
         wayOverlay.addWay(way);
+    }
+
+    @Override
+    public void onCompleted(Object object) {
+        handler = null;
+        Result result = (Result) object;
+        addPathToMap(result.getPoints());
+    }
+
+    @Override
+    public void onError(Object object) {
+        handler = null;
+        Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
     }
 }

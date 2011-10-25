@@ -232,6 +232,6 @@ public class ServerScreen extends FragmentActivity implements Observer {
 
     private void serverSelected(String url) {
         ConnectionProgressDialog.newInstance("Connecting", url).show(getSupportFragmentManager(), "connecting");
-        handler = Session.connect(url, this);
+        handler = Session.createSession(url, this);
     }
 }

@@ -24,6 +24,10 @@ public class AlgorithmInfo implements Serializable {
         return sourceIsTarget;
     }
 
+    public String getUrlsuffix() {
+        return urlsuffix;
+    }
+
     public static AlgorithmInfo parse(JSONObject object) throws JSONException {
         AlgorithmInfo info = new AlgorithmInfo();
         info.version = object.getString("version");
