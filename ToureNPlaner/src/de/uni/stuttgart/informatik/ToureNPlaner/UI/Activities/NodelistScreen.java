@@ -3,7 +3,10 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,17 +41,61 @@ public class NodelistScreen extends ListActivity {
         adapter = new NodeListAdapter(session.getNodeModel().getNodeVector(), this);
         ListView listView = getListView();
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
+        registerForContextMenu(listView);
+        
+        
+        
+        //---------ContextMenu-----------------
+          listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+          @Override
+          public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+          	//if (view.getId() == R.id.serverListView) {
+                  AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
+                  contextMenu.setHeaderTitle(adapter.getItem(info.position).getName());
+                  String[] menuItems = {"edit", "delete"};
+                  for (int i = 0; i < menuItems.length; i++) {
+                      contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+                //  }
+              }
+          }
+          }
+          );
+          
+          listView.setOnItemClickListener(new OnItemClickListener() {
+          	@Override
+              public void onItemClick(AdapterView<?> adapter, View view,
+                                      final int pos, long arg3) {
+             
+                  Intent myIntent = new Intent(NodelistScreen.this,
+                          NodePreferences.class);
+                  myIntent.putExtra("node", (Serializable) adapter.getItemAtPosition(pos));
+                  startActivityForResult(myIntent, pos);
+        
+              }
+          });
+   }
+      
+      @Override
+      public boolean onContextItemSelected(MenuItem item) {
+          final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+          switch (item.getItemId()) {
+              case 0: // edit
+              	 Intent myIntent = new Intent(NodelistScreen.this,
+                           NodePreferences.class);
+                   myIntent.putExtra("node", (Serializable) adapter.getItem(info.position));
+                   startActivityForResult(myIntent, info.position);
+                  break;
+              case 1: // delete
+                  
+                  break;
+          }
+          return true;
+      }
+      
 
-            public void onItemClick(AdapterView<?> adapter, View view,
-                                    final int pos, long arg3) {
-                Intent myIntent = new Intent(NodelistScreen.this,
-                        NodePreferences.class);
-                myIntent.putExtra("node", (Serializable) adapter.getItemAtPosition(pos));
-                startActivityForResult(myIntent, pos);
-            }
-        });
-    }
+
+
+     
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
