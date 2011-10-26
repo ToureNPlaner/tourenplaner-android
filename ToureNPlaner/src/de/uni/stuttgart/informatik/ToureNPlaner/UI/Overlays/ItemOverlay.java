@@ -1,18 +1,21 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import java.util.ArrayList;
+
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.ItemizedOverlay;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.OverlayItem;
 
-import java.util.ArrayList;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 
 public class ItemOverlay extends ItemizedOverlay<OverlayItem> {
     private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
@@ -20,12 +23,14 @@ public class ItemOverlay extends ItemizedOverlay<OverlayItem> {
     private Drawable iconNormal;
     private Drawable iconEnd;
     private NodeModel nodeModel;
+    
     private final AlgorithmInfo algorithmInfo;
 
     public ItemOverlay(Context context, NodeModel nodeModel, AlgorithmInfo algorithmInfo) {
         // ColorDrawable is just a workaround until the icons are loaded
         super(boundCenterBottom(new ColorDrawable()));
         this.nodeModel = nodeModel;
+      
         this.algorithmInfo = algorithmInfo;
         setupIcons(context);
         loadFromModel();
@@ -45,6 +50,9 @@ public class ItemOverlay extends ItemizedOverlay<OverlayItem> {
         requestRedraw();
     }
 
+    public void clear(){
+    	
+    }
     @Override
     public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
         String markerName = "Marker Nr. "
@@ -70,6 +78,17 @@ public class ItemOverlay extends ItemizedOverlay<OverlayItem> {
     public void addMarkerToMap(Node node) {
         OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), node.getName(), "", iconNormal);
         list.add(overlayitem);
+    }
+    
+    @Override
+    protected boolean onTap(int index) {
+      OverlayItem item = list.get(index);
+      Log.v("tab","hh");
+//      AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+//      dialog.setTitle(item.getTitle());
+//      dialog.setMessage(item.getSnippet());
+//      dialog.show();
+      return true;
     }
 
     private void setupIcons(Context context) {

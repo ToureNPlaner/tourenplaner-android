@@ -23,24 +23,32 @@ private int index = 0;
 		this.mapView = mapview;
 		this.gp = gp;
 	}
+	public DrawableMarker() {
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public void draw(Canvas canvas) {
-		  // Transfrom geoposition to Point on canvas
+		int radiusFactor = 1;
+		// Transfrom geoposition to Point on canvas
         Projection projection = mapView.getProjection();
 	    Point point = new Point();
 	    projection.toPixels(gp, point);
 	     // the circle to mark the spot
 	    Paint circle = new Paint();
+	    Paint circleLine = new Paint();
 	    Paint TextPaint = new Paint();
 	    TextPaint.setColor(Color.WHITE);
 	    TextPaint.setTextSize(16);
 	    circle.setColor(color);
+	    circleLine.setColor(Color.BLACK);
 	    // draw line with antialiasing
         DrawFilter drawFilter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG);
         canvas.setDrawFilter(drawFilter);
 	   
+        //add a line for the circle
+        canvas.drawCircle(point.x, point.y, (float) (( mapView.getZoomLevel())*radiusFactor)+1, circleLine);
         // add a factor to customize the standard radius
-	    canvas.drawCircle(point.x, point.y, (float) ( mapView.getZoomLevel()), circle);
+	    canvas.drawCircle(point.x, point.y, (float) ( mapView.getZoomLevel())*radiusFactor, circle);
 	    // draw Text on the circle
 	    canvas.drawText(String.valueOf(index), point.x - 3, point.y + 6, TextPaint);
 	}
