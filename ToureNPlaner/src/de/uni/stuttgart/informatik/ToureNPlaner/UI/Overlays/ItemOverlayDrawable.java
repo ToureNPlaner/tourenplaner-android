@@ -7,15 +7,10 @@ import org.mapsforge.android.maps.ItemizedOverlay;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.OverlayItem;
 
-import android.R.color;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
@@ -26,8 +21,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	private MapView mapview;
 	private final AlgorithmInfo algorithmInfo = null;
 
-	public ItemOverlayDrawable(Context context, NodeModel nodeModel,
-			MapView mapview) {
+	public ItemOverlayDrawable(Context context, NodeModel nodeModel,MapView mapview) {
 		// ColorDrawable is just a workaround until the icons are loaded
 		super(boundCenterBottom(new ColorDrawable()));
 		this.nodeModel = nodeModel;
@@ -45,7 +39,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 		for (int i = 0; i < nodeModel.size(); i++) {
 			addMarkerToMap(nodeModel.get(i));
 		}
-		updateIcons();
+			updateIcons();
 		requestRedraw();
 	}
 
@@ -90,7 +84,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 				dm);
 		list.add(overlayitem);
 	}
-
+	
 	public void clear() {
 		nodeModel.clear();
 		list.clear();
@@ -112,9 +106,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 					.SetIndex(list.size() - 1);
 			((DrawableMarker) list.get(0).getMarker()).setColor(Color.GREEN);
 			((DrawableMarker) list.get(0).getMarker()).SetIndex(0);
-
-		}
+			}
 	}
-
 	// }
 }

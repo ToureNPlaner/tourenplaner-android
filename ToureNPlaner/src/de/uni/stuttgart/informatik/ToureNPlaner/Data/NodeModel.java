@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class NodeModel implements Serializable {
 
 	private ArrayList<Node> nodeVector = new ArrayList<Node>();
-
+	
     public static final String IDENTIFIER = "nodemodel";
 
 	public ArrayList<Node> getNodeVector() {

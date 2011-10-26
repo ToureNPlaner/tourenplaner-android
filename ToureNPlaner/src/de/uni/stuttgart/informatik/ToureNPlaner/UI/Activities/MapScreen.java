@@ -9,11 +9,14 @@ import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.MapViewMode;
 import org.mapsforge.android.maps.OverlayWay;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,19 +30,20 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.GPSLocationListener;
 
 public class MapScreen extends MapActivity implements Observer {
 	public MapView mapView;
 	private ArrayWayOverlay wayOverlay;
 	private Session session;
-	private GeoPoint currentPosition = new GeoPoint(52.514446, 13.350150); // Berlin
 	// private ItemOverlay itemizedoverlay;
 	private ItemOverlayDrawable itemizedoverlay;
+	private ItemOverlayLocation itemizedoverlaylocation;
 	private AsyncTask<Void, Void, Object> handler;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		currentPosition = mapView.getMapCenter();
 		outState.putSerializable(Session.IDENTIFIER, session);
 		super.onSaveInstanceState(outState);
 	}
@@ -56,36 +60,38 @@ public class MapScreen extends MapActivity implements Observer {
 					Session.IDENTIFIER);
 		}
 
-		initializeMapview();
-		mapView.getController().setCenter(currentPosition);
-		}
-
-	private void initializeMapview() {
 		// setting properties of the mapview
-		mapView = new MapView(this);
-		mapView.setClickable(true);
-		mapView.setLongClickable(true);
-		mapView.setBuiltInZoomControls(true);
-		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
-		// mapView.setMapFile("/sdcard/berlin.map");
-		mapView.setFpsCounter(true);
-		mapView.setMemoryCardCachePersistence(true);
-		mapView.setMemoryCardCacheSize(1000);
-		setContentView(mapView);
-	
-		itemizedoverlay = new ItemOverlayDrawable(this, session.getNodeModel(),
-				mapView);
-		mapView.getOverlays().add(itemizedoverlay);
-		setupWayOverlay();
-		mapView.getController().setCenter(currentPosition);
-			}
-
-	// this method is called when the activity rotates, this will forbid the execution of OnCreate() 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		initializeMapview();
-			}
+				mapView = new MapView(this);
+				mapView.setClickable(true);
+				mapView.setLongClickable(true);
+				mapView.setBuiltInZoomControls(true);
+				mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
+				// mapView.setMapFile("/sdcard/berlin.map");
+				mapView.setFpsCounter(true);
+				mapView.setMemoryCardCachePersistence(true);
+				mapView.setMemoryCardCacheSize(1000);
+				setContentView(mapView);
+			
+			
+				// setting up LocationManager and set MapFocus on lastknown GPS-Location 
+				LocationManager locManager =(LocationManager)getSystemService(Context.LOCATION_SERVICE);
+				Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				GeoPoint gp = new GeoPoint(loc.getLatitude(),loc.getLongitude());
+				mapView.getController().setCenter(gp);
+			
+				//overlay for locationItems
+				itemizedoverlaylocation = new ItemOverlayLocation(this, mapView,loc);
+				//overlay for nodeItems
+				itemizedoverlay = new ItemOverlayDrawable(this, session.getNodeModel(),	mapView);
+				
+				LocationListener mlocListener = new GPSLocationListener(this,itemizedoverlaylocation);
+				locManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+				
+				itemizedoverlaylocation.addLocationToMap(gp,"");
+				mapView.getOverlays().add(itemizedoverlay);
+				mapView.getOverlays().add(itemizedoverlaylocation);
+				setupWayOverlay();
+	}
 
 	private void setupWayOverlay() {
 		// ----------------WayOverlay Properties-----------------
@@ -180,4 +186,5 @@ public class MapScreen extends MapActivity implements Observer {
 		Toast.makeText(getApplicationContext(), object.toString(),
 				Toast.LENGTH_LONG).show();
 	}
+
 }
