@@ -42,7 +42,7 @@
     <orderEntry type="module-library" exported="">
       <library name="mapsforge-map-0.2.4.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/mapsforge-map-0.2.4.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/mapsforge-map-0.2.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -51,7 +51,7 @@
     <orderEntry type="module-library" exported="">
       <library name="android-support-v4.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/android-support-v4.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/android-support-v4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
