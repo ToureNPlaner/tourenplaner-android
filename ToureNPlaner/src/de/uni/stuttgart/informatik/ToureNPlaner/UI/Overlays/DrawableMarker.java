@@ -18,10 +18,12 @@ private MapView mapView;
 private GeoPoint gp;
 private int color = Color.BLACK;
 private int index = 0;
+private Boolean isDrawText = true;
 
-	public DrawableMarker(MapView mapview, GeoPoint gp){
+	public DrawableMarker(MapView mapview, GeoPoint gp,Boolean isDrawText){
 		this.mapView = mapview;
 		this.gp = gp;
+		this.isDrawText = isDrawText;
 	}
 	public DrawableMarker() {
 		// TODO Auto-generated constructor stub
@@ -49,8 +51,10 @@ private int index = 0;
         canvas.drawCircle(point.x, point.y, (float) (( mapView.getZoomLevel())*radiusFactor)+1, circleLine);
         // add a factor to customize the standard radius
 	    canvas.drawCircle(point.x, point.y, (float) ( mapView.getZoomLevel())*radiusFactor, circle);
-	    // draw Text on the circle
+	    // draw Text on the circle 
+	    if (isDrawText){
 	    canvas.drawText(String.valueOf(index), point.x - 3, point.y + 6, TextPaint);
+	    }
 	}
 
 	public void SetIndex(Integer index){

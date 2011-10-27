@@ -41,26 +41,21 @@ public class MapScreen extends MapActivity implements Observer {
 	private ItemOverlayDrawable itemizedoverlay;
 	private ItemOverlayLocation itemizedoverlaylocation;
 	private AsyncTask<Void, Void, Object> handler;
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
 		super.onSaveInstanceState(outState);
 	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// If we get created for the first time we get our data from the intent
 		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState
-					.getSerializable(Session.IDENTIFIER);
+			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
 		} else {
-			session = (Session) getIntent().getSerializableExtra(
-					Session.IDENTIFIER);
+			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
-
-		// setting properties of the mapview
+				// setting properties of the mapview
 				mapView = new MapView(this);
 				mapView.setClickable(true);
 				mapView.setLongClickable(true);
@@ -69,30 +64,43 @@ public class MapScreen extends MapActivity implements Observer {
 				// mapView.setMapFile("/sdcard/berlin.map");
 				mapView.setFpsCounter(true);
 				mapView.setMemoryCardCachePersistence(true);
-				mapView.setMemoryCardCacheSize(1000);
+				mapView.setMemoryCardCacheSize(1000);//overlay for nodeItems
+
 				setContentView(mapView);
-			
-			
-				// setting up LocationManager and set MapFocus on lastknown GPS-Location 
+				Log.v("entering","Try GPS");
+				try{
+				Log.v("gps","pending");
 				LocationManager locManager =(LocationManager)getSystemService(Context.LOCATION_SERVICE);
 				Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				Log.v("GPSProvider",LocationManager.GPS_PROVIDER.toString());
+				// setting up LocationManager and set MapFocus on lastknown GPS-Location 
 				GeoPoint gp = new GeoPoint(loc.getLatitude(),loc.getLongitude());
+				session.setCurrentLocation(gp);
 				mapView.getController().setCenter(gp);
-			
 				//overlay for locationItems
 				itemizedoverlaylocation = new ItemOverlayLocation(this, mapView,loc);
+				
+				//overlay for nodeItems
+				itemizedoverlaylocation.addLocationToMap(gp,"");
+				mapView.getOverlays().add(itemizedoverlaylocation);
+				LocationListener mlocListener = new GPSLocationListener(this,itemizedoverlaylocation);
+				locManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+				Log.v("gps","succed");
+				}catch(Exception e){
+					Log.v("gps","failed" + e.getMessage());//overlay for nodeItems
+
+				}
+				try{
+					mapView.getController().setCenter(session.getCurrentLocation());		
+				}catch(Exception e){
+				}
 				//overlay for nodeItems
 				itemizedoverlay = new ItemOverlayDrawable(this, session.getNodeModel(),	mapView);
 				
-				LocationListener mlocListener = new GPSLocationListener(this,itemizedoverlaylocation);
-				locManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
-				
-				itemizedoverlaylocation.addLocationToMap(gp,"");
 				mapView.getOverlays().add(itemizedoverlay);
-				mapView.getOverlays().add(itemizedoverlaylocation);
+				
 				setupWayOverlay();
 	}
-
 	private void setupWayOverlay() {
 		// ----------------WayOverlay Properties-----------------
 		// create the default paint objects for overlay ways
@@ -102,8 +110,7 @@ public class MapScreen extends MapActivity implements Observer {
 		wayDefaultPaintFill.setAlpha(160);
 		wayDefaultPaintFill.setStrokeWidth(7);
 		wayDefaultPaintFill.setStrokeJoin(Paint.Join.ROUND);
-		wayDefaultPaintFill.setPathEffect(new DashPathEffect(new float[] { 20,
-				20 }, 0));
+		wayDefaultPaintFill.setPathEffect(new DashPathEffect(new float[] {20,20}, 0));
 		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
 		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
 		wayDefaultPaintOutline.setColor(Color.BLUE);
@@ -121,7 +128,6 @@ public class MapScreen extends MapActivity implements Observer {
 				wayDefaultPaintOutline);
 		mapView.getOverlays().add(wayOverlay);
 	}
-
 	// ----------------Menu-----------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,13 +145,13 @@ public class MapScreen extends MapActivity implements Observer {
 			Intent myIntent = new Intent(this, NodelistScreen.class);
 			myIntent.putExtra(Session.IDENTIFIER, session);
 			startActivityForResult(myIntent, 0);
-
 			return true;
 		case R.id.reset:
 			// clear nodes
 			itemizedoverlay.clear();
 			// clear path
 			wayOverlay.clear();
+		
 			return true;
 		case R.id.calculate:
 			handler = new Session.RequestHandler(session, this).execute();
@@ -161,7 +167,6 @@ public class MapScreen extends MapActivity implements Observer {
 				NodeModel.IDENTIFIER));
 		itemizedoverlay.setNodeModel(session.getNodeModel());
 	}
-
 	public void addPathToMap(ArrayList<GeoPoint> points) {
 		wayOverlay.clear();
 		OverlayWay way;
@@ -172,19 +177,16 @@ public class MapScreen extends MapActivity implements Observer {
 		way = new OverlayWay(geoArray);
 		wayOverlay.addWay(way);
 	}
-
 	@Override
 	public void onCompleted(Object object) {
 		handler = null;
 		Result result = (Result) object;
 		addPathToMap(result.getPoints());
 	}
-
 	@Override
 	public void onError(Object object) {
 		handler = null;
 		Toast.makeText(getApplicationContext(), object.toString(),
 				Toast.LENGTH_LONG).show();
 	}
-
 }

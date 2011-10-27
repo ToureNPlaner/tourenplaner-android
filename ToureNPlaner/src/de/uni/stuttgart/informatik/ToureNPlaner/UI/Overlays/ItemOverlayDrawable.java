@@ -10,6 +10,7 @@ import org.mapsforge.android.maps.OverlayItem;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Vibrator;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -19,11 +20,13 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
 	private NodeModel nodeModel;
 	private MapView mapview;
+	private Context context;
 	private final AlgorithmInfo algorithmInfo = null;
 
 	public ItemOverlayDrawable(Context context, NodeModel nodeModel,MapView mapview) {
 		// ColorDrawable is just a workaround until the icons are loaded
 		super(boundCenterBottom(new ColorDrawable()));
+		this.context = context;
 		this.nodeModel = nodeModel;
 		this.mapview = mapview;
 		loadFromModel();
@@ -51,6 +54,9 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 				geoPoint.getLongitude());
 		addMarkerToMap(node);
 		nodeModel.addNodeToVector(node);
+		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(100);
+
 		updateIcons();
 		requestRedraw();
 
@@ -79,7 +85,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	}
 
 	public void addMarkerToMap(Node node) {
-		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint());
+		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint(),true);
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), "", "",
 				dm);
 		list.add(overlayitem);

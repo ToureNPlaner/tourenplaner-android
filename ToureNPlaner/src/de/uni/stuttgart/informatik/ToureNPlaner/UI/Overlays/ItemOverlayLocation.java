@@ -62,7 +62,7 @@ public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> {
 
 	public void addLocationToMap(GeoPoint gp, String name) {
 		Node node = new Node(name, gp.getLatitude(), gp.getLongitude());
-		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint());
+		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint(),false);
 		dm.setColor(Color.YELLOW);
 		overlayItem = new OverlayItem(node.getGeoPoint(), "", "",dm);
 		gpsLocation.setLatitude(gp.getLatitude());
