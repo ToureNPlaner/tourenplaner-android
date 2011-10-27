@@ -6,13 +6,35 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 import org.json.JSONObject;
 import org.mapsforge.android.maps.GeoPoint;
 
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Session implements Serializable {
     public static final String IDENTIFIER = "session";
+
+    /**
+         * This input stream won't read() after the underlying stream is exhausted.
+         * http://code.google.com/p/android/issues/detail?id=14562
+         */
+        static final class DoneHandlerInputStream extends FilterInputStream {
+            private boolean done;
+
+            public DoneHandlerInputStream(InputStream stream) {
+                super(stream);
+            }
+
+            @Override public int read(byte[] bytes, int offset, int count) throws IOException {
+                if (!done) {
+                    int result = super.read(bytes, offset, count);
+                    if (result != -1) {
+                        return result;
+                    }
+                }
+                done = true;
+                return -1;
+            }
+        }
 
     public static class ConnectionHandler extends AsyncTask<Void, Void, Object> {
         Observer listener;
@@ -44,7 +66,8 @@ public class Session implements Serializable {
                 HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
 
                 try {
-                    String content = Util.streamToString(urlConnection.getInputStream());
+                    InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
+                    String content = Util.streamToString(stream);
                     ServerInfo info = ServerInfo.parse(new JSONObject(content));
                     Session session = new Session();
                     session.serverInfo = info;
@@ -97,8 +120,8 @@ public class Session implements Serializable {
                 outputStream.write(str.getBytes());
 
                 try {
-
-                    String content = Util.streamToString(urlConnection.getInputStream());
+                    InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
+                    String content = Util.streamToString(stream);
 
                     return Result.parse(new JSONObject(content));
                 } finally {
