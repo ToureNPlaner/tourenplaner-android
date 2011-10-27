@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import org.json.JSONObject;
 
 public class ServerInfoTest extends TestCase {
-    final String INFO = "{\"sslport\":8081,\"servertype\":\"public\",\"algorithms\":[{\"constraints\":{\"sourceIsTarget\":false,\"minPoints\":2},\"pointconstraints\":null,\"urlsuffix\":\"sp\",\"name\":\"Shortest Path\",\"version\":1}],\"version\":0.1}";
+    final static String INFO = "{\"sslport\":8081,\"servertype\":\"public\",\"algorithms\":[{\"constraints\":{\"sourceIsTarget\":false,\"minPoints\":2},\"pointconstraints\":null,\"urlsuffix\":\"sp\",\"name\":\"Shortest Path\",\"version\":1}],\"version\":0.1}";
     final JSONObject object;
 
     public ServerInfoTest() throws Exception {

@@ -23,7 +23,7 @@ public class Result {
 
         result.points = new ArrayList<GeoPoint>(points.length());
         for(int i = 0;i<points.length();i++) {
-            result.points.add(Point.parse(points.getJSONObject(i)));
+            result.points.add(Point.parseFloat(points.getJSONObject(i)));
         }
 
         return result;
