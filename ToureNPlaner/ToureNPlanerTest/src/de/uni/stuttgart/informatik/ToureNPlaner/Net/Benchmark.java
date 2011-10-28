@@ -19,11 +19,7 @@ public class Benchmark extends InstrumentationTestCase {
 
     final static String TAG = "TP";
 
-    final static int COUNT = 10;
-
-    public Benchmark() throws Exception {
-        super();
-    }
+    final static int COUNT = 2;
 
     protected void setUp() throws Exception {
         if (SampleResponseFloatJson == null)
@@ -44,13 +40,13 @@ public class Benchmark extends InstrumentationTestCase {
         JSONArray points = new JSONObject(SampleResponseFloatJson).getJSONArray("points");
 
         final long t0 = System.currentTimeMillis();
-        for (int i = 0; i < COUNT * 10; i++) {
+        for (int i = 0; i < COUNT; i++) {
             ArrayList<GeoPoint> array = new ArrayList<GeoPoint>(points.length());
             for (int j = 0; j < points.length(); j++) {
                 array.add(Point.parseFloat(points.getJSONObject(j)));
             }
         }
-        Log.w(TAG, "JsonFloat: " + (System.currentTimeMillis() - t0) / COUNT / 10 + " ms");
+        Log.w(TAG, "JsonFloat: " + (System.currentTimeMillis() - t0) / COUNT + " ms");
     }
 
     public void testOrgJsonInt() throws Exception {
@@ -65,13 +61,13 @@ public class Benchmark extends InstrumentationTestCase {
         JSONArray points = new JSONObject(SampleResponseIntJson).getJSONArray("points");
 
         final long t0 = System.currentTimeMillis();
-        for (int i = 0; i < COUNT * 10; i++) {
+        for (int i = 0; i < COUNT; i++) {
             ArrayList<GeoPoint> array = new ArrayList<GeoPoint>(points.length());
             for (int j = 0; j < points.length(); j++) {
                 array.add(Point.parseInt(points.getJSONObject(j)));
             }
         }
-        Log.w(TAG, "JsonInt: " + (System.currentTimeMillis() - t0) / COUNT / 10 + " ms");
+        Log.w(TAG, "JsonInt: " + (System.currentTimeMillis() - t0) / COUNT + " ms");
     }
 
     public void testJsonIntComplete() throws Exception {

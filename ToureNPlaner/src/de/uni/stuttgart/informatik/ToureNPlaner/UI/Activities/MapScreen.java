@@ -1,14 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import java.util.ArrayList;
-
-import org.mapsforge.android.maps.ArrayWayOverlay;
-import org.mapsforge.android.maps.GeoPoint;
-import org.mapsforge.android.maps.MapActivity;
-import org.mapsforge.android.maps.MapView;
-import org.mapsforge.android.maps.MapViewMode;
-import org.mapsforge.android.maps.OverlayWay;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,14 +15,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.GPSLocationListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.GPSLocationListener;
+import org.mapsforge.android.maps.*;
+
+import java.util.ArrayList;
 
 public class MapScreen extends MapActivity implements Observer {
 	public MapView mapView;
@@ -64,7 +58,7 @@ public class MapScreen extends MapActivity implements Observer {
 				// mapView.setMapFile("/sdcard/berlin.map");
 				mapView.setFpsCounter(true);
 				mapView.setMemoryCardCachePersistence(true);
-				mapView.setMemoryCardCacheSize(1000);//overlay for nodeItems
+				mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
 				setContentView(mapView);
 				Log.v("entering","Try GPS");
