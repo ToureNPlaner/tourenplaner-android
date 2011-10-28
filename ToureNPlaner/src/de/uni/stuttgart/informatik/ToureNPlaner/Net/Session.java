@@ -121,9 +121,8 @@ public class Session implements Serializable {
 
                 try {
                     InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
-                    String content = Util.streamToString(stream);
 
-                    return Result.parse(new JSONObject(content));
+                    return Result.parse(stream);
                 } finally {
                     urlConnection.disconnect();
                 }

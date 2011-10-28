@@ -96,13 +96,54 @@ public class Benchmark extends InstrumentationTestCase {
 
             ArrayList<GeoPoint> array = new ArrayList<GeoPoint>();
 
-            jacksonParse(jp, array);
+            jacksonParseInt(jp, array);
             jp.close(); // ensure resources get cleaned up timely and properly
         }
         Log.w(TAG, "JacksonInt: " + (System.currentTimeMillis() - t0) / COUNT + " ms");
     }
 
-    private void jacksonParse(JsonParser jp, ArrayList<GeoPoint> array) throws Exception {
+    public void testJacksonFloat() throws Exception {
+            JsonFactory f = new JsonFactory();
+            final long t0 = System.currentTimeMillis();
+            for (int i = 0; i < COUNT; i++) {
+                JsonParser jp = f.createJsonParser(SampleResponseIntJson);
+
+                ArrayList<GeoPoint> array = new ArrayList<GeoPoint>();
+
+                jacksonParseFloat(jp, array);
+                jp.close(); // ensure resources get cleaned up timely and properly
+            }
+            Log.w(TAG, "JacksonFloat: " + (System.currentTimeMillis() - t0) / COUNT + " ms");
+        }
+
+    private void jacksonParseFloat(JsonParser jp, ArrayList<GeoPoint> array) throws Exception {
+            JsonToken current;
+
+            while ((current = jp.nextToken()) != JsonToken.END_OBJECT) {
+                if ("points".equals(jp.getCurrentName())) {
+                    current = jp.nextToken(); // move to value, or START_OBJECT/START_ARRAY
+                    double lt = 0, ln = 0;
+                    if (current == JsonToken.START_ARRAY) {
+                        current = jp.nextToken();
+                        while (current != JsonToken.END_ARRAY) {
+                            while ((current = jp.nextToken()) != JsonToken.END_OBJECT) {
+                                if (jp.getCurrentName().equals("lt")) {
+                                    jp.nextToken();
+                                    lt = jp.getDoubleValue();
+                                } else if (jp.getCurrentName().equals("ln")) {
+                                    jp.nextToken();
+                                    ln = jp.getDoubleValue();
+                                }
+                            }
+                            array.add(new GeoPoint(lt, ln));
+                            current = jp.nextToken();
+                        }
+                    }
+                }
+            }
+        }
+
+    private void jacksonParseInt(JsonParser jp, ArrayList<GeoPoint> array) throws Exception {
         JsonToken current;
 
         while ((current = jp.nextToken()) != JsonToken.END_OBJECT) {
@@ -136,7 +177,7 @@ public class Benchmark extends InstrumentationTestCase {
 
         ArrayList<GeoPoint> array = new ArrayList<GeoPoint>();
 
-        jacksonParse(jp, array);
+        jacksonParseInt(jp, array);
         jp.close(); // ensure resources get cleaned up timely and properly
 
         SampleResponseIntJson = Util.streamToString(getInstrumentation().getContext().getResources().openRawResource(R.raw.sample_response_int));
