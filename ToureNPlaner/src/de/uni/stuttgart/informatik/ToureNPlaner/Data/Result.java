@@ -10,9 +10,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Result {
-    private ArrayList<GeoPoint> points;
+    private GeoPoint[][] points;
 
-    public ArrayList<GeoPoint> getPoints() {
+    public GeoPoint[][] getPoints() {
         return points;
     }
 
@@ -40,12 +40,14 @@ public class Result {
 
     public static Result parse(InputStream stream) throws IOException {
         Result result = new Result();
-        result.points = new ArrayList<GeoPoint>();
+        ArrayList<GeoPoint> points = new ArrayList<GeoPoint>();
 
         JsonFactory f = new JsonFactory();
         JsonParser jp = f.createJsonParser(stream);
 
-        jacksonParse(jp,result.points);
+        jacksonParse(jp,points);
+
+        result.points = new GeoPoint[][] {points.toArray(new GeoPoint[points.size()])};
 
         return result;
     }

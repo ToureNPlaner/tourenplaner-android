@@ -146,18 +146,19 @@ public class Session implements Serializable {
     private String url;
     private String user;
     private String password;
+    //TODO geoPoint is not serializable
     private GeoPoint currentLocation;
     private AlgorithmInfo selectedAlgorithm;
     private NodeModel nodeModel = new NodeModel();
 
-    
-    public GeoPoint getCurrentLocation() {
-		return currentLocation;
-	}
 
-	public void setCurrentLocation(GeoPoint currentLocation) {
-		this.currentLocation = currentLocation;
-	}
+    public GeoPoint getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(GeoPoint currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 
     public void setNodeModel(NodeModel nodeModel) {
         this.nodeModel = nodeModel;
