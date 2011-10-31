@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
 import java.util.ArrayList;
 
+import android.view.HapticFeedbackConstants;
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.ItemizedOverlay;
 import org.mapsforge.android.maps.MapView;
@@ -20,13 +21,11 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
 	private NodeModel nodeModel;
 	private MapView mapview;
-	private Context context;
 	private final AlgorithmInfo algorithmInfo = null;
 
-	public ItemOverlayDrawable(Context context, NodeModel nodeModel,MapView mapview) {
+	public ItemOverlayDrawable(NodeModel nodeModel,MapView mapview) {
 		// ColorDrawable is just a workaround until the icons are loaded
 		super(boundCenterBottom(new ColorDrawable()));
-		this.context = context;
 		this.nodeModel = nodeModel;
 		this.mapview = mapview;
 		loadFromModel();
@@ -54,8 +53,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 				geoPoint.getLongitude());
 		addMarkerToMap(node);
 		nodeModel.addNodeToVector(node);
-		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-		v.vibrate(100);
+		mapView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
 		updateIcons();
 		requestRedraw();
