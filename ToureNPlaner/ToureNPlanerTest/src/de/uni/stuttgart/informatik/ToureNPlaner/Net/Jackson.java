@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Jackson extends InstrumentationTestCase {
     final static String TAG = "TP";
-    final static int COUNT = 2;
+    final static int COUNT = 10;
 
     static String SampleResponseFloatJson = null;
     static String SampleResponseIntJson = null;
@@ -56,6 +56,39 @@ public class Jackson extends InstrumentationTestCase {
             jacksonParse(jp, points);
         }
         Log.w(TAG, "JacksonFloatNormal: " + (System.currentTimeMillis() - t0)/COUNT + " ms");
+    }
+    
+    public void testJacksonFloatPreAllocSmall() throws Exception {
+        final long t0 = System.currentTimeMillis();
+        for(int i = 0;i<COUNT;i++) {
+            ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(10);
+            JsonFactory f = new JsonFactory();
+            JsonParser jp = f.createJsonParser(SampleResponseFloatJson);
+            jacksonParse(jp, points);
+        }
+        Log.w(TAG, "testJacksonFloatPreAllocSmall: " + (System.currentTimeMillis() - t0)/COUNT + " ms");
+    }
+    
+    public void testJacksonFloatPreAllocMiddle() throws Exception {
+        final long t0 = System.currentTimeMillis();
+        for(int i = 0;i<COUNT;i++) {
+            ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(50);
+            JsonFactory f = new JsonFactory();
+            JsonParser jp = f.createJsonParser(SampleResponseFloatJson);
+            jacksonParse(jp, points);
+        }
+        Log.w(TAG, "testJacksonFloatPreAllocMiddle: " + (System.currentTimeMillis() - t0)/COUNT + " ms");
+    }
+    
+    public void testJacksonFloatPreAllocLarge() throws Exception {
+        final long t0 = System.currentTimeMillis();
+        for(int i = 0;i<COUNT;i++) {
+            ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(100);
+            JsonFactory f = new JsonFactory();
+            JsonParser jp = f.createJsonParser(SampleResponseFloatJson);
+            jacksonParse(jp, points);
+        }
+        Log.w(TAG, "testJacksonFloatPreAllocLarge: " + (System.currentTimeMillis() - t0)/COUNT + " ms");
     }
 
     public void testJacksonFloatNoIntern() throws Exception {

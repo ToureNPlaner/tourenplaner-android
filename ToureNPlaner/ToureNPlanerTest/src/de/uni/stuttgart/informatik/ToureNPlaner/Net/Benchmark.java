@@ -19,7 +19,7 @@ public class Benchmark extends InstrumentationTestCase {
 
     final static String TAG = "TP";
 
-    final static int COUNT = 2;
+    final static int COUNT = 20;
 
     protected void setUp() throws Exception {
         if (SampleResponseFloatJson == null)
@@ -102,7 +102,7 @@ public class Benchmark extends InstrumentationTestCase {
             JsonFactory f = new JsonFactory();
             final long t0 = System.currentTimeMillis();
             for (int i = 0; i < COUNT; i++) {
-                JsonParser jp = f.createJsonParser(SampleResponseIntJson);
+                JsonParser jp = f.createJsonParser(SampleResponseFloatJson);
 
                 ArrayList<GeoPoint> array = new ArrayList<GeoPoint>();
 
@@ -169,7 +169,7 @@ public class Benchmark extends InstrumentationTestCase {
     public void testJackson() throws Exception {
         final long t0 = System.currentTimeMillis();
         JsonFactory f = new JsonFactory();
-        JsonParser jp = f.createJsonParser(getInstrumentation().getContext().getResources().openRawResource(R.raw.sample_response_int));
+        JsonParser jp = f.createJsonParser(SampleResponseIntJson);
 
         ArrayList<GeoPoint> array = new ArrayList<GeoPoint>();
 
