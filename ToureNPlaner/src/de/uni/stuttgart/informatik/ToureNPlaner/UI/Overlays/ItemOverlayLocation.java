@@ -1,16 +1,15 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
-import org.mapsforge.android.maps.GeoPoint;
-import org.mapsforge.android.maps.ItemizedOverlay;
-import org.mapsforge.android.maps.MapView;
-import org.mapsforge.android.maps.OverlayItem;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import org.mapsforge.android.maps.GeoPoint;
+import org.mapsforge.android.maps.ItemizedOverlay;
+import org.mapsforge.android.maps.MapView;
+import org.mapsforge.android.maps.OverlayItem;
 
 public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> {
 	private OverlayItem overlayItem = new OverlayItem();
@@ -36,7 +35,7 @@ public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-		return true;
+		return false;
 	}
 
 	@Override
