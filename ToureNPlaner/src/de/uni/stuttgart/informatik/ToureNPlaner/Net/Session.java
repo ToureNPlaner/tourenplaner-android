@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 import org.json.JSONObject;
@@ -14,27 +15,28 @@ public class Session implements Serializable {
     public static final String IDENTIFIER = "session";
 
     /**
-         * This input stream won't read() after the underlying stream is exhausted.
-         * http://code.google.com/p/android/issues/detail?id=14562
-         */
-        static final class DoneHandlerInputStream extends FilterInputStream {
-            private boolean done;
+     * This input stream won't read() after the underlying stream is exhausted.
+     * http://code.google.com/p/android/issues/detail?id=14562
+     */
+    static final class DoneHandlerInputStream extends FilterInputStream {
+        private boolean done;
 
-            public DoneHandlerInputStream(InputStream stream) {
-                super(stream);
-            }
-
-            @Override public int read(byte[] bytes, int offset, int count) throws IOException {
-                if (!done) {
-                    int result = super.read(bytes, offset, count);
-                    if (result != -1) {
-                        return result;
-                    }
-                }
-                done = true;
-                return -1;
-            }
+        public DoneHandlerInputStream(InputStream stream) {
+            super(stream);
         }
+
+        @Override
+        public int read(byte[] bytes, int offset, int count) throws IOException {
+            if (!done) {
+                int result = super.read(bytes, offset, count);
+                if (result != -1) {
+                    return result;
+                }
+            }
+            done = true;
+            return -1;
+        }
+    }
 
     public static class ConnectionHandler extends AsyncTask<Void, Void, Object> {
         Observer listener;
@@ -109,20 +111,28 @@ public class Session implements Serializable {
         protected Object doInBackground(Void... voids) {
             try {
                 URL uri = new URL(session.getUrl() + "/alg" + session.getSelectedAlgorithm().getUrlsuffix());
+
                 HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
                 urlConnection.setDoOutput(true);
-                String userPassword = session.getUser() + ":" + session.getPassword();
-                String encoding =  Base64.encodeString(userPassword);
-                urlConnection.setRequestProperty("Authorization","Basic " + encoding);
-                
-                OutputStream outputStream =  urlConnection.getOutputStream();
-                String str = Request.generate(session).toString();
-                outputStream.write(str.getBytes());
+                urlConnection.setChunkedStreamingMode(0);
+                urlConnection.setRequestProperty("Content-Type", "application/json;");
+                if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PRIVATE) {
+                    String userPassword = session.getUser() + ":" + session.getPassword();
+                    String encoding = Base64.encodeString(userPassword);
+                    urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
+                }
 
                 try {
+                    String str = Request.generate(session).toString();
+                    OutputStream outputStream = urlConnection.getOutputStream();
+                    outputStream.write(str.getBytes("US-ASCII"));
                     InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
 
-                    return Result.parse(stream);
+                    final long t0 = System.currentTimeMillis();
+                    Result result = Result.parse(stream);
+                    Log.v("TP", "ResultParse: " + (System.currentTimeMillis() - t0) + " ms");
+
+                    return result;
                 } finally {
                     urlConnection.disconnect();
                 }
