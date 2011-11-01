@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ServerScreen extends FragmentActivity implements Observer {
     static final String SERVERLIST_FILENAME = "serverlist";
@@ -73,12 +74,14 @@ public class ServerScreen extends FragmentActivity implements Observer {
     
     private void editServer(int id, String server) {
         servers.set(id, server);
+        Collections.sort(servers);
         adapter.notifyDataSetChanged();
         saveServerList();
     }
     
     private void newServer(String server) {
         servers.add(server);
+        Collections.sort(servers);
         adapter.notifyDataSetChanged();
         saveServerList();
     }
@@ -117,6 +120,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
             try {
                 ObjectInputStream in = new ObjectInputStream(inputStream);
                 servers = (ArrayList<String>) in.readObject();
+                Collections.sort(servers);
             } finally {
                 inputStream.close();
             }
