@@ -1,17 +1,10 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
+import android.graphics.*;
+import android.graphics.drawable.Drawable;
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
-
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.DrawFilter;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 
 public class DrawableMarker extends Drawable{
 private MapView mapView;
@@ -25,10 +18,12 @@ private Boolean isDrawText = true;
 		this.gp = gp;
 		this.isDrawText = isDrawText;
 	}
-	public DrawableMarker() {
-		// TODO Auto-generated constructor stub
-	}
-	@Override
+
+    public void setGp(GeoPoint gp) {
+        this.gp = gp;
+    }
+
+    @Override
 	public void draw(Canvas canvas) {
 		int radiusFactor = 1;
 		// Transfrom geoposition to Point on canvas

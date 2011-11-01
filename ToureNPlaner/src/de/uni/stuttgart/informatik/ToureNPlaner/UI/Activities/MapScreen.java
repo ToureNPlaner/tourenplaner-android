@@ -6,11 +6,9 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +19,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.GPSLocationListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
 import org.mapsforge.android.maps.*;
@@ -30,9 +27,8 @@ public class MapScreen extends MapActivity implements Observer {
     public MapView mapView;
     private ArrayWayOverlay wayOverlay;
     private Session session;
-    // private ItemOverlay itemizedoverlay;
+
     private ItemOverlayDrawable itemizedoverlay;
-    private ItemOverlayLocation itemizedoverlaylocation;
     private AsyncTask<Void, Void, Object> handler;
 
     @Override
@@ -65,40 +61,30 @@ public class MapScreen extends MapActivity implements Observer {
         mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
         setContentView(mapView);
-        Log.v("entering", "Try GPS");
-        try {
-            Log.v("gps", "pending");
-            LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            Log.v("GPSProvider", LocationManager.GPS_PROVIDER.toString());
-            // setting up LocationManager and set MapFocus on lastknown GPS-Location
-            GeoPoint gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-            session.setCurrentLocation(gp);
-            mapView.getController().setCenter(gp);
-            //overlay for locationItems
-            itemizedoverlaylocation = new ItemOverlayLocation(this, mapView, loc);
 
-            //overlay for nodeItems
-            itemizedoverlaylocation.addLocationToMap(gp, "");
-            mapView.getOverlays().add(itemizedoverlaylocation);
-            LocationListener mlocListener = new GPSLocationListener(this, itemizedoverlaylocation);
-            // 5 minutes, 50 meters
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5*60*1000, 50, mlocListener);
-            Log.v("gps", "succed");
-        } catch (Exception e) {
-            Log.v("gps", "failed" + e.getMessage());//overlay for nodeItems
+        setupGPS();
 
-        }
-        try {
-            mapView.getController().setCenter(session.getCurrentLocation());
-        } catch (Exception e) {
-        }
         //overlay for nodeItems
         itemizedoverlay = new ItemOverlayDrawable(session.getNodeModel(), mapView);
-
         mapView.getOverlays().add(itemizedoverlay);
 
         setupWayOverlay();
+    }
+
+    private void setupGPS() {
+        LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        GeoPoint gp = null;
+        if(loc != null) {
+            gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+        }
+
+        // setting up LocationManager and set MapFocus on lastknown GPS-Location
+        mapView.getController().setCenter(gp);
+        ItemOverlayLocation itemizedoverlaylocation = new ItemOverlayLocation(mapView, gp);
+        mapView.getOverlays().add(itemizedoverlaylocation);
+        // 5 minutes, 50 meters
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5*60*1000, 50, itemizedoverlaylocation);
     }
 
     private void setupWayOverlay() {

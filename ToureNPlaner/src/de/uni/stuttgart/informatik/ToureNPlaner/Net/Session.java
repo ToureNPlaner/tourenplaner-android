@@ -5,7 +5,6 @@ import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 import org.json.JSONObject;
-import org.mapsforge.android.maps.GeoPoint;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -146,19 +145,8 @@ public class Session implements Serializable {
     private String url;
     private String user;
     private String password;
-    //TODO geoPoint is not serializable
-    private GeoPoint currentLocation;
     private AlgorithmInfo selectedAlgorithm;
     private NodeModel nodeModel = new NodeModel();
-
-
-    public GeoPoint getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(GeoPoint currentLocation) {
-        this.currentLocation = currentLocation;
-    }
 
     public void setNodeModel(NodeModel nodeModel) {
         this.nodeModel = nodeModel;

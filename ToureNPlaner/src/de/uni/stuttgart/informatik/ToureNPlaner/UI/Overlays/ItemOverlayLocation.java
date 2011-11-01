@@ -1,37 +1,30 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.ItemizedOverlay;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.OverlayItem;
 
-public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> {
-	private OverlayItem overlayItem = new OverlayItem();
-	private Location gpsLocation = new Location("");
-	private MapView mapview;
+public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> implements LocationListener {
+	private OverlayItem overlayItem;
+    private DrawableMarker drawableMarker;
+	private GeoPoint gpsLocation = null;
 
-	public ItemOverlayLocation(Context context, MapView mapview,
-			Location gpsLocation) {
+    public ItemOverlayLocation(MapView mapview, GeoPoint geoPoint) {
 		// ColorDrawable is just a workaround until the icons are loaded
 		super(boundCenterBottom(new ColorDrawable()));
-		this.gpsLocation = gpsLocation;
-		this.mapview = mapview;
-		loadFromModel();
+        this.gpsLocation = geoPoint;
+        drawableMarker = new DrawableMarker(mapview, geoPoint, false);
+        drawableMarker.setColor(Color.YELLOW);
+        overlayItem = new OverlayItem(geoPoint, "", "", drawableMarker);
 	}
 
-
-	private void loadFromModel() {
-		GeoPoint gp = new GeoPoint(gpsLocation.getLatitude(),
-				gpsLocation.getLongitude());
-		addLocationToMap(gp, "");
-		requestRedraw();
-	}
 
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
@@ -40,7 +33,7 @@ public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public int size() {
-		return 1;
+		return gpsLocation == null ? 0 : 1;
 	}
 
 	@Override
@@ -59,15 +52,30 @@ public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> {
 		return true;
 	}
 
-	public void addLocationToMap(GeoPoint gp, String name) {
-		Node node = new Node(name, gp.getLatitude(), gp.getLongitude());
-		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint(),false);
-		dm.setColor(Color.YELLOW);
-		overlayItem = new OverlayItem(node.getGeoPoint(), "", "",dm);
-		gpsLocation.setLatitude(gp.getLatitude());
-		gpsLocation.setLongitude(gp.getLongitude());
-		requestRedraw();
+	public void updateLocation(GeoPoint gp) {
+        if(gp != null) {
+            drawableMarker.setGp(gp);
+            overlayItem.setPoint(gp);
+            gpsLocation = gp;
+            requestRedraw();
+        }
 	}
 
-	
+
+    @Override
+    public void onLocationChanged(Location location) {
+        updateLocation(new GeoPoint(location.getLatitude(),location.getLongitude()));
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+    }
 }
