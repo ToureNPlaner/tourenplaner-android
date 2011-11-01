@@ -148,6 +148,16 @@ public class Session implements Serializable {
     private AlgorithmInfo selectedAlgorithm;
     private NodeModel nodeModel = new NodeModel();
 
+    private Result result;
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
     public void setNodeModel(NodeModel nodeModel) {
         this.nodeModel = nodeModel;
     }

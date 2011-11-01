@@ -113,6 +113,10 @@ public class MapScreen extends MapActivity implements Observer {
         wayOverlay = new ArrayWayOverlay(wayDefaultPaintFill,
                 wayDefaultPaintOutline);
         mapView.getOverlays().add(wayOverlay);
+        Result result = session.getResult();
+        if(result != null) {
+            addPathToMap(result.getPoints());
+        }
     }
 
     // ----------------Menu-----------------
@@ -138,6 +142,7 @@ public class MapScreen extends MapActivity implements Observer {
                 itemizedoverlay.clear();
                 // clear path
                 wayOverlay.clear();
+                session.setResult(null);
 
                 return true;
             case R.id.calculate:
@@ -165,6 +170,7 @@ public class MapScreen extends MapActivity implements Observer {
     public void onCompleted(Object object) {
         handler = null;
         Result result = (Result) object;
+        session.setResult(result);
         addPathToMap(result.getPoints());
         setProgressBarIndeterminateVisibility(false);
     }
