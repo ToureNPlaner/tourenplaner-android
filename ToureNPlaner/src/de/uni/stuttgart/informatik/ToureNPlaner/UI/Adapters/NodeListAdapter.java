@@ -15,8 +15,10 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import java.util.ArrayList;
 
 public class NodeListAdapter extends ArrayAdapter<Node> {
-    public NodeListAdapter(ArrayList<Node> nodeVector, Context context) {
-        super(context, android.R.layout.simple_list_item_1, nodeVector);
+	private ArrayList<Node> nodeList;
+    public NodeListAdapter(ArrayList<Node> nodeList, Context context) {
+        super(context, android.R.layout.simple_list_item_1, nodeList);
+        this.nodeList = nodeList;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
         TextView tvText = (TextView) itemLayout.findViewById(R.id.bottomtext);
         tvText.setText(node.getGeoPoint().toString());
 
-        ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.icon);
+        ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.nodelisticon);
         Drawable icon;
 
         // sets the icon depending on the index
@@ -47,4 +49,30 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
         ImageView.setImageDrawable(icon);
         return itemLayout;
     }
+    
+   
+    public int getCount() {
+        return nodeList.size();
+    }
+
+ 
+    public Node getItem(int position) {
+        return nodeList.get(position);
+    }
+
+    
+    public long getItemId(int position) {
+        return position;
+    }
+    
+    public void onRemove(int index) {
+		if (index < 0 || index > nodeList.size()) return;		
+		nodeList.remove(index);
+	}
+
+	public void onDrop(int from, int to) {
+		Node temp = nodeList.get(from);
+		nodeList.remove(from);
+		nodeList.add(to,temp);
+	}
 }

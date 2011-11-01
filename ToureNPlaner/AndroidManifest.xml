@@ -15,12 +15,14 @@
         <activity android:name=".UI.Activities.MapScreen"> </activity>
         <activity android:name=".UI.Activities.BillingScreen"></activity>
         <activity android:name=".UI.Activities.NodelistScreen"></activity>
-        <activity android:name=".UI.Activities.NodePreferences"></activity>
-        <activity android:name=".UI.Activities.ServerScreen">
+         <activity android:name=".UI.Activities.ServerScreen">
         	<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            </activity>
+             </activity>
+           <activity android:name=".UI.Activities.NodePreferences"></activity>
+       
+           
           </application>
 </manifest>
