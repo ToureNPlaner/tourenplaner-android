@@ -5,11 +5,10 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.mapsforge.android.maps.GeoPoint;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 
-public class Result {
+public class Result implements Serializable {
     private GeoPoint[][] points;
 
     public GeoPoint[][] getPoints() {
@@ -51,4 +50,23 @@ public class Result {
 
         return result;
     }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeInt(points[0].length);
+        for(int i=0;i<points[0].length;i++) {
+            out.writeInt(points[0][i].getLatitudeE6());
+            out.writeInt(points[0][i].getLongitudeE6());
+        }
+    }
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        int length = in.readInt();
+        points = new GeoPoint[1][length];
+        for(int i=0;i<points[0].length;i++) {
+            int lat = in.readInt();
+            int lon = in.readInt();
+            points[0][i] = new GeoPoint(lat,lon);
+        }
+    }
+
+
 }
