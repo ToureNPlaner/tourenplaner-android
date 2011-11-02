@@ -2,6 +2,8 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
@@ -12,6 +14,7 @@ private GeoPoint gp;
 private int color = Color.BLACK;
 private int index = 1;
 private Boolean isDrawText = true;
+private double bound;
 
 	public DrawableMarker(MapView mapview, GeoPoint gp,Boolean isDrawText){
 		this.mapView = mapview;
@@ -30,7 +33,8 @@ private Boolean isDrawText = true;
         Projection projection = mapView.getProjection();
 	    Point point = new Point();
 	    projection.toPixels(gp, point);
-	     // the circle to mark the spot
+	    
+	    // the circle to mark the spot
 	    Paint circle = new Paint();
 	    Paint circleLine = new Paint();
 	    Paint TextPaint = new Paint();
@@ -44,15 +48,20 @@ private Boolean isDrawText = true;
 	   
         //add a line for the circle
         canvas.drawCircle(point.x, point.y, (float) (( mapView.getZoomLevel())*radiusFactor)+1, circleLine);
+        bound =  mapView.getZoomLevel()*radiusFactor+1;
         // add a factor to customize the standard radius
 	    canvas.drawCircle(point.x, point.y, (float) ( mapView.getZoomLevel())*radiusFactor, circle);
 	    // draw Text on the circle 
+	    // x position depending on amount of numbers
 	    if (isDrawText){
 	    	if(index < 10) canvas.drawText(String.valueOf(index), point.x - 3, point.y + 6, TextPaint);
 	    	if(index >=10 )canvas.drawText(String.valueOf(index), point.x - 9, point.y + 6, TextPaint);
 	    }
 	}
 
+    public double getBound(){
+    	return bound;
+    }
 	public void SetIndex(Integer index){
 	this.index = index;
 	}

@@ -6,37 +6,43 @@ import java.util.ArrayList;
 
 public class NodeModel implements Serializable {
 
-	private ArrayList<Node> nodeVector = new ArrayList<Node>();
+	private ArrayList<Node> nodeArrayList = new ArrayList<Node>();
 	
     public static final String IDENTIFIER = "nodemodel";
 
 	public ArrayList<Node> getNodeVector() {
-		return nodeVector;
+		return nodeArrayList;
 	}
 
 	public Node get(int i) {
-		return nodeVector.get(i);
+		return nodeArrayList.get(i);
 	}
 
 	public Integer size() {
-		return nodeVector.size();
+		return nodeArrayList.size();
 	}
 
 	public void addNodeToVector(Node node) {
-		nodeVector.add(node);
+		nodeArrayList.add(node);
 	}
 	public void clear(){
-		nodeVector.clear();
+		nodeArrayList.clear();
 	}
 
 	public void remove(int pos) {
-		nodeVector.remove(pos);
+		nodeArrayList.remove(pos);
 		}
-
-	public void swapNodes(int pos1, int pos2) {
-		Node tempNode = nodeVector.get(pos1);
-		nodeVector.set(pos1, nodeVector.get(pos2));
-		nodeVector.set(pos2, tempNode);
-
+public void revertNodes(){
+	ArrayList<Node> tempArrayList = new ArrayList<Node>();
+	for (int i = 0; i<=nodeArrayList.size() -1 ; i++){
+		tempArrayList.add(nodeArrayList.get(i));
 	}
+	nodeArrayList.clear();
+	for (int i = tempArrayList.size() - 1 ; i >= 0;i--){
+		nodeArrayList.add(tempArrayList.get(i));
+	
+	}
+	tempArrayList.clear();
+}
+	
 }

@@ -19,6 +19,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.NodeResultListAdapter;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
 import org.mapsforge.android.maps.*;
@@ -65,7 +66,7 @@ public class MapScreen extends MapActivity implements Observer {
         setupGPS();
 
         //overlay for nodeItems
-        itemizedoverlay = new ItemOverlayDrawable(session.getNodeModel(), mapView);
+        itemizedoverlay = new ItemOverlayDrawable(this,session.getNodeModel(), mapView,0,4,4);
         mapView.getOverlays().add(itemizedoverlay);
 
         setupWayOverlay();
@@ -146,9 +147,15 @@ public class MapScreen extends MapActivity implements Observer {
 
                 return true;
             case R.id.calculate:
+            	if (session.getNodeModel().size() > 1){
                 handler = new Session.RequestHandler(session, this).execute();
                 setProgressBarIndeterminateVisibility(true);
+            	}
                 return true;
+            case R.id.resultlist:
+            	Intent myIntentResult = new Intent (this, NodeResultlistScreen.class);
+            	myIntentResult.putExtra(Session.IDENTIFIER,session);
+            	startActivity(myIntentResult);
             default:
                 return super.onOptionsItemSelected(item);
         }

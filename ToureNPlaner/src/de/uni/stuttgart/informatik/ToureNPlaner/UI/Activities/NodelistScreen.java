@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -152,12 +153,37 @@ public class NodelistScreen extends ListActivity {
                  startActivityForResult(myIntent, info.position);
                 break;
             case 1: // delete
+            	session.getNodeModel().remove(info.position);
+            	adapter.notifyDataSetChanged();
                 
                 break;
         }
         return true;
     }
     
+ 
+    
+    // ----------------Menu-----------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.nodelistmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case R.id.revertNodes:
+        	session.getNodeModel().revertNodes();
+        	adapter.notifyDataSetChanged();
+        	
+        
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
 
