@@ -51,8 +51,9 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 				+ String.valueOf(nodeModel.size() + 1);
 		Node node = new Node(markerName, geoPoint.getLatitude(),
 				geoPoint.getLongitude());
-		addMarkerToMap(node);
 		nodeModel.addNodeToVector(node);
+		addMarkerToMap(node);
+		
 		mapView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
 		updateIcons();
@@ -84,6 +85,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 
 	public void addMarkerToMap(Node node) {
 		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint(),true);
+		dm.SetIndex(nodeModel.size());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), "", "",
 				dm);
 		list.add(overlayitem);
@@ -102,14 +104,14 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 		if (list.size() > 0) {
 			for (int i = 1; i < list.size() - 1; i++) {
 				((DrawableMarker) list.get(i).getMarker()).setColor(Color.BLUE);
-				((DrawableMarker) list.get(i).getMarker()).SetIndex(i);
+				((DrawableMarker) list.get(i).getMarker()).SetIndex(i + 1);
 			}
 			((DrawableMarker) list.get(list.size() - 1).getMarker())
 					.setColor(Color.RED);
 			((DrawableMarker) list.get(list.size() - 1).getMarker())
-					.SetIndex(list.size() - 1);
+					.SetIndex(list.size());
 			((DrawableMarker) list.get(0).getMarker()).setColor(Color.GREEN);
-			((DrawableMarker) list.get(0).getMarker()).SetIndex(0);
+			((DrawableMarker) list.get(0).getMarker()).SetIndex(1);
 			}
 	}
 	// }

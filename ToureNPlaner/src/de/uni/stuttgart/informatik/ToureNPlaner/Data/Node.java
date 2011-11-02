@@ -3,12 +3,13 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 import org.mapsforge.android.maps.GeoPoint;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Node implements Serializable {
 	private String name;
-	private Double latitude;
-	private Double longitude;
+	private double latitude;
+	private double longitude;
 	private ArrayList<Constraint> constraintList;
     private transient GeoPoint geoPoint;
 
@@ -56,4 +57,6 @@ public class Node implements Serializable {
         }
         return geoPoint;
     }
-}
+
+    }
+

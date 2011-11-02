@@ -68,7 +68,8 @@ public class DragNDropListView extends ListView {
 		final int x = (int) ev.getX();
 		final int y = (int) ev.getY();	
 		
-		if (action == MotionEvent.ACTION_DOWN && x < this.getWidth()/4) {
+		// modify x constraint to set the focusbox of the drag
+		if (action == MotionEvent.ACTION_DOWN && x > this.getWidth()/1.25) {
 			mDragMode = true;
 		}
 

@@ -10,7 +10,7 @@ public class DrawableMarker extends Drawable{
 private MapView mapView;
 private GeoPoint gp;
 private int color = Color.BLACK;
-private int index = 0;
+private int index = 1;
 private Boolean isDrawText = true;
 
 	public DrawableMarker(MapView mapview, GeoPoint gp,Boolean isDrawText){
@@ -48,7 +48,8 @@ private Boolean isDrawText = true;
 	    canvas.drawCircle(point.x, point.y, (float) ( mapView.getZoomLevel())*radiusFactor, circle);
 	    // draw Text on the circle 
 	    if (isDrawText){
-	    canvas.drawText(String.valueOf(index), point.x - 3, point.y + 6, TextPaint);
+	    	if(index < 10) canvas.drawText(String.valueOf(index), point.x - 3, point.y + 6, TextPaint);
+	    	if(index >=10 )canvas.drawText(String.valueOf(index), point.x - 9, point.y + 6, TextPaint);
 	    }
 	}
 
