@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import org.mapsforge.android.maps.GeoPoint;
 import org.mapsforge.android.maps.ItemizedOverlay;
 import org.mapsforge.android.maps.MapView;
@@ -43,13 +42,7 @@ public class ItemOverlayLocation extends ItemizedOverlay<OverlayItem> implements
 
 	@Override
 	protected boolean onTap(int index) {
-		// OverlayItem item = list.get(index);
-		// AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		Log.v("tap", "tap triggered");
-		// dialog.setTitle(item.getTitle());
-		// dialog.setMessage(item.getSnippet());
-		// dialog.show();
-		return true;
+		return false;
 	}
 
 	public void updateLocation(GeoPoint gp) {
