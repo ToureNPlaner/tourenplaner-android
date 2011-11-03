@@ -39,6 +39,8 @@ public class MapScreen extends MapActivity implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean isFirstStart = savedInstanceState == null;
         // If we get created for the first time we get our data from the intent
         if (savedInstanceState != null) {
             session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
@@ -60,7 +62,7 @@ public class MapScreen extends MapActivity implements Observer {
         mapView.setMemoryCardCachePersistence(true);
         mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
-        setupGPS();
+        setupGPS(isFirstStart);
 
         initializeHandler();
 
@@ -71,7 +73,7 @@ public class MapScreen extends MapActivity implements Observer {
         setupWayOverlay();
     }
 
-    private void setupGPS() {
+    private void setupGPS(boolean isFirstStart) {
         LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         GeoPoint gp = null;
@@ -80,7 +82,9 @@ public class MapScreen extends MapActivity implements Observer {
         }
 
         // setting up LocationManager and set MapFocus on lastknown GPS-Location
-        mapView.getController().setCenter(gp);
+        if(isFirstStart) {
+            mapView.getController().setCenter(gp);
+        }
         ItemOverlayLocation itemizedoverlaylocation = new ItemOverlayLocation(mapView, gp);
         mapView.getOverlays().add(itemizedoverlaylocation);
         // 5 minutes, 50 meters
