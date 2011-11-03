@@ -7,7 +7,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +18,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.NodeResultListAdapter;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
 import org.mapsforge.android.maps.*;
@@ -30,7 +28,7 @@ public class MapScreen extends MapActivity implements Observer {
     private Session session;
 
     private ItemOverlayDrawable itemizedoverlay;
-    private AsyncTask<Void, Void, Object> handler;
+    private Session.RequestHandler handler = null;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -65,6 +63,8 @@ public class MapScreen extends MapActivity implements Observer {
 
         setupGPS();
 
+        initializeHandler();
+
         //overlay for nodeItems
         itemizedoverlay = new ItemOverlayDrawable(this,session.getNodeModel(), mapView,0,4,4);
         mapView.getOverlays().add(itemizedoverlay);
@@ -85,7 +85,7 @@ public class MapScreen extends MapActivity implements Observer {
         ItemOverlayLocation itemizedoverlaylocation = new ItemOverlayLocation(mapView, gp);
         mapView.getOverlays().add(itemizedoverlaylocation);
         // 5 minutes, 50 meters
-        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5*60*1000, 50, itemizedoverlaylocation);
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, itemizedoverlaylocation);
     }
 
     private void setupWayOverlay() {
@@ -148,8 +148,9 @@ public class MapScreen extends MapActivity implements Observer {
                 return true;
             case R.id.calculate:
             	if (session.getNodeModel().size() > 1){
-                handler = new Session.RequestHandler(session, this).execute();
-                setProgressBarIndeterminateVisibility(true);
+                    handler = new Session.RequestHandler(session, this);
+                    handler.execute();
+                    setProgressBarIndeterminateVisibility(true);
             	}
                 return true;
             case R.id.resultlist:
@@ -171,6 +172,22 @@ public class MapScreen extends MapActivity implements Observer {
     public void addPathToMap(GeoPoint[][] points) {
         wayOverlay.clear();
         wayOverlay.addWay(new OverlayWay(points));
+    }
+
+    private void initializeHandler() {
+        handler = (Session.RequestHandler) getLastNonConfigurationInstance();
+
+        if (handler != null) {
+            handler.setListener(this);
+            setProgressBarIndeterminateVisibility(true);
+        } else {
+            setProgressBarIndeterminateVisibility(false);
+        }
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return handler;
     }
 
     @Override
