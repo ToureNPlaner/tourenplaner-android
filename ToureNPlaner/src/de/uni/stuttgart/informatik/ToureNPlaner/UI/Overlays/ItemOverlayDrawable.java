@@ -1,31 +1,20 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import org.mapsforge.android.maps.GeoPoint;
-import org.mapsforge.android.maps.ItemizedOverlay;
-import org.mapsforge.android.maps.MapView;
-import org.mapsforge.android.maps.OverlayItem;
-import org.mapsforge.android.maps.Projection;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.NodePreferences;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.NodelistScreen;
+import org.mapsforge.android.maps.*;
+
+import java.util.ArrayList;
 
 public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
@@ -85,7 +74,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 		nodeModel.addNodeToVector(node);
 		addMarkerToMap(node);
 		
-		mapView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
 		updateIcons();
 		requestRedraw();
