@@ -53,8 +53,8 @@ public class NodePreferences extends Activity {
 			Button btnReturn = (Button) findViewById(R.id.btnReturn);
 
 			etName.setText(node.getName());
-			// etLongitude.setText(String.valueOf(node.getLongitude()));
-			// etLatitude.setText(String.valueOf(node.getLatitude()));
+			// etLongitude.setText(String.valueOf(node.getLoE7()));
+			// etLatitude.setText(String.valueOf(node.getLaE7()));
 
 			// -----------------btnSave-----------------------
 			btnSave.setOnClickListener(new OnClickListener() {

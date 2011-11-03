@@ -18,16 +18,16 @@ public class Result implements Serializable {
     static void jacksonParse(JsonParser jp, ArrayList<GeoPoint> array) throws IOException {
         while (jp.nextToken() != JsonToken.END_OBJECT) {
             if ("points".equals(jp.getCurrentName())) {
-                double lt = 0, ln = 0;
+                int lt = 0, ln = 0;
                 if (jp.nextToken() == JsonToken.START_ARRAY) {
                     while (jp.nextToken() != JsonToken.END_ARRAY) {
                         while (jp.nextToken() != JsonToken.END_OBJECT) {
                             if (jp.getCurrentName().equals("lt")) {
                                 jp.nextToken();
-                                lt = jp.getDoubleValue();
+                                lt = jp.getIntValue()/10;
                             } else if (jp.getCurrentName().equals("ln")) {
                                 jp.nextToken();
-                                ln = jp.getDoubleValue();
+                                ln = jp.getIntValue()/10;
                             }
                         }
                         array.add(new GeoPoint(lt, ln));

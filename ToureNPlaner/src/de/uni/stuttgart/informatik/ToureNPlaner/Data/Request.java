@@ -11,8 +11,8 @@ public class Request {
 
     private static JSONObject generate(Node node) throws JSONException {
         JSONObject o = new JSONObject();
-        o.put("lt", node.getLatitude());
-        o.put("ln", node.getLongitude());
+        o.put("lt", node.getLaE7());
+        o.put("ln", node.getLoE7());
         return o;
     }
 

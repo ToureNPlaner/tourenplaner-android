@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -69,8 +68,8 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		String markerName = "Marker Nr. "
 				+ String.valueOf(nodeModel.size() + 1);
-		Node node = new Node(markerName, geoPoint.getLatitude(),
-				geoPoint.getLongitude());
+		Node node = new Node(markerName, geoPoint.getLatitudeE6()*10,
+				geoPoint.getLongitudeE6()*10);
 		nodeModel.addNodeToVector(node);
 		addMarkerToMap(node);
 		
