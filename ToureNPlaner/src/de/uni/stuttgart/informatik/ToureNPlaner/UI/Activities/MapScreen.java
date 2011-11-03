@@ -13,10 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
@@ -26,7 +28,7 @@ public class MapScreen extends MapActivity implements Observer {
     public MapView mapView;
     private ArrayWayOverlay wayOverlay;
     private Session session;
-
+    public final static  int RequestCodeMapScreen = 0;
     private ItemOverlayDrawable itemizedoverlay;
     private Session.RequestHandler handler = null;
 
@@ -132,45 +134,67 @@ public class MapScreen extends MapActivity implements Observer {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.nodelist:
-                // generates an intent from the class NodeListScreen
-                Intent myIntent = new Intent(this, NodelistScreen.class);
-                myIntent.putExtra(Session.IDENTIFIER, session);
-                startActivityForResult(myIntent, 0);
-                return true;
-            case R.id.reset:
-                // clear nodes
-                itemizedoverlay.clear();
-                // clear path
-                wayOverlay.clear();
-                session.setResult(null);
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.nodelist:
+			// generates an intent from the class NodeListScreen
+			Intent myIntent = new Intent(this, NodelistScreen.class);
+			myIntent.putExtra(Session.IDENTIFIER, session);
+			startActivityForResult(myIntent, RequestCodeMapScreen);
+			return true;
+		case R.id.reset:
+			// clear nodes
+			itemizedoverlay.clear();
+			// clear path
+			wayOverlay.clear();
+			session.setResult(null);
 
-                return true;
-            case R.id.calculate:
-            	if (session.getNodeModel().size() > 1){
-                    handler = new Session.RequestHandler(session, this);
-                    handler.execute();
-                    setProgressBarIndeterminateVisibility(true);
-            	}
-                return true;
-            case R.id.resultlist:
-            	Intent myIntentResult = new Intent (this, NodeResultlistScreen.class);
-            	myIntentResult.putExtra(Session.IDENTIFIER,session);
-            	startActivity(myIntentResult);
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+			return true;
+		case R.id.calculate:
+			if (session.getNodeModel().size() > 1) {
+				handler = (RequestHandler) new Session.RequestHandler(session, this).execute();
+				setProgressBarIndeterminateVisibility(true);
+			}
+			return true;
+		case R.id.resultlist:
+			Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
+			myIntentResult.putExtra(Session.IDENTIFIER, session);
+			startActivity(myIntentResult);
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        session.setNodeModel((NodeModel) data.getExtras().getSerializable(
-                NodeModel.IDENTIFIER));
-        itemizedoverlay.setNodeModel(session.getNodeModel());
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		switch (requestCode) {
+		case RequestCodeMapScreen:
+
+			session.setNodeModel((NodeModel) data.getExtras().getSerializable(
+					NodeModel.IDENTIFIER));
+			itemizedoverlay.setNodeModel(session.getNodeModel());
+			itemizedoverlay.updateIcons();
+			break;
+		case ItemOverlayDrawable.RequestCodeItemOverlay:
+			Intent sender = itemizedoverlay.ItemOverlayIntent;
+			int DataIndex = sender.getExtras().getInt("index");
+			switch (resultCode) {
+			case RESULT_OK:
+				session.getNodeModel().getNodeVector().set(DataIndex,(Node) data.getSerializableExtra("node"));
+
+				break;
+			case NodePreferences.RESULT_DELETE:
+				session.getNodeModel().getNodeVector().remove(DataIndex);
+				itemizedoverlay.setNodeModel(session.getNodeModel());
+				itemizedoverlay.updateIcons();
+				wayOverlay.clear();
+				mapView.invalidate();
+
+			}
+		}
+	}
 
     public void addPathToMap(GeoPoint[][] points) {
         wayOverlay.clear();

@@ -21,12 +21,12 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 	private NodeModel nodeModel;
 	private MapView mapview;
 	private final AlgorithmInfo algorithmInfo = null;
-	
+	public static final int RequestCodeItemOverlay = 1;
 	private Context context;
 	private Point offset = new Point();
 	private MapView cMap;
 	protected String Tag = "default";
-
+	public Intent ItemOverlayIntent;
 	private int mapViewWidth = 0;
 	private int mapViewHeight = 0;
 	private int xCenterOffset = 0;
@@ -94,13 +94,11 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public boolean onTap(int i) {
-		 Intent myIntent = new Intent(context, NodePreferences.class);
-         myIntent.putExtra("node", nodeModel.getNodeVector().get(i));
-         //((Activity) context).startActivityForResult(myIntent, i);
-         ((Activity) context).startActivity(myIntent);
-		Log.v("tap", "tap triggered");
-		
-		return true;
+		 ItemOverlayIntent = new Intent(context, NodePreferences.class);
+		 ItemOverlayIntent.putExtra("node", nodeModel.getNodeVector().get(i));
+		 ItemOverlayIntent.putExtra("index", i);
+        ((Activity) context).startActivityForResult(ItemOverlayIntent,RequestCodeItemOverlay);
+	return false;
 	}
 	
 	
@@ -139,12 +137,12 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> {
 		return false;
 		}
 
-	private void updateIcons() {
+	public void updateIcons() {
 		// if (!algorithmInfo.sourceIsTarget() &&
 		// list.size() > 0) {
 int bound = 0;
 		if (list.size() > 0) {
-			bound = (int) (((DrawableMarker) list.get(0).getMarker()).getBound() *1.5);
+			bound = (int) (((DrawableMarker) list.get(0).getMarker()).getBound() *2.25);
 			for (int i = 1; i < list.size() - 1; i++) {
 				((DrawableMarker) list.get(i).getMarker()).setColor(Color.BLUE);
 				((DrawableMarker) list.get(i).getMarker()).SetIndex(i + 1);

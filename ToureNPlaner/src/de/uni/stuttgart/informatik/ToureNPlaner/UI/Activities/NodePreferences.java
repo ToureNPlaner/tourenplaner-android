@@ -59,6 +59,7 @@ public class NodePreferences extends Activity {
 			// -----------------btnSave-----------------------
 			btnSave.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
+					node.setName(etName.getText().toString());
                     finishActivity();
 				}
 			});
