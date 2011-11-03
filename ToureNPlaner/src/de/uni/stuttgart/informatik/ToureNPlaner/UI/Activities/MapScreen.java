@@ -49,7 +49,8 @@ public class MapScreen extends MapActivity implements Observer {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         // setting properties of the mapview
-        mapView = new MapView(this);
+        setContentView(R.layout.activity_mapscreen);
+        this.mapView = (MapView) findViewById(R.id.mapView);
         mapView.setClickable(true);
         mapView.setLongClickable(true);
         mapView.setBuiltInZoomControls(true);
@@ -58,8 +59,6 @@ public class MapScreen extends MapActivity implements Observer {
         mapView.setFpsCounter(true);
         mapView.setMemoryCardCachePersistence(true);
         mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
-
-        setContentView(mapView);
 
         setupGPS();
 
