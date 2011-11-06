@@ -46,8 +46,6 @@ public class DrawableMarker extends Drawable {
         // Transfrom geoposition to Point on canvas
         mapView.getProjection().toPixels(gp, point);
         canvas.setDrawFilter(drawFilter);
-        // Workaround for http://code.google.com/p/skia/issues/detail?id=387
-        canvas.setMatrix(canvas.getMatrix());
 
         circle.setColor(color);
 
