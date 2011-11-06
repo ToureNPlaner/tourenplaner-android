@@ -29,6 +29,7 @@ public class DrawableMarker extends Drawable {
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(16);
+        textPaint.setTextAlign(Paint.Align.CENTER);
         circleLine.setColor(Color.BLACK);
         // draw line with antialiasing
         drawFilter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG);
@@ -57,9 +58,9 @@ public class DrawableMarker extends Drawable {
         canvas.drawCircle(point.x, point.y, (float) (mapView.getZoomLevel()) * radiusFactor, circle);
         // draw Text on the circle
         // x position depending on amount of numbers
+
         if (isDrawText) {
-            if (index < 10) canvas.drawText(String.valueOf(index), point.x - 3, point.y + 6, textPaint);
-            if (index >= 10) canvas.drawText(String.valueOf(index), point.x - 9, point.y + 6, textPaint);
+            canvas.drawText(String.valueOf(index), point.x, point.y + 6f, textPaint);
         }
     }
 
