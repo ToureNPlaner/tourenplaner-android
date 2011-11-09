@@ -118,8 +118,11 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 			
 		Log.d("pressed","gps");	
 		}else{
-			// correction of index because of additional gpsmarker
+			// correction of index because of additional gpsmarker when GpsLocation exists
+			if(((DrawableMarker)list.get(0).getMarker()).isChangeable() == false){
+			
 			i -=1;
+			}
 			 ItemOverlayIntent = new Intent(context, NodePreferences.class);
 			 ItemOverlayIntent.putExtra("node", nodeModel.getNodeVector().get(i));
 			 ItemOverlayIntent.putExtra("index", i);
