@@ -4,11 +4,14 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.mapsforge.android.maps.GeoPoint;
+
 public class NodeModel implements Serializable {
 
 	private ArrayList<Node> nodeArrayList = new ArrayList<Node>();
-	
-    public static final String IDENTIFIER = "nodemodel";
+	private static GeoPoint GPSGeoPoint;
+   
+	public static final String IDENTIFIER = "nodemodel";
 
 	public ArrayList<Node> getNodeVector() {
 		return nodeArrayList;
@@ -24,6 +27,12 @@ public class NodeModel implements Serializable {
 
 	public void addNodeToVector(Node node) {
 		nodeArrayList.add(node);
+	}
+	public void setNodeToVector(int index,Node node) {
+		nodeArrayList.set(index,node);
+	}
+	public void addNodeAtIndexToVector(int index,Node node) {
+		nodeArrayList.add(index,node);
 	}
 	public void clear(){
 		nodeArrayList.clear();
@@ -43,6 +52,14 @@ public void revertNodes(){
 	
 	}
 	tempArrayList.clear();
+}
+
+public GeoPoint getGPSGeoPoint() {
+	return GPSGeoPoint;
+}
+
+public void setGPSGeoPoint(GeoPoint gPSGeoPoint) {
+	GPSGeoPoint = gPSGeoPoint;
 }
 	
 }

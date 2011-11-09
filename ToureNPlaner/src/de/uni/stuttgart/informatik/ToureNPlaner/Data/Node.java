@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class Node implements Serializable {
 	private String name;
+	private String type;
+	
+
 	private int laE7;
 	private int loE7;
 	private ArrayList<Constraint> constraintList;
@@ -33,7 +36,13 @@ public class Node implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getType() {
+		return type;
+	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
 	public int getLaE7() {
 		return this.laE7;
 	}

@@ -21,7 +21,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayLocation;
 import org.mapsforge.android.maps.*;
 
 public class MapScreen extends MapActivity implements Observer {
@@ -31,6 +30,7 @@ public class MapScreen extends MapActivity implements Observer {
     public final static  int RequestCodeMapScreen = 0;
     private ItemOverlayDrawable itemizedoverlay;
     private Session.RequestHandler handler = null;
+    private GeoPoint GPSGeoPoint = null;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -65,33 +65,34 @@ public class MapScreen extends MapActivity implements Observer {
         mapView.setMemoryCardCachePersistence(true);
         mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
-        setupGPS(isFirstStart);
+        
 
         initializeHandler();
 
         //overlay for nodeItems
-        itemizedoverlay = new ItemOverlayDrawable(this,session.getNodeModel(), mapView,0,4,4);
+        itemizedoverlay = new ItemOverlayDrawable(this,session.getNodeModel(), mapView);
+       
+        setupGPS(isFirstStart);
+        itemizedoverlay.addGPSMarkerToMap(GPSGeoPoint);
+        itemizedoverlay.updateIcons();
         mapView.getOverlays().add(itemizedoverlay);
-
+       
         setupWayOverlay();
     }
 
     private void setupGPS(boolean isFirstStart) {
         LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        GeoPoint gp = null;
         if(loc != null) {
-            gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+        	GPSGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         }
 
         // setting up LocationManager and set MapFocus on lastknown GPS-Location
         if(isFirstStart) {
-            mapView.getController().setCenter(gp);
+            mapView.getController().setCenter(GPSGeoPoint);
         }
-        ItemOverlayLocation itemizedoverlaylocation = new ItemOverlayLocation(mapView, gp);
-        mapView.getOverlays().add(itemizedoverlaylocation);
         // 5 minutes, 50 meters
-        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, itemizedoverlaylocation);
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, itemizedoverlay);
     }
 
     private void setupWayOverlay() {

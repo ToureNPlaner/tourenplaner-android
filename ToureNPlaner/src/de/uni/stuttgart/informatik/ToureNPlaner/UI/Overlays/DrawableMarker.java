@@ -10,7 +10,7 @@ public class DrawableMarker extends Drawable {
     private GeoPoint gp;
     private int color = Color.BLACK;
     private int index = 1;
-    private Boolean isDrawText = true;
+
     private double bound;
 
     private final Paint circle;
@@ -18,8 +18,13 @@ public class DrawableMarker extends Drawable {
     private final Paint textPaint;
     private final DrawFilter drawFilter;
     private final Point point;
+    private boolean isChangeable = true;
+    private Boolean isDrawText = true;
+    
 
-    public DrawableMarker(MapView mapview, GeoPoint gp, Boolean isDrawText) {
+	
+
+	public DrawableMarker(MapView mapview, GeoPoint gp, Boolean isDrawText) {
         this.mapView = mapview;
         this.gp = gp;
         this.isDrawText = isDrawText;
@@ -36,10 +41,7 @@ public class DrawableMarker extends Drawable {
         point = new Point();
     }
 
-    public void setGp(GeoPoint gp) {
-        this.gp = gp;
-    }
-
+ 
     @Override
     public void draw(Canvas canvas) {
         int radiusFactor = 1;
@@ -62,6 +64,24 @@ public class DrawableMarker extends Drawable {
         }
     }
 
+    
+    public void setGp(GeoPoint gp) {
+        this.gp = gp;
+    }
+    public boolean isChangeable() {
+		return isChangeable;
+	}
+
+	public void setChangable(boolean isChangable) {
+		this.isChangeable = isChangable;
+	}
+	public Boolean getIsDrawText() {
+		return isDrawText;
+	}
+
+	public void setDrawText(Boolean isDrawText) {
+		this.isDrawText = isDrawText;
+	}
     public double getBound() {
         return bound;
     }
