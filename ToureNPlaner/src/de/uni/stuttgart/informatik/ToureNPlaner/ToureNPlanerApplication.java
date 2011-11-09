@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner;
 
 import android.app.Application;
 import android.os.Build;
+import android.util.Log;
 
 public class ToureNPlanerApplication extends Application {
     @Override
@@ -13,8 +14,9 @@ public class ToureNPlanerApplication extends Application {
     private void disableConnectionReuseIfNecessary() {
         // HTTP connection reuse which was buggy pre-froyo
         // Build.VERSION_CODES.FROYO
-        if (Integer.parseInt(Build.VERSION.SDK) < 8) {
+        if (Build.VERSION.SDK_INT < 8) {
             System.setProperty("http.keepAlive", "false");
+	        Log.i("ToureNPlaner","HTTP keep-alive disabled");
         }
     }
 }
