@@ -61,7 +61,7 @@ public class MapScreen extends MapActivity implements Observer {
         mapView.setMapViewMode(MapViewMode.CUSTOM_TILE_DOWNLOAD);
 	    mapView.setMapTileDownloadServer("gerbera.informatik.uni-stuttgart.de/osm/tiles");
         // mapView.setMapFile("/sdcard/berlin.map");
-        mapView.setFpsCounter(true);
+        //mapView.setFpsCounter(true);
         mapView.setMemoryCardCachePersistence(true);
         mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
