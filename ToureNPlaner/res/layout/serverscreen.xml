@@ -5,5 +5,4 @@
   android:layout_height="fill_parent" android:orientation="vertical" android:weightSum="1">
     <Button android:id="@+id/btnAdd" android:text="Add Server" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
     <ListView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/serverListView"></ListView>
-    
 </LinearLayout>
