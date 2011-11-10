@@ -12,27 +12,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class RequestHandler extends AsyncTask<Void, Void, Object> {
-	Observer listener;
-	final Session session;
-
-	public void setListener(Observer listener) {
-		this.listener = listener;
-	}
-
-	@Override
-	protected void onPostExecute(Object object) {
-		if (object instanceof Result) {
-			listener.onCompleted(object);
-		} else {
-			listener.onError(object);
-		}
-	}
+public class RequestHandler extends ConnectionHandler {
+	private final Session session;
 
 	public RequestHandler(Session session, Observer listener) {
-		super();
+		super(listener);
 		this.session = session;
-		this.listener = listener;
 	}
 
 	@Override

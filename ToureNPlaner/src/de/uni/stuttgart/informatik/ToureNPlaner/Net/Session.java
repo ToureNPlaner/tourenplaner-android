@@ -1,13 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
-import android.os.AsyncTask;
-import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
-import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.UUID;
 
 public class Session implements Serializable {
@@ -18,7 +13,6 @@ public class Session implements Serializable {
 	}
 
 	private final UUID uuid;
-	private transient boolean dirty;
 
 	private static class Data implements Serializable
 	{
@@ -31,11 +25,19 @@ public class Session implements Serializable {
 		private Result result;
 	}
 	
-	Data d = new Data();
+	private Data d = new Data();
 
     public Result getResult() {
         return d.result;
     }
+
+	private void safe() {
+
+	}
+
+	private void load() {
+
+	}
 
     public void setResult(Result result) {
 	    d.result = result;
@@ -94,8 +96,8 @@ public class Session implements Serializable {
      * @param listener the Callback listener
      * @return Use this to cancel the task with cancel(true)
      */
-    public static ConnectionHandler createSession(String url, Observer listener) {
-        ConnectionHandler handler = new ConnectionHandler(url, listener);
+    public static ServerInfoHandler createSession(String url, Observer listener) {
+        ServerInfoHandler handler = new ServerInfoHandler(listener, url);
         handler.execute();
         return handler;
     }
