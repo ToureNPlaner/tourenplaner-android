@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ServerScreen extends FragmentActivity implements Observer {
-    static final String SERVERLIST_FILENAME = "serverlist";
+    private static final String SERVERLIST_FILENAME = "serverlist";
     private ArrayAdapter<String> adapter;
     private ServerInfoHandler handler;
     private ArrayList<String> servers;
