@@ -17,8 +17,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.ItemOverlayDrawable;
 import org.mapsforge.android.maps.*;
@@ -29,7 +29,7 @@ public class MapScreen extends MapActivity implements Observer {
     private Session session;
     public final static  int RequestCodeMapScreen = 0;
     private ItemOverlayDrawable itemizedoverlay;
-    private Session.RequestHandler handler = null;
+    private RequestHandler handler = null;
     private GeoPoint GPSGeoPoint = null;
 
     @Override
@@ -155,7 +155,7 @@ public class MapScreen extends MapActivity implements Observer {
 			return true;
 		case R.id.calculate:
 			if (session.getNodeModel().size() > 1) {
-				handler = (RequestHandler) new Session.RequestHandler(session, this).execute();
+				handler = (RequestHandler) new RequestHandler(session, this).execute();
 				setProgressBarIndeterminateVisibility(true);
 			}
 			return true;
@@ -204,7 +204,7 @@ public class MapScreen extends MapActivity implements Observer {
     }
 
     private void initializeHandler() {
-        handler = (Session.RequestHandler) getLastNonConfigurationInstance();
+        handler = (RequestHandler) getLastNonConfigurationInstance();
 
         if (handler != null) {
             handler.setListener(this);

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.ConnectionHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -27,7 +28,7 @@ import java.util.Collections;
 public class ServerScreen extends FragmentActivity implements Observer {
     static final String SERVERLIST_FILENAME = "serverlist";
     private ArrayAdapter<String> adapter;
-    private Session.ConnectionHandler handler;
+    private ConnectionHandler handler;
     private ArrayList<String> servers;
 
     public static class ConnectionProgressDialog extends MyProgressDialog {
@@ -135,7 +136,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     private void initializeHandler() {
-        handler = (Session.ConnectionHandler) getLastCustomNonConfigurationInstance();
+        handler = (ConnectionHandler) getLastCustomNonConfigurationInstance();
 
         if (handler != null)
             handler.setListener(this);
