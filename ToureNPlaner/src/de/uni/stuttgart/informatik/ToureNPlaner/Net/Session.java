@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.UUID;
 
 public class Session implements Serializable {
     public static final String IDENTIFIER = "session";
@@ -69,10 +70,9 @@ public class Session implements Serializable {
                 try {
                     InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
                     String content = Util.streamToString(stream);
-                    ServerInfo info = ServerInfo.parse(new JSONObject(content));
                     Session session = new Session();
-                    session.serverInfo = info;
-                    session.url = url;
+                    session.setServerInfo(ServerInfo.parse(new JSONObject(content)));
+                    session.setUrl(url);
                     return session;
                 } finally {
                     urlConnection.disconnect();
@@ -83,7 +83,7 @@ public class Session implements Serializable {
         }
     }
 
-    public static class RequestHandler extends AsyncTask<Void, Void, Object> {
+	public static class RequestHandler extends AsyncTask<Void, Void, Object> {
         Observer listener;
         final Session session;
 
@@ -141,61 +141,80 @@ public class Session implements Serializable {
         }
     }
 
-    private ServerInfo serverInfo;
-    private String url;
-    private String user;
-    private String password;
-    private AlgorithmInfo selectedAlgorithm;
-    private NodeModel nodeModel = new NodeModel();
+	public Session() {
+		this.uuid = UUID.randomUUID();
+	}
 
-    private Result result;
+	private final UUID uuid;
+	private transient boolean dirty;
+
+	private static class Data implements Serializable
+	{
+		private ServerInfo serverInfo;
+	    private String url;
+	    private String user;
+	    private String password;
+	    private AlgorithmInfo selectedAlgorithm;
+	    private NodeModel nodeModel = new NodeModel();
+		private Result result;
+	}
+	
+	Data d = new Data();
 
     public Result getResult() {
-        return result;
+        return d.result;
     }
 
     public void setResult(Result result) {
-        this.result = result;
+	    d.result = result;
     }
 
     public void setNodeModel(NodeModel nodeModel) {
-        this.nodeModel = nodeModel;
+        d.nodeModel = nodeModel;
     }
 
+	private void setUrl(String url) {
+		d.url = url;
+	}
+
     public String getUrl() {
-        return url;
+        return d.url;
     }
 
     public String getUser() {
-        return user;
+        return d.user;
     }
 
     public String getPassword() {
-        return password;
+        return d.password;
     }
 
     public NodeModel getNodeModel() {
-        return nodeModel;
+        return d.nodeModel;
     }
 
     public AlgorithmInfo getSelectedAlgorithm() {
-        return selectedAlgorithm;
+        return d.selectedAlgorithm;
     }
 
     public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
-        this.selectedAlgorithm = selectedAlgorithm;
+        d.selectedAlgorithm = selectedAlgorithm;
+    }
+
+	public void setServerInfo(ServerInfo serverInfo) {
+       d.serverInfo = serverInfo;
     }
 
     public ServerInfo getServerInfo() {
-        return serverInfo;
+        return d.serverInfo;
     }
 
     public void setUser(String user) {
-        this.user = user;
+        d.user = user;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        d.password = password;
     }
 
     /**
