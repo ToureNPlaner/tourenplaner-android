@@ -101,7 +101,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 			        	   // transform the GpsMarker into a regular mapMarker on Position 0
 			        	   ((DrawableMarker)list.get(gpsindex).getMarker()).setChangable(true);
 			        	   ((DrawableMarker)list.get(gpsindex).getMarker()).setDrawText(true);
-			        	   nodeModel.setGPSGeoPoint(null);
+			        	   NodeModel.setGPSisStart(true);
 			        	   Node gpsStartnode = new Node("gpsLocation",list.get(gpsindex).getPoint().getLatitudeE6()*10,list.get(gpsindex).getPoint().getLongitudeE6()*10);
 			        	   nodeModel.addNodeAtIndexToVector(0, gpsStartnode);
 			        	   updateIcons();
@@ -145,6 +145,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 	public void clear() {
 		nodeModel.clear();
 		list.clear();
+		NodeModel.setGPSisStart(false);
 		addGPSMarkerToMap(nodeModel.getGPSGeoPoint());
 		requestRedraw();
 	}
@@ -163,6 +164,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 			for (int i = 0; i < list.size() ; i++) {
 				if(((DrawableMarker) list.get(i).getMarker()).isChangeable()){
 					if(hasStartpoint == false){
+						Log.v("setColor","green");
 						((DrawableMarker) list.get(i).getMarker()).setColor(Color.GREEN);
 						((DrawableMarker) list.get(i).getMarker()).setBounds(0, 0, bound,bound);
 						((DrawableMarker) list.get(i).getMarker()).SetIndex(index);
@@ -181,13 +183,14 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 			((DrawableMarker) list.get(list.size() - 1).getMarker()).SetIndex(index-1);
 			((DrawableMarker) list.get(list.size() - 1).getMarker()).setBounds(0, 0, bound,bound);
 			}
-			
+			requestRedraw();
 			}
 	}
 	// -----------------GPS------------------
 
 	public void addGPSMarkerToMap(GeoPoint GPSGeoPoint){
-		if (GPSGeoPoint != null){
+		if (GPSGeoPoint != null && NodeModel.isGPSisStart() == false){
+			Log.v("setColor","yellow");
 			  GPSMarker = new DrawableMarker(mapview, GPSGeoPoint, false);
 			  GPSMarker.setColor(Color.YELLOW);
 			  GPSMarker.setChangable(false);

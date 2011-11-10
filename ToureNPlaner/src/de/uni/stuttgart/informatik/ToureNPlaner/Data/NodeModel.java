@@ -10,7 +10,10 @@ public class NodeModel implements Serializable {
 
 	private ArrayList<Node> nodeArrayList = new ArrayList<Node>();
 	private static GeoPoint GPSGeoPoint;
+	private static boolean GPSisStart = false; 
    
+	
+
 	public static final String IDENTIFIER = "nodemodel";
 
 	public ArrayList<Node> getNodeVector() {
@@ -61,5 +64,11 @@ public GeoPoint getGPSGeoPoint() {
 public void setGPSGeoPoint(GeoPoint gPSGeoPoint) {
 	GPSGeoPoint = gPSGeoPoint;
 }
-	
+public static boolean isGPSisStart() {
+	return GPSisStart;
+}
+
+public static void setGPSisStart(boolean gPSisStart) {
+	GPSisStart = gPSisStart;
+}
 }

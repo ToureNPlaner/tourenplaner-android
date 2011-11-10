@@ -19,10 +19,7 @@ public class DrawableMarker extends Drawable {
     private final DrawFilter drawFilter;
     private final Point point;
     private boolean isChangeable = true;
-    private Boolean isDrawText = true;
-    
-
-	
+    private boolean isDrawText = true;
 
 	public DrawableMarker(MapView mapview, GeoPoint gp, Boolean isDrawText) {
         this.mapView = mapview;
@@ -94,7 +91,6 @@ public class DrawableMarker extends Drawable {
         this.color = color;
 
     }
-
     @Override
     public int getOpacity() {
         // TODO Auto-generated method stub

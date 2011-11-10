@@ -151,7 +151,7 @@ public class MapScreen extends MapActivity implements Observer {
 			// clear path
 			wayOverlay.clear();
 			session.setResult(null);
-
+			mapView.invalidate();
 			return true;
 		case R.id.calculate:
 			if (session.getNodeModel().size() > 1) {
