@@ -13,6 +13,7 @@ public class Request {
         JSONObject o = new JSONObject();
         o.put("lt", node.getLaE7());
         o.put("ln", node.getLoE7());
+	    o.put("name", node.getName());
         return o;
     }
 
