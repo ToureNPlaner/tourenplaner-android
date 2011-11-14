@@ -37,9 +37,10 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 	private GeoPoint GPSGeoPoint = null;
 	private DrawableMarker GPSMarker;
 	private OverlayItem overlayItem;
+	private final int markerbounds = 16;
 	public ItemOverlayDrawable(Context context,NodeModel nodeModel,MapView mapview) {
 		// ColorDrawable is just a workaround until the icons are loaded
-		super(boundCenterBottom(new ColorDrawable()));
+		super(new ColorDrawable());
 		this.nodeModel = nodeModel;
 		this.mapview = mapview;
 		this.context = context;
@@ -87,7 +88,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 	protected OverlayItem createItem(int i) {
 		return list.get(i);
 	}
-
+	
 	@Override
 	public boolean onTap( int i) {
 		
@@ -123,16 +124,21 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 			
 			i -=1;
 			}
+			if(i < nodeModel.size() && i >=0){
 			 ItemOverlayIntent = new Intent(context, NodePreferences.class);
 			 ItemOverlayIntent.putExtra("node", nodeModel.getNodeVector().get(i));
 			 ItemOverlayIntent.putExtra("index", i);
 	        ((Activity) context).startActivityForResult(ItemOverlayIntent,RequestCodeItemOverlay);
-			
+			}
 		}
 		
 	return false;
 	}
 	
+	public NodeModel getNodeModel() {
+		return nodeModel;
+	}
+
 	public void addMarkerToMap(Node node) {
 		DrawableMarker dm = new DrawableMarker(mapview, node.getGeoPoint(),true);
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), "", "",
@@ -154,34 +160,34 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 		// if (!algorithmInfo.sourceIsTarget() &&
 		// list.size() > 0) {
 		boolean hasStartpoint = false;
-		int bound = 0;
 		int index = 1;
 		if (list.size() > 0) {
 			// set boundsize
-			bound = (int) (((DrawableMarker) list.get(0).getMarker()).getBound());
+			
 			// checks whether a marker is changeable or not. if a marker is changeable and it is the first of this kind
 			// it is the startmarker 
 			for (int i = 0; i < list.size() ; i++) {
-				if(((DrawableMarker) list.get(i).getMarker()).isChangeable()){
+				DrawableMarker drawableMarker = (DrawableMarker) list.get(i).getMarker();
+				if(drawableMarker.isChangeable()){
 					if(hasStartpoint == false){
-						Log.v("setColor","green");
-						((DrawableMarker) list.get(i).getMarker()).setColor(Color.GREEN);
-						((DrawableMarker) list.get(i).getMarker()).setBounds(0, 0, bound,bound);
-						((DrawableMarker) list.get(i).getMarker()).SetIndex(index);
+						drawableMarker.setColor(Color.GREEN);
+						drawableMarker.setBounds(0, 0, markerbounds,markerbounds);
+						drawableMarker.SetIndex(index);
 						index+=1;
 						hasStartpoint = true;
 					}else{
-					((DrawableMarker) list.get(i).getMarker()).setColor(Color.BLUE);
-					((DrawableMarker) list.get(i).getMarker()).SetIndex(index);
+					drawableMarker.setColor(Color.BLUE);
+					drawableMarker.SetIndex(index);
 					index+=1;
-					((DrawableMarker) list.get(i).getMarker()).setBounds(0, 0, bound,bound);
+					drawableMarker.setBounds(0, 0, markerbounds,markerbounds);
+					
 								}
 				}
 			}
 			if(((DrawableMarker) list.get(list.size() - 1).getMarker()).isChangeable() && list.size() >2){
 			((DrawableMarker) list.get(list.size() - 1).getMarker()).setColor(Color.RED);
 			((DrawableMarker) list.get(list.size() - 1).getMarker()).SetIndex(index-1);
-			((DrawableMarker) list.get(list.size() - 1).getMarker()).setBounds(0, 0, bound,bound);
+			((DrawableMarker) list.get(list.size() - 1).getMarker()).setBounds(0, 0,markerbounds,markerbounds);
 			}
 			requestRedraw();
 			}
@@ -194,7 +200,7 @@ public class ItemOverlayDrawable extends ItemizedOverlay<OverlayItem> implements
 			  GPSMarker = new DrawableMarker(mapview, GPSGeoPoint, false);
 			  GPSMarker.setColor(Color.YELLOW);
 			  GPSMarker.setChangable(false);
-			  GPSMarker.setBounds(0, 0, 8,8);
+			  GPSMarker.setBounds(0, 0, markerbounds,markerbounds);
 			  overlayItem = new OverlayItem(GPSGeoPoint, "", "", GPSMarker);
 			  nodeModel.setGPSGeoPoint(GPSGeoPoint);
 			  list.add(overlayItem);
