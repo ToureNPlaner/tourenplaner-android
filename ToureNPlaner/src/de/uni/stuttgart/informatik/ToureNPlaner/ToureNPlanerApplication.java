@@ -1,15 +1,23 @@
 package de.uni.stuttgart.informatik.ToureNPlaner;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
 public class ToureNPlanerApplication extends Application {
+	private static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
+	    context = getApplicationContext();
         disableConnectionReuseIfNecessary();
     }
+
+	public static Context getContext() {
+		return context;
+	}
 
     private void disableConnectionReuseIfNecessary() {
         // HTTP connection reuse which was buggy pre-froyo
