@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -151,7 +152,7 @@ public class MapScreen extends MapActivity implements Observer {
 			// clear path
 			wayOverlay.clear();
 			session.setResult(null);
-
+			mapView.invalidate();
 			return true;
 		case R.id.calculate:
 			if (session.getNodeModel().size() > 1) {
@@ -163,9 +164,24 @@ public class MapScreen extends MapActivity implements Observer {
 			Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
 			myIntentResult.putExtra(Session.IDENTIFIER, session);
 			startActivity(myIntentResult);
+			return true;
+			
+//		case R.id.gotofirst:
+//		if (itemizedoverlay.getNodeModel().size() > 0){
+//			mapView.getController().setCenter(itemizedoverlay.getNodeModel().get(0).getGeoPoint());
+//			}
+//		return true;
+//		case R.id.gotogps:
+//		if(GPSGeoPoint!=null){
+//			 mapView.getController().setCenter(GPSGeoPoint);
+//		}
+//		return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+		
+			
+		
 	}
 
 	@Override
@@ -201,7 +217,7 @@ public class MapScreen extends MapActivity implements Observer {
     public void addPathToMap(GeoPoint[][] points) {
         wayOverlay.clear();
         wayOverlay.addWay(new OverlayWay(points));
-    }
+            }
 
     private void initializeHandler() {
         handler = (RequestHandler) getLastNonConfigurationInstance();

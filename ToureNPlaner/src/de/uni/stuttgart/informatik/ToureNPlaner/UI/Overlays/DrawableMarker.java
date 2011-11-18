@@ -19,10 +19,7 @@ public class DrawableMarker extends Drawable {
     private final DrawFilter drawFilter;
     private final Point point;
     private boolean isChangeable = true;
-    private Boolean isDrawText = true;
-    
-
-	
+    private boolean isDrawText = true;
 
 	public DrawableMarker(MapView mapview, GeoPoint gp, Boolean isDrawText) {
         this.mapView = mapview;
@@ -38,6 +35,7 @@ public class DrawableMarker extends Drawable {
         circleLine.setColor(Color.BLACK);
         // draw line with antialiasing
         drawFilter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG);
+    
         point = new Point();
     }
 
@@ -62,6 +60,7 @@ public class DrawableMarker extends Drawable {
         if (isDrawText) {
             canvas.drawText(String.valueOf(index), point.x, point.y + 6f, textPaint);
         }
+        setBounds(0, 0,mapView.getZoomLevel() * radiusFactor, mapView.getZoomLevel() * radiusFactor);
     }
 
     
@@ -94,7 +93,6 @@ public class DrawableMarker extends Drawable {
         this.color = color;
 
     }
-
     @Override
     public int getOpacity() {
         // TODO Auto-generated method stub

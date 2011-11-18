@@ -13,4 +13,13 @@
      <item android:id="@+id/resultlist"
           android:icon="@drawable/list"
           android:title="Ergebnis" />
+  <!--     <item android:id="@+id/gotogps"
+          android:icon="@drawable/list"
+          android:title="Ihre Position" />
+     <item android:id="@+id/gotofirst"
+          android:icon="@drawable/list"
+          android:title="Ihr Startpunkt" />
+     -->
+          
+          
 </menu>
