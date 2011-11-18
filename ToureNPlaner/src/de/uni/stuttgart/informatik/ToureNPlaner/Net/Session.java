@@ -10,9 +10,12 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.*;
 import java.util.UUID;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Session implements Serializable {
     public static final String IDENTIFIER = "session";
+	public static final String DIRECTORY = "session";
 
 	private static class Data implements Serializable
 	{
@@ -27,20 +30,27 @@ public class Session implements Serializable {
 
 	private final UUID uuid;
 	private static transient Data d;
+	
+	public static File openCacheDir() {
+		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
+	}
 
 	public Session() {
 		this.uuid = UUID.randomUUID();
-		this.d = new Data();
+		d = new Data();
 	}
 
 	public void safe() {
 		try {
-            FileOutputStream outputStream = ToureNPlanerApplication.getContext().openFileOutput(uuid.toString(), Context.MODE_PRIVATE);
+			File dir = openCacheDir();
+			dir.mkdir();
+            FileOutputStream outputStream = new FileOutputStream(new File(dir, uuid.toString()));
+
+			ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new BufferedOutputStream(outputStream)));
             try {
-                ObjectOutputStream out = new ObjectOutputStream(outputStream);
                 out.writeObject(d);
             } finally {
-                outputStream.close();
+                out.close();
             }
         } catch (Exception e) {
 			Log.e("ToureNPLaner","Session loading failed", e);
@@ -49,15 +59,21 @@ public class Session implements Serializable {
 
 	private void load() {
 		try {
-            FileInputStream inputStream = ToureNPlanerApplication.getContext().openFileInput(uuid.toString());
+			File dir = openCacheDir();
+            FileInputStream inputStream = new FileInputStream(new File(dir, uuid.toString()));
+
+			ObjectInputStream in = new ObjectInputStream(new GZIPInputStream(new BufferedInputStream(inputStream)));
             try {
-                ObjectInputStream in = new ObjectInputStream(inputStream);
                 d = (Data) in.readObject();
             } finally {
-                inputStream.close();
+                in.close();
             }
         } catch (Exception e) {
 			Log.e("ToureNPLaner","Session loading failed", e);
+			// If we can't load load an empty session
+			// Can happen if user deletes cache and tries to restore session afterwards
+			// TODO won't work still need to initialise members
+			d = new Data();
         }
 	}
 

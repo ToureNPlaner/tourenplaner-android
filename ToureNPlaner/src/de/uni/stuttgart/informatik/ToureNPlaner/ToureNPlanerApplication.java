@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+
+import java.io.File;
+import java.util.Date;
 
 public class ToureNPlanerApplication extends Application {
 	private static Context context;
@@ -13,10 +17,30 @@ public class ToureNPlanerApplication extends Application {
         super.onCreate();
 	    context = getApplicationContext();
         disableConnectionReuseIfNecessary();
+	    performCleanUp();
     }
 
 	public static Context getContext() {
 		return context;
+	}
+
+	/**
+	 * Cleans up old Session Files
+	 */
+	private void performCleanUp() {
+		File[] files = Session.openCacheDir().listFiles();
+
+		if(files == null)
+			return;
+
+		long currentTime = new Date().getTime();
+
+		for(File file : files) {
+			// If file is older than a day
+			if(currentTime - file.lastModified() >= 24 * 60 * 60 * 1000) {
+				file.delete();
+			}
+		}
 	}
 
     private void disableConnectionReuseIfNecessary() {
