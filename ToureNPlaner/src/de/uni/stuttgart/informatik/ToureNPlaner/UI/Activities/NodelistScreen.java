@@ -50,7 +50,7 @@ public class NodelistScreen extends ListActivity {
         adapter = new NodeListAdapter(session.getNodeModel().getNodeVector(), this);
         setListAdapter(adapter);
         ListView listView = getListView();
-    registerForContextMenu(listView);
+        registerForContextMenu(listView);
         
         
         
@@ -81,7 +81,7 @@ public class NodelistScreen extends ListActivity {
                                       final int pos, long arg3) {
              
                   Intent myIntent = new Intent(NodelistScreen.this,
-                          NodePreferences.class);
+                          EditNodeScreen.class);
                   myIntent.putExtra("node", (Serializable) adapter.getItemAtPosition(pos));
                   startActivityForResult(myIntent, pos);
         
@@ -148,7 +148,7 @@ public class NodelistScreen extends ListActivity {
         switch (item.getItemId()) {
             case 0: // edit
             	 Intent myIntent = new Intent(NodelistScreen.this,
-                         NodePreferences.class);
+                         EditNodeScreen.class);
                  myIntent.putExtra("node", (Serializable) adapter.getItem(info.position));
                  startActivityForResult(myIntent, info.position);
                 break;
@@ -176,7 +176,7 @@ public class NodelistScreen extends ListActivity {
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.revertNodes:
-        	session.getNodeModel().revertNodes();
+        	session.getNodeModel().reverseNodes();
         	adapter.notifyDataSetChanged();
         	
         
@@ -196,7 +196,7 @@ public class NodelistScreen extends ListActivity {
               session.getNodeModel().getNodeVector().set(requestCode, (Node) data.getSerializableExtra("node"));
               adapter.notifyDataSetChanged();
               break;
-          case NodePreferences.RESULT_DELETE:
+          case EditNodeScreen.RESULT_DELETE:
               session.getNodeModel().getNodeVector().remove(requestCode);
               adapter.notifyDataSetChanged();
       }

@@ -8,12 +8,15 @@ import java.util.ArrayList;
 public class Node implements Serializable {
 	private String name;
 	private String type;
-	
 
 	private int laE7;
 	private int loE7;
 	private ArrayList<Constraint> constraintList;
     private transient GeoPoint geoPoint;
+	
+	public static Node createNode(String name, GeoPoint point) {
+		return new Node(name, point.getLatitudeE6()*10, point.getLongitudeE6()*10);
+	}
 
 	public Node(String name, int laE7, int loE7,
 			ArrayList<Constraint> constraintList) {
@@ -27,6 +30,12 @@ public class Node implements Serializable {
 		this.name = name;
 		this.laE7 = laE7;
 		this.loE7 = loE7;
+	}
+
+	public void setGeoPoint(GeoPoint geoPoint) {
+		this.laE7 = geoPoint.getLatitudeE6()*10;
+		this.loE7 = geoPoint.getLongitudeE6()*10;
+		this.geoPoint = geoPoint;
 	}
 
 	public String getName() {

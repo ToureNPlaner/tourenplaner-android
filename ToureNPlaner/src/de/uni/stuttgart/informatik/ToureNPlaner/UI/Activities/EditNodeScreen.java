@@ -10,11 +10,13 @@ import android.widget.EditText;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
-public class NodePreferences extends Activity {
+public class EditNodeScreen extends Activity {
 
     private Node node;
 
     public static final int RESULT_DELETE = RESULT_FIRST_USER;
+
+	private Bundle data;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -25,6 +27,7 @@ public class NodePreferences extends Activity {
     void finishActivity() {
         Intent data = new Intent();
         data.putExtra("node", node);
+	    data.putExtra("index", this.data.getInt("index", 0));
         setResult(RESULT_OK, data);
         finish();
     }
@@ -36,9 +39,11 @@ public class NodePreferences extends Activity {
 		// generates the NodePreferences layout and fill content in the Textviews
 		try {
             if (savedInstanceState != null) {
-                node = (Node) savedInstanceState.getSerializable("node");
+	            data = savedInstanceState;
+                node = (Node) data.getSerializable("node");
             } else {
-                node = (Node) getIntent().getSerializableExtra("node");
+	            data = getIntent().getExtras();
+                node = (Node) data.getSerializable("node");
             }
 
 			// -------------- get EditTexts --------------
@@ -73,7 +78,7 @@ public class NodePreferences extends Activity {
 			// -----------------btnDelete-----------------------
 			btnDelete.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-                    setResult(RESULT_DELETE, null);
+                    setResult(RESULT_DELETE, new Intent().putExtra("index",data.getInt("index", 0)));
                     finish();
 				}
 			});
