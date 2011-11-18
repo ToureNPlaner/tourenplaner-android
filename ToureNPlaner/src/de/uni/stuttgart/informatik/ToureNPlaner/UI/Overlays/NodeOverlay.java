@@ -152,8 +152,6 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public void addMarkerToMap(Node node) {
 		NodeDrawable dm = new NodeDrawable(nodeParameters, node.getName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, dm);
-		ItemizedOverlay.boundCenterBottom(dm);
-		overlayitem.setMarker(dm);
 		list.add(overlayitem);
 	}
 
@@ -183,13 +181,13 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 
 	public void updateIcons() {
-		if (algorithmInfo.sourceIsTarget() && list.size() > 0) {
+		if (!algorithmInfo.sourceIsTarget() && list.size() > 0) {
             for (int i = 1; i < list.size() - 1; i++) {
 	            NodeDrawable d = (NodeDrawable) list.get(i).getMarker();
                 d.setColor(Color.BLUE);
             }
 
-			((NodeDrawable)list.get(list.size() - 1).getMarker()).setColor(Color.GREEN);
+			((NodeDrawable)list.get(list.size() - 1).getMarker()).setColor(Color.RED);
 			((NodeDrawable)list.get(0).getMarker()).setColor(Color.GREEN);
 		}
 
