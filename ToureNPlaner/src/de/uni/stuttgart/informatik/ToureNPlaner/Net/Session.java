@@ -2,26 +2,17 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.content.Context;
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.UUID;
 
 public class Session implements Serializable {
     public static final String IDENTIFIER = "session";
-
-	/**
-	 * Used when loaded from serialization
-	 */
-	public Session() {
-		this.uuid = UUID.randomUUID();
-		this.d = new Data();
-	}
-
-	private final UUID uuid;
 
 	private static class Data implements Serializable
 	{
@@ -33,12 +24,14 @@ public class Session implements Serializable {
 	    private NodeModel nodeModel = new NodeModel();
 		private Result result;
 	}
-	
+
+	private final UUID uuid;
 	private static transient Data d;
 
-    public Result getResult() {
-        return d.result;
-    }
+	public Session() {
+		this.uuid = UUID.randomUUID();
+		this.d = new Data();
+	}
 
 	public void safe() {
 		try {
@@ -54,7 +47,7 @@ public class Session implements Serializable {
         }
 	}
 
-	public void load() {
+	private void load() {
 		try {
             FileInputStream inputStream = ToureNPlanerApplication.getContext().openFileInput(uuid.toString());
             try {
@@ -72,6 +65,11 @@ public class Session implements Serializable {
 		if(d == null)
 			load();
 	}
+
+	public Result getResult() {
+	    checkData();
+        return d.result;
+    }
 
     public void setResult(Result result) {
 	    checkData();
@@ -124,7 +122,7 @@ public class Session implements Serializable {
 
 	public void setServerInfo(ServerInfo serverInfo) {
 		checkData();
-       d.serverInfo = serverInfo;
+        d.serverInfo = serverInfo;
 		safe();
     }
 

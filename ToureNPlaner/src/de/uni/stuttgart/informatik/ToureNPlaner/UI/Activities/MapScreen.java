@@ -48,8 +48,6 @@ public class MapScreen extends MapActivity implements Observer {
 			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
 
-		session.load();
-
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		// setting properties of the mapview
