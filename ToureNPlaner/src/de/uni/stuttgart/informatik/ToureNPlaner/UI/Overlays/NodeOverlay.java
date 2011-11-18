@@ -209,6 +209,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		} else {
 			gpsMarker = null;
 		}
+		populate();
 	}
 
 	@Override
@@ -219,6 +220,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 			list.get(0).setPoint(geoPoint);
 			nodeModel.get(0).setGeoPoint(geoPoint);
 		}
+		populate();
 	}
 
 	@Override
