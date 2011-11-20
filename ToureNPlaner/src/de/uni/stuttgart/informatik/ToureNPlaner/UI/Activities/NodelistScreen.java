@@ -149,8 +149,9 @@ public class NodelistScreen extends ListActivity {
             case 0: // edit
             	 Intent myIntent = new Intent(NodelistScreen.this,
                          EditNodeScreen.class);
-                 myIntent.putExtra("node", (Serializable) adapter.getItem(info.position));
-                 startActivityForResult(myIntent, info.position);
+                 myIntent.putExtra("node", adapter.getItem(info.position));
+                 myIntent.putExtra("index",info.position);
+                 startActivityForResult(myIntent, 0);
                 break;
             case 1: // delete
             	session.getNodeModel().remove(info.position);
@@ -193,11 +194,11 @@ public class NodelistScreen extends ListActivity {
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       switch (resultCode) {
           case RESULT_OK:
-              session.getNodeModel().getNodeVector().set(requestCode, (Node) data.getSerializableExtra("node"));
+              session.getNodeModel().getNodeVector().set(data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
               adapter.notifyDataSetChanged();
               break;
           case EditNodeScreen.RESULT_DELETE:
-              session.getNodeModel().getNodeVector().remove(requestCode);
+              session.getNodeModel().getNodeVector().remove(data.getExtras().getInt("index"));
               adapter.notifyDataSetChanged();
       }
   }
