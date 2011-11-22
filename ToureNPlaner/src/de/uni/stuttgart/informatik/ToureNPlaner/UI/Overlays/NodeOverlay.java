@@ -81,6 +81,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		this.nodeModel = nodeModel;
 		loadFromModel();
 	}
+	
+	public NodeModel getNodeModel() {
+		return nodeModel;
+	}
 
 	private void loadFromModel() {
 		list.clear();

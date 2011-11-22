@@ -8,18 +8,21 @@
           android:icon="@drawable/calculate"
           android:title="Berechnen" />
     <item android:id="@+id/reset"
-          android:icon="@drawable/reset"
+          android:icon="@drawable/trash"
           android:title="Löschen" />
      <item android:id="@+id/resultlist"
           android:icon="@drawable/list"
           android:title="Ergebnis" />
-  <!--     <item android:id="@+id/gotogps"
+       <item android:id="@+id/gps"
           android:icon="@drawable/list"
           android:title="Ihre Position" />
-     <item android:id="@+id/gotofirst"
+          <item android:id="@+id/back"
+          android:icon="@drawable/list"
+          android:title="Zurück" />
+     <!--  <item android:id="@+id/gotofirst"
           android:icon="@drawable/list"
           android:title="Ihr Startpunkt" />
-     -->
+      -->
           
           
 </menu>

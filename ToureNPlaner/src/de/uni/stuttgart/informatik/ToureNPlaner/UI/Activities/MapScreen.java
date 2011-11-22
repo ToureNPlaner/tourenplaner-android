@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ public class MapScreen extends MapActivity implements Observer {
 	public final static int REQUEST_CODE_MAP_SCREEN = 0;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
+	GeoPoint gpsGeoPoint = null;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -76,7 +79,7 @@ public class MapScreen extends MapActivity implements Observer {
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-		GeoPoint gpsGeoPoint = null;
+		
 
 		if (loc != null) {
 			gpsGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
@@ -143,28 +146,64 @@ public class MapScreen extends MapActivity implements Observer {
 					setProgressBarIndeterminateVisibility(true);
 				}
 				return true;
+			
 			case R.id.resultlist:
 				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
 				myIntentResult.putExtra(Session.IDENTIFIER, session);
 				startActivity(myIntentResult);
 				return true;
-
+			case R.id.gps:
+				if(gpsGeoPoint!=null){
+					 mapView.getController().setCenter(gpsGeoPoint);
+				}
+				return true;
+				
+			case R.id.back:
+			finish();
+				return true;
 //		case R.id.gotofirst:
 //		if (nodeOverlay.getNodeModel().size() > 0){
 //			mapView.getController().setCenter(nodeOverlay.getNodeModel().get(0).getGeoPoint());
 //			}
 //		return true;
-//		case R.id.gotogps:
-//		if(gpsGeoPoint!=null){
-//			 mapView.getController().setCenter(gpsGeoPoint);
-//		}
-//		return true;
+	
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 
 
 	}
+	
+	
+	//---------------Key-Events--------------------
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    	int NodeModelsize =  nodeOverlay.getNodeModel().size();
+	    	NodeModel tempNodeModel = new NodeModel();
+	    	if (NodeModelsize > 0){
+	    	// create a tempNodeModel to force a redraw of the NodeOverlay 
+	    	nodeOverlay.getNodeModel().remove(NodeModelsize-1);
+	    	tempNodeModel = nodeOverlay.getNodeModel();
+	     	nodeOverlay.setNodeModel(tempNodeModel);
+	    	nodeOverlay.updateIcons();
+	    	wayOverlay.clear();
+			mapView.invalidate();
+		    return true;
+	    	}else{
+	    		// go back to algorithmscreen when no marker is left
+	    		 return super.onKeyDown(keyCode, event);
+	    		
+	    	}
+	    
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	
+	
+	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
