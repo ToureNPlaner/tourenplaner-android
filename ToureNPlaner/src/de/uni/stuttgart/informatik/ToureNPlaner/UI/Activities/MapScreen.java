@@ -19,6 +19,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
@@ -236,6 +237,13 @@ public class MapScreen extends MapActivity implements Observer {
 		wayOverlay.clear();
 		wayOverlay.addWay(new OverlayWay(points));
 	}
+	
+	public GeoPoint[][] getNN() throws Exception{
+		RequestNN reqNN = new RequestNN();
+		return reqNN.getNN(session, "nnl");
+}
+
+	
 
 	private void initializeHandler() {
 		handler = (RequestHandler) getLastNonConfigurationInstance();
