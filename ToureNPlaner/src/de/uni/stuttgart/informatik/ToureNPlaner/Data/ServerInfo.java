@@ -14,18 +14,35 @@ public class ServerInfo implements Serializable {
     }
     private String version;
     private ServerType serverType;
+	private int port;
     private int SslPort;
-    private String url;
+    private String hostname;
 
-    public String getUrl() {
-        return url;
+    public String getHostname() {
+        return hostname;
+    }
+	
+	public String getProtocol() {
+		return serverType == ServerType.PRIVATE ? "https" : "http";
+	}
+	
+	public String getURL() {
+		return getProtocol() + "://" + getHostname() + ":" + (serverType == ServerType.PRIVATE ? getSslPort() : getPort());
+	}
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public int getPort() {
+		return port;
+	}
 
-    public String getVersion() {
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public String getVersion() {
         return version;
     }
 

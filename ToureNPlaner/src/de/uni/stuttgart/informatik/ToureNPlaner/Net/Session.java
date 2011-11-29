@@ -1,6 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
-import android.content.Context;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
@@ -9,6 +8,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -20,7 +21,6 @@ public class Session implements Serializable {
 	private static class Data implements Serializable
 	{
 		private ServerInfo serverInfo;
-	    private String url;
 	    private String user;
 	    private String password;
 	    private AlgorithmInfo selectedAlgorithm;
@@ -101,13 +101,21 @@ public class Session implements Serializable {
 
 	public void setUrl(String url) {
 		checkData();
-		d.url = url;
-		safe();
+		try {
+			URL uri = new URL(url);
+			d.serverInfo.setHostname(uri.getHost());
+			d.serverInfo.setPort(uri.getPort());
+			uri.getProtocol();
+			safe();
+		} catch (MalformedURLException e) {
+			// Should never happen
+			e.printStackTrace();
+		}
 	}
 
     public String getUrl() {
 	    checkData();
-        return d.url;
+        return d.serverInfo.getURL();
     }
 
     public String getUser() {
