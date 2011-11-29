@@ -14,10 +14,10 @@
           android:icon="@drawable/list"
           android:title="Ergebnis" />
        <item android:id="@+id/gps"
-          android:icon="@drawable/list"
+          android:icon="@drawable/myplace"
           android:title="Ihre Position" />
           <item android:id="@+id/back"
-          android:icon="@drawable/list"
+          android:icon="@drawable/back"
           android:title="Zurück" />
      <!--  <item android:id="@+id/gotofirst"
           android:icon="@drawable/list"
