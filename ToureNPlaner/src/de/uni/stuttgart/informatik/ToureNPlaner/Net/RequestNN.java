@@ -16,49 +16,41 @@ import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 
-public class RequestNN {
+public class RequestNN extends ConnectionHandler {
+	private final Session session;
+	private final String urlsuffix;
 
-public RequestNN(){
+	public RequestNN(Observer listener, Session session, String urlsuffix) {
+		super(listener);
+		this.session = session;
+		this.urlsuffix = urlsuffix;
 	}
 
-
-public GeoPoint[][] getNN(Session session, String urlsuffix){
-	URL uri;
-
+	@Override
+protected Object doInBackground(Void... voids) {
 	try {
-		uri = new URL(session.getUrl() + "/alg" + urlsuffix);
+		URL uri = new URL(session.getUrl() + "/alg" + urlsuffix);
 		HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection() ;
 		urlConnection.setDoOutput(true);
 		urlConnection.setChunkedStreamingMode(0);
 		urlConnection.setRequestProperty("Content-Type", "application/json;");
 	
 		try{
+			
 			String str = Request.generate(session).toString();
-		    OutputStream outputStream = urlConnection.getOutputStream();
+			Log.v("sessionString",str);
+			OutputStream outputStream = urlConnection.getOutputStream();
 			outputStream.write(str.getBytes("US-ASCII"));
 			InputStream stream = urlConnection.getInputStream();
 			Result result = Result.parse(stream);
 			return result.getPoints();
-			
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		finally {
+
+		
+		} finally {
 			urlConnection.disconnect();
 		}
-	} 
-	
-	catch (MalformedURLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	} catch (Exception e) {
+		return e;
 	}
-	catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	
-	return null;
-	
 }
 }

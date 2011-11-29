@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,7 +33,9 @@ public class MapScreen extends MapActivity implements Observer {
 	public final static int REQUEST_CODE_MAP_SCREEN = 0;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
+	private RequestNN reqNN = null;
 	GeoPoint gpsGeoPoint = null;
+	GeoPoint[][] gparrayNN = null;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -149,9 +152,10 @@ public class MapScreen extends MapActivity implements Observer {
 				return true;
 			
 			case R.id.resultlist:
-				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
-				myIntentResult.putExtra(Session.IDENTIFIER, session);
-				startActivity(myIntentResult);
+				
+//				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
+//				myIntentResult.putExtra(Session.IDENTIFIER, session);
+//				startActivity(myIntentResult);
 				return true;
 			case R.id.gps:
 				if(gpsGeoPoint!=null){
@@ -238,12 +242,12 @@ public class MapScreen extends MapActivity implements Observer {
 		wayOverlay.addWay(new OverlayWay(points));
 	}
 	
-	public GeoPoint[][] getNN() throws Exception{
-		RequestNN reqNN = new RequestNN();
-		return reqNN.getNN(session, "nnl");
-}
-
-	
+	public void triggerNNlookup(){
+		reqNN = (RequestNN) new RequestNN(this,session,"nnl").execute();
+		}
+	public GeoPoint[][] getNNGeoPoints(){
+		return gparrayNN;
+	}
 
 	private void initializeHandler() {
 		handler = (RequestHandler) getLastNonConfigurationInstance();
@@ -255,19 +259,36 @@ public class MapScreen extends MapActivity implements Observer {
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
-
+	
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 		return handler;
 	}
+	
+	
 
 	@Override
 	public void onCompleted(Object object) {
-		handler = null;
-		Result result = (Result) object;
-		session.setResult(result);
-		addPathToMap(result.getPoints());
-		setProgressBarIndeterminateVisibility(false);
+		// for requesthandler
+		if(handler != null){
+			handler = null;
+			reqNN = null;
+		
+			Result result = (Result) object;
+			session.setResult(result);
+			addPathToMap(result.getPoints());
+			setProgressBarIndeterminateVisibility(false);
+		}
+		
+		// for requestNN
+		if(reqNN != null){
+			handler = null;
+			reqNN = null;
+			GeoPoint[][] result = (GeoPoint[][]) object;
+			gparrayNN = result;
+			nodeOverlay.setNNMarker();
+		}
+		
 	}
 
 	@Override

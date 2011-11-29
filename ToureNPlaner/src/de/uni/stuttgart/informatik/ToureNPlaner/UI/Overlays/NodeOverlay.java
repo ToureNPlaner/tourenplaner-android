@@ -19,6 +19,7 @@ import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.EditNodeScreen;
 import org.mapsforge.android.maps.*;
@@ -35,7 +36,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public static final int REQUEST_CODE_ITEM_OVERLAY = 1;
 	private final static int MARKER_BOUNDS = 10;
 	private final static int GPS_RADIUS = 8;
-
+	private String markerName = "noName";
 	private OverlayItem gpsMarker;
 
 	private boolean useGps = false;
@@ -105,51 +106,49 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-		String markerName = String.valueOf(nodeModel.size() + 1);
-		Boolean isDuplicate = false;
+		markerName = String.valueOf(nodeModel.size() + 1);
 		Node node = Node.createNode(markerName, geoPoint);
-		Node nodeNN = null;
 		nodeModel.add(node);
-		// gets an GeoPoint[][] stored with all NearestNeighbors 
-		try{
-	
-			GeoPoint[][] gparray;
-			gparray = ((MapScreen) context).getNN();
-			int indexLast = gparray[0].length-1;
-			// gets the last NNGeoPoint 
-			GeoPoint NNLGP = new GeoPoint((gparray[0][indexLast].getLatitudeE6()),  gparray[0][indexLast].getLongitudeE6());
-			
-			// remove last node with onLongPressCoorinates
-			nodeModel.remove(nodeModel.size()-1);
-			isDuplicate = checkForDuplicates(NNLGP, gparray);
-//			Duplicatecheck disabled
-//			if(isDuplicate==true){
-//				//	Thread-Failure
-//				//  Toast.makeText(context, "Marker an dieser Position schon vorhanden. Marker wurde nicht angelegt", Toast.LENGTH_SHORT).show();
-//				Log.v("Doppelter NN Marker", "Marker wurde nicht angelegt");
-//			}else{
-			nodeNN = Node.createNode(markerName,NNLGP);
-			// add new NNnode
-			nodeModel.add(nodeNN);
-//}
-			}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		if(isDuplicate==false){
-			if (nodeNN == null){
-				Log.v("marker","angelegt");
-				addMarkerToMap(node);
-			}else{
-				Log.v("markerNN","angelegt");
-				addMarkerToMap(nodeNN);
-			}}
+		((MapScreen)context).triggerNNlookup();
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		updateIcons();
 		return true;
 	}
+	// method is called from MapScreen when requestNNHandler has completed
+	public void setNNMarker(){
+		GeoPoint[][] gparray;
+		Node nodeNN = null;
+		Boolean isDuplicate = false;
+		// gets an GeoPoint[][] stored with all NearestNeighbors 
+		gparray = ((MapScreen) context).getNNGeoPoints();
+		int indexLast = gparray[0].length-1;
+		
+		// gets the last NNGeoPoint 
+		GeoPoint NNLGP = new GeoPoint((gparray[0][indexLast].getLatitudeE6()),  gparray[0][indexLast].getLongitudeE6());
+		nodeNN = Node.createNode(markerName,NNLGP);
+		
+		//		isDuplicate = checkForDuplicates(NNLGP, gparray);
+//		Duplicatecheck disabled
+//		if(isDuplicate==true){
+//			//	Thread-Failure
+//			//  Toast.makeText(context, "Marker an dieser Position schon vorhanden. Marker wurde nicht angelegt", Toast.LENGTH_SHORT).show();
+//			Log.v("Doppelter NN Marker", "Marker wurde nicht angelegt");
+//		}else{
 	
-	
+
+		
+	if(isDuplicate==false){
+		if (nodeNN != null){
+			// remove last node with onLongPressCoorinates
+			nodeModel.remove(nodeModel.size()-1);
+			// add new NNnode
+			nodeModel.add(nodeNN);
+			addMarkerToMap(nodeNN);
+		}}
+	updateIcons();
+	requestRedraw();
+		
+	}
 	/***
 	 * 
 	 * @param gp
