@@ -169,7 +169,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	@Override
 	protected void drawOverlayBitmap(Canvas canvas, Point drawPosition, Projection projection, byte drawZoomLevel) {
 		// When the zoom level changes update all markers
-		final int scaled = Math.max(8, MARKER_BOUNDS / 2 * drawZoomLevel);
+		//final int scaled = Math.max(8, MARKER_BOUNDS / 2 * drawZoomLevel);
+		final int scaled = 10;
 		final Rect bounds = new Rect(-scaled, -scaled, scaled, scaled);
 		if(lastZoomLevel != drawZoomLevel) {
 			for(int i=0; i < list.size(); i++) {
