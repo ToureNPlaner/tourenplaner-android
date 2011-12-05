@@ -23,9 +23,7 @@ public class RequestHandler extends ConnectionHandler {
 	@Override
 	protected Object doInBackground(Void... voids) {
 		try {
-			URL uri = new URL(session.getUrl() + "/alg" + session.getSelectedAlgorithm().getUrlsuffix());
-
-			HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
+			HttpURLConnection urlConnection = session.openConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix());
 			urlConnection.setDoOutput(true);
 			urlConnection.setChunkedStreamingMode(0);
 			urlConnection.setRequestProperty("Content-Type", "application/json;");

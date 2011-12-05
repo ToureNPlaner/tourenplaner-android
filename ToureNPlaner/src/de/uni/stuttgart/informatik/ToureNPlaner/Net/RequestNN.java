@@ -26,8 +26,7 @@ public GeoPoint[][] getNN(Session session, String urlsuffix){
 	URL uri;
 
 	try {
-		uri = new URL(session.getUrl() + "/alg" + urlsuffix);
-		HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection() ;
+		HttpURLConnection urlConnection = session.openConnection("/alg" + urlsuffix);
 		urlConnection.setDoOutput(true);
 		urlConnection.setChunkedStreamingMode(0);
 		urlConnection.setRequestProperty("Content-Type", "application/json;");

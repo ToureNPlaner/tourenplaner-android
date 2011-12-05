@@ -7,9 +7,15 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
+import javax.net.ssl.*;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -30,7 +36,44 @@ public class Session implements Serializable {
 
 	private final UUID uuid;
 	private static transient Data d;
-	
+
+	private static HostnameVerifier acceptAllHostnameVerifier = new HostnameVerifier() {
+		@Override
+		public boolean verify(String s, SSLSession sslSession) {
+			return true;
+		}
+	};
+
+	private static TrustManager[] acceptAllTrustManager = new TrustManager[]{new X509TrustManager() {
+		@Override
+		public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+		}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+		}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+	}};
+
+	private static SSLContext sslContext;
+
+	static {
+		try {
+			sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, acceptAllTrustManager, null);
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("TP", "SSL", e);
+		} catch (KeyManagementException e) {
+			Log.e("TP", "SSL", e);
+		}
+	}
+
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
 	}
@@ -116,6 +159,23 @@ public class Session implements Serializable {
     public String getUrl() {
 	    checkData();
         return d.serverInfo.getURL();
+	}
+
+	public HttpURLConnection openConnection(String path) throws IOException {
+		URL uri = new URL(getUrl() + path);
+
+		if (d.serverInfo.getServerType() == ServerInfo.ServerType.PRIVATE) {
+			try {
+				HttpsURLConnection con = (HttpsURLConnection) uri.openConnection();
+				con.setSSLSocketFactory(sslContext.getSocketFactory());
+				con.setHostnameVerifier(acceptAllHostnameVerifier);
+				return con;
+			} catch (Exception e) {
+				Log.e("TP", "SSL", e);
+			}
+		}
+
+		return (HttpURLConnection) uri.openConnection();
     }
 
     public String getUser() {
