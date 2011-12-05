@@ -109,8 +109,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		markerName = String.valueOf(nodeModel.size() + 1);
 		Node node = Node.createNode(markerName, geoPoint);
 		nodeModel.add(node);
-		((MapScreen)context).triggerNNlookup();
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		((MapScreen)context).triggerNNlookup();
 		updateIcons();
 		return true;
 	}
