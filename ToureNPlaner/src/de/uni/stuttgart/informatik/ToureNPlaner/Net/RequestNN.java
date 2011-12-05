@@ -16,15 +16,18 @@ import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 
-public class RequestNN {
+public class RequestNN extends ConnectionHandler {
+	private final Session session;
+	private final String urlsuffix;
 
-public RequestNN(){
+	public RequestNN(Observer listener, Session session, String urlsuffix) {
+		super(listener);
+		this.session = session;
+		this.urlsuffix = urlsuffix;
 	}
 
-
-public GeoPoint[][] getNN(Session session, String urlsuffix){
-	URL uri;
-
+	@Override
+protected Object doInBackground(Void... voids) {
 	try {
 		HttpURLConnection urlConnection = session.openConnection("/alg" + urlsuffix);
 		urlConnection.setDoOutput(true);
@@ -38,26 +41,13 @@ public GeoPoint[][] getNN(Session session, String urlsuffix){
 			InputStream stream = urlConnection.getInputStream();
 			Result result = Result.parse(stream);
 			return result.getPoints();
-			
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		finally {
+
+		
+		} finally {
 			urlConnection.disconnect();
 		}
-	} 
-	
-	catch (MalformedURLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	} catch (Exception e) {
+		return e;
 	}
-	catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	
-	return null;
-	
 }
 }

@@ -12,7 +12,6 @@ public abstract class ConnectionHandler extends AsyncTask<Void, Void, Object> {
 	public void setListener(Observer listener) {
 		this.listener = listener;
 	}
-
 	@Override
 	public void onPostExecute(Object object) {
 		if (object instanceof Exception) {
