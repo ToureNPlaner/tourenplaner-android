@@ -110,8 +110,14 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		Node node = Node.createNode(markerName, geoPoint);
 		nodeModel.add(node);
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		((MapScreen)context).triggerNNlookup();
 		updateIcons();
+
+		((MapScreen)context).runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				((MapScreen)context).triggerNNlookup();
+			}
+		});
 		return true;
 	}
 	// method is called from MapScreen when requestNNHandler has completed
