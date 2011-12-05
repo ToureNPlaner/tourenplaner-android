@@ -15,7 +15,7 @@ public class GpsDrawable extends Drawable{
 		Rect bounds = this.getBounds();
         //add a line for the circle
         canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width()/2, paint);
-	}
+        }
 
 	@Override
 	public void setAlpha(int i) {

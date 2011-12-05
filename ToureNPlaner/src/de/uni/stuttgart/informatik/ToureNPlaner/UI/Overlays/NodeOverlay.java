@@ -16,6 +16,7 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
@@ -44,14 +45,14 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 	private GpsDrawable gpsDrawable;
 	private NodeDrawable.Parameters nodeParameters;
-
-	public NodeOverlay(Context context, AlgorithmInfo algorithmInfo, NodeModel nodeModel, GeoPoint gpsPoint) {
+	private Drawable defaultDrawable;
+	public NodeOverlay(Context context, AlgorithmInfo algorithmInfo, NodeModel nodeModel, GeoPoint gpsPoint,Drawable defaultDrawable) {
 		// ColorDrawable is just a workaround until the icons are loaded
-		super(new ColorDrawable());
+		super(boundCenterBottom(defaultDrawable));
 		this.algorithmInfo = algorithmInfo;
 		this.nodeModel = nodeModel;
 		this.context = context;
-
+this.defaultDrawable= defaultDrawable;
 		setupParameters();
 		setupGpsDrawable();
 
@@ -108,10 +109,17 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		markerName = String.valueOf(nodeModel.size() + 1);
 		Node node = Node.createNode(markerName, geoPoint);
+		addMarkerToMap(node);
 		nodeModel.add(node);
-		((MapScreen)context).triggerNNlookup();
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		updateIcons();
+
+		((MapScreen)context).runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				((MapScreen)context).triggerNNlookup();
+			}
+		});
 		return true;
 	}
 	// method is called from MapScreen when requestNNHandler has completed
@@ -146,7 +154,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 			addMarkerToMap(nodeNN);
 		}}
 	updateIcons();
-	requestRedraw();
+	populate();
 		
 	}
 	/***
@@ -182,7 +190,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 	@Override
 	public boolean onTap(int i) {
-
+ 
 		if (i == list.size()) {
 			final GeoPoint gpsPoint = this.gpsMarker.getPoint();
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -213,10 +221,15 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	public void addMarkerToMap(Node node) {
-		NodeDrawable dm = new NodeDrawable(nodeParameters, node.getName());
-		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, dm);
+	//	NodeDrawable dm = new NodeDrawable(nodeParameters, node.getName());
+		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, defaultDrawable);
 		list.add(overlayitem);
-	}
+		populate();
+		requestRedraw();
+		updateIcons();
+		
+		
+		}
 
 	public void clear() {
 		nodeModel.clear();
@@ -245,14 +258,32 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 
 	public void updateIcons() {
+//		if (!algorithmInfo.sourceIsTarget() && list.size() > 0) {
+//            for (int i = 1; i < list.size() - 1; i++) {
+//	            NodeDrawable d = (NodeDrawable) list.get(i).getMarker();
+//                d.setColor(Color.BLUE);
+//            }
+//
+//			((NodeDrawable)list.get(list.size() - 1).getMarker()).setColor(Color.RED);
+//			((NodeDrawable)list.get(0).getMarker()).setColor(Color.GREEN);
+//		}
+//
+//		// Also update the zoom level
+//		lastZoomLevel = Byte.MIN_VALUE;
+//		requestRedraw();
 		if (!algorithmInfo.sourceIsTarget() && list.size() > 0) {
             for (int i = 1; i < list.size() - 1; i++) {
-	            NodeDrawable d = (NodeDrawable) list.get(i).getMarker();
-                d.setColor(Color.BLUE);
+	            Drawable d = (Drawable) list.get(i).getMarker();
+               d =  context.getResources().getDrawable(R.drawable.markericon);
+               list.get(i).setMarker(d);
             }
 
-			((NodeDrawable)list.get(list.size() - 1).getMarker()).setColor(Color.RED);
-			((NodeDrawable)list.get(0).getMarker()).setColor(Color.GREEN);
+			Drawable dend =list.get(list.size() - 1).getMarker();
+			dend = context.getResources().getDrawable(R.drawable.markerendger);
+			list.get(list.size() - 1).setMarker(dend);
+			Drawable dstart = list.get(0).getMarker();
+			dstart = context.getResources().getDrawable(R.drawable.markerstart);
+			list.get(0).setMarker(dstart);
 		}
 
 		// Also update the zoom level
@@ -268,6 +299,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 				gpsMarker = new OverlayItem(geoPoint, null, null, gpsDrawable);
 			else
 				gpsMarker.setPoint(geoPoint);
+			
 		} else {
 			gpsMarker = null;
 		}

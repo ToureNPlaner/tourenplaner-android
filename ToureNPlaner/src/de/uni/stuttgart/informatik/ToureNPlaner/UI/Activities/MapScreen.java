@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
@@ -36,7 +37,6 @@ public class MapScreen extends MapActivity implements Observer {
 	private RequestNN reqNN = null;
 	GeoPoint gpsGeoPoint = null;
 	GeoPoint[][] gparrayNN = null;
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
@@ -47,6 +47,8 @@ public class MapScreen extends MapActivity implements Observer {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		
+		  
 		boolean isFirstStart = savedInstanceState == null;
 		// If we get created for the first time we get our data from the intent
 		if (savedInstanceState != null) {
@@ -75,8 +77,8 @@ public class MapScreen extends MapActivity implements Observer {
 		setupWayOverlay();
 
 		setupGPS(isFirstStart);
-		nodeOverlay.updateIcons();
 		mapView.getOverlays().add(nodeOverlay);
+		nodeOverlay.updateIcons();
 	}
 
 	private void setupGPS(boolean isFirstStart) {
@@ -93,13 +95,14 @@ public class MapScreen extends MapActivity implements Observer {
 		if (isFirstStart) {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
-
-		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint);
+		Drawable drawable = this.getResources().getDrawable(R.drawable.markericon);
+		
+		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint,drawable);
 
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
 	}
-
+	
 	private void setupWayOverlay() {
 		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
 		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
@@ -145,9 +148,13 @@ public class MapScreen extends MapActivity implements Observer {
 				mapView.invalidate();
 				return true;
 			case R.id.calculate:
+				nodeOverlay.requestRedraw();
+				nodeOverlay.updateIcons();
 				if (session.getNodeModel().size() > 1) {
 					handler = (RequestHandler) new RequestHandler(session, this).execute();
 					setProgressBarIndeterminateVisibility(true);
+				
+					
 				}
 				return true;
 			
@@ -160,6 +167,7 @@ public class MapScreen extends MapActivity implements Observer {
 			case R.id.gps:
 				if(gpsGeoPoint!=null){
 					 mapView.getController().setCenter(gpsGeoPoint);
+				
 				}
 				return true;
 				
@@ -179,22 +187,17 @@ public class MapScreen extends MapActivity implements Observer {
 
 	}
 	
-	
-	//---------------Key-Events--------------------
+		//---------------Key-Events--------------------
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
 	    	int NodeModelsize =  nodeOverlay.getNodeModel().size();
-	    	NodeModel tempNodeModel = new NodeModel();
+	   
 	    	if (NodeModelsize > 0){
 	    	// create a tempNodeModel to force a redraw of the NodeOverlay 
 	    	nodeOverlay.getNodeModel().remove(NodeModelsize-1);
-	    	tempNodeModel = nodeOverlay.getNodeModel();
-	     	nodeOverlay.setNodeModel(tempNodeModel);
-	    	nodeOverlay.updateIcons();
-	    	wayOverlay.clear();
-			mapView.invalidate();
+	    	redrawOverlay();
 		    return true;
 	    	}else{
 	    		// go back to algorithmscreen when no marker is left
@@ -207,9 +210,15 @@ public class MapScreen extends MapActivity implements Observer {
 	}
 	
 	
+	private void redrawOverlay(){
+	 	NodeModel tempNodeModel = new NodeModel();
+		tempNodeModel = nodeOverlay.getNodeModel();
+     	nodeOverlay.setNodeModel(tempNodeModel);
+    	nodeOverlay.updateIcons();
+    	wayOverlay.clear();
+		mapView.invalidate();
+		}
 	
-	
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
