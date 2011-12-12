@@ -18,18 +18,16 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 
 public class RequestNN extends ConnectionHandler {
 	private final Session session;
-	private final String urlsuffix;
 
-	public RequestNN(Observer listener, Session session, String urlsuffix) {
+	public RequestNN(Observer listener, Session session) {
 		super(listener);
 		this.session = session;
-		this.urlsuffix = urlsuffix;
 	}
 
 	@Override
 protected Object doInBackground(Void... voids) {
 	try {
-		HttpURLConnection urlConnection = session.openConnection("/alg" + urlsuffix);
+		HttpURLConnection urlConnection = session.openConnection("/algnns");
 		urlConnection.setDoOutput(true);
 		urlConnection.setChunkedStreamingMode(0);
 		urlConnection.setRequestProperty("Content-Type", "application/json;");

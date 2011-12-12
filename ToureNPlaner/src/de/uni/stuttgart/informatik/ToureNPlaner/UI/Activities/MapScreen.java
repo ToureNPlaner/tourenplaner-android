@@ -27,16 +27,49 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.*;
 
-public class MapScreen extends MapActivity implements Observer {
-	public MapView mapView;
+public class MapScreen extends MapActivity {
+	private MapView mapView;
 	private ArrayWayOverlay wayOverlay;
 	private Session session;
 	public final static int REQUEST_CODE_MAP_SCREEN = 0;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
-	private RequestNN reqNN = null;
 	GeoPoint gpsGeoPoint = null;
 	GeoPoint[][] gparrayNN = null;
+
+	private final Observer requestListener = new Observer() {
+		@Override
+		public void onCompleted(Object object) {
+			handler = null;
+			Result result = (Result) object;
+			session.setResult(result);
+			addPathToMap(result.getPoints());
+			setProgressBarIndeterminateVisibility(false);
+		}
+
+		@Override
+		public void onError(Object object) {
+			handler = null;
+			setProgressBarIndeterminateVisibility(false);
+			Toast.makeText(getApplicationContext(), object.toString(),
+							Toast.LENGTH_LONG).show();
+		}
+	};
+
+	private final Observer nnsListener = new Observer() {
+			@Override
+			public void onCompleted(Object object) {
+				gparrayNN = (GeoPoint[][]) object;
+				nodeOverlay.setNNMarker();
+			}
+
+			@Override
+			public void onError(Object object) {
+				Toast.makeText(getApplicationContext(), object.toString(),
+								Toast.LENGTH_LONG).show();
+			}
+		};
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
@@ -145,13 +178,12 @@ public class MapScreen extends MapActivity implements Observer {
 				// clear path
 				wayOverlay.clear();
 				session.setResult(null);
-				mapView.invalidate();
 				return true;
 			case R.id.calculate:
 				nodeOverlay.requestRedraw();
 				nodeOverlay.updateIcons();
 				if (session.getNodeModel().size() > 1) {
-					handler = (RequestHandler) new RequestHandler(session, this).execute();
+					handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
 					setProgressBarIndeterminateVisibility(true);
 				
 					
@@ -252,7 +284,7 @@ public class MapScreen extends MapActivity implements Observer {
 	}
 	
 	public void triggerNNlookup(){
-		reqNN = (RequestNN) new RequestNN(this,session,"nnl").execute();
+		new RequestNN(nnsListener,session).execute();
 		}
 	public GeoPoint[][] getNNGeoPoints(){
 		return gparrayNN;
@@ -262,7 +294,7 @@ public class MapScreen extends MapActivity implements Observer {
 		handler = (RequestHandler) getLastNonConfigurationInstance();
 
 		if (handler != null) {
-			handler.setListener(this);
+			handler.setListener(requestListener);
 			setProgressBarIndeterminateVisibility(true);
 		} else {
 			setProgressBarIndeterminateVisibility(false);
@@ -272,39 +304,5 @@ public class MapScreen extends MapActivity implements Observer {
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 		return handler;
-	}
-	
-	
-
-	@Override
-	public void onCompleted(Object object) {
-		// for requesthandler
-		if(handler != null){
-			handler = null;
-			reqNN = null;
-		
-			Result result = (Result) object;
-			session.setResult(result);
-			addPathToMap(result.getPoints());
-			setProgressBarIndeterminateVisibility(false);
-		}
-		
-		// for requestNN
-		if(reqNN != null){
-			handler = null;
-			reqNN = null;
-			GeoPoint[][] result = (GeoPoint[][]) object;
-			gparrayNN = result;
-			nodeOverlay.setNNMarker();
-		}
-		
-	}
-
-	@Override
-	public void onError(Object object) {
-		handler = null;
-		Toast.makeText(getApplicationContext(), object.toString(),
-				Toast.LENGTH_LONG).show();
-		setProgressBarIndeterminateVisibility(false);
 	}
 }
