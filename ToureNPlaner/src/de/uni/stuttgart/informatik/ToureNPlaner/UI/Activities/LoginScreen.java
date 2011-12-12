@@ -29,7 +29,7 @@ public class LoginScreen extends Activity {
         setContentView(R.layout.loginscreen);
 
         EditText emailTextfield = (EditText) findViewById(R.id.emailTextfield);
-        emailTextfield.setText("root@toureNPlaner");
+        emailTextfield.setText("root@toureNPlaner.de");
         EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
         passwordTextfield.setText("toureNPlaner");
 
