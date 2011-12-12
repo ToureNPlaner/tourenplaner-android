@@ -18,12 +18,10 @@ public class Request {
     }
 
 
-    public static JSONObject generate(Session session) {
+    public static JSONObject generate(ArrayList<Node> nodes) {
         JSONObject o = new JSONObject();
         JSONArray a = new JSONArray();
         try {
-
-            ArrayList<Node> nodes = session.getNodeModel().getNodeVector();
             for (int i = 0; i < nodes.size(); i++) {
                 a.put(generate(nodes.get(i)));
             }

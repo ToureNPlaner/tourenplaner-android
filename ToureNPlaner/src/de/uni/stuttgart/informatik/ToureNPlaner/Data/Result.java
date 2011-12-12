@@ -30,6 +30,24 @@ public class Result implements Serializable {
                                 ln = jp.getIntValue()/10;
                             }
                         }
+	                    // TODO
+                        //array.add(new GeoPoint(lt, ln));
+                    }
+                }
+            }
+	        if ("way".equals(jp.getCurrentName())) {
+                int lt = 0, ln = 0;
+                if (jp.nextToken() == JsonToken.START_ARRAY) {
+                    while (jp.nextToken() != JsonToken.END_ARRAY) {
+                        while (jp.nextToken() != JsonToken.END_OBJECT) {
+                            if (jp.getCurrentName().equals("lt")) {
+                                jp.nextToken();
+                                lt = jp.getIntValue()/10;
+                            } else if (jp.getCurrentName().equals("ln")) {
+                                jp.nextToken();
+                                ln = jp.getIntValue()/10;
+                            }
+                        }
                         array.add(new GeoPoint(lt, ln));
                     }
                 }

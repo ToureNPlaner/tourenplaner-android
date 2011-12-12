@@ -8,11 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.Window;
+import android.view.*;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
@@ -32,7 +28,6 @@ public class MapScreen extends MapActivity {
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 	private GeoPoint gpsGeoPoint = null;
-	private GeoPoint[][] gparrayNN = null;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -51,25 +46,25 @@ public class MapScreen extends MapActivity {
 			handler = null;
 			setProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(),
-							Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();
 		}
 	};
 
 	private final Observer nnsListener = new Observer() {
-			@Override
-			public void onCompleted(ConnectionHandler caller, Object object) {
-				gparrayNN = (GeoPoint[][]) object;
-				nodeOverlay.setNNMarker();
-				requestList.remove((RequestNN) caller);
-			}
+		@Override
+		public void onCompleted(ConnectionHandler caller, Object object) {
+			((RequestNN) caller).getNode().setGeoPoint((GeoPoint) object);
+			nodeOverlay.onModelChanged();
+			requestList.remove((RequestNN) caller);
+		}
 
-			@Override
-			public void onError(ConnectionHandler caller, Object object) {
-				Toast.makeText(getApplicationContext(), object.toString(),
-								Toast.LENGTH_LONG).show();
-				requestList.remove((RequestNN) caller);
-			}
-		};
+		@Override
+		public void onError(ConnectionHandler caller, Object object) {
+			Toast.makeText(getApplicationContext(), object.toString(),
+					Toast.LENGTH_LONG).show();
+			requestList.remove((RequestNN) caller);
+		}
+	};
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -81,8 +76,7 @@ public class MapScreen extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		
-		  
+
 		boolean isFirstStart = savedInstanceState == null;
 		// If we get created for the first time we get our data from the intent
 		if (savedInstanceState != null) {
@@ -119,7 +113,6 @@ public class MapScreen extends MapActivity {
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-		
 
 		if (loc != null) {
 			gpsGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
@@ -130,13 +123,13 @@ public class MapScreen extends MapActivity {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 		Drawable drawable = this.getResources().getDrawable(R.drawable.markericon);
-		
-		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint,drawable);
+
+		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint, drawable);
 
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
 	}
-	
+
 	private void setupWayOverlay() {
 		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
 		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
@@ -186,72 +179,62 @@ public class MapScreen extends MapActivity {
 				if (session.getNodeModel().size() > 1) {
 					handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
 					setProgressBarIndeterminateVisibility(true);
-				
-					
+
+
 				}
 				return true;
-			
+
 			case R.id.resultlist:
-				
+
 //				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
 //				myIntentResult.putExtra(Session.IDENTIFIER, session);
 //				startActivity(myIntentResult);
 				return true;
 			case R.id.gps:
-				if(gpsGeoPoint!=null){
-					 mapView.getController().setCenter(gpsGeoPoint);
-				
+				if (gpsGeoPoint != null) {
+					mapView.getController().setCenter(gpsGeoPoint);
+
 				}
 				return true;
-				
+
 			case R.id.back:
-			finish();
+				finish();
 				return true;
 //		case R.id.gotofirst:
 //		if (nodeOverlay.getNodeModel().size() > 0){
 //			mapView.getController().setCenter(nodeOverlay.getNodeModel().get(0).getGeoPoint());
 //			}
 //		return true;
-	
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 
 
 	}
-	
-		//---------------Key-Events--------------------
-	
+
+	//---------------Key-Events--------------------
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	    	int NodeModelsize =  nodeOverlay.getNodeModel().size();
-	   
-	    	if (NodeModelsize > 0){
-	    	// create a tempNodeModel to force a redraw of the NodeOverlay 
-	    	nodeOverlay.getNodeModel().remove(NodeModelsize-1);
-	    	redrawOverlay();
-		    return true;
-	    	}else{
-	    		// go back to algorithmscreen when no marker is left
-	    		 return super.onKeyDown(keyCode, event);
-	    		
-	    	}
-	    
-	    }
-	    return super.onKeyDown(keyCode, event);
-	}
-	
-	
-	private void redrawOverlay(){
-	 	NodeModel tempNodeModel = new NodeModel();
-		tempNodeModel = nodeOverlay.getNodeModel();
-     	nodeOverlay.setNodeModel(tempNodeModel);
-    	nodeOverlay.updateIcons();
-    	wayOverlay.clear();
-		mapView.invalidate();
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			int NodeModelsize = nodeOverlay.getNodeModel().size();
+
+			if (NodeModelsize > 0) {
+				// create a tempNodeModel to force a redraw of the NodeOverlay
+				nodeOverlay.getNodeModel().remove(NodeModelsize - 1);
+				nodeOverlay.onModelChanged();
+				return true;
+			} else {
+				// go back to algorithmscreen when no marker is left
+				return super.onKeyDown(keyCode, event);
+
+			}
+
 		}
-	
+		return super.onKeyDown(keyCode, event);
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -283,12 +266,9 @@ public class MapScreen extends MapActivity {
 		wayOverlay.clear();
 		wayOverlay.addWay(new OverlayWay(points));
 	}
-	
-	public void triggerNNlookup(){
-		requestList.add((RequestNN) new RequestNN(nnsListener, session).execute());
-		}
-	public GeoPoint[][] getNNGeoPoints(){
-		return gparrayNN;
+
+	public void triggerNNlookup(Node node) {
+		requestList.add((RequestNN) new RequestNN(nnsListener, session, node).execute());
 	}
 
 	private void initializeHandler() {
@@ -301,7 +281,7 @@ public class MapScreen extends MapActivity {
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
-	
+
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 		return handler;
@@ -310,11 +290,11 @@ public class MapScreen extends MapActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
-		if(handler != null)
+
+		if (handler != null)
 			handler.setListener(null);
 
-		for(RequestNN request: requestList) {
+		for (RequestNN request : requestList) {
 			request.setListener(null);
 		}
 	}

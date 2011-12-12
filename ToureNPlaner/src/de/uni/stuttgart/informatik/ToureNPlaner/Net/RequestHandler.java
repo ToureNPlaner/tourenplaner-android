@@ -23,18 +23,10 @@ public class RequestHandler extends ConnectionHandler {
 	@Override
 	protected Object doInBackground(Void... voids) {
 		try {
-			HttpURLConnection urlConnection = session.openConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix());
-			urlConnection.setDoOutput(true);
-			urlConnection.setChunkedStreamingMode(0);
-			urlConnection.setRequestProperty("Content-Type", "application/json;");
-			if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PRIVATE) {
-				String userPassword = session.getUser() + ":" + session.getPassword();
-				String encoding = Base64.encodeString(userPassword);
-				urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
-			}
+			HttpURLConnection urlConnection = session.openPostConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix());
 
 			try {
-				String str = Request.generate(session).toString();
+				String str = Request.generate(session.getNodeModel().getNodeVector()).toString();
 				OutputStream outputStream = urlConnection.getOutputStream();
 				outputStream.write(str.getBytes("US-ASCII"));
 				InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());

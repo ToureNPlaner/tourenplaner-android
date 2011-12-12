@@ -6,6 +6,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -161,7 +162,7 @@ public class Session implements Serializable {
         return d.serverInfo.getURL();
 	}
 
-	public HttpURLConnection openConnection(String path) throws IOException {
+	public HttpURLConnection openGetConnection(String path) throws IOException {
 		URL uri = new URL(getUrl() + path);
 
 		if (d.serverInfo.getServerType() == ServerInfo.ServerType.PRIVATE) {
@@ -177,6 +178,21 @@ public class Session implements Serializable {
 
 		return (HttpURLConnection) uri.openConnection();
     }
+
+	public HttpURLConnection openPostConnection(String path) throws IOException {
+		HttpURLConnection con = openGetConnection(path);
+
+		con.setDoOutput(true);
+		con.setChunkedStreamingMode(0);
+		con.setRequestProperty("Content-Type", "application/json;");
+		if (getServerInfo().getServerType() == ServerInfo.ServerType.PRIVATE) {
+			String userPassword = getUser() + ":" + getPassword();
+			String encoding = Base64.encodeString(userPassword);
+			con.setRequestProperty("Authorization", "Basic " + encoding);
+		}
+
+		return con;
+	}
 
     public String getUser() {
 	    checkData();

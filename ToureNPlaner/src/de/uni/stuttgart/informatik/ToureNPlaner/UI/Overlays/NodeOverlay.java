@@ -108,7 +108,7 @@ this.defaultDrawable= defaultDrawable;
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		markerName = String.valueOf(nodeModel.size() + 1);
-		Node node = Node.createNode(markerName, geoPoint);
+		final Node node = Node.createNode(markerName, geoPoint);
 		addMarkerToMap(node);
 		nodeModel.add(node);
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -117,46 +117,16 @@ this.defaultDrawable= defaultDrawable;
 		((MapScreen)context).runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				((MapScreen)context).triggerNNlookup();
+				((MapScreen)context).triggerNNlookup(node);
 			}
 		});
 		return true;
 	}
-	// method is called from MapScreen when requestNNHandler has completed
-	public void setNNMarker(){
-		GeoPoint[][] gparray;
-		Node nodeNN = null;
-		Boolean isDuplicate = false;
-		// gets an GeoPoint[][] stored with all NearestNeighbors 
-		gparray = ((MapScreen) context).getNNGeoPoints();
-		int indexLast = gparray[0].length-1;
-		
-		// gets the last NNGeoPoint 
-		GeoPoint NNLGP = new GeoPoint((gparray[0][indexLast].getLatitudeE6()),  gparray[0][indexLast].getLongitudeE6());
-		nodeNN = Node.createNode(markerName,NNLGP);
-		
-		//		isDuplicate = checkForDuplicates(NNLGP, gparray);
-//		Duplicatecheck disabled
-//		if(isDuplicate==true){
-//			//	Thread-Failure
-//			//  Toast.makeText(context, "Marker an dieser Position schon vorhanden. Marker wurde nicht angelegt", Toast.LENGTH_SHORT).show();
-//			Log.v("Doppelter NN Marker", "Marker wurde nicht angelegt");
-//		}else{
-	
 
-		
-	if(isDuplicate==false){
-		if (nodeNN != null){
-			// remove last node with onLongPressCoorinates
-			nodeModel.remove(nodeModel.size()-1);
-			// add new NNnode
-			nodeModel.add(nodeNN);
-			addMarkerToMap(nodeNN);
-		}}
-	updateIcons();
-	populate();
-		
+	public void onModelChanged() {
+		loadFromModel();
 	}
+
 	/***
 	 * 
 	 * @param gp
