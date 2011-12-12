@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public abstract class ConnectionHandler extends AsyncTask<Void, Void, Object> {
 	private Observer listener;
@@ -14,10 +15,16 @@ public abstract class ConnectionHandler extends AsyncTask<Void, Void, Object> {
 	}
 	@Override
 	public void onPostExecute(Object object) {
+		if(listener == null) {
+			// TODO remove
+			Log.w("TP", "Null Listener!");
+			return;
+		}
+
 		if (object instanceof Exception) {
-			listener.onError(object);
+			listener.onError(this, object);
 		} else {
-			listener.onCompleted(object);
+			listener.onCompleted(this, object);
 		}
 	}
 }

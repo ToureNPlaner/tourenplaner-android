@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.ConnectionHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -207,7 +208,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     @Override
-    public void onCompleted(Object object) {
+    public void onCompleted(ConnectionHandler caller, Object object) {
         handler = null;
         MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
         dialog.dismiss();
@@ -223,7 +224,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     @Override
-    public void onError(Object object) {
+    public void onError(ConnectionHandler caller, Object object) {
         handler = null;
         MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
         dialog.dismiss();
@@ -235,7 +236,14 @@ public class ServerScreen extends FragmentActivity implements Observer {
         return handler;
     }
 
-    private void serverSelected(String url) {
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(handler != null)
+			handler.setListener(null);
+	}
+
+	private void serverSelected(String url) {
         ConnectionProgressDialog.newInstance("Connecting", url).show(getSupportFragmentManager(), "connecting");
         handler = Session.createSession(url, this);
     }

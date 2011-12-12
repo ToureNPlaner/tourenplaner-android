@@ -8,24 +8,21 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestNN;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.*;
+
+import java.util.ArrayList;
 
 public class MapScreen extends MapActivity {
 	private MapView mapView;
@@ -34,12 +31,14 @@ public class MapScreen extends MapActivity {
 	public final static int REQUEST_CODE_MAP_SCREEN = 0;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
-	GeoPoint gpsGeoPoint = null;
-	GeoPoint[][] gparrayNN = null;
+	private GeoPoint gpsGeoPoint = null;
+	private GeoPoint[][] gparrayNN = null;
+
+	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
 	private final Observer requestListener = new Observer() {
 		@Override
-		public void onCompleted(Object object) {
+		public void onCompleted(ConnectionHandler caller, Object object) {
 			handler = null;
 			Result result = (Result) object;
 			session.setResult(result);
@@ -48,7 +47,7 @@ public class MapScreen extends MapActivity {
 		}
 
 		@Override
-		public void onError(Object object) {
+		public void onError(ConnectionHandler caller, Object object) {
 			handler = null;
 			setProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(),
@@ -58,15 +57,17 @@ public class MapScreen extends MapActivity {
 
 	private final Observer nnsListener = new Observer() {
 			@Override
-			public void onCompleted(Object object) {
+			public void onCompleted(ConnectionHandler caller, Object object) {
 				gparrayNN = (GeoPoint[][]) object;
 				nodeOverlay.setNNMarker();
+				requestList.remove((RequestNN) caller);
 			}
 
 			@Override
-			public void onError(Object object) {
+			public void onError(ConnectionHandler caller, Object object) {
 				Toast.makeText(getApplicationContext(), object.toString(),
 								Toast.LENGTH_LONG).show();
+				requestList.remove((RequestNN) caller);
 			}
 		};
 
@@ -284,7 +285,7 @@ public class MapScreen extends MapActivity {
 	}
 	
 	public void triggerNNlookup(){
-		new RequestNN(nnsListener,session).execute();
+		requestList.add((RequestNN) new RequestNN(nnsListener, session).execute());
 		}
 	public GeoPoint[][] getNNGeoPoints(){
 		return gparrayNN;
@@ -304,5 +305,17 @@ public class MapScreen extends MapActivity {
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 		return handler;
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		if(handler != null)
+			handler.setListener(null);
+
+		for(RequestNN request: requestList) {
+			request.setListener(null);
+		}
 	}
 }
