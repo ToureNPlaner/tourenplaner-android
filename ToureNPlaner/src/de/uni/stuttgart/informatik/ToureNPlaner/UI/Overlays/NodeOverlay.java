@@ -58,9 +58,6 @@ this.defaultDrawable= defaultDrawable;
 
 		loadFromModel();
 		updateGpsMarker(gpsPoint);
-
-		
-		
 	}
 
 	private void setupGpsDrawable() {
@@ -84,6 +81,10 @@ this.defaultDrawable= defaultDrawable;
 		circleLine.setAntiAlias(true);
 		circleLine.setColor(Color.BLACK);
 		nodeParameters = new NodeDrawable.Parameters(textPaint, circleLine, circle);
+	}
+
+	public GeoPoint getGpsPosition() {
+		return gpsMarker == null ? null : gpsMarker.getPoint();
 	}
 
 	public void setNodeModel(NodeModel nodeModel) {

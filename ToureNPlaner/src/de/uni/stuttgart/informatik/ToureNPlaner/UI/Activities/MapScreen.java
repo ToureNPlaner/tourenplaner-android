@@ -27,7 +27,6 @@ public class MapScreen extends MapActivity {
 	public final static int REQUEST_CODE_MAP_SCREEN = 0;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
-	private GeoPoint gpsGeoPoint = null;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -104,15 +103,16 @@ public class MapScreen extends MapActivity {
 
 		setupWayOverlay();
 
-		setupGPS(isFirstStart);
+		setupGpsAndNodeOverlay(isFirstStart);
+
 		mapView.getOverlays().add(nodeOverlay);
-		nodeOverlay.updateIcons();
 	}
 
-	private void setupGPS(boolean isFirstStart) {
+	private void setupGpsAndNodeOverlay(boolean isFirstStart) {
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+		GeoPoint gpsGeoPoint = null;
 
 		if (loc != null) {
 			gpsGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
@@ -122,8 +122,8 @@ public class MapScreen extends MapActivity {
 		if (isFirstStart) {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
-		Drawable drawable = this.getResources().getDrawable(R.drawable.markericon);
 
+		Drawable drawable = this.getResources().getDrawable(R.drawable.markericon);
 		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint, drawable);
 
 		// 5 minutes, 50 meters
@@ -139,8 +139,7 @@ public class MapScreen extends MapActivity {
 		wayDefaultPaintOutline.setStrokeJoin(Paint.Join.ROUND);
 
 		// create the WayOverlay and add the ways
-		wayOverlay = new ArrayWayOverlay(wayDefaultPaintOutline,
-				null);
+		wayOverlay = new ArrayWayOverlay(wayDefaultPaintOutline, null);
 		mapView.getOverlays().add(wayOverlay);
 		Result result = session.getResult();
 		if (result != null) {
@@ -169,18 +168,13 @@ public class MapScreen extends MapActivity {
 			case R.id.reset:
 				// clear nodes
 				nodeOverlay.clear();
-				// clear path
-				wayOverlay.clear();
 				session.setResult(null);
+				onInvalidate();
 				return true;
 			case R.id.calculate:
-				nodeOverlay.requestRedraw();
-				nodeOverlay.updateIcons();
 				if (session.getNodeModel().size() > 1) {
 					handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
 					setProgressBarIndeterminateVisibility(true);
-
-
 				}
 				return true;
 
@@ -191,10 +185,7 @@ public class MapScreen extends MapActivity {
 //				startActivity(myIntentResult);
 				return true;
 			case R.id.gps:
-				if (gpsGeoPoint != null) {
-					mapView.getController().setCenter(gpsGeoPoint);
-
-				}
+				mapView.getController().setCenter(nodeOverlay.getGpsPosition());
 				return true;
 
 			case R.id.back:
@@ -223,14 +214,9 @@ public class MapScreen extends MapActivity {
 			if (NodeModelsize > 0) {
 				// create a tempNodeModel to force a redraw of the NodeOverlay
 				nodeOverlay.getNodeModel().remove(NodeModelsize - 1);
-				nodeOverlay.onModelChanged();
+				onInvalidate();
 				return true;
-			} else {
-				// go back to algorithmscreen when no marker is left
-				return super.onKeyDown(keyCode, event);
-
 			}
-
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -244,22 +230,24 @@ public class MapScreen extends MapActivity {
 				session.setNodeModel((NodeModel) data.getExtras().getSerializable(
 						NodeModel.IDENTIFIER));
 				nodeOverlay.setNodeModel(session.getNodeModel());
-				nodeOverlay.updateIcons();
+				onInvalidate();
 				break;
 			case NodeOverlay.REQUEST_CODE_ITEM_OVERLAY:
 				switch (resultCode) {
 					case RESULT_OK:
 						session.getNodeModel().getNodeVector().set(data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
-						nodeOverlay.updateIcons();
+						onInvalidate();
 						break;
 					case EditNodeScreen.RESULT_DELETE:
 						session.getNodeModel().getNodeVector().remove(data.getExtras().getInt("index"));
-						nodeOverlay.setNodeModel(session.getNodeModel());
-						nodeOverlay.updateIcons();
-						wayOverlay.clear();
-						mapView.invalidate();
+						onInvalidate();
 				}
 		}
+	}
+
+	private void onInvalidate() {
+		nodeOverlay.onModelChanged();
+		wayOverlay.clear();
 	}
 
 	public void addPathToMap(GeoPoint[][] points) {
