@@ -103,12 +103,12 @@ public class MapScreen extends MapActivity {
 
 		setupWayOverlay();
 
-		setupGpsAndNodeOverlay(isFirstStart);
+		setupGPS(isFirstStart);
 
 		mapView.getOverlays().add(nodeOverlay);
 	}
 
-	private void setupGpsAndNodeOverlay(boolean isFirstStart) {
+	private void setupGPS(boolean isFirstStart) {
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
