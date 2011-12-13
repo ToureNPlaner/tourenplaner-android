@@ -123,7 +123,7 @@ public class MapScreen extends MapActivity {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
-		Drawable drawable = this.getResources().getDrawable(R.drawable.markericon);
+		Drawable drawable = getResources().getDrawable(R.drawable.markericon);
 		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint, drawable);
 
 		// 5 minutes, 50 meters
@@ -212,7 +212,6 @@ public class MapScreen extends MapActivity {
 			int NodeModelsize = nodeOverlay.getNodeModel().size();
 
 			if (NodeModelsize > 0) {
-				// create a tempNodeModel to force a redraw of the NodeOverlay
 				nodeOverlay.getNodeModel().remove(NodeModelsize - 1);
 				onInvalidate();
 				return true;
