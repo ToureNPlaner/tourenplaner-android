@@ -24,6 +24,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.EditNodeScreen;
 import org.mapsforge.android.maps.*;
+import org.mapsforge.android.maps.overlay.ItemizedOverlay;
+import org.mapsforge.android.maps.overlay.OverlayItem;
 
 import java.util.ArrayList;
 

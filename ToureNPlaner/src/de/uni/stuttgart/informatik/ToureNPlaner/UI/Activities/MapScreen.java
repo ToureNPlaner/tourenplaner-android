@@ -17,6 +17,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.*;
+import org.mapsforge.android.maps.overlay.ArrayWayOverlay;
+import org.mapsforge.android.maps.overlay.OverlayWay;
 
 import java.util.ArrayList;
 
@@ -92,12 +94,13 @@ public class MapScreen extends MapActivity {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.setMapViewMode(MapViewMode.CUSTOM_TILE_DOWNLOAD);
-		mapView.setMapTileDownloadServer("gerbera.informatik.uni-stuttgart.de/osm/tiles");
+		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
+		//mapView.setRenderTheme(MapView.DEFAULT_RENDER_THEME);
+		//mapView.setMapTileDownloadServer("gerbera.informatik.uni-stuttgart.de/osm/tiles");
 		// mapView.setMapFile("/sdcard/berlin.map");
 		//mapView.setFpsCounter(true);
-		mapView.setMemoryCardCachePersistence(true);
-		mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
+		//mapView.setMemoryCardCachePersistence(true);
+		//mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
 		initializeHandler();
 
