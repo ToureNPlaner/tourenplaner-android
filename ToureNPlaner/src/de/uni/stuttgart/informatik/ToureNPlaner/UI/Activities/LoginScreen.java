@@ -1,23 +1,39 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 
-public class LoginScreen extends Activity {
-
+public class LoginScreen extends FragmentActivity implements Observer {
+	private AuthRequestHandler handler;
     private Session session;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(Session.IDENTIFIER, session);
         super.onSaveInstanceState(outState);
+    }
+
+	public static class ConnectionProgressDialog extends MyProgressDialog {
+        public static ConnectionProgressDialog newInstance(String title, String message) {
+            return (ConnectionProgressDialog) MyProgressDialog.newInstance(new ConnectionProgressDialog(), title, message);
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            ((LoginScreen) getActivity()).cancelConnection();
+        }
     }
 
     /**
@@ -41,6 +57,8 @@ public class LoginScreen extends Activity {
         }
 
         setupLoginButton();
+
+	    initializeHandler();
     }
 
     private void setupLoginButton() {
@@ -54,15 +72,55 @@ public class LoginScreen extends Activity {
                 EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
 
                 // set userdata
-                session.setUser(emailTextfield.getText().toString());
+                session.setUsername(emailTextfield.getText().toString());
                 session.setPassword(passwordTextfield.getText().toString());
 
-                // TODO DB check if user exist and have permissions
-                Intent myIntent = new Intent(view.getContext(),
-                        AlgorithmScreen.class);
-                myIntent.putExtra(Session.IDENTIFIER, session);
-                startActivity(myIntent);
+	            ConnectionProgressDialog.newInstance("Login", "...").show(getSupportFragmentManager(), "login");
+                handler = new AuthRequestHandler(LoginScreen.this, session);
+	            handler.execute();
             }
         });
     }
+
+	private void initializeHandler() {
+        handler = (AuthRequestHandler) getLastCustomNonConfigurationInstance();
+
+        if (handler != null)
+            handler.setListener(this);
+        else {
+            MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
+            if (dialog != null)
+                dialog.dismiss();
+        }
+    }
+
+	private void cancelConnection() {
+        handler.cancel(true);
+        handler = null;
+    }
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(handler != null)
+			handler.setListener(null);
+	}
+
+	@Override
+	public void onCompleted(ConnectionHandler caller, Object object) {
+		handler = null;
+        MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
+        dialog.dismiss();
+		Intent myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
+        myIntent.putExtra(Session.IDENTIFIER, session);
+        startActivity(myIntent);
+	}
+
+	@Override
+	public void onError(ConnectionHandler caller, Object object) {
+		handler = null;
+	    MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
+	    dialog.dismiss();
+	    Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
+	}
 }

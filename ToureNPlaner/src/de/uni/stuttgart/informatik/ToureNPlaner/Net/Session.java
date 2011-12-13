@@ -1,10 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 
@@ -28,11 +25,12 @@ public class Session implements Serializable {
 	private static class Data implements Serializable
 	{
 		private ServerInfo serverInfo;
-	    private String user;
+	    private String username;
 	    private String password;
 	    private AlgorithmInfo selectedAlgorithm;
 	    private NodeModel nodeModel = new NodeModel();
 		private Result result;
+		private User user;
 	}
 
 	private final UUID uuid;
@@ -137,6 +135,12 @@ public class Session implements Serializable {
 	    safe();
     }
 
+	public void setUser(User user) {
+		checkData();
+	    d.user = user;
+	    safe();
+	}
+
     public void setNodeModel(NodeModel nodeModel) {
 	    checkData();
         d.nodeModel = nodeModel;
@@ -170,6 +174,10 @@ public class Session implements Serializable {
 				HttpsURLConnection con = (HttpsURLConnection) uri.openConnection();
 				con.setSSLSocketFactory(sslContext.getSocketFactory());
 				con.setHostnameVerifier(acceptAllHostnameVerifier);
+
+				String userPassword = getUser() + ":" + getPassword();
+				String encoding = Base64.encodeString(userPassword);
+				con.setRequestProperty("Authorization", "Basic " + encoding);
 				return con;
 			} catch (Exception e) {
 				Log.e("TP", "SSL", e);
@@ -185,18 +193,13 @@ public class Session implements Serializable {
 		con.setDoOutput(true);
 		con.setChunkedStreamingMode(0);
 		con.setRequestProperty("Content-Type", "application/json;");
-		if (getServerInfo().getServerType() == ServerInfo.ServerType.PRIVATE) {
-			String userPassword = getUser() + ":" + getPassword();
-			String encoding = Base64.encodeString(userPassword);
-			con.setRequestProperty("Authorization", "Basic " + encoding);
-		}
 
 		return con;
 	}
 
     public String getUser() {
 	    checkData();
-        return d.user;
+        return d.username;
     }
 
     public String getPassword() {
@@ -231,9 +234,9 @@ public class Session implements Serializable {
         return d.serverInfo;
     }
 
-    public void setUser(String user) {
+    public void setUsername(String username) {
 	    checkData();
-        d.user = user;
+        d.username = username;
 	    safe();
     }
 

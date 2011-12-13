@@ -60,18 +60,18 @@ public class ServerScreen extends FragmentActivity implements Observer {
     }
 
     public static class NewDialog extends TextDialog {
-            public static NewDialog newInstance(String title, String content) {
-                return (NewDialog) TextDialog.newInstance(new NewDialog(), title, content);
-            }
-
-            @Override
-            public void doPositiveClick() {
-                ((ServerScreen)getActivity()).newServer(getInputField().getText().toString());
-            }
-
-            @Override
-            public void doNegativeClick() {}
+        public static NewDialog newInstance(String title, String content) {
+            return (NewDialog) TextDialog.newInstance(new NewDialog(), title, content);
         }
+
+        @Override
+        public void doPositiveClick() {
+            ((ServerScreen)getActivity()).newServer(getInputField().getText().toString());
+        }
+
+        @Override
+        public void doNegativeClick() {}
+    }
     
     
     private void editServer(int id, String server) {
