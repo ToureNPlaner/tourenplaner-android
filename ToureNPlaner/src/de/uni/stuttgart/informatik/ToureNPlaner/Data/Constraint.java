@@ -11,13 +11,17 @@ public class Constraint implements Serializable {
     private Double minimumValue;
     private Double maximumValue;
 
-    Constraint(String name, String type, Double minimumValue, Double maximumValue) {
+    public Constraint(String name, String type, Double minimumValue, Double maximumValue) {
         this.name = name;
         this.type = type;
         this.minimumValue = minimumValue;
         this.maximumValue = maximumValue;
     }
-
+    
+    @Override
+    public String toString() {
+        return name;
+    }
     public String getName() {
         return name;
     }

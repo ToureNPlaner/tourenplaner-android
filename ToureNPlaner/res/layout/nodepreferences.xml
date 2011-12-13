@@ -6,21 +6,51 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent" 
   android:weightSum="1"
-  android:background="#444444"
   android:padding="10px"
+
   >
     <TableLayout android:id="@+id/tableLayout1" android:layout_width="wrap_content" android:layout_height="wrap_content">
         <TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:baselineAligned="false" android:layout_weight="1" android:layout_height="wrap_content" >
-            <TextView android:text="Name" android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-            <EditText android:id="@+id/etName" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Name" >
+</TextView>
+
+                
+<!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+<LinearLayout
+    android:focusable="true" android:focusableInTouchMode="true"
+    android:layout_width="0px" android:layout_height="0px"/>
+
+<!-- :nextFocusUp and :nextFocusLeft have been set to the id of this component
+     to prevent the dummy from receiving focus again -->
+<AutoCompleteTextView android:id="@+id/etName"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:nextFocusUp="@+id/etName" android:nextFocusLeft="@+id/etName"/>
+
         </TableRow>
-           <TableRow android:id="@+id/tableRow3" android:baselineAligned="false" android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1">
-            <Spinner android:id="@+id/spinnerConstraints" android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>
-            <EditText android:id="@+id/etConstraints" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
-           </TableRow>
-        <TableRow android:layout_width="wrap_content" android:id="@+id/tableRow4" android:layout_height="0dp" android:layout_weight="1"></TableRow>
-    </TableLayout>
+     </TableLayout>
     <Button android:text="save" android:id="@+id/btnSave" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
     <Button android:text="delete" android:id="@+id/btnDelete" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
     <Button android:layout_height="wrap_content" android:text="back" android:id="@+id/btnReturn" android:layout_width="fill_parent"></Button>
+
+    <TextView
+        android:id="@+id/lblNodePreferencesConstraintText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Constraints"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:visibility="invisible" />
+
+    <ListView
+        android:id="@+id/listViewNodePreferences"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
 </LinearLayout>

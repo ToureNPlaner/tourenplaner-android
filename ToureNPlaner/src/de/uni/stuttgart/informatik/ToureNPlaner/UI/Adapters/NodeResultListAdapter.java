@@ -10,18 +10,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.util.ArrayList;
 
 public class NodeResultListAdapter extends ArrayAdapter<Node> {
 	private ArrayList<Node> nodeList;
-	private Session session;
-    public NodeResultListAdapter(ArrayList<Node> nodeList, Context context, Session session) {
+    public NodeResultListAdapter(ArrayList<Node> nodeList, Context context) {
         super(context, android.R.layout.simple_list_item_1, nodeList);
         this.nodeList = nodeList;
-        this.session = session;
     }
 
     @Override

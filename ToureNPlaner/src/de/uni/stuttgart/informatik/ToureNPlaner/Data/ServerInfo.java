@@ -69,7 +69,10 @@ public class ServerInfo implements Serializable {
         JSONArray array = object.getJSONArray("algorithms");
         info.algorithms = new ArrayList<AlgorithmInfo>(array.length());
         for(int i=0;i<array.length();i++) {
-            info.algorithms.add(AlgorithmInfo.parse(array.getJSONObject(i)));
+        	AlgorithmInfo algInfo = AlgorithmInfo.parse(array.getJSONObject(i));
+        	if(algInfo.getIsHidden()==false){
+            info.algorithms.add(algInfo);
+        	}
         }
 
         return info;
