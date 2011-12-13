@@ -35,25 +35,21 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private final AlgorithmInfo algorithmInfo;
 
 	public static final int REQUEST_CODE_ITEM_OVERLAY = 1;
-	private final static int MARKER_BOUNDS = 10;
 	private final static int GPS_RADIUS = 8;
-	private String markerName = "noName";
 	private OverlayItem gpsMarker;
 
 	private boolean useGps = false;
-	private byte lastZoomLevel = Byte.MIN_VALUE;
 
 	private GpsDrawable gpsDrawable;
-	private NodeDrawable.Parameters nodeParameters;
 	private Drawable defaultDrawable;
+
 	public NodeOverlay(Context context, AlgorithmInfo algorithmInfo, NodeModel nodeModel, GeoPoint gpsPoint,Drawable defaultDrawable) {
 		// ColorDrawable is just a workaround until the icons are loaded
 		super(boundCenterBottom(defaultDrawable));
 		this.algorithmInfo = algorithmInfo;
 		this.nodeModel = nodeModel;
 		this.context = context;
-this.defaultDrawable= defaultDrawable;
-		setupParameters();
+		this.defaultDrawable= defaultDrawable;
 		setupGpsDrawable();
 
 		loadFromModel();
@@ -66,21 +62,6 @@ this.defaultDrawable= defaultDrawable;
 		p.setColor(Color.YELLOW);
 		gpsDrawable = new GpsDrawable(p);
 		gpsDrawable.setBounds(-GPS_RADIUS,-GPS_RADIUS,GPS_RADIUS,GPS_RADIUS);
-	}
-
-	private void setupParameters() {
-		Paint circle = new Paint();
-		circle.setAntiAlias(true);
-		TextPaint textPaint = new TextPaint();
-		textPaint.setColor(Color.WHITE);
-		textPaint.setTextSize(16);
-		textPaint.setTextAlign(Paint.Align.CENTER);
-		textPaint.setAntiAlias(true);
-		textPaint.toString();
-		Paint circleLine = new Paint();
-		circleLine.setAntiAlias(true);
-		circleLine.setColor(Color.BLACK);
-		nodeParameters = new NodeDrawable.Parameters(textPaint, circleLine, circle);
 	}
 
 	public GeoPoint getGpsPosition() {
@@ -103,12 +84,10 @@ this.defaultDrawable= defaultDrawable;
 		}
 		updateIcons();
 	}
-	
-	
-	
+
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-		markerName = String.valueOf(nodeModel.size() + 1);
+		String markerName = String.valueOf(nodeModel.size() + 1);
 		final Node node = Node.createNode(markerName, geoPoint);
 		addMarkerToMap(node);
 		nodeModel.add(node);
@@ -134,16 +113,15 @@ this.defaultDrawable= defaultDrawable;
 	 * @param gparray
 	 * @return returns whether gparray contains already gp  
 	 */
-	private Boolean checkForDuplicates(GeoPoint gp, GeoPoint[][] gparray){
-		Boolean isDuplicate = false;
+	private boolean checkForDuplicates(GeoPoint gp, GeoPoint[][] gparray) {
 		GeoPoint arrayGP;
-		for (int i =0; i < gparray[0].length-1;i++){
-			arrayGP = new GeoPoint(gparray[0][i].getLatitudeE6(),gparray[0][i].getLongitudeE6());
-			if(gp.getLatitudeE6() == arrayGP.getLatitudeE6() && gp.getLongitudeE6() == arrayGP.getLongitudeE6()){
-				isDuplicate = true;
+		for (int i = 0; i < gparray[0].length; i++) {
+			arrayGP = gparray[0][i];
+			if (gp.getLatitudeE6() == arrayGP.getLatitudeE6() && gp.getLongitudeE6() == arrayGP.getLongitudeE6()) {
+				return true;
 			}
-			}
-		return isDuplicate;
+		}
+		return false;
 	}
 
 	@Override
@@ -188,77 +166,36 @@ this.defaultDrawable= defaultDrawable;
 			((Activity) context).startActivityForResult(intent, REQUEST_CODE_ITEM_OVERLAY);
 		}
 
-		return false;
+		return true;
 	}
 
 	public void addMarkerToMap(Node node) {
 	//	NodeDrawable dm = new NodeDrawable(nodeParameters, node.getName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, defaultDrawable);
 		list.add(overlayitem);
-		populate();
 		requestRedraw();
-		updateIcons();
-		
-		
-		}
+	}
 
 	public void clear() {
 		nodeModel.clear();
 		list.clear();
 		useGps = false;
-		populate();
+		requestRedraw();
 	}
-
-	@Override
-	protected void drawOverlayBitmap(Canvas canvas, Point drawPosition, Projection projection, byte drawZoomLevel) {
-		// When the zoom level changes update all markers
-		//final int scaled = Math.max(8, MARKER_BOUNDS / 2 * drawZoomLevel);
-		final int scaled = 10;
-		final Rect bounds = new Rect(-scaled, -scaled, scaled, scaled);
-		if(lastZoomLevel != drawZoomLevel) {
-			for(int i=0; i < list.size(); i++) {
-				Drawable d = list.get(i).getMarker();
-				d.setBounds(bounds);
-			}
-
-			lastZoomLevel = drawZoomLevel;
-		}
-		super.drawOverlayBitmap(canvas, drawPosition, projection, drawZoomLevel);
-	}
-
-
 
 	public void updateIcons() {
-//		if (!algorithmInfo.sourceIsTarget() && list.size() > 0) {
-//            for (int i = 1; i < list.size() - 1; i++) {
-//	            NodeDrawable d = (NodeDrawable) list.get(i).getMarker();
-//                d.setColor(Color.BLUE);
-//            }
-//
-//			((NodeDrawable)list.get(list.size() - 1).getMarker()).setColor(Color.RED);
-//			((NodeDrawable)list.get(0).getMarker()).setColor(Color.GREEN);
-//		}
-//
-//		// Also update the zoom level
-//		lastZoomLevel = Byte.MIN_VALUE;
-//		requestRedraw();
 		if (!algorithmInfo.sourceIsTarget() && list.size() > 0) {
-            for (int i = 1; i < list.size() - 1; i++) {
-	            Drawable d = (Drawable) list.get(i).getMarker();
-               d =  context.getResources().getDrawable(R.drawable.markericon);
-               list.get(i).setMarker(d);
-            }
+			for (int i = 1; i < list.size() - 1; i++) {
+				Drawable d = boundCenterBottom(context.getResources().getDrawable(R.drawable.markericon));
+				list.get(i).setMarker(d);
+			}
 
-			Drawable dend =list.get(list.size() - 1).getMarker();
-			dend = context.getResources().getDrawable(R.drawable.markerendger);
+			Drawable dend = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerendger));
 			list.get(list.size() - 1).setMarker(dend);
-			Drawable dstart = list.get(0).getMarker();
-			dstart = context.getResources().getDrawable(R.drawable.markerstart);
+			Drawable dstart = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart));
 			list.get(0).setMarker(dstart);
 		}
 
-		// Also update the zoom level
-		lastZoomLevel = Byte.MIN_VALUE;
 		requestRedraw();
 	}
 
@@ -274,7 +211,7 @@ this.defaultDrawable= defaultDrawable;
 		} else {
 			gpsMarker = null;
 		}
-		populate();
+		requestRedraw();
 	}
 
 	@Override
@@ -285,7 +222,7 @@ this.defaultDrawable= defaultDrawable;
 			list.get(0).setPoint(geoPoint);
 			nodeModel.get(0).setGeoPoint(geoPoint);
 		}
-		populate();
+		requestRedraw();
 	}
 
 	@Override
