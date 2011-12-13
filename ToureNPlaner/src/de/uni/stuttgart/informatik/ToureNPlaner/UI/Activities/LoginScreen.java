@@ -1,6 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
@@ -75,7 +73,7 @@ public class LoginScreen extends FragmentActivity implements Observer {
                 session.setUsername(emailTextfield.getText().toString());
                 session.setPassword(passwordTextfield.getText().toString());
 
-	            ConnectionProgressDialog.newInstance("Login", "...").show(getSupportFragmentManager(), "login");
+	            ConnectionProgressDialog.newInstance("Login", session.getUsername()).show(getSupportFragmentManager(), "login");
                 handler = new AuthRequestHandler(LoginScreen.this, session);
 	            handler.execute();
             }

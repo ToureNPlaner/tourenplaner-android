@@ -141,6 +141,11 @@ public class Session implements Serializable {
 	    safe();
 	}
 
+	public User getUser() {
+		checkData();
+	    return d.user;
+	}
+
     public void setNodeModel(NodeModel nodeModel) {
 	    checkData();
         d.nodeModel = nodeModel;
@@ -175,7 +180,7 @@ public class Session implements Serializable {
 				con.setSSLSocketFactory(sslContext.getSocketFactory());
 				con.setHostnameVerifier(acceptAllHostnameVerifier);
 
-				String userPassword = getUser() + ":" + getPassword();
+				String userPassword = getUsername() + ":" + getPassword();
 				String encoding = Base64.encodeString(userPassword);
 				con.setRequestProperty("Authorization", "Basic " + encoding);
 				return con;
@@ -197,7 +202,7 @@ public class Session implements Serializable {
 		return con;
 	}
 
-    public String getUser() {
+    public String getUsername() {
 	    checkData();
         return d.username;
     }
