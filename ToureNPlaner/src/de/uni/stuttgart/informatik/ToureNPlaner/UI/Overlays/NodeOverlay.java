@@ -35,7 +35,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private final AlgorithmInfo algorithmInfo;
 
 	public static final int REQUEST_CODE_ITEM_OVERLAY = 1;
-	private final static int GPS_RADIUS = 8;
+	private final static int GPS_RADIUS = 10;
 	private OverlayItem gpsMarker;
 
 	private boolean useGps = false;
