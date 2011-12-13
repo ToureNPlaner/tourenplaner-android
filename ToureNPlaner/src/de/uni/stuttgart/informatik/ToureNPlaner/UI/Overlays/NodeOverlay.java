@@ -18,9 +18,11 @@ import android.view.HapticFeedbackConstants;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.RequestNN;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.EditNodeScreen;
 import org.mapsforge.android.maps.*;
@@ -88,7 +90,15 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		String markerName = String.valueOf(nodeModel.size() + 1);
-		final Node node = Node.createNode(markerName, geoPoint);
+		//final Node node = Node.createNode(markerName, geoPoint);
+		
+		//  temporary generated constraints for testing  
+		ArrayList<Constraint> cl = new ArrayList<Constraint>();
+		cl.add(new Constraint ("Constraint1","Typ1",4.0,3.0));
+		cl.add(new Constraint ("Constraint2","Typ1",2.0,1.0));
+		final Node node = Node.createNode(markerName, geoPoint,cl);
+		
+		
 		addMarkerToMap(node);
 		nodeModel.add(node);
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -162,6 +172,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		} else {
 			Intent intent = new Intent(context, EditNodeScreen.class);
 			intent.putExtra("node", nodeModel.getNodeVector().get(i));
+			intent.putExtra(Session.IDENTIFIER,((MapScreen)context).getSessionFromMapScreen());
 			intent.putExtra("index", i);
 			((Activity) context).startActivityForResult(intent, REQUEST_CODE_ITEM_OVERLAY);
 		}

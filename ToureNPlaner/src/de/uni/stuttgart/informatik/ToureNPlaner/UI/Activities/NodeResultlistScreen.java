@@ -46,7 +46,7 @@ public class NodeResultlistScreen extends ListActivity {
 
            
        
-        adapter = new NodeResultListAdapter(session.getNodeModel().getNodeVector(), this, session);
+        adapter = new NodeResultListAdapter(session.getNodeModel().getNodeVector(), this);
         setListAdapter(adapter);
         ListView listView = getListView();
   

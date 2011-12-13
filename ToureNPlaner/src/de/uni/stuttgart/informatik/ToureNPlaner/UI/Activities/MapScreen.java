@@ -243,7 +243,9 @@ public class MapScreen extends MapActivity {
 				}
 		}
 	}
-
+	public Session getSessionFromMapScreen(){
+		return session;
+	}
 	private void onInvalidate() {
 		nodeOverlay.onModelChanged();
 		session.setResult(null);

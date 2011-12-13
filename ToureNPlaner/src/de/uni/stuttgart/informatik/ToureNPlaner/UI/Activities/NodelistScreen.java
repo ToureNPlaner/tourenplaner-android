@@ -32,6 +32,15 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.RemoveListener;
 public class NodelistScreen extends ListActivity {
 	private NodeListAdapter adapter;
 	private Session session;
+	
+	
+	
+	@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(Session.IDENTIFIER, session);
+        super.onSaveInstanceState(outState);
+    }
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,7 @@ public class NodelistScreen extends ListActivity {
              
                   Intent myIntent = new Intent(NodelistScreen.this,
                           EditNodeScreen.class);
+                  myIntent.putExtra(Session.IDENTIFIER, session);
                   myIntent.putExtra("node", (Serializable) adapter.getItemAtPosition(pos));
                   startActivityForResult(myIntent, pos);
         
@@ -150,6 +160,7 @@ public class NodelistScreen extends ListActivity {
             	 Intent myIntent = new Intent(NodelistScreen.this,
                          EditNodeScreen.class);
                  myIntent.putExtra("node", adapter.getItem(info.position));
+                 myIntent.putExtra(Session.IDENTIFIER, session);
                  myIntent.putExtra("index",info.position);
                  startActivityForResult(myIntent, 0);
                 break;
