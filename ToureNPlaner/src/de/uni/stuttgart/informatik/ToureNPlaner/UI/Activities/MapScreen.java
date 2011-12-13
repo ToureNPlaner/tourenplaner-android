@@ -247,6 +247,7 @@ public class MapScreen extends MapActivity {
 
 	private void onInvalidate() {
 		nodeOverlay.onModelChanged();
+		session.setResult(null);
 		wayOverlay.clear();
 	}
 
