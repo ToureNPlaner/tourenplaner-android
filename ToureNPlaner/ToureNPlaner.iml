@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="EclipseModuleManager" forced_jdk="true">
+<module type="ANDROID_MODULE" version="4">
+  <component name="EclipseModuleManager">
     <libelement value="jar://$MODULE_DIR$/mapsforge-map-0.2.4.jar!/" />
     <conelement value="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK" />
     <src_description expected_position="1">
