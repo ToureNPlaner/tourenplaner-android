@@ -35,8 +35,12 @@ public class AlgorithmInfo implements Serializable {
     public boolean isHidden(){
     	return isHidden;
     }
-    
-  public static AlgorithmInfo parse(JSONObject object) throws JSONException {
+
+    public int getMinPoints() {
+        return minPoints;
+    }
+
+    public static AlgorithmInfo parse(JSONObject object) throws JSONException {
         AlgorithmInfo info = new AlgorithmInfo();
         info.version = object.getString("version");
         info.name = object.getString("name");

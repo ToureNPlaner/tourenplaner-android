@@ -214,7 +214,7 @@ public class MapScreen extends MapActivity {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			int NodeModelsize = nodeOverlay.getNodeModel().size();
 
-			if (NodeModelsize > 0) {
+			if (NodeModelsize >= session.getSelectedAlgorithm().getMinPoints()) {
 				nodeOverlay.getNodeModel().remove(NodeModelsize - 1);
 				onInvalidate();
 				return true;
