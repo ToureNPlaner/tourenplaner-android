@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -34,7 +32,7 @@ public class AlgorithmInfo implements Serializable {
 		return point_constraints;
     }
     
-    public boolean getIsHidden(){
+    public boolean isHidden(){
     	return isHidden;
     }
     

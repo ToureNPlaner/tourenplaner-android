@@ -14,6 +14,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
+import java.util.ArrayList;
+
 
 public class AlgorithmScreen extends Activity {
 
@@ -43,8 +45,13 @@ public class AlgorithmScreen extends Activity {
 
     private void setupListView() {
         ListView listView = (ListView) findViewById(R.id.listViewAlgorithm);
+        ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
+        for(AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
+            if(!alg.isHidden())
+                algorithms.add(alg);
+        }
         ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this,
-                android.R.layout.simple_list_item_1, session.getServerInfo().getAlgorithms());
+                android.R.layout.simple_list_item_1, algorithms);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
