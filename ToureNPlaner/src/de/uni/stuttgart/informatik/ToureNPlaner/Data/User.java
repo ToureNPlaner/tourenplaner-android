@@ -18,12 +18,16 @@ public class User implements Serializable {
 
 	public static User parse(JSONObject object) throws JSONException {
 		User user = new User();
-		user.address = object.getString("email");
-		user.address = object.getString("address");
-		user.address = object.getString("status");
-		user.address = object.getString("admin");
-		user.address = object.getString("firstname");
-		user.address = object.getString("lastname");
+        try{
+            user.address = object.getString("email");
+            user.address = object.getString("address");
+            user.address = object.getString("status");
+            user.address = object.getString("admin");
+            user.address = object.getString("firstname");
+            user.address = object.getString("lastname");
+        } catch (JSONException e) {
+            // ignore
+        }
 
         return new User();
 	}
