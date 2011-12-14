@@ -104,6 +104,11 @@ public class LoginScreen extends FragmentActivity implements Observer {
 			handler.setListener(null);
 	}
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return handler;
+    }
+
 	@Override
 	public void onCompleted(ConnectionHandler caller, Object object) {
 		handler = null;
