@@ -27,7 +27,7 @@ public class RequestNN extends ConnectionHandler {
 	@Override
 protected Object doInBackground(Void... voids) {
 	try {
-		HttpURLConnection urlConnection = session.openPostConnection("/algnns");
+		HttpURLConnection urlConnection = session.openPostConnection("/algnns", true);
 
 		ArrayList<Node> nodes = new ArrayList<Node>(1);
 		nodes.add(node);
@@ -37,7 +37,7 @@ protected Object doInBackground(Void... voids) {
 		    OutputStream outputStream = urlConnection.getOutputStream();
 			outputStream.write(str.getBytes("US-ASCII"));
 			InputStream stream = urlConnection.getInputStream();
-			Result result = Result.parse(stream);
+			Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
 			return result.getPoints()[0][0];
 
 		

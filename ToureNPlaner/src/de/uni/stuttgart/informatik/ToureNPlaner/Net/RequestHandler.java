@@ -23,7 +23,7 @@ public class RequestHandler extends ConnectionHandler {
 	@Override
 	protected Object doInBackground(Void... voids) {
 		try {
-			HttpURLConnection urlConnection = session.openPostConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix());
+			HttpURLConnection urlConnection = session.openPostConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix(), true);
 
 			try {
 				String str = Request.generate(session.getNodeModel().getNodeVector()).toString();
@@ -32,7 +32,7 @@ public class RequestHandler extends ConnectionHandler {
 				InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
 
 				final long t0 = System.currentTimeMillis();
-				Result result = Result.parse(stream);
+				Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
 				Log.v("TP", "ResultParse: " + (System.currentTimeMillis() - t0) + " ms");
 
 				return result;

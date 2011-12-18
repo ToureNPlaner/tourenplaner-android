@@ -20,6 +20,7 @@ public class ServerInfoHandler extends ConnectionHandler {
 		try {
 			URL uri = new URL(url + "/info");
 			HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
+			urlConnection.setRequestProperty("Accept", Util.ContentType.JSON.identifier);
 
 			try {
 				InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());

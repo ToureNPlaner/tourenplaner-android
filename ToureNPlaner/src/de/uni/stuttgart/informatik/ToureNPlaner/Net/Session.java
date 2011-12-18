@@ -183,6 +183,7 @@ public class Session implements Serializable {
 				String userPassword = getUsername() + ":" + getPassword();
 				String encoding = Base64.encodeString(userPassword);
 				con.setRequestProperty("Authorization", "Basic " + encoding);
+				con.setRequestProperty("Accept", Util.ContentType.JSON.identifier);
 				return con;
 			} catch (Exception e) {
 				Log.e("TP", "SSL", e);
@@ -192,12 +193,18 @@ public class Session implements Serializable {
 		return (HttpURLConnection) uri.openConnection();
     }
 
-	public HttpURLConnection openPostConnection(String path) throws IOException {
+	public HttpURLConnection openPostConnection(String path, boolean acceptSmile) throws IOException {
 		HttpURLConnection con = openGetConnection(path);
 
 		con.setDoOutput(true);
 		con.setChunkedStreamingMode(0);
 		con.setRequestProperty("Content-Type", "application/json;");
+		String acceptString;
+		if(acceptSmile)
+			acceptString = Util.ContentType.SMILE.identifier + ", " + Util.ContentType.JSON.identifier;
+		else
+			acceptString = Util.ContentType.JSON.identifier;
+		con.setRequestProperty("Accept", acceptString);
 
 		return con;
 	}

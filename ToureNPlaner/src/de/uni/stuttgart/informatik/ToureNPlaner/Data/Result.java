@@ -1,8 +1,10 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Util;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.smile.SmileFactory;
 import org.mapsforge.android.maps.GeoPoint;
 
 import java.io.*;
@@ -55,11 +57,20 @@ public class Result implements Serializable {
         }
     }
 
-    public static Result parse(InputStream stream) throws IOException {
+    public static Result parse(Util.ContentType type, InputStream stream) throws IOException {
         Result result = new Result();
         ArrayList<GeoPoint> points = new ArrayList<GeoPoint>();
 
-        JsonFactory f = new JsonFactory();
+	    JsonFactory f = null;
+	    switch (type) {
+		    case JSON:
+			    f = new JsonFactory();
+			    break;
+		    case SMILE:
+			    f = new SmileFactory();
+			    break;
+	    }
+
         JsonParser jp = f.createJsonParser(stream);
 
         jacksonParse(jp,points);
