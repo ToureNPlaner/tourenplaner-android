@@ -38,7 +38,7 @@ protected Object doInBackground(Void... voids) {
 			outputStream.write(str.getBytes("US-ASCII"));
 			InputStream stream = urlConnection.getInputStream();
 			Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
-			return result.getPoints()[0][0];
+			return result.getWay()[0][0];
 
 		
 		} finally {

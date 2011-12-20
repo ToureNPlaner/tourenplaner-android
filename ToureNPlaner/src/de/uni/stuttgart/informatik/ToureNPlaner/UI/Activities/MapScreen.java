@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.view.MenuCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.view.*;
 import android.widget.Toast;
@@ -41,7 +40,7 @@ public class MapScreen extends MapActivity {
 			handler = null;
 			Result result = (Result) object;
 			session.setResult(result);
-			addPathToMap(result.getPoints());
+			addPathToMap(result.getWay());
 			setProgressBarIndeterminateVisibility(false);
 		}
 
@@ -149,7 +148,7 @@ public class MapScreen extends MapActivity {
 		mapView.getOverlays().add(wayOverlay);
 		Result result = session.getResult();
 		if (result != null) {
-			addPathToMap(result.getPoints());
+			addPathToMap(result.getWay());
 		}
 	}
 

@@ -11,15 +11,15 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Result implements Serializable {
-    private GeoPoint[][] points;
+    private GeoPoint[][] way;
 
-    public GeoPoint[][] getPoints() {
-        return points;
+    public GeoPoint[][] getWay() {
+        return way;
     }
 
     static void jacksonParse(JsonParser jp, ArrayList<GeoPoint> array) throws IOException {
         while (jp.nextToken() != JsonToken.END_OBJECT) {
-            if ("points".equals(jp.getCurrentName())) {
+            if ("way".equals(jp.getCurrentName())) {
                 int lt = 0, ln = 0;
                 if (jp.nextToken() == JsonToken.START_ARRAY) {
                     while (jp.nextToken() != JsonToken.END_ARRAY) {
@@ -75,25 +75,25 @@ public class Result implements Serializable {
 
         jacksonParse(jp,points);
 
-        result.points = new GeoPoint[][] {points.toArray(new GeoPoint[points.size()])};
+        result.way = new GeoPoint[][] {points.toArray(new GeoPoint[points.size()])};
 
         return result;
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeInt(points[0].length);
-        for(int i=0;i<points[0].length;i++) {
-            out.writeInt(points[0][i].latitudeE6);
-            out.writeInt(points[0][i].longitudeE6);
+        out.writeInt(way[0].length);
+        for(int i=0;i< way[0].length;i++) {
+            out.writeInt(way[0][i].latitudeE6);
+            out.writeInt(way[0][i].longitudeE6);
         }
     }
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         int length = in.readInt();
-        points = new GeoPoint[1][length];
-        for(int i=0;i<points[0].length;i++) {
+        way = new GeoPoint[1][length];
+        for(int i=0;i< way[0].length;i++) {
             int lat = in.readInt();
             int lon = in.readInt();
-            points[0][i] = new GeoPoint(lat,lon);
+            way[0][i] = new GeoPoint(lat,lon);
         }
     }
 
