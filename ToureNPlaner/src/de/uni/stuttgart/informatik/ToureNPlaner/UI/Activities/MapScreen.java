@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.view.MenuCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.view.*;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -156,6 +158,7 @@ public class MapScreen extends MapActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.mapscreenmenu, menu);
+        MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItemCompat.SHOW_AS_ACTION_IF_ROOM | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
 
