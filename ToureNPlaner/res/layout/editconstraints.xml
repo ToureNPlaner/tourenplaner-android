@@ -65,62 +65,72 @@
             </EditText>
         </TableRow>
 
-        <TableRow
+               <TableRow
             android:id="@+id/tableRow2"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:baselineAligned="false" >
 
             <TextView
-                android:id="@+id/lblconstMax"
+                android:id="@+id/lblconstValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Maximum" >
+                android:text="Value"
+                 >
 
             </TextView>
 
             <EditText
-                android:id="@+id/txtconstMax"
+                android:id="@+id/txtconstValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:numeric="decimal" >
-                
+                 >
+
             </EditText>
         </TableRow>
+            
+       </TableLayout>
 
-        <TableRow
-            android:id="@+id/tableRow2"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lblconstMin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false" >
+            android:layout_gravity="center"
+            android:text="min" />
 
-            <TextView
-                android:id="@+id/lblconstMin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Minimum" >
+        <SeekBar
+            android:id="@+id/editconstraintseekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-            </TextView>
+        <TextView
+            android:id="@+id/lblconstMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="max" />
 
-            <EditText
-                android:id="@+id/txtconstMin"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" 
-                android:numeric="decimal">
-            </EditText>
-        </TableRow>
-    </TableLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
 
     <Button
         android:id="@+id/btnconstReturn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="back" >
-</Button>
+        android:text="back" />
 
 </LinearLayout>
  

@@ -30,15 +30,19 @@ public class ConstraintListAdapter extends ArrayAdapter<Constraint> {
         TextView tvname = (TextView) itemLayout.findViewById(R.id.constName);
         tvname.setText(constraint.getName());
         
+        
+
+        TextView tvValue = (TextView) itemLayout.findViewById(R.id.constValue);
+        if(constraint.getValue() != null){
+        tvValue.setText( constraint.getValue().toString());
+        }else{
+        	 tvValue.setText(constraint.getMinimumValue().toString());
+        }
+        
         TextView tvtype = (TextView) itemLayout.findViewById(R.id.constType);
         tvtype.setText(constraint.getType());
-
-        TextView tvValue1 = (TextView) itemLayout.findViewById(R.id.constValue1);
-        tvValue1.setText("max: " + constraint.getMaximumValue().toString());
-
-        TextView tvValue2 = (TextView) itemLayout.findViewById(R.id.constValue2);
-        tvValue2.setText("min: " + constraint.getMinimumValue().toString());
-
+        
+        
         return itemLayout;
     }
     

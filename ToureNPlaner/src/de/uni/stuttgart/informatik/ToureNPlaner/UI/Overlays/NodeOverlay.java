@@ -97,8 +97,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		
 		//  temporary generated constraints for testing  
 		ArrayList<Constraint> cl = new ArrayList<Constraint>();
-		cl.add(new Constraint ("Constraint1","Typ1",4.0,3.0));
-		cl.add(new Constraint ("Constraint2","Typ1",2.0,1.0));
+		cl.add(new Constraint ("Constraint1","Meter",0.0,2000.0));
+		cl.add(new Constraint ("Constraint2","Euro",0.0,125.0));
 		final Node node = Node.createNode(markerName, geoPoint,cl);
 		
 		

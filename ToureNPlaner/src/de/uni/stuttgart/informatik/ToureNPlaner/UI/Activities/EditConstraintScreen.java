@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class EditConstraintScreen extends Activity{
 	private Session session;
@@ -57,8 +59,8 @@ public class EditConstraintScreen extends Activity{
            	// -------------- get EditTexts --------------
 			final EditText etName = (EditText) findViewById(R.id.txtconstName);
 			final EditText etType = (EditText) findViewById(R.id.txtconstType);
-			final EditText etMin = (EditText) findViewById(R.id.txtconstMin);
-			final EditText etMax = (EditText) findViewById(R.id.txtconstMax);
+			final EditText etValue = (EditText) findViewById(R.id.txtconstValue);
+		
 			
 			// -------------- get Buttons --------------
 			
@@ -66,14 +68,49 @@ public class EditConstraintScreen extends Activity{
 
 			etName.setText(String.valueOf(constraint.getName()));
 			etType.setText(String.valueOf(constraint.getType()));
-			etMin.setText(String.valueOf(constraint.getMinimumValue()));
-			etMax.setText(String.valueOf(constraint.getMaximumValue()));
+			//etMin.setText(String.valueOf(constraint.getMinimumValue()));
+			//etMax.setText(String.valueOf(constraint.getMaximumValue()));
 		
+			
+			//------------------get TextView ------------------
+			TextView lblMin = (TextView) findViewById(R.id.lblconstMin);
+			TextView lblMax = (TextView) findViewById(R.id.lblconstMax);
+			lblMin.setText(String.valueOf(constraint.getMinimumValue()));
+			lblMax.setText(String.valueOf(constraint.getMaximumValue()));
+			//------------------get seekBar -------------------
+			SeekBar seekbar =  (SeekBar) findViewById(R.id.editconstraintseekBar);
+			final int minimumSeekbar = constraint.getMinimumValue().intValue();
+			seekbar.setMax(constraint.getMaximumValue().intValue()*10);
+			seekbar.setProgress(minimumSeekbar);
+			seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+				@Override
+				public void onProgressChanged(SeekBar arg0, int arg1,
+						boolean arg2) {
+					
+					etValue.setText(Double.toString((double)arg1/10));
+					
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar arg0) {
+					arg0.setProgress(arg0.getProgress()+minimumSeekbar);
+					
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar arg0) {
+					arg0.setProgress(arg0.getProgress()+minimumSeekbar);
+					
+				}});
 			// -----------------btnSave-----------------------
 			btnReturn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					constraint.setMaximumValue(Double.valueOf(etMax.getEditableText().toString()));
-					constraint.setMinimumValue(Double.valueOf(etMin.getEditableText().toString()));
+					//constraint.setMaximumValue(Double.valueOf(etMax.getEditableText().toString()));
+				//	constraint.setMinimumValue(Double.valueOf(etMin.getEditableText().toString()));
+					constraint.setValue(Double.valueOf(etValue.getText().toString()));
 					finishActivity();
 				}
 			});
