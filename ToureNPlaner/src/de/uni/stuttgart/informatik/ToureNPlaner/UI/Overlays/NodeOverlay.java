@@ -28,6 +28,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.EditNodeScreen;
 import org.mapsforge.android.maps.*;
 import org.mapsforge.android.maps.overlay.ItemizedOverlay;
 import org.mapsforge.android.maps.overlay.OverlayItem;
+import org.mapsforge.core.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -129,7 +130,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		GeoPoint arrayGP;
 		for (int i = 0; i < gparray[0].length; i++) {
 			arrayGP = gparray[0][i];
-			if (gp.getLatitudeE6() == arrayGP.getLatitudeE6() && gp.getLongitudeE6() == arrayGP.getLongitudeE6()) {
+			if (gp.equals(arrayGP)) {
 				return true;
 			}
 		}

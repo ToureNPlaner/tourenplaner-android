@@ -3,8 +3,6 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import org.mapsforge.android.maps.GeoPoint;
-import org.mapsforge.android.maps.MapView;
 
 public class NodeDrawable extends Drawable {
 	public static class Parameters {

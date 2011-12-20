@@ -9,7 +9,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.mapsforge.android.maps.GeoPoint;
+import org.mapsforge.core.GeoPoint;
 
 import java.util.ArrayList;
 

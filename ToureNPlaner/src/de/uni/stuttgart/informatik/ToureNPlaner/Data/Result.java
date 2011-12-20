@@ -5,7 +5,7 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.smile.SmileFactory;
-import org.mapsforge.android.maps.GeoPoint;
+import org.mapsforge.core.GeoPoint;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -83,8 +83,8 @@ public class Result implements Serializable {
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeInt(points[0].length);
         for(int i=0;i<points[0].length;i++) {
-            out.writeInt(points[0][i].getLatitudeE6());
-            out.writeInt(points[0][i].getLongitudeE6());
+            out.writeInt(points[0][i].latitudeE6);
+            out.writeInt(points[0][i].longitudeE6);
         }
     }
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {

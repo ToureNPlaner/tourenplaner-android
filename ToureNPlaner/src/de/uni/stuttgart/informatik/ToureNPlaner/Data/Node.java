@@ -1,6 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import org.mapsforge.android.maps.GeoPoint;
+import org.mapsforge.core.GeoPoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ public class Node implements Serializable {
     private transient GeoPoint geoPoint;
 	
 	public static Node createNode(String name, GeoPoint point) {
-		return new Node(name, point.getLatitudeE6()*10, point.getLongitudeE6()*10);
+		return new Node(name, point.latitudeE6*10, point.longitudeE6*10);
 	}
 	
 	public static Node createNode(String name, GeoPoint point,ArrayList<Constraint> constraintList) {
-		return new Node(name, point.getLatitudeE6()*10, point.getLongitudeE6()*10,constraintList);
+		return new Node(name, point.latitudeE6*10, point.longitudeE6*10,constraintList);
 	}
 
 	public Node(String name, int laE7, int loE7,
@@ -36,8 +36,8 @@ public class Node implements Serializable {
 	}
 
 	public void setGeoPoint(GeoPoint geoPoint) {
-		this.laE7 = geoPoint.getLatitudeE6()*10;
-		this.loE7 = geoPoint.getLongitudeE6()*10;
+		this.laE7 = geoPoint.latitudeE6*10;
+		this.loE7 = geoPoint.longitudeE6*10;
 		this.geoPoint = geoPoint;
 	}
 

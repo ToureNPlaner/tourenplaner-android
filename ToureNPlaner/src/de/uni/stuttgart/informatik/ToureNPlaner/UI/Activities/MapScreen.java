@@ -19,6 +19,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.*;
 import org.mapsforge.android.maps.overlay.ArrayWayOverlay;
 import org.mapsforge.android.maps.overlay.OverlayWay;
+import org.mapsforge.core.GeoPoint;
 
 import java.util.ArrayList;
 

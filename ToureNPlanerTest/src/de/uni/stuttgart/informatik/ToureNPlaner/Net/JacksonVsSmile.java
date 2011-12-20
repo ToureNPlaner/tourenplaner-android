@@ -7,7 +7,7 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.smile.SmileFactory;
-import org.mapsforge.android.maps.GeoPoint;
+import org.mapsforge.core.GeoPoint;
 
 import java.io.IOException;
 import java.io.InputStream;

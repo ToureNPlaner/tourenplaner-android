@@ -2,7 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mapsforge.android.maps.GeoPoint;
+import org.mapsforge.core.GeoPoint;
 
 public class Point {
 
