@@ -12,28 +12,32 @@ import java.util.ArrayList;
 
 public class Result implements Serializable {
     private GeoPoint[][] way;
+	private ArrayList<Node> points;
 
     public GeoPoint[][] getWay() {
         return way;
     }
 
-    static void jacksonParse(JsonParser jp, ArrayList<GeoPoint> array) throws IOException {
+	public ArrayList<Node> getPoints() {
+	        return points;
+	    }
+
+    static void jacksonParse(JsonParser jp, ArrayList<GeoPoint> way, ArrayList<Node> points) throws IOException {
         while (jp.nextToken() != JsonToken.END_OBJECT) {
-            if ("way".equals(jp.getCurrentName())) {
+            if ("points".equals(jp.getCurrentName())) {
                 int lt = 0, ln = 0;
                 if (jp.nextToken() == JsonToken.START_ARRAY) {
                     while (jp.nextToken() != JsonToken.END_ARRAY) {
                         while (jp.nextToken() != JsonToken.END_OBJECT) {
                             if (jp.getCurrentName().equals("lt")) {
                                 jp.nextToken();
-                                lt = jp.getIntValue()/10;
+                                lt = jp.getIntValue();
                             } else if (jp.getCurrentName().equals("ln")) {
                                 jp.nextToken();
-                                ln = jp.getIntValue()/10;
+                                ln = jp.getIntValue();
                             }
                         }
-	                    // TODO
-                        //array.add(new GeoPoint(lt, ln));
+                        points.add(new Node("", lt, ln));
                     }
                 }
             }
@@ -50,7 +54,7 @@ public class Result implements Serializable {
                                 ln = jp.getIntValue()/10;
                             }
                         }
-                        array.add(new GeoPoint(lt, ln));
+	                    way.add(new GeoPoint(lt, ln));
                     }
                 }
             }
@@ -59,7 +63,8 @@ public class Result implements Serializable {
 
     public static Result parse(Util.ContentType type, InputStream stream) throws IOException {
         Result result = new Result();
-        ArrayList<GeoPoint> points = new ArrayList<GeoPoint>();
+        ArrayList<GeoPoint> way = new ArrayList<GeoPoint>();
+	    ArrayList<Node> points = new ArrayList<Node>();
 
 	    JsonFactory f = null;
 	    switch (type) {
@@ -73,9 +78,10 @@ public class Result implements Serializable {
 
         JsonParser jp = f.createJsonParser(stream);
 
-        jacksonParse(jp,points);
+        jacksonParse(jp, way, points);
 
-        result.way = new GeoPoint[][] {points.toArray(new GeoPoint[points.size()])};
+        result.way = new GeoPoint[][] {way.toArray(new GeoPoint[way.size()])};
+	    result.points = points;
 
         return result;
     }
@@ -86,6 +92,7 @@ public class Result implements Serializable {
             out.writeInt(way[0][i].latitudeE6);
             out.writeInt(way[0][i].longitudeE6);
         }
+	    out.writeObject(points);
     }
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         int length = in.readInt();
@@ -95,6 +102,7 @@ public class Result implements Serializable {
             int lon = in.readInt();
             way[0][i] = new GeoPoint(lat,lon);
         }
+	    points = (ArrayList<Node>) in.readObject();
     }
 
 

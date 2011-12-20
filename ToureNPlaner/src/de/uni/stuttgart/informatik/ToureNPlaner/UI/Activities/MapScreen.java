@@ -56,7 +56,7 @@ public class MapScreen extends MapActivity {
 	private final Observer nnsListener = new Observer() {
 		@Override
 		public void onCompleted(ConnectionHandler caller, Object object) {
-			((RequestNN) caller).getNode().setGeoPoint((GeoPoint) object);
+			((RequestNN) caller).getNode().setGeoPoint(((Node) object).getGeoPoint());
 			nodeOverlay.onModelChanged();
 			requestList.remove((RequestNN) caller);
 		}
