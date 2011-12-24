@@ -95,7 +95,7 @@ public class Session implements Serializable {
                 out.close();
             }
         } catch (Exception e) {
-			Log.e("ToureNPLaner","Session loading failed", e);
+			Log.e("ToureNPLaner","Session saving failed", e);
         }
 	}
 
