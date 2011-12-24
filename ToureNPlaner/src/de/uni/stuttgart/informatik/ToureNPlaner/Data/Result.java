@@ -85,25 +85,4 @@ public class Result implements Serializable {
 
         return result;
     }
-
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeInt(way[0].length);
-        for(int i=0;i< way[0].length;i++) {
-            out.writeInt(way[0][i].latitudeE6);
-            out.writeInt(way[0][i].longitudeE6);
-        }
-	    out.writeObject(points);
-    }
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        int length = in.readInt();
-        way = new GeoPoint[1][length];
-        for(int i=0;i< way[0].length;i++) {
-            int lat = in.readInt();
-            int lon = in.readInt();
-            way[0][i] = new GeoPoint(lat,lon);
-        }
-	    points = (ArrayList<Node>) in.readObject();
-    }
-
-
 }

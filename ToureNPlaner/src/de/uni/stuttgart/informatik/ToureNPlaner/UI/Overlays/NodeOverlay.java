@@ -99,7 +99,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		ArrayList<Constraint> cl = new ArrayList<Constraint>();
 		cl.add(new Constraint ("Constraint1","Meter",0.0,2000.0));
 		cl.add(new Constraint ("Constraint2","Euro",0.0,125.0));
-		final Node node = Node.createNode(markerName, geoPoint,cl);
+		final Node node = new Node(markerName, geoPoint,cl);
 		
 		
 		addMarkerToMap(node);
@@ -161,7 +161,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 					.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							// transform the GpsMarker into a regular mapMarker on Position 0
-							Node gpsStartnode = Node.createNode("gpsLocation", gpsPoint);
+							Node gpsStartnode = new Node("gpsLocation", gpsPoint);
 							useGps = true;
 							nodeModel.addBeginning(gpsStartnode);
 							loadFromModel();

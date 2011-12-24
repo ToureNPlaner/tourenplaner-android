@@ -8,36 +8,25 @@ import java.util.ArrayList;
 public class Node implements Serializable {
 	private String name;
 	private String type;
-	private int laE7;
-	private int loE7;
 	private ArrayList<Constraint> constraintList;
-    private transient GeoPoint geoPoint;
+    private GeoPoint geoPoint;
 	
-	public static Node createNode(String name, GeoPoint point) {
-		return new Node(name, point.latitudeE6*10, point.longitudeE6*10);
-	}
-	
-	public static Node createNode(String name, GeoPoint point,ArrayList<Constraint> constraintList) {
-		return new Node(name, point.latitudeE6*10, point.longitudeE6*10,constraintList);
-	}
-
-	public Node(String name, int laE7, int loE7,
-			ArrayList<Constraint> constraintList) {
+	public Node(String name, GeoPoint point) {
 		this.name = name;
-		this.laE7 = laE7;
-		this.loE7 = loE7;
+		this.geoPoint = point;
+	}
+	
+	public Node(String name, GeoPoint point,ArrayList<Constraint> constraintList) {
+		this(name, point);
 		this.constraintList = constraintList;
 	}
 
 	public Node(String name, int laE7, int loE7) {
 		this.name = name;
-		this.laE7 = laE7;
-		this.loE7 = loE7;
+		this.geoPoint = new GeoPoint(laE7/10, loE7/10);
 	}
 
 	public void setGeoPoint(GeoPoint geoPoint) {
-		this.laE7 = geoPoint.latitudeE6*10;
-		this.loE7 = geoPoint.longitudeE6*10;
 		this.geoPoint = geoPoint;
 	}
 
@@ -56,11 +45,11 @@ public class Node implements Serializable {
 		this.type = type;
 	}
 	public int getLaE7() {
-		return this.laE7;
+		return geoPoint.latitudeE6*10;
 	}
 
 	public int getLoE7() {
-		return this.loE7;
+		return geoPoint.longitudeE6*10;
 	}
 
 	public ArrayList<Constraint> getConstraintList() {
@@ -72,11 +61,7 @@ public class Node implements Serializable {
 	}
 
     public GeoPoint getGeoPoint() {
-        if(geoPoint == null) {
-            geoPoint = new GeoPoint(laE7/10, loE7/10);
-        }
         return geoPoint;
     }
-
-    }
+}
 
