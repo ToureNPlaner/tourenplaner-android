@@ -71,7 +71,7 @@ public class EditNodeScreen extends Activity {
                 node = (Node) data.getSerializable("node");
             }
             
-            //  TODO: uncomment if when there are algorithms with constraints
+            //  TODO: uncomment when there are algorithms with constraints
             //  setup ConstraintListview
             
             //  if(session.getSelectedAlgorithm().getPointConstraints().size() > 0){
