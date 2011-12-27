@@ -45,8 +45,10 @@ public class AlgorithmInfo implements Serializable {
         info.version = object.getString("version");
         info.name = object.getString("name");
         info.urlsuffix = object.getString("urlsuffix");
-        info.minPoints = object.getJSONObject("constraints").getInt("minPoints");
-        info.sourceIsTarget = object.getJSONObject("constraints").getBoolean("sourceIsTarget");
+	    if(!object.isNull("constraints")) {
+            info.minPoints = object.getJSONObject("constraints").getInt("minPoints");
+            info.sourceIsTarget = object.getJSONObject("constraints").getBoolean("sourceIsTarget");
+	    }
         info.isHidden = object.getBoolean("hidden");
         
         if (object.isNull("pointconstraints")) {
