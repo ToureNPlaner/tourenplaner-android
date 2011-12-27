@@ -3,17 +3,18 @@
 	<!--ToureNPlaner-->
 	<string name="app_name">ToureNPlaner</string>
 	
-	<!--  serverscreen-->
+	<!--serverscreen-->
    	<string name="choose_server_screen">Choose a server</string>
 	<string name="add_server">Add server</string>
    
-	<!--  loginscreen-->
+	<!--loginscreen-->
 	<string name="login_screen">enter your credentials</string>
 	<string name="email">e-mail</string>
 	<string name="password">password</string>
 	<string name="login">login</string>
+	<string name="save_credentials">save credentials</string>
 	
-	<!--  algorithmscreen-->
+	<!--algorithmscreen-->
 	 <string name="choose_algorithmn_screen">Choose an algorithmn</string>
 	 <string name="billing">billing</string>
 	
@@ -37,7 +38,7 @@
 	<string name="value">value</string>
 
 	<!--various-->
-	<string name="connecting">connectingy</string>
+	<string name="connecting">connecting</string>
     <string name="new_string">new</string>
 	<string name="ok">ok</string>
 	<string name="yes">yes</string>

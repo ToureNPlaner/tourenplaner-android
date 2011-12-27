@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Constraint implements Serializable {
     private String name;
     private String type;
-    private Double value;
+    private Object value;
     private Double minimumValue;
     private Double maximumValue;
 
@@ -20,12 +20,12 @@ public class Constraint implements Serializable {
         this.maximumValue = maximumValue;
     }
     
-    public Double getValue() {
+   	public Object getValue() {
 		return value;
 	}
 
-	public void setValue(Double value) {
-		this.value = value;
+	public void setValue(Object value) {
+		this.value =  value;
 	}
 
 	@Override
