@@ -23,9 +23,9 @@ public class Result implements Serializable {
 	    }
 
     static void jacksonParse(JsonParser jp, ArrayList<GeoPoint> way, ArrayList<Node> points) throws IOException {
+	    int lt = 0, ln = 0;
         while (jp.nextToken() != JsonToken.END_OBJECT) {
             if ("points".equals(jp.getCurrentName())) {
-                int lt = 0, ln = 0;
                 if (jp.nextToken() == JsonToken.START_ARRAY) {
                     while (jp.nextToken() != JsonToken.END_ARRAY) {
                         while (jp.nextToken() != JsonToken.END_OBJECT) {
@@ -42,7 +42,6 @@ public class Result implements Serializable {
                 }
             }
 	        if ("way".equals(jp.getCurrentName())) {
-                int lt = 0, ln = 0;
                 if (jp.nextToken() == JsonToken.START_ARRAY) {
                     while (jp.nextToken() != JsonToken.END_ARRAY) {
                         while (jp.nextToken() != JsonToken.END_OBJECT) {
