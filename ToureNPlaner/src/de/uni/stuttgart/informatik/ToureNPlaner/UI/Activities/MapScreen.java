@@ -131,8 +131,19 @@ public class MapScreen extends MapActivity {
 		Drawable drawable = getResources().getDrawable(R.drawable.markericon);
 		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint, drawable);
 
+		requestLocationUpdates();
+	}
+
+	private void requestLocationUpdates() {
+		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
+	}
+
+	private void stopLocationUpdates() {
+		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		// 5 minutes, 50 meters
+		locManager.removeUpdates(nodeOverlay);
 	}
 
 	private void setupWayOverlay() {
@@ -281,6 +292,18 @@ public class MapScreen extends MapActivity {
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 		return handler;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		stopLocationUpdates();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		requestLocationUpdates();
 	}
 
 	@Override
