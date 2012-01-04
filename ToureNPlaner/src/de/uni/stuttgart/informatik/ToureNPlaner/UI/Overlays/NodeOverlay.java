@@ -69,16 +69,16 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		gpsDrawable.setBounds(-GPS_RADIUS,-GPS_RADIUS,GPS_RADIUS,GPS_RADIUS);
 	}
 
-	public GeoPoint getGpsPosition() {
+	synchronized public GeoPoint getGpsPosition() {
 		return gpsMarker == null ? null : gpsMarker.getPoint();
 	}
 
-	public void setNodeModel(NodeModel nodeModel) {
+	synchronized public void setNodeModel(NodeModel nodeModel) {
 		this.nodeModel = nodeModel;
 		loadFromModel();
 	}
 	
-	public NodeModel getNodeModel() {
+	synchronized public NodeModel getNodeModel() {
 		return nodeModel;
 	}
 
@@ -91,7 +91,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	@Override
-	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
+	synchronized public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		String markerName = String.valueOf(nodeModel.size() + 1);
 		//final Node node = Node.createNode(markerName, geoPoint);
 		
@@ -119,7 +119,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		return true;
 	}
 
-	public void onModelChanged() {
+	synchronized public void onModelChanged() {
 		loadFromModel();
 	}
 
@@ -141,7 +141,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	@Override
-	public int size() {
+	synchronized public int size() {
 		return list.size() + (gpsMarker == null ? 0 : 1);
 	}
 
@@ -154,7 +154,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	@Override
-	public boolean onTap(int i) {
+	synchronized public boolean onTap(int i) {
  
 		if (i == list.size()) {
 			final GeoPoint gpsPoint = this.gpsMarker.getPoint();
@@ -186,21 +186,21 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		return true;
 	}
 
-	public void addMarkerToMap(Node node) {
+	synchronized public void addMarkerToMap(Node node) {
 	//	NodeDrawable dm = new NodeDrawable(nodeParameters, node.getName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, defaultDrawable);
 		list.add(overlayitem);
 		requestRedraw();
 	}
 
-	public void clear() {
+	synchronized public void clear() {
 		nodeModel.clear();
 		list.clear();
 		useGps = false;
 		requestRedraw();
 	}
 
-	public void updateIcons() {
+	synchronized public void updateIcons() {
 		if (!algorithmInfo.sourceIsTarget() && list.size() > 0) {
 			for (int i = 1; i < list.size() - 1; i++) {
 				Drawable d = boundCenterBottom(context.getResources().getDrawable(R.drawable.markericon));
@@ -232,7 +232,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	@Override
-	public void onLocationChanged(Location location) {
+	synchronized public void onLocationChanged(Location location) {
 		GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
 		gpsMarker.setPoint(geoPoint);
 		if(useGps && !list.isEmpty()) {
@@ -243,15 +243,15 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	@Override
-	public void onStatusChanged(String s, int i, Bundle bundle) {
+	synchronized public void onStatusChanged(String s, int i, Bundle bundle) {
 	}
 
 	@Override
-	public void onProviderEnabled(String s) {
+	synchronized public void onProviderEnabled(String s) {
 	}
 
 	@Override
-	public void onProviderDisabled(String s) {
+	synchronized public void onProviderDisabled(String s) {
 		gpsMarker = null;
 	}
 
