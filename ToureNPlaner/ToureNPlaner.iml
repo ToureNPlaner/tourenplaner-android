@@ -48,6 +48,7 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs" />
+          <root url="file://$MODULE_DIR$/../../mapsforge/src/main/java" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
