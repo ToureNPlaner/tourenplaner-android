@@ -94,7 +94,12 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		edit.perform();
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
-		((MapScreen) context).performNNSearch(node);
+		((MapScreen) context).runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				((MapScreen) context).performNNSearch(node);
+			}
+		});
 		return true;
 	}
 
