@@ -32,13 +32,13 @@ public class Session implements Serializable {
 		private String username;
 		private String password;
 		private AlgorithmInfo selectedAlgorithm;
-		private NodeModel nodeModel = new NodeModel();
-		private Result result;
 		private User user;
 	}
 
 	private final UUID uuid;
 	private static transient Data d;
+	private static transient NodeModel nodeModel = new NodeModel();
+	private static transient Result result;
 
 	private static HostnameVerifier acceptAllHostnameVerifier = new HostnameVerifier() {
 		@Override
@@ -86,15 +86,16 @@ public class Session implements Serializable {
 		d = new Data();
 	}
 
-	public void safe() {
+	private void safe(Object o, String name) {
 		try {
-			File dir = openCacheDir();
+			File dir = new File(openCacheDir(), uuid.toString());
 			dir.mkdir();
-			FileOutputStream outputStream = new FileOutputStream(new File(dir, uuid.toString()));
 
+			FileOutputStream outputStream = new FileOutputStream(new File(dir, name));
 			ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new BufferedOutputStream(outputStream)));
+
 			try {
-				out.writeObject(d);
+				out.writeObject(o);
 			} finally {
 				out.close();
 			}
@@ -103,24 +104,42 @@ public class Session implements Serializable {
 		}
 	}
 
-	private void load() {
+	private void safeData() {
+		safe(d, "data");
+	}
+
+	private void safeNodeModel() {
+		safe(nodeModel, "nodeModel");
+	}
+
+	private void safeResult() {
+		safe(result, "result");
+	}
+
+	private void loadAll() {
+		d = (Data) load("data");
+		result = (Result) load("result");
+		nodeModel = (NodeModel) load("nodeModel");
+		if (nodeModel == null)
+			nodeModel = new NodeModel();
+	}
+
+	private Object load(String name) {
 		try {
-			File dir = openCacheDir();
-			FileInputStream inputStream = new FileInputStream(new File(dir, uuid.toString()));
+			File dir = new File(openCacheDir(), uuid.toString());
+
+			FileInputStream inputStream = new FileInputStream(new File(dir, name));
 
 			ObjectInputStream in = new ObjectInputStream(new GZIPInputStream(new BufferedInputStream(inputStream)));
 			try {
-				d = (Data) in.readObject();
+				return in.readObject();
 			} finally {
 				in.close();
 			}
 		} catch (Exception e) {
 			Log.e("ToureNPLaner", "Session loading failed", e);
-			// If we can't load load an empty session
-			// Can happen if user deletes cache and tries to restore session afterwards
-			// TODO won't work still need to initialise members
-			d = new Data();
 		}
+		return null;
 	}
 
 	public static enum Change {
@@ -137,7 +156,7 @@ public class Session implements Serializable {
 	private void readObject(java.io.ObjectInputStream in) throws ClassNotFoundException, IOException {
 		in.defaultReadObject();
 		if (d == null)
-			load();
+			loadAll();
 		listeners = new ArrayList<Listener>();
 	}
 
@@ -149,24 +168,38 @@ public class Session implements Serializable {
 		listeners.remove(listener);
 	}
 
-	public void notifyChangeListerners(Change change) {
+	public void notifyChangeListerners(final Change change) {
 		for (int i = 0; i < listeners.size(); i++) {
 			listeners.get(i).onChange(change);
 		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				synchronized (Session.class) {
+					switch (change) {
+						case MODEL_CHANGE:
+							safeNodeModel();
+							break;
+						case RESULT_CHANGE:
+							safeResult();
+							break;
+					}
+				}
+			}
+		}).start();
 	}
 
 	public Result getResult() {
-		return d.result;
+		return result;
 	}
 
 	public void setResult(Result result) {
-		d.result = result;
-		safe();
+		Session.result = result;
 	}
 
 	public void setUser(User user) {
 		d.user = user;
-		safe();
+		safeData();
 	}
 
 	public User getUser() {
@@ -174,8 +207,11 @@ public class Session implements Serializable {
 	}
 
 	public void setNodeModel(NodeModel nodeModel) {
-		d.nodeModel = nodeModel;
-		safe();
+		Session.nodeModel = nodeModel;
+	}
+
+	public NodeModel getNodeModel() {
+		return nodeModel;
 	}
 
 	public void setUrl(String url) {
@@ -184,7 +220,7 @@ public class Session implements Serializable {
 			d.serverInfo.setHostname(uri.getHost());
 			d.serverInfo.setPort(uri.getPort());
 			uri.getProtocol();
-			safe();
+			safeData();
 		} catch (MalformedURLException e) {
 			// Should never happen
 			e.printStackTrace();
@@ -241,22 +277,18 @@ public class Session implements Serializable {
 		return d.password;
 	}
 
-	public NodeModel getNodeModel() {
-		return d.nodeModel;
-	}
-
 	public AlgorithmInfo getSelectedAlgorithm() {
 		return d.selectedAlgorithm;
 	}
 
 	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
 		d.selectedAlgorithm = selectedAlgorithm;
-		safe();
+		safeData();
 	}
 
 	public void setServerInfo(ServerInfo serverInfo) {
 		d.serverInfo = serverInfo;
-		safe();
+		safeData();
 	}
 
 	public ServerInfo getServerInfo() {
@@ -265,12 +297,12 @@ public class Session implements Serializable {
 
 	public void setUsername(String username) {
 		d.username = username;
-		safe();
+		safeData();
 	}
 
 	public void setPassword(String password) {
 		d.password = password;
-		safe();
+		safeData();
 	}
 
 	/**
