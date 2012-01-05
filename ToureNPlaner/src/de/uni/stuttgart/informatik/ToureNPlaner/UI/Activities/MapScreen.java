@@ -166,25 +166,18 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.nodelist:
-				// generates an intent from the class NodeListScreen
 				Intent myIntent = new Intent(this, NodelistScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
 				startActivityForResult(myIntent, REQUEST_CODE_MAP_SCREEN);
 				return true;
 			case R.id.reset:
-				// clear nodes
 				Edit edit = new ClearEdit(session);
 				edit.perform();
 				return true;
 			case R.id.calculate:
-				if (session.getNodeModel().size() > 1) {
-					handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
-					setProgressBarIndeterminateVisibility(true);
-				}
+				performRequest();
 				return true;
-
 			case R.id.resultlist:
-
 //				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
 //				myIntentResult.putExtra(Session.IDENTIFIER, session);
 //				startActivity(myIntentResult);
@@ -196,12 +189,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.back:
 				finish();
 				return true;
-//		case R.id.gotofirst:
-//		if (nodeOverlay.getNodeModel().size() > 0){
-//			mapView.getController().setCenter(nodeOverlay.getNodeModel().get(0).getGeoPoint());
-//			}
-//		return true;
-
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -209,7 +196,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	}
 
-	//---------------Key-Events--------------------
+	private void performRequest() {
+		if (handler == null && session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints()) {
+			handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
+			setProgressBarIndeterminateVisibility(true);
+		}
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -251,7 +243,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		wayOverlay.addWay(new OverlayWay(points));
 	}
 
-	public void triggerNNlookup(Node node) {
+	public void performNNSearch(Node node) {
 		requestList.add((RequestNN) new RequestNN(nnsListener, session, node).execute());
 	}
 
@@ -309,14 +301,20 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
-	public void onChange(Session.Change change) {
-		switch (change) {
-			case RESULT_CHANGE:
-				addPathToMap(session.getResult().getWay());
-				break;
-			case MODEL_CHANGE:
-				wayOverlay.clear();
-				break;
-		}
+	public void onChange(final Session.Change change) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				switch (change) {
+					case RESULT_CHANGE:
+						addPathToMap(session.getResult().getWay());
+						break;
+					case MODEL_CHANGE:
+						wayOverlay.clear();
+						performRequest();
+						break;
+				}
+			}
+		});
 	}
 }

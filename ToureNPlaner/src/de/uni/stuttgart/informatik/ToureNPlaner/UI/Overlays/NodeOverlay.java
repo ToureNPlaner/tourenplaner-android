@@ -93,9 +93,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
 		edit.perform();
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		updateIcons();
 
-		((MapScreen) context).triggerNNlookup(node);
+		((MapScreen) context).performNNSearch(node);
 		return true;
 	}
 
