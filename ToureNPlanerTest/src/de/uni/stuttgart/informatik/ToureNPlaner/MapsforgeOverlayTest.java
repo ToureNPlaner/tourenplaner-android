@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.*;
 import android.test.ActivityUnitTestCase;
-import android.util.Log;
-import android.widget.LinearLayout;
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
