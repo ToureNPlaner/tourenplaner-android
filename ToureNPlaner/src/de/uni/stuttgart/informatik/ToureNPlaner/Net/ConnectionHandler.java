@@ -13,9 +13,15 @@ public abstract class ConnectionHandler extends AsyncTask<Void, Void, Object> {
 	public void setListener(Observer listener) {
 		this.listener = listener;
 	}
+
+	/**
+	 * Will be run in UI thread
+	 *
+	 * @param object
+	 */
 	@Override
 	public void onPostExecute(Object object) {
-		if(listener == null) {
+		if (listener == null) {
 			// TODO remove
 			Log.w("TP", "Null Listener!");
 			return;

@@ -1,15 +1,17 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-
+/**
+ * RequestNN are not persistent, so we don't need to update the session etc.
+ */
 public class RequestNN extends ConnectionHandler {
 	private final Session session;
 	private final Node node;
@@ -25,27 +27,27 @@ public class RequestNN extends ConnectionHandler {
 	}
 
 	@Override
-protected Object doInBackground(Void... voids) {
-	try {
-		HttpURLConnection urlConnection = session.openPostConnection("/algnns", true);
+	protected Object doInBackground(Void... voids) {
+		try {
+			HttpURLConnection urlConnection = session.openPostConnection("/algnns", true);
 
-		ArrayList<Node> nodes = new ArrayList<Node>(1);
-		nodes.add(node);
-	
-		try{
-			String str = Request.generate(nodes).toString();
-		    OutputStream outputStream = urlConnection.getOutputStream();
-			outputStream.write(str.getBytes("US-ASCII"));
-			InputStream stream = urlConnection.getInputStream();
-			Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
-			return result.getPoints().get(0);
+			ArrayList<Node> nodes = new ArrayList<Node>(1);
+			nodes.add(node);
 
-		
-		} finally {
-			urlConnection.disconnect();
+			try {
+				String str = Request.generate(nodes).toString();
+				OutputStream outputStream = urlConnection.getOutputStream();
+				outputStream.write(str.getBytes("US-ASCII"));
+				InputStream stream = urlConnection.getInputStream();
+				Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
+				return result.getPoints().get(0);
+
+
+			} finally {
+				urlConnection.disconnect();
+			}
+		} catch (Exception e) {
+			return e;
 		}
-	} catch (Exception e) {
-		return e;
 	}
-}
 }

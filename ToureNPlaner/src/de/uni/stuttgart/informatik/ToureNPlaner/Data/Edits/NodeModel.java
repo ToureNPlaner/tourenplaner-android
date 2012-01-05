@@ -1,5 +1,7 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.Data;
+package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
 
+
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,29 +24,25 @@ public class NodeModel implements Serializable {
 		return nodeArrayList.size();
 	}
 
-	public void add(Node node) {
+	void add(Node node) {
 		nodeArrayList.add(node);
 	}
-	
-	public void addBeginning(Node node) {
+
+	void addBeginning(Node node) {
 		reverseNodes();
 		nodeArrayList.add(node);
 		reverseNodes();
 	}
 
-	public void set(int index, Node node) {
-		nodeArrayList.add(index, node);
-	}
-
-	public void clear() {
+	void clear() {
 		nodeArrayList.clear();
 	}
 
-	public void remove(int pos) {
+	void remove(int pos) {
 		nodeArrayList.remove(pos);
 	}
 
-	public void reverseNodes() {
+	void reverseNodes() {
 		for (int front = 0, back = nodeArrayList.size() - 1;
 		     front < nodeArrayList.size() / 2;
 		     front++, back--) {

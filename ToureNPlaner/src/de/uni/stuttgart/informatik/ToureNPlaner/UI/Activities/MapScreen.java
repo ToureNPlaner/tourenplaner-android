@@ -11,20 +11,22 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.view.*;
 import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
-import org.mapsforge.android.maps.*;
+import org.mapsforge.android.maps.MapActivity;
+import org.mapsforge.android.maps.MapView;
+import org.mapsforge.android.maps.MapViewMode;
 import org.mapsforge.android.maps.overlay.ArrayWayOverlay;
 import org.mapsforge.android.maps.overlay.OverlayWay;
 import org.mapsforge.core.GeoPoint;
 
 import java.util.ArrayList;
 
-public class MapScreen extends MapActivity {
+public class MapScreen extends MapActivity implements Session.Listener {
 	private MapView mapView;
 	private ArrayWayOverlay wayOverlay;
 	private Session session;
@@ -38,9 +40,8 @@ public class MapScreen extends MapActivity {
 		@Override
 		public void onCompleted(ConnectionHandler caller, Object object) {
 			handler = null;
-			Result result = (Result) object;
-			session.setResult(result);
-			addPathToMap(result.getWay());
+			Edit edit = new SetResultEdit(session, (Result) object);
+			edit.perform();
 			setProgressBarIndeterminateVisibility(false);
 		}
 
@@ -48,16 +49,15 @@ public class MapScreen extends MapActivity {
 		public void onError(ConnectionHandler caller, Object object) {
 			handler = null;
 			setProgressBarIndeterminateVisibility(false);
-			Toast.makeText(getApplicationContext(), object.toString(),
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
 	};
 
 	private final Observer nnsListener = new Observer() {
 		@Override
 		public void onCompleted(ConnectionHandler caller, Object object) {
-			((RequestNN) caller).getNode().setGeoPoint(((Node) object).getGeoPoint());
-			nodeOverlay.onModelChanged();
+			Edit edit = new UpdateGeoPointEdit(session, ((RequestNN) caller).getNode(), ((Node) object).getGeoPoint());
+			edit.perform();
 			requestList.remove((RequestNN) caller);
 		}
 
@@ -111,6 +111,9 @@ public class MapScreen extends MapActivity {
 		setupGPS(isFirstStart);
 
 		mapView.getOverlays().add(nodeOverlay);
+
+		session.registerListener(nodeOverlay);
+		session.registerListener(this);
 	}
 
 	private void setupGPS(boolean isFirstStart) {
@@ -129,21 +132,7 @@ public class MapScreen extends MapActivity {
 		}
 
 		Drawable drawable = getResources().getDrawable(R.drawable.markericon);
-		nodeOverlay = new NodeOverlay(this, session.getSelectedAlgorithm(), session.getNodeModel(), gpsGeoPoint, drawable);
-
-		requestLocationUpdates();
-	}
-
-	private void requestLocationUpdates() {
-		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// 5 minutes, 50 meters
-		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
-	}
-
-	private void stopLocationUpdates() {
-		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// 5 minutes, 50 meters
-		locManager.removeUpdates(nodeOverlay);
+		nodeOverlay = new NodeOverlay(this, session, gpsGeoPoint, drawable);
 	}
 
 	private void setupWayOverlay() {
@@ -168,7 +157,7 @@ public class MapScreen extends MapActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.mapscreenmenu, menu);
-        MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItemCompat.SHOW_AS_ACTION_IF_ROOM | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+		MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItemCompat.SHOW_AS_ACTION_IF_ROOM | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
 
@@ -184,9 +173,8 @@ public class MapScreen extends MapActivity {
 				return true;
 			case R.id.reset:
 				// clear nodes
-				nodeOverlay.clear();
-				session.setResult(null);
-				onInvalidate();
+				Edit edit = new ClearEdit(session);
+				edit.perform();
 				return true;
 			case R.id.calculate:
 				if (session.getNodeModel().size() > 1) {
@@ -226,11 +214,11 @@ public class MapScreen extends MapActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			int NodeModelsize = nodeOverlay.getNodeModel().size();
+			int NodeModelsize = session.getNodeModel().size();
 
 			if (NodeModelsize >= session.getSelectedAlgorithm().getMinPoints()) {
-				nodeOverlay.getNodeModel().remove(NodeModelsize - 1);
-				onInvalidate();
+				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
+				edit.perform();
 				return true;
 			}
 		}
@@ -239,34 +227,23 @@ public class MapScreen extends MapActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+		Edit edit;
 		switch (requestCode) {
 			case REQUEST_CODE_MAP_SCREEN:
-
-				session.setNodeModel((NodeModel) data.getExtras().getSerializable(
-						NodeModel.IDENTIFIER));
-				nodeOverlay.setNodeModel(session.getNodeModel());
-				onInvalidate();
+				edit = new ChangeNodeModelEdit(session, (NodeModel) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
+				edit.perform();
 				break;
 			case NodeOverlay.REQUEST_CODE_ITEM_OVERLAY:
 				switch (resultCode) {
 					case RESULT_OK:
-						session.getNodeModel().getNodeVector().set(data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
-						onInvalidate();
+						edit = new UpdateNodeEdit(session, data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
+						edit.perform();
 						break;
 					case EditNodeScreen.RESULT_DELETE:
-						session.getNodeModel().getNodeVector().remove(data.getExtras().getInt("index"));
-						onInvalidate();
+						edit = new RemoveNodeEdit(session, data.getExtras().getInt("index"));
+						edit.perform();
 				}
 		}
-	}
-	public Session getSessionFromMapScreen(){
-		return session;
-	}
-	private void onInvalidate() {
-		nodeOverlay.onModelChanged();
-		session.setResult(null);
-		wayOverlay.clear();
 	}
 
 	public void addPathToMap(GeoPoint[][] points) {
@@ -297,24 +274,49 @@ public class MapScreen extends MapActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		stopLocationUpdates();
+		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		// 5 minutes, 50 meters
+		locManager.removeUpdates(nodeOverlay);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		requestLocationUpdates();
+		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		// 5 minutes, 50 meters
+		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 
+		session.removeListener(nodeOverlay);
+		session.removeListener(this);
+
 		if (handler != null)
 			handler.setListener(null);
 
 		for (RequestNN request : requestList) {
 			request.setListener(null);
+		}
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
+		return true;
+	}
+
+	@Override
+	public void onChange(Session.Change change) {
+		switch (change) {
+			case RESULT_CHANGE:
+				addPathToMap(session.getResult().getWay());
+				break;
+			case MODEL_CHANGE:
+				wayOverlay.clear();
+				break;
 		}
 	}
 }

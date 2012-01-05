@@ -1,7 +1,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.User;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 
@@ -14,21 +18,21 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class Session implements Serializable {
-    public static final String IDENTIFIER = "session";
+	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
 
-	private static class Data implements Serializable
-	{
+	private static class Data implements Serializable {
 		private ServerInfo serverInfo;
-	    private String username;
-	    private String password;
-	    private AlgorithmInfo selectedAlgorithm;
-	    private NodeModel nodeModel = new NodeModel();
+		private String username;
+		private String password;
+		private AlgorithmInfo selectedAlgorithm;
+		private NodeModel nodeModel = new NodeModel();
 		private Result result;
 		private User user;
 	}
@@ -86,74 +90,95 @@ public class Session implements Serializable {
 		try {
 			File dir = openCacheDir();
 			dir.mkdir();
-            FileOutputStream outputStream = new FileOutputStream(new File(dir, uuid.toString()));
+			FileOutputStream outputStream = new FileOutputStream(new File(dir, uuid.toString()));
 
 			ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new BufferedOutputStream(outputStream)));
-            try {
-                out.writeObject(d);
-            } finally {
-                out.close();
-            }
-        } catch (Exception e) {
-			Log.e("ToureNPLaner","Session saving failed", e);
-        }
+			try {
+				out.writeObject(d);
+			} finally {
+				out.close();
+			}
+		} catch (Exception e) {
+			Log.e("ToureNPLaner", "Session saving failed", e);
+		}
 	}
 
 	private void load() {
 		try {
 			File dir = openCacheDir();
-            FileInputStream inputStream = new FileInputStream(new File(dir, uuid.toString()));
+			FileInputStream inputStream = new FileInputStream(new File(dir, uuid.toString()));
 
 			ObjectInputStream in = new ObjectInputStream(new GZIPInputStream(new BufferedInputStream(inputStream)));
-            try {
-                d = (Data) in.readObject();
-            } finally {
-                in.close();
-            }
-        } catch (Exception e) {
-			Log.e("ToureNPLaner","Session loading failed", e);
+			try {
+				d = (Data) in.readObject();
+			} finally {
+				in.close();
+			}
+		} catch (Exception e) {
+			Log.e("ToureNPLaner", "Session loading failed", e);
 			// If we can't load load an empty session
 			// Can happen if user deletes cache and tries to restore session afterwards
 			// TODO won't work still need to initialise members
 			d = new Data();
-        }
+		}
 	}
 
-	private void checkData() {
-		if(d == null)
+	public static enum Change {
+		MODEL_CHANGE,
+		RESULT_CHANGE,
+	}
+
+	public interface Listener {
+		void onChange(Change change);
+	}
+
+	private transient ArrayList<Listener> listeners = new ArrayList<Listener>();
+
+	private void readObject(java.io.ObjectInputStream in) throws ClassNotFoundException, IOException {
+		in.defaultReadObject();
+		if (d == null)
 			load();
+		listeners = new ArrayList<Listener>();
+	}
+
+	public void registerListener(Listener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(Listener listener) {
+		listeners.remove(listener);
+	}
+
+	public void notifyChangeListerners(Change change) {
+		for (int i = 0; i < listeners.size(); i++) {
+			listeners.get(i).onChange(change);
+		}
 	}
 
 	public Result getResult() {
-	    checkData();
-        return d.result;
-    }
+		return d.result;
+	}
 
-    public void setResult(Result result) {
-	    checkData();
-	    d.result = result;
-	    safe();
-    }
+	public void setResult(Result result) {
+		d.result = result;
+		safe();
+	}
 
 	public void setUser(User user) {
-		checkData();
-	    d.user = user;
-	    safe();
+		d.user = user;
+		safe();
 	}
 
 	public User getUser() {
-		checkData();
-	    return d.user;
+		return d.user;
 	}
 
-    public void setNodeModel(NodeModel nodeModel) {
-	    checkData();
-        d.nodeModel = nodeModel;
-	    safe();
-    }
+	public void setNodeModel(NodeModel nodeModel) {
+		d.nodeModel = nodeModel;
+		safe();
+	}
 
 	public void setUrl(String url) {
-		checkData();
 		try {
 			URL uri = new URL(url);
 			d.serverInfo.setHostname(uri.getHost());
@@ -166,9 +191,8 @@ public class Session implements Serializable {
 		}
 	}
 
-    public String getUrl() {
-	    checkData();
-        return d.serverInfo.getURL();
+	public String getUrl() {
+		return d.serverInfo.getURL();
 	}
 
 	public HttpURLConnection openGetConnection(String path) throws IOException {
@@ -191,7 +215,7 @@ public class Session implements Serializable {
 		}
 
 		return (HttpURLConnection) uri.openConnection();
-    }
+	}
 
 	public HttpURLConnection openPostConnection(String path, boolean acceptSmile) throws IOException {
 		HttpURLConnection con = openGetConnection(path);
@@ -200,7 +224,7 @@ public class Session implements Serializable {
 		con.setChunkedStreamingMode(0);
 		con.setRequestProperty("Content-Type", "application/json;");
 		String acceptString;
-		if(acceptSmile)
+		if (acceptSmile)
 			acceptString = Util.ContentType.SMILE.identifier + ", " + Util.ContentType.JSON.identifier;
 		else
 			acceptString = Util.ContentType.JSON.identifier;
@@ -209,63 +233,54 @@ public class Session implements Serializable {
 		return con;
 	}
 
-    public String getUsername() {
-	    checkData();
-        return d.username;
-    }
+	public String getUsername() {
+		return d.username;
+	}
 
-    public String getPassword() {
-	    checkData();
-        return d.password;
-    }
+	public String getPassword() {
+		return d.password;
+	}
 
-    public NodeModel getNodeModel() {
-	    checkData();
-        return d.nodeModel;
-    }
+	public NodeModel getNodeModel() {
+		return d.nodeModel;
+	}
 
-    public AlgorithmInfo getSelectedAlgorithm() {
-	    checkData();
-        return d.selectedAlgorithm;
-    }
+	public AlgorithmInfo getSelectedAlgorithm() {
+		return d.selectedAlgorithm;
+	}
 
-    public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
-	    checkData();
-        d.selectedAlgorithm = selectedAlgorithm;
-	    safe();
-    }
+	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
+		d.selectedAlgorithm = selectedAlgorithm;
+		safe();
+	}
 
 	public void setServerInfo(ServerInfo serverInfo) {
-		checkData();
-        d.serverInfo = serverInfo;
+		d.serverInfo = serverInfo;
 		safe();
-    }
+	}
 
-    public ServerInfo getServerInfo() {
-	    checkData();
-        return d.serverInfo;
-    }
+	public ServerInfo getServerInfo() {
+		return d.serverInfo;
+	}
 
-    public void setUsername(String username) {
-	    checkData();
-        d.username = username;
-	    safe();
-    }
+	public void setUsername(String username) {
+		d.username = username;
+		safe();
+	}
 
-    public void setPassword(String password) {
-	    checkData();
-        d.password = password;
-	    safe();
-    }
+	public void setPassword(String password) {
+		d.password = password;
+		safe();
+	}
 
-    /**
-     * @param url      The URL to connect to
-     * @param listener the Callback listener
-     * @return Use this to cancel the task with cancel(true)
-     */
-    public static ServerInfoHandler createSession(String url, Observer listener) {
-        ServerInfoHandler handler = new ServerInfoHandler(listener, url);
-        handler.execute();
-        return handler;
-    }
+	/**
+	 * @param url      The URL to connect to
+	 * @param listener the Callback listener
+	 * @return Use this to cancel the task with cancel(true)
+	 */
+	public static ServerInfoHandler createSession(String url, Observer listener) {
+		ServerInfoHandler handler = new ServerInfoHandler(listener, url);
+		handler.execute();
+		return handler;
+	}
 }
