@@ -309,7 +309,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					addPathToMap(session.getResult().getWay());
 				}
 				if (0 < (change & Session.MODEL_CHANGE)) {
-					wayOverlay.clear();
+					if (0 == (change & Session.ADD_CHANGE))
+						wayOverlay.clear();
 					performRequest();
 				}
 			}

@@ -145,6 +145,7 @@ public class Session implements Serializable {
 	public final static int MODEL_CHANGE = 1;
 	public final static int RESULT_CHANGE = 2;
 	public final static int NNS_CHANGE = 4;
+	public final static int ADD_CHANGE = 8;
 
 	public interface Listener {
 		void onChange(int change);
