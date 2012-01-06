@@ -330,7 +330,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				}
 				if (0 < (change & Session.MODEL_CHANGE)) {
 					if (0 == (change & Session.ADD_CHANGE)) {
-						Edit edit = new ClearResultEdit(session);
+						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
 					}
 					performRequest();
