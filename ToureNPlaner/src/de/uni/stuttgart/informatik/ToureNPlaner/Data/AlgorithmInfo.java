@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AlgorithmInfo implements Serializable, Comparable {
+public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String version;
 	private String name;
 	private String urlsuffix;
@@ -66,10 +66,10 @@ public class AlgorithmInfo implements Serializable, Comparable {
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		if (o == null || !(o instanceof AlgorithmInfo))
+	public int compareTo(AlgorithmInfo another) {
+		if (another == null)
 			return 0;
 
-		return name.compareTo(((AlgorithmInfo) o).name);
+		return name.compareTo(another.name);
 	}
 }
