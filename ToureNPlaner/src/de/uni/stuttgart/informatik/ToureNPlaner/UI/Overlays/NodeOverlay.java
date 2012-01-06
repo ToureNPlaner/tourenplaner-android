@@ -65,7 +65,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		gpsDrawable.setBounds(-GPS_RADIUS, -GPS_RADIUS, GPS_RADIUS, GPS_RADIUS);
 	}
 
-	synchronized public GeoPoint getGpsPosition() {
+	public GeoPoint getGpsPosition() {
 		return gpsMarker == null ? null : gpsMarker.getPoint();
 	}
 
@@ -170,8 +170,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		requestRedraw();
 	}
 
-	synchronized private void updateIcons() {
-		if (!session.getSelectedAlgorithm().sourceIsTarget() && list.size() > 0) {
+	private synchronized void updateIcons() {
+		if (!session.getSelectedAlgorithm().sourceIsTarget() && !list.isEmpty()) {
 			for (int i = 1; i < list.size() - 1; i++) {
 				Drawable d = boundCenterBottom(context.getResources().getDrawable(R.drawable.markericon));
 				list.get(i).setMarker(d);
@@ -204,7 +204,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	@Override
 	public void onLocationChanged(Location location) {
 		GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-		gpsMarker.setPoint(geoPoint);
+		updateGpsMarker(geoPoint);
 		if (useGps && !list.isEmpty()) {
 			Edit edit = new UpdateNNSEdit(session, session.getNodeModel().get(0), geoPoint);
 			edit.perform();
