@@ -172,6 +172,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				startActivityForResult(myIntent, REQUEST_CODE_MAP_SCREEN);
 				return true;
 			case R.id.reset:
+				if (handler != null) {
+					handler.cancel(true);
+					setProgressBarIndeterminateVisibility(false);
+					handler = null;
+				}
 				Edit edit = new ClearEdit(session);
 				edit.perform();
 				return true;
@@ -186,7 +191,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.gps:
 				mapView.getController().setCenter(nodeOverlay.getGpsPosition());
 				return true;
-
 			case R.id.back:
 				finish();
 				return true;
