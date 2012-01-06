@@ -215,7 +215,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			int NodeModelsize = session.getNodeModel().size();
 
-			if (NodeModelsize >= session.getSelectedAlgorithm().getMinPoints()) {
+			if (NodeModelsize > 0) {
 				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
 				edit.perform();
 				return true;
