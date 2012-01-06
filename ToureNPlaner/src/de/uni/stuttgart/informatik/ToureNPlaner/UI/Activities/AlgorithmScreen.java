@@ -60,7 +60,10 @@ public class AlgorithmScreen extends Activity {
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				session.setSelectedAlgorithm((AlgorithmInfo) adapterView.getItemAtPosition(i));
+				AlgorithmInfo alg = (AlgorithmInfo) adapterView.getItemAtPosition(i);
+				if (!alg.equals(session.getSelectedAlgorithm()))
+					session.setResult(null);
+				session.setSelectedAlgorithm(alg);
 				Intent myIntent = new Intent(view.getContext(), MapScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
 				startActivity(myIntent);
