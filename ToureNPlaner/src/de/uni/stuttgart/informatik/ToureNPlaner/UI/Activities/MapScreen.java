@@ -197,7 +197,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void performRequest() {
-		if (handler == null && session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints()) {
+		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints()) {
+			if (handler != null)
+				handler.cancel(true);
 			handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
 			setProgressBarIndeterminateVisibility(true);
 		}
