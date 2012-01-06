@@ -306,11 +306,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			@Override
 			public void run() {
 				if (0 < (change & Session.RESULT_CHANGE)) {
-					addPathToMap(session.getResult().getWay());
+					if (session.getResult() == null) {
+						wayOverlay.clear();
+					} else {
+						addPathToMap(session.getResult().getWay());
+					}
 				}
 				if (0 < (change & Session.MODEL_CHANGE)) {
-					if (0 == (change & Session.ADD_CHANGE))
-						wayOverlay.clear();
+					if (0 == (change & Session.ADD_CHANGE)) {
+						Edit edit = new ClearResultEdit(session);
+						edit.perform();
+					}
 					performRequest();
 				}
 			}
