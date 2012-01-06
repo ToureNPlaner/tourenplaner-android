@@ -89,17 +89,20 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		cl.add(new Constraint("Constraint5", "boolean", 0.0, 1.0));
 		final Node node = new Node(markerName, geoPoint, cl);
 
-
-		Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
-		edit.perform();
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
+
+		// Important! Try to perform the NNS Search before, notifying any one else about the change.
+		// else through HTTP pipelining the NNS might be performed after the request!
 		((MapScreen) context).runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				((MapScreen) context).performNNSearch(node);
 			}
 		});
+
+		Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
+		edit.perform();
 		return true;
 	}
 
