@@ -31,7 +31,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private MapView mapView;
 	private ArrayWayOverlay wayOverlay;
 	private Session session;
-	public final static int REQUEST_CODE_MAP_SCREEN = 0;
+	public static final int REQUEST_NODEMODEL = 0;
+	public static final int REQUEST_NODE = 1;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 
@@ -169,7 +170,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.nodelist:
 				Intent myIntent = new Intent(this, NodelistScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
-				startActivityForResult(myIntent, REQUEST_CODE_MAP_SCREEN);
+				startActivityForResult(myIntent, REQUEST_NODEMODEL);
 				return true;
 			case R.id.reset:
 				if (handler != null) {
@@ -228,11 +229,15 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Edit edit;
 		switch (requestCode) {
-			case REQUEST_CODE_MAP_SCREEN:
-				edit = new ChangeNodeModelEdit(session, (NodeModel) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
-				edit.perform();
+			case REQUEST_NODEMODEL:
+				switch (resultCode) {
+					case RESULT_OK:
+						edit = new ChangeNodeModelEdit(session, (NodeModel) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
+						edit.perform();
+						break;
+				}
 				break;
-			case NodeOverlay.REQUEST_CODE_ITEM_OVERLAY:
+			case REQUEST_NODE:
 				switch (resultCode) {
 					case RESULT_OK:
 						edit = new UpdateNodeEdit(session, data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
@@ -241,6 +246,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					case EditNodeScreen.RESULT_DELETE:
 						edit = new RemoveNodeEdit(session, data.getExtras().getInt("index"));
 						edit.perform();
+						break;
 				}
 		}
 	}

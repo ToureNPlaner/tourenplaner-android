@@ -24,10 +24,12 @@ import java.io.Serializable;
 public class NodelistScreen extends ListActivity {
 	private NodeListAdapter adapter;
 	private Session session;
+	private boolean dirty;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
+		outState.putBoolean("dirty", dirty);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -40,6 +42,7 @@ public class NodelistScreen extends ListActivity {
 
 		if (savedInstanceState != null) {
 			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
+			dirty = savedInstanceState.getBoolean("dirty");
 		} else {
 			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
@@ -61,13 +64,11 @@ public class NodelistScreen extends ListActivity {
 			listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 				@Override
 				public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-					//if (view.getId() == R.id.serverListView) {
 					AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
 					contextMenu.setHeaderTitle(adapter.getItem(info.position).getName());
 					String[] menuItems = {"edit", "delete"};
 					for (int i = 0; i < menuItems.length; i++) {
 						contextMenu.add(Menu.NONE, i, i, menuItems[i]);
-						//  }
 					}
 				}
 			}
@@ -97,6 +98,7 @@ public class NodelistScreen extends ListActivity {
 					ListAdapter adapter = getListAdapter();
 					if (adapter instanceof NodeListAdapter) {
 						((NodeListAdapter) adapter).onDrop(from, to);
+						dirty = true;
 						getListView().invalidateViews();
 					}
 				}
@@ -189,10 +191,12 @@ public class NodelistScreen extends ListActivity {
 			case RESULT_OK:
 				edit = new UpdateNodeEdit(session, data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
 				edit.perform();
+				dirty = true;
 				break;
 			case EditNodeScreen.RESULT_DELETE:
 				edit = new RemoveNodeEdit(session, data.getExtras().getInt("index"));
 				edit.perform();
+				dirty = true;
 				break;
 		}
 	}
@@ -202,7 +206,7 @@ public class NodelistScreen extends ListActivity {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 			Intent data = new Intent();
 			data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel());
-			setResult(RESULT_OK, data);
+			setResult(dirty ? RESULT_OK : RESULT_CANCELED, data);
 		}
 		return super.onKeyDown(keyCode, event);
 	}
