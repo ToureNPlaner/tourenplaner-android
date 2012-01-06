@@ -9,78 +9,79 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class AlgorithmScreen extends Activity {
+	private Session session;
 
-    private Session session;
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(Session.IDENTIFIER, session);
+		super.onSaveInstanceState(outState);
+	}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(Session.IDENTIFIER, session);
-        super.onSaveInstanceState(outState);
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.algorithmscreen);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.algorithmscreen);
+		// If we get created for the first time we get our data from the intent
+		if (savedInstanceState != null) {
+			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
+		} else {
+			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
+		}
 
-        // If we get created for the first time we get our data from the intent
-        if(savedInstanceState != null) {
-            session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-        } else {
-            session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-        }
+		setupListView();
+		setupBillingButton();
+	}
 
-        setupListView();
-        setupBillingButton();
-    }
+	private void setupListView() {
+		ListView listView = (ListView) findViewById(R.id.listViewAlgorithm);
+		ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
+		for (AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
+			if (!alg.isHidden())
+				algorithms.add(alg);
+		}
 
-    private void setupListView() {
-        ListView listView = (ListView) findViewById(R.id.listViewAlgorithm);
-        ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
-        for(AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
-            if(!alg.isHidden())
-                algorithms.add(alg);
-        }
-        ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this,
-                android.R.layout.simple_list_item_1, algorithms);
-        listView.setAdapter(adapter);
+		Collections.sort(algorithms);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                session.setSelectedAlgorithm((AlgorithmInfo) adapterView.getItemAtPosition(i));
-                Intent myIntent = new Intent(view.getContext(),
-                            MapScreen.class);
-                myIntent.putExtra(Session.IDENTIFIER,session);
-                startActivity(myIntent);
-            }
-        });
-    }
+		ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this,
+				android.R.layout.simple_list_item_1, algorithms);
+		listView.setAdapter(adapter);
 
-    private void setupBillingButton() {
-        Button btnBilling = (Button) findViewById(R.id.btnBilling);
-        if(session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
-            btnBilling.setVisibility(View.GONE);
-        } else {
-            btnBilling.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // generates an intent from the class BillingScreen
-                    Intent myIntent = new Intent(view.getContext(),
-                            BillingScreen.class);
-                    startActivity(myIntent);
-                }
-            });
-        }
-    }
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				session.setSelectedAlgorithm((AlgorithmInfo) adapterView.getItemAtPosition(i));
+				Intent myIntent = new Intent(view.getContext(), MapScreen.class);
+				myIntent.putExtra(Session.IDENTIFIER, session);
+				startActivity(myIntent);
+			}
+		});
+	}
+
+	private void setupBillingButton() {
+		Button btnBilling = (Button) findViewById(R.id.btnBilling);
+		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
+			btnBilling.setVisibility(View.GONE);
+		} else {
+			btnBilling.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					// generates an intent from the class BillingScreen
+					Intent myIntent = new Intent(view.getContext(), BillingScreen.class);
+					startActivity(myIntent);
+				}
+			});
+		}
+	}
 
 }
