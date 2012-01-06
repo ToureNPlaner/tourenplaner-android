@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!--ToureNPlaner-->
-	<string name="app_name">ToureNPlaner</string>
-	
-	<!--serverscreen-->
-   	<string name="choose_server_screen">Choose a server</string>
-	<string name="add_server">Add server</string>
-   
-	<!--loginscreen-->
-	<string name="login_screen">enter your credentials</string>
-	<string name="email">e-mail</string>
-	<string name="password">password</string>
-	<string name="login">login</string>
-	<string name="save_credentials">save credentials</string>
-	
-	<!--algorithmscreen-->
-	 <string name="choose_algorithmn_screen">Choose an algorithmn</string>
-	 <string name="billing">billing</string>
-	
-	<!--mapscreen-->
-	<string name="map_screen">mapscreen</string>
-	
-	<!--menu-->
-	<string name="nodelist">nodelist</string>
-	<string name="resultlist">resultlist</string>
-	<string name="calculate">calculate</string>
-	<string name="yourlocation">your location</string>
-		
-	<!-- editnodescreen -->
-	<string name="save">save</string>
-	<string name="constraints">constraints</string>
-	<string name="name">name</string>
-	
+    <!--ToureNPlaner-->
+    <string name="app_name">ToureNPlaner</string>
 
-	<!--constraints-->
-	<string name="type">type</string>
-	<string name="value">value</string>
+    <!--serverscreen-->
+    <string name="choose_server_screen">Choose a server</string>
+    <string name="add_server">Add server</string>
 
-	<!--various-->
-	<string name="connecting">connecting</string>
+    <!--loginscreen-->
+    <string name="login_screen">enter your credentials</string>
+    <string name="email">e-mail</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="save_credentials">save credentials</string>
+
+    <!--algorithmscreen-->
+    <string name="choose_algorithmn_screen">Choose an algorithmn</string>
+    <string name="billing">billing</string>
+
+    <!--mapscreen-->
+    <string name="map_screen">mapscreen</string>
+
+    <!--menu-->
+    <string name="nodelist">nodelist</string>
+    <string name="resultlist">resultlist</string>
+    <string name="calculate">calculate</string>
+    <string name="yourlocation">your location</string>
+
+    <!-- editnodescreen -->
+    <string name="save">save</string>
+    <string name="constraints">constraints</string>
+    <string name="name">name</string>
+
+
+    <!--constraints-->
+    <string name="type">type</string>
+    <string name="value">value</string>
+
+    <!--various-->
+    <string name="connecting">connecting</string>
     <string name="new_string">new</string>
-	<string name="ok">ok</string>
-	<string name="yes">yes</string>
-	<string name="no">no</string>
-	<string name="cancel">cancel</string>
-	<string name="back">back</string>
-	<string name="delete">delete</string>
-	
+    <string name="ok">ok</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="cancel">cancel</string>
+    <string name="back">back</string>
+    <string name="delete">delete</string>
+    <string name="edit">edit</string>
+
 </resources>

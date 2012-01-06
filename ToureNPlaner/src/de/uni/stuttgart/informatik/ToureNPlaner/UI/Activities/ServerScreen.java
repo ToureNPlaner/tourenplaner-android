@@ -12,8 +12,8 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.ConnectionHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
@@ -27,224 +27,239 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ServerScreen extends FragmentActivity implements Observer {
-    private static final String SERVERLIST_FILENAME = "serverlist";
-    private ArrayAdapter<String> adapter;
-    private ServerInfoHandler handler;
-    private ArrayList<String> servers;
+	private static final String SERVERLIST_FILENAME = "serverlist";
+	private ArrayAdapter<String> adapter;
+	private ServerInfoHandler handler;
+	private ArrayList<String> servers;
 
-    public static class ConnectionProgressDialog extends MyProgressDialog {
-        public static ConnectionProgressDialog newInstance(String title, String message) {
-            return (ConnectionProgressDialog) MyProgressDialog.newInstance(new ConnectionProgressDialog(), title, message);
-        }
+	public static class ConnectionProgressDialog extends MyProgressDialog {
+		static final String IDENTIFIER = "connecting";
 
-        @Override
-        public void onCancel(DialogInterface dialog) {
-            ((ServerScreen) getActivity()).cancelConnection();
-        }
-    }
+		public static ConnectionProgressDialog newInstance(String title, String message) {
+			return (ConnectionProgressDialog) MyProgressDialog.newInstance(new ConnectionProgressDialog(), title, message);
+		}
 
-    public static class EditDialog extends TextDialog {
-        public static EditDialog newInstance(String title, String content, int id) {
-            EditDialog dialog = (EditDialog) TextDialog.newInstance(new EditDialog(), title, content);
-            dialog.getArguments().putInt("id", id);
-            return dialog;
-        }
+		@Override
+		public void onCancel(DialogInterface dialog) {
+			((ServerScreen) getActivity()).cancelConnection();
+		}
+	}
 
-        @Override
-        public void doPositiveClick() {
-            ((ServerScreen)getActivity()).editServer(getArguments().getInt("id"),getInputField().getText().toString());
-        }
+	public static class EditDialog extends TextDialog {
+		static final String IDENTIFIER = "edit";
 
-        @Override
-        public void doNegativeClick() {}
-    }
+		public static EditDialog newInstance(String title, String content, int id) {
+			EditDialog dialog = (EditDialog) TextDialog.newInstance(new EditDialog(), title, content);
+			dialog.getArguments().putInt("id", id);
+			return dialog;
+		}
 
-    public static class NewDialog extends TextDialog {
-        public static NewDialog newInstance(String title, String content) {
-            return (NewDialog) TextDialog.newInstance(new NewDialog(), title, content);
-        }
+		@Override
+		public void doPositiveClick() {
+			((ServerScreen) getActivity()).editServer(getArguments().getInt("id"), getInputField().getText().toString());
+		}
 
-        @Override
-        public void doPositiveClick() {
-            ((ServerScreen)getActivity()).newServer(getInputField().getText().toString());
-        }
+		@Override
+		public void doNegativeClick() {
+		}
+	}
 
-        @Override
-        public void doNegativeClick() {}
-    }
-    
-    
-    private void editServer(int id, String server) {
-        servers.set(id, server);
-        Collections.sort(servers);
-        adapter.notifyDataSetChanged();
-        saveServerList();
-    }
-    
-    private void newServer(String server) {
-        servers.add(server);
-        Collections.sort(servers);
-        adapter.notifyDataSetChanged();
-        saveServerList();
-    }
+	public static class NewDialog extends TextDialog {
+		static final String IDENTIFIER = "new";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.serverscreen);
+		public static NewDialog newInstance(String title, String content) {
+			return (NewDialog) TextDialog.newInstance(new NewDialog(), title, content);
+		}
 
-        loadServerList();
+		@Override
+		public void doPositiveClick() {
+			((ServerScreen) getActivity()).newServer(getInputField().getText().toString());
+		}
 
-        setupListView();
-        setupButtons();
+		@Override
+		public void doNegativeClick() {
+		}
+	}
 
-        initializeHandler();
-    }
 
-    private void saveServerList() {
-        try {
-            FileOutputStream outputStream = openFileOutput(SERVERLIST_FILENAME, MODE_PRIVATE);
-            try {
-                ObjectOutputStream out = new ObjectOutputStream(outputStream);
-                out.writeObject(servers);
-            } finally {
-                outputStream.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	private void editServer(int id, String server) {
+		servers.set(id, server);
+		Collections.sort(servers);
+		adapter.notifyDataSetChanged();
+		saveServerList();
+	}
 
-    @SuppressWarnings("unchecked")
-    private void loadServerList() {
-        try {
-            FileInputStream inputStream = openFileInput(SERVERLIST_FILENAME);
-            try {
-                ObjectInputStream in = new ObjectInputStream(inputStream);
-                servers = (ArrayList<String>) in.readObject();
-                Collections.sort(servers);
-            } finally {
-                inputStream.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            servers = new ArrayList<String>();
-        }
-    }
+	private void newServer(String server) {
+		servers.add(server);
+		Collections.sort(servers);
+		adapter.notifyDataSetChanged();
+		saveServerList();
+	}
 
-    private void setupButtons() {
-        setupAddButton();
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.serverscreen);
 
-    private void initializeHandler() {
-        handler = (ServerInfoHandler) getLastCustomNonConfigurationInstance();
+		loadServerList();
 
-        if (handler != null)
-            handler.setListener(this);
-        else {
-            MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
-            if (dialog != null)
-                dialog.dismiss();
-        }
-    }
+		setupListView();
+		setupButtons();
 
-    private void setupAddButton() {
-        Button btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NewDialog.newInstance("New","").show(getSupportFragmentManager(),"new");
-            }
-        });
-    }
+		initializeHandler();
+	}
 
-    private void setupListView() {
-        ListView listView = (ListView) findViewById(R.id.serverListView);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, servers);
-        listView.setAdapter(adapter);
+	private void saveServerList() {
+		try {
+			FileOutputStream outputStream = openFileOutput(SERVERLIST_FILENAME, MODE_PRIVATE);
+			try {
+				ObjectOutputStream out = new ObjectOutputStream(outputStream);
+				out.writeObject(servers);
+			} finally {
+				outputStream.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-        listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-                if (view.getId() == R.id.serverListView) {
-                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
-                    contextMenu.setHeaderTitle(servers.get(info.position));
-                    String[] menuItems = {"edit", "delete"};
-                    for (int i = 0; i < menuItems.length; i++) {
-                        contextMenu.add(Menu.NONE, i, i, menuItems[i]);
-                    }
-                }
-            }
-        });
+	@SuppressWarnings("unchecked")
+	private void loadServerList() {
+		try {
+			FileInputStream inputStream = openFileInput(SERVERLIST_FILENAME);
+			try {
+				ObjectInputStream in = new ObjectInputStream(inputStream);
+				servers = (ArrayList<String>) in.readObject();
+				Collections.sort(servers);
+			} finally {
+				inputStream.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			servers = new ArrayList<String>();
+		}
+	}
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String url = "http://" + adapterView.getItemAtPosition(i);
-                serverSelected(url);
-            }
-        });
-    }
+	private void setupButtons() {
+		setupAddButton();
+	}
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case 0: // edit
-                EditDialog.newInstance("Choose",servers.get(info.position),info.position).show(getSupportFragmentManager(),"edit");
-                break;
-            case 1: // delete
-                servers.remove(info.position);
-                adapter.notifyDataSetChanged();
-                saveServerList();
-                break;
-        }
-        return true;
-    }
+	private void initializeHandler() {
+		handler = (ServerInfoHandler) getLastCustomNonConfigurationInstance();
 
-    private void cancelConnection() {
-        handler.cancel(true);
-        handler = null;
-    }
+		if (handler != null)
+			handler.setListener(this);
+		else {
+			MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
+					.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
+			if (dialog != null)
+				dialog.dismiss();
+		}
+	}
 
-    @Override
-    public void onCompleted(ConnectionHandler caller, Object object) {
-        handler = null;
-        MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
-        dialog.dismiss();
-        Session session = (Session) object;
-        Intent myIntent;
-        if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
-            myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
-        } else {
-            myIntent = new Intent(getBaseContext(), LoginScreen.class);
-        }
-        myIntent.putExtra(Session.IDENTIFIER, session);
-        startActivity(myIntent);
-    }
+	private void setupAddButton() {
+		Button btnAdd = (Button) findViewById(R.id.btnAdd);
+		btnAdd.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				NewDialog.newInstance(getResources().getString(R.string.new_string), "")
+						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
+			}
+		});
+	}
 
-    @Override
-    public void onError(ConnectionHandler caller, Object object) {
-        handler = null;
-        MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("connecting");
-        dialog.dismiss();
-        Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
-    }
+	private void setupListView() {
+		ListView listView = (ListView) findViewById(R.id.serverListView);
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, servers);
+		listView.setAdapter(adapter);
 
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return handler;
-    }
+		listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+			@Override
+			public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+				if (view.getId() == R.id.serverListView) {
+					AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
+					contextMenu.setHeaderTitle(servers.get(info.position));
+					String[] menuItems = {getResources().getString(R.string.edit), getResources().getString(R.string.delete)};
+					for (int i = 0; i < menuItems.length; i++) {
+						contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+					}
+				}
+			}
+		});
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				String url = "http://" + adapterView.getItemAtPosition(i);
+				serverSelected(url);
+			}
+		});
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+			case 0: // edit
+				EditDialog.newInstance(getResources().getString(R.string.choose_server_screen),
+						servers.get(info.position), info.position)
+						.show(getSupportFragmentManager(), EditDialog.IDENTIFIER);
+				break;
+			case 1: // delete
+				servers.remove(info.position);
+				adapter.notifyDataSetChanged();
+				saveServerList();
+				break;
+		}
+		return true;
+	}
+
+	private void cancelConnection() {
+		handler.cancel(true);
+		handler = null;
+	}
+
+	@Override
+	public void onCompleted(ConnectionHandler caller, Object object) {
+		handler = null;
+		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
+				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
+		dialog.dismiss();
+		Session session = (Session) object;
+		Intent myIntent;
+		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
+			myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
+		} else {
+			myIntent = new Intent(getBaseContext(), LoginScreen.class);
+		}
+		myIntent.putExtra(Session.IDENTIFIER, session);
+		startActivity(myIntent);
+	}
+
+	@Override
+	public void onError(ConnectionHandler caller, Object object) {
+		handler = null;
+		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
+				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
+		dialog.dismiss();
+		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		return handler;
+	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if(handler != null)
+		if (handler != null)
 			handler.setListener(null);
 	}
 
 	private void serverSelected(String url) {
-        ConnectionProgressDialog.newInstance("Connecting", url).show(getSupportFragmentManager(), "connecting");
-        handler = Session.createSession(url, this);
-    }
+		ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
+				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
+		handler = Session.createSession(url, this);
+	}
 }
