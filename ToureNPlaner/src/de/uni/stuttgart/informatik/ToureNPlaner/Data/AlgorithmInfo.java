@@ -16,6 +16,9 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private boolean sourceIsTarget;
 	private boolean isHidden;
 
+	private AlgorithmInfo() {
+	}
+
 	@Override
 	public String toString() {
 		return name;
@@ -54,7 +57,6 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 		if (object.isNull("pointconstraints")) {
 			info.point_constraints = new ArrayList<Constraint>();
-			info.point_constraints.add(new Constraint("Price", "price", 0.0, 2000.0));
 		} else {
 			JSONArray array = object.getJSONArray("pointconstraints");
 			info.point_constraints = new ArrayList<Constraint>(array.length());
@@ -71,5 +73,15 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 			return 0;
 
 		return name.compareTo(another.name);
+	}
+
+	public static AlgorithmInfo createMock() {
+		AlgorithmInfo info = new AlgorithmInfo();
+		info.name = "Mock";
+		info.version = "";
+		info.urlsuffix = "";
+		info.point_constraints = new ArrayList<Constraint>();
+		info.point_constraints.add(new Constraint("Price", "price", 0.0, 2000.0));
+		return info;
 	}
 }

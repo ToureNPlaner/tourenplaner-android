@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.ConnectionHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
@@ -232,6 +233,9 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		} else {
 			myIntent = new Intent(getBaseContext(), LoginScreen.class);
 		}
+
+		session.getServerInfo().getAlgorithms().add(AlgorithmInfo.createMock());
+
 		myIntent.putExtra(Session.IDENTIFIER, session);
 		startActivity(myIntent);
 	}
