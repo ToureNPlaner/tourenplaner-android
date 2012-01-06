@@ -244,7 +244,8 @@ private String constraintValue;
 				input.setInputType(InputType.TYPE_CLASS_NUMBER);
 			}
 			if(constraintType.equals("float")||constraintType.equals("meter")||constraintType.equals("price")){
-				input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		
 			}
 			builder.setView(input);
 			builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
@@ -271,7 +272,7 @@ private String constraintValue;
 		for (int i = 0; i < str.length(); i++) {
 			c = str.charAt(i);
 			
-          if (!Character.isDigit(c)&& '.'!=c && ','!=c)
+          if (!Character.isDigit(c)&& '.'!=c)
               return false;
       }
 
