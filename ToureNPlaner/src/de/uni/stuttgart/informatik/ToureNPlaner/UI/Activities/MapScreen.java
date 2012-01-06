@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.view.*;
@@ -298,7 +299,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
+		// Only disable the button, if we don't have an action bar. Version < HONEYCOMB
+		if (Build.VERSION.SDK_INT < 11) {
+			menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
+		}
 		return true;
 	}
 
