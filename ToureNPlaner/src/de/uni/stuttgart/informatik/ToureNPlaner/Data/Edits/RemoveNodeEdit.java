@@ -13,6 +13,6 @@ public class RemoveNodeEdit extends Edit {
 	@Override
 	public void perform() {
 		session.getNodeModel().remove(index);
-		session.notifyChangeListerners(Session.Change.MODEL_CHANGE);
+		session.notifyChangeListerners(Session.MODEL_CHANGE);
 	}
 }

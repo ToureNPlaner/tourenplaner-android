@@ -15,7 +15,7 @@ import android.view.HapticFeedbackConstants;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.AddNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateGeoPointEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNNSEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -192,7 +192,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
 		gpsMarker.setPoint(geoPoint);
 		if (useGps && !list.isEmpty()) {
-			Edit edit = new UpdateGeoPointEdit(session, session.getNodeModel().get(0), geoPoint);
+			Edit edit = new UpdateNNSEdit(session, session.getNodeModel().get(0), geoPoint);
 			edit.perform();
 		}
 	}
@@ -212,8 +212,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 
 	@Override
-	public void onChange(Session.Change change) {
-		if (Session.Change.MODEL_CHANGE == change)
+	public void onChange(int change) {
+		if (0 < ((Session.MODEL_CHANGE | Session.NNS_CHANGE) & change))
 			loadFromModel();
 	}
 }

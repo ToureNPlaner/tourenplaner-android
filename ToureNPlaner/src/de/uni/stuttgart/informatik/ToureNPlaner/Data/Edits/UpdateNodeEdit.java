@@ -16,6 +16,6 @@ public class UpdateNodeEdit extends Edit {
 	@Override
 	public void perform() {
 		session.getNodeModel();
-		session.notifyChangeListerners(Session.Change.MODEL_CHANGE);
+		session.notifyChangeListerners(Session.MODEL_CHANGE);
 	}
 }

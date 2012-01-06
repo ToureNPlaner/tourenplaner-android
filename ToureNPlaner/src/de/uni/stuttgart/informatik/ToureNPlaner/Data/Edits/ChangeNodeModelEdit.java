@@ -13,6 +13,6 @@ public class ChangeNodeModelEdit extends Edit {
 	@Override
 	public void perform() {
 		session.setNodeModel(nodeModel);
-		session.notifyChangeListerners(Session.Change.MODEL_CHANGE);
+		session.notifyChangeListerners(Session.MODEL_CHANGE);
 	}
 }

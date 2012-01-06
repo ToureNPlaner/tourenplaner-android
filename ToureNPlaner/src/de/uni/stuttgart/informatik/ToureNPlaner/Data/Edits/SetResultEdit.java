@@ -14,6 +14,6 @@ public class SetResultEdit extends Edit {
 	@Override
 	public void perform() {
 		session.setResult(result);
-		session.notifyChangeListerners(Session.Change.RESULT_CHANGE);
+		session.notifyChangeListerners(Session.RESULT_CHANGE);
 	}
 }

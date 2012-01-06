@@ -56,7 +56,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private final Observer nnsListener = new Observer() {
 		@Override
 		public void onCompleted(ConnectionHandler caller, Object object) {
-			Edit edit = new UpdateGeoPointEdit(session, ((RequestNN) caller).getNode(), ((Node) object).getGeoPoint());
+			Edit edit = new UpdateNNSEdit(session, ((RequestNN) caller).getNode(), ((Node) object).getGeoPoint());
 			edit.perform();
 			requestList.remove((RequestNN) caller);
 		}
@@ -301,18 +301,16 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
-	public void onChange(final Session.Change change) {
+	public void onChange(final int change) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				switch (change) {
-					case RESULT_CHANGE:
-						addPathToMap(session.getResult().getWay());
-						break;
-					case MODEL_CHANGE:
-						wayOverlay.clear();
-						performRequest();
-						break;
+				if (0 < (change & Session.RESULT_CHANGE)) {
+					addPathToMap(session.getResult().getWay());
+				}
+				if (0 < (change & Session.MODEL_CHANGE)) {
+					wayOverlay.clear();
+					performRequest();
 				}
 			}
 		});

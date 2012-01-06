@@ -142,13 +142,12 @@ public class Session implements Serializable {
 		return null;
 	}
 
-	public static enum Change {
-		MODEL_CHANGE,
-		RESULT_CHANGE,
-	}
+	public final static int MODEL_CHANGE = 1;
+	public final static int RESULT_CHANGE = 2;
+	public final static int NNS_CHANGE = 4;
 
 	public interface Listener {
-		void onChange(Change change);
+		void onChange(int change);
 	}
 
 	private transient ArrayList<Listener> listeners = new ArrayList<Listener>();
@@ -168,7 +167,7 @@ public class Session implements Serializable {
 		listeners.remove(listener);
 	}
 
-	public void notifyChangeListerners(final Change change) {
+	public void notifyChangeListerners(final int change) {
 		for (int i = 0; i < listeners.size(); i++) {
 			listeners.get(i).onChange(change);
 		}
@@ -176,13 +175,11 @@ public class Session implements Serializable {
 			@Override
 			public void run() {
 				synchronized (Session.class) {
-					switch (change) {
-						case MODEL_CHANGE:
-							safeNodeModel();
-							break;
-						case RESULT_CHANGE:
-							safeResult();
-							break;
+					if (0 < (change & MODEL_CHANGE)) {
+						safeNodeModel();
+					}
+					if (0 < (change & RESULT_CHANGE)) {
+						safeResult();
 					}
 				}
 			}
