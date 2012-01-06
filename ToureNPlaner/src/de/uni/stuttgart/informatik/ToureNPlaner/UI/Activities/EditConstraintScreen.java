@@ -9,8 +9,10 @@ import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -87,8 +89,10 @@ public class EditConstraintScreen extends Activity{
 			final SeekBar seekbar =  (SeekBar) findViewById(R.id.editconstraintseekBar);
 			
     		if(constraintType.equals("float")||constraintType.equals("price")){
+    			etValue.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				divisionFactor = 100;
 			}else{
+				etValue.setInputType(InputType.TYPE_CLASS_NUMBER);
 				divisionFactor=1;
 			}
 
@@ -150,6 +154,7 @@ public class EditConstraintScreen extends Activity{
 					
 				}});
 			
+						
 			// -----------------btnSave-----------------------
 			btnReturn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
