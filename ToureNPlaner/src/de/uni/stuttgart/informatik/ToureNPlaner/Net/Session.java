@@ -89,7 +89,7 @@ public class Session implements Serializable {
 	private void safe(Object o, String name) {
 		try {
 			File dir = new File(openCacheDir(), uuid.toString());
-			dir.mkdir();
+			dir.mkdirs();
 
 			FileOutputStream outputStream = new FileOutputStream(new File(dir, name));
 			ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new BufferedOutputStream(outputStream)));
