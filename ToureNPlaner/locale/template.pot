@@ -1,0 +1,131 @@
+# Translations template for PROJECT.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2012-01-06 16:42+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "app_name"
+msgid "ToureNPlaner"
+msgstr ""
+
+msgctxt "choose_server_screen"
+msgid "Choose a server"
+msgstr ""
+
+msgctxt "add_server"
+msgid "Add server"
+msgstr ""
+
+msgctxt "login_screen"
+msgid "enter your credentials"
+msgstr ""
+
+msgctxt "email"
+msgid "e-mail"
+msgstr ""
+
+msgctxt "password"
+msgid "password"
+msgstr ""
+
+msgctxt "login"
+msgid "login"
+msgstr ""
+
+msgctxt "save_credentials"
+msgid "save credentials"
+msgstr ""
+
+msgctxt "choose_algorithmn_screen"
+msgid "Choose an algorithmn"
+msgstr ""
+
+msgctxt "billing"
+msgid "billing"
+msgstr ""
+
+msgctxt "map_screen"
+msgid "mapscreen"
+msgstr ""
+
+msgctxt "nodelist"
+msgid "nodelist"
+msgstr ""
+
+msgctxt "resultlist"
+msgid "resultlist"
+msgstr ""
+
+msgctxt "calculate"
+msgid "calculate"
+msgstr ""
+
+msgctxt "yourlocation"
+msgid "your location"
+msgstr ""
+
+msgctxt "save"
+msgid "save"
+msgstr ""
+
+msgctxt "constraints"
+msgid "constraints"
+msgstr ""
+
+msgctxt "name"
+msgid "name"
+msgstr ""
+
+msgctxt "type"
+msgid "type"
+msgstr ""
+
+msgctxt "value"
+msgid "value"
+msgstr ""
+
+msgctxt "connecting"
+msgid "connecting"
+msgstr ""
+
+msgctxt "new_string"
+msgid "new"
+msgstr ""
+
+msgctxt "ok"
+msgid "ok"
+msgstr ""
+
+msgctxt "yes"
+msgid "yes"
+msgstr ""
+
+msgctxt "no"
+msgid "no"
+msgstr ""
+
+msgctxt "cancel"
+msgid "cancel"
+msgstr ""
+
+msgctxt "back"
+msgid "back"
+msgstr ""
+
+msgctxt "delete"
+msgid "delete"
+msgstr ""
+
