@@ -20,7 +20,15 @@ public class Constraint implements Serializable {
         this.maximumValue = maximumValue;
     }
     
-   	public Object getValue() {
+   	public Constraint(Constraint constraint) {
+   	   this.name = constraint.name;
+       this.type = constraint.type;
+
+       this.minimumValue = constraint.minimumValue;
+       this.maximumValue = constraint.maximumValue;
+	}
+
+	public Object getValue() {
 		return value;
 	}
 
