@@ -54,6 +54,7 @@ public class AlgorithmInfo implements Serializable, Comparable {
 
 		if (object.isNull("pointconstraints")) {
 			info.point_constraints = new ArrayList<Constraint>();
+			info.point_constraints.add(new Constraint("Price", "price", 0.0, 2000.0));
 		} else {
 			JSONArray array = object.getJSONArray("pointconstraints");
 			info.point_constraints = new ArrayList<Constraint>(array.length());

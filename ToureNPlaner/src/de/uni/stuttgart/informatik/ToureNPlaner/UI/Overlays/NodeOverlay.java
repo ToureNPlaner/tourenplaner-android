@@ -11,7 +11,9 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.HapticFeedbackConstants;
+import android.widget.EditText;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.AddNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
@@ -37,7 +39,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public static final int REQUEST_CODE_ITEM_OVERLAY = 1;
 	private final static int GPS_RADIUS = 10;
 	private OverlayItem gpsMarker;
-
+private String constraintValue;
 	private boolean useGps = false;
 
 	private GpsDrawable gpsDrawable;
@@ -78,15 +80,14 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		String markerName = String.valueOf(session.getNodeModel().size() + 1);
-		//final Node node = Node.createNode(markerName, geoPoint);
-
-		//  temporary generated constraints for testing
-		ArrayList<Constraint> cl = new ArrayList<Constraint>();
-		cl.add(new Constraint("Constraint1", "integer", 0.0, 42.0));
-		cl.add(new Constraint("Constraint2", "meter", 0.0, 2000.0));
-		cl.add(new Constraint("Constraint3", "float", 0.0, 125.00));
-		cl.add(new Constraint("Constraint4", "price", 0.0, 512.00));
-		cl.add(new Constraint("Constraint5", "boolean", 0.0, 1.0));
+		 
+		
+		final ArrayList<Constraint> cl = new ArrayList<Constraint>();
+		 ArrayList<Constraint> tempcl = session.getSelectedAlgorithm().getPointConstraints();
+		for (int i = 0; i<session.getSelectedAlgorithm().getPointConstraints().size();i++){
+			cl.add(new Constraint(session.getSelectedAlgorithm().getPointConstraints().get(i)));
+		}
+	
 		final Node node = new Node(markerName, geoPoint, cl);
 
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -101,6 +102,15 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 			}
 		});
 
+		((MapScreen)context).runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i <cl.size() ;i++){
+				ConstraintDialog(cl.get(i).getName(),cl.get(i).getMinimumValue(),cl.get(i).getMaximumValue(),i,cl.get(i).getType());
+				}	
+				session.getNodeModel().getNodeVector().set(session.getNodeModel().size()-1,session.getNodeModel().getNodeVector().get(session.getNodeModel().size()-1));
+			}});
+		
 		Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
 		edit.perform();
 		return true;
@@ -218,5 +228,52 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public void onChange(int change) {
 		if (0 < ((Session.MODEL_CHANGE | Session.NNS_CHANGE) & change))
 			loadFromModel();
+	}
+	
+	public void ConstraintDialog(String title, final Object min, final Object max,final int constraintid,final String constraintType){
+		  AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setMessage("enter a value: ");
+			builder.setCancelable(true);
+			builder.setTitle(title);
+			// Set an EditText view to get user input 
+			final EditText input = new EditText(context);
+			String hintmessage = String.valueOf(min) + " .. " + String.valueOf(max);
+			input.setHint(hintmessage);
+			if(constraintType.equals("integer")||constraintType.equals("boolean")){
+				input.setInputType(InputType.TYPE_CLASS_NUMBER);
+			}
+			if(constraintType.equals("float")||constraintType.equals("meter")||constraintType.equals("price")){
+				input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			}
+			builder.setView(input);
+			builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							constraintValue  = input.getEditableText().toString();
+							Boolean isNumeric = checkForDigits(constraintValue);
+							if(constraintValue.equals("")||constraintValue == null){
+								constraintValue = String.valueOf(min);
+							}
+							
+							if(isNumeric){
+							session.getNodeModel().get(session.getNodeModel().size()-1).getConstraintList().get(constraintid).setValue(constraintValue);
+							}
+						}
+					});
+			builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					}).create().show();
+	    }
+	public boolean checkForDigits(String str){
+		char c ;
+		for (int i = 0; i < str.length(); i++) {
+			c = str.charAt(i);
+			
+          if (!Character.isDigit(c)&& '.'!=c && ','!=c)
+              return false;
+      }
+
+      return true;
 	}
 }
