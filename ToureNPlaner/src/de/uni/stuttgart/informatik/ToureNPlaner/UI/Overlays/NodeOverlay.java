@@ -59,6 +59,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		Paint p = new Paint();
 		p.setAntiAlias(true);
 		p.setColor(Color.YELLOW);
+		p.setAlpha(128);
 		gpsDrawable = new GpsDrawable(p);
 		gpsDrawable.setBounds(-GPS_RADIUS, -GPS_RADIUS, GPS_RADIUS, GPS_RADIUS);
 	}
