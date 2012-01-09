@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tests SYSTEM "project.dtd">
+<tests product="TestDataManager" team="05" version="1.0">
+<sequence created="09.01.2012" creator="Vivian" name="Project" number="0">
+<description>This is the root node of the project. It contains all test sequences and test cases.</description>
+<pre/>
+<sequence created="09.01.2012" creator="viiv" name="Unit Test" number="1">
+<description/>
+<pre/>
+</sequence>
+<sequence created="09.01.2012" creator="viiv" name="Integration Test" number="2">
+<description/>
+<pre/>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="System Test" number="3">
+<description/>
+<pre/>
+<sequence created="09.01.2012" creator="Vivian" name="Server_Screen" number="5">
+<description>Testfälle für den Server_Screen</description>
+<pre>Server_Screen wurde gestartet</pre>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="14" priority="C" title="gültigen Server hinzufügen">
+<description>fügt einen gültigen Server hinzu</description>
+<pre>Serverscreen ist gestartet</pre>
+<actions>- klicken auf "add server" -Serveradresse eingeben
+-bestätigen</actions>
+<post>Server wird in Serverliste angezeigt</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="16" priority="C" title="gültigen Server hinzufügen">
+<description>fügt einen gültigen Server hinzu</description>
+<pre>Serverscreen ist gestartet</pre>
+<actions>- klicken auf "add server" -Serveradresse eingeben
+-bestätigen</actions>
+<post>Server wird in Serverliste angezeigt</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="15" priority="C" title="ungültigen Server hinzufügen">
+<description>ungültigen Server hinzufügen</description>
+<pre>serverscreen ist gestartet			</pre>
+<actions>- klicken auf "add server" -Serveradresse eingeben
+-bestätigen</actions>
+<post>Server wird in Serverliste angezeigt</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="18" priority="C" title="Editiere 2. gültigen Server">
+<description/>
+<pre>Server in der Serverliste sind vorhanden		</pre>
+<actions>Editierdialog von 2. gültigen Server auswählen
+Server beliebig verändern	</actions>
+<post>Änderungen wurden übernommen</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="17" priority="C" title="Server löschen">
+<description>lösche 2. gültigen Server</description>
+<pre>Server in Serverliste vorhanden		</pre>
+<actions>lösche 2. gültigen Server in der Liste</actions>
+<post>Server ist nichtmehr in der Liste vorhanden</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="19" priority="C" title="ungültigen Server auswählen">
+<description/>
+<pre>ungültiger Server ist vorhanden			</pre>
+<actions>ungültigen Server auswählen	</actions>
+<post>entsprechende Fehlermeldung wurde angezeigt</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="20" priority="C" title="gültigen Server auswählen">
+<description/>
+<pre>gültiger Server ist vorhanden		</pre>
+<actions>gültigen Server auswählen</actions>
+<post>Verbindung zum Server ausgewählt und weiter auf loginScreen</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="22" priority="C" title="gültigen Server auswählen(keine Internet Verbindung)">
+<description/>
+<pre>gültiger Server ist vorhanden		</pre>
+<actions>gültigen Server auswählen</actions>
+<post>entsprechende Fehlermeldung anzeigen</post>
+<tags/>
+</testcase>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="Login_Screen" number="6">
+<description>Testfälle für den Login_Screen</description>
+<pre>Login_Screen ist gestartet</pre>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="23" priority="C" title="korrekte Anmeldedaten eingeben">
+<description/>
+<pre>Loginscreen</pre>
+<actions>-Eingabe von korrekten Anmeldedaten
+-bestätigen</actions>
+<post>eingeloggt auf Server und auf AlgorithmScreen</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="25" priority="C" title="korrekte Anmeldedaten eingeben(Eingabedaten Speichern)">
+<description>zusätzlich noch "Eingabedaten Speichern" aktivieren</description>
+<pre>Loginscreen</pre>
+<actions>-Eingabe von korrekten Anmeldedaten
+-bestätigen
+-Application schließen
+-Zurück zu loginscreen</actions>
+<post>Anmeldedaten wurden gespeichert</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="24" priority="C" title="inkorrekte Anmeldedaten eingeben">
+<description/>
+<pre>loginScreen	</pre>
+<actions>-Eingabe von inkorrekten Anmeldedaten
+-bestätigen</actions>
+<post>entsprechende Fehlermeldung wurde ausgegeben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="26" priority="C" title="inkorrekte Anmeldedaten eingeben(Eingabedaten Speichern)">
+<description>zusätzlich noch "Eingabedaten Speichern" aktivieren</description>
+<pre>loginScreen	</pre>
+<actions>-Eingabe von inkorrekten Anmeldedaten
+-bestätigen
+-Application schließen
+-Zurück zu loginscreen</actions>
+<post>Anmeldedaten wurden gespeichert</post>
+<tags/>
+</testcase>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="Algorithmn_Screen" number="7">
+<description>Testfälle für den Algorithmn_Screen</description>
+<pre/>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="27" priority="C" title="Auswahl eines Algorithmus">
+<description/>
+<pre>Algorithmen sind in der Liste vorhanden	</pre>
+<actions>Wähle ersten Algorithmus aus</actions>
+<post>weiterleitung auf Mapscreen</post>
+<tags/>
+</testcase>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="Map_Screen" number="8">
+<description>Testfälle für den Map_Screen</description>
+<pre>Map_Screen ist gestartet</pre>
+<sequence created="09.01.2012" creator="Vivian" name="Map_Screen_Menü" number="9">
+<description>Testfälle für das MapScreenMenü</description>
+<pre>Der Mapscreen ist gestartet</pre>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="46" priority="C" title="Nodelist">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle Nodelist aus</actions>
+<post>Nodelist wurde gestartet</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="47" priority="C" title="Berechnen">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle Berechnen aus</actions>
+<post>Algorithmus wird ausgeführt</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="48" priority="C" title="Löschen">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle Löschen aus</actions>
+<post>Alle Marker und Pfade sind gelöscht</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="49" priority="C" title="Ergebnisliste">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle Ergebnisliste  aus</actions>
+<post>Ergebnisliste wird gestartet</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="50" priority="C" title="Mein Standort">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle Mein Standort aus</actions>
+<post>Mapfocus wird auf GPSStandort zentriert</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="51" priority="C" title="Zurück">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle Zurück aus</actions>
+<post>Zurück auf AlgorithmScreen</post>
+<tags/>
+</testcase>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="Algorithmen ohne Constraints" number="31">
+<description/>
+<pre/>
+<testcase created="09.01.2012" creator="Vivian" effort="00:02" number="36" priority="C" title="10 Marker Hinzufügen ">
+<description/>
+<pre>mapscreen	</pre>
+<actions>füge willkührlich 10 Marker hinzu</actions>
+<post>10 Marker sind auf der Karte zu sehen</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="29" priority="C" title="Marker über &quot;onTab&quot; editieren">
+<description/>
+<pre>MapScreen
+Marker sind vorhanden</pre>
+<actions>-Klicke auf Marker 
+-Editiere Name von Marker 
+-speichern
+-zurück auf Mapscreen</actions>
+<post>Marker sollte neuen Wert gespeichert haben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="34" priority="C" title="marker über &quot;Nodelist&quot; editieren">
+<description/>
+<pre>Nodelist
+Marker sind vorhanden</pre>
+<actions>-Klicke auf Marker 
+-Editiere Name von Marker 
+-speichern
+-zurück zu Nodelist</actions>
+<post>Marker sollte neuen Wert gespeichert haben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="33" priority="C" title="ersten und letzen Marker löschen über &quot;onTab&quot;">
+<description/>
+<pre>marker sind vorhanden</pre>
+<actions>-klicke auf Marker 
+- klicke löschen</actions>
+<post>Marker ist nichtmehr vorhanden
+Marker ist nichtmehr auf der Karte sichtbar</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="35" priority="C" title="ersten und letzen Marker löschen über &quot;Nodelist&quot;">
+<description/>
+<pre>marker sind vorhanden</pre>
+<actions>-klicke auf Marker 
+- klicke löschen</actions>
+<post>Marker ist nichtmehr vorhanden
+Marker ist nichtmehr in der Liste vorhanden</post>
+<tags/>
+</testcase>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="Algorithmen mit Constraints" number="32">
+<description/>
+<pre/>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="28" priority="C" title="10 Marker Hinzufügen korrekte Constraints">
+<description/>
+<pre>mapscreen	</pre>
+<actions>füge willkührlich 10 Marker hinzu
+</actions>
+<post>10 Marker sind auf der Karte zu sehen</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="41" priority="C" title="Marker mit ungültigem Constraint">
+<description>ungültig im Sinne von falscher Datentyp</description>
+<pre>Mapscreen
+Algorithmus mit Constraints</pre>
+<actions>gebe einen ungültigen Wert für Constraints an</actions>
+<post>entsprechende Fehlermeldung wurde ausgegeben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="42" priority="C" title="Marker mit kleinerem Wert als minimal möglich">
+<description/>
+<pre>Mapscreen
+Algorithmus mit Constraints</pre>
+<actions>gebe einen kleineren Wert für den Constraints an als minimal möglich</actions>
+<post>entsprechende Fehlermeldung wurde ausgegeben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="43" priority="C" title="Marker mit größerem Wert als maximal möglich">
+<description/>
+<pre>Mapscreen
+Algorithmus mit Constraints</pre>
+<actions>gebe einen größeren Wert für den Constraints an als maximal möglich</actions>
+<post>entsprechende Fehlermeldung wurde ausgegeben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="53" priority="C" title="Marker mit leerem Wert">
+<description/>
+<pre>Mapscreen
+Algorithmus mit Constraints</pre>
+<actions>gebe keinen Wert ein und bestätige</actions>
+<post>Minimal wert wurde genommen
+</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="54" priority="C" title="Markerconstraint wird abgebrochen">
+<description/>
+<pre>Mapscreen
+Algorithmus mit Constraints</pre>
+<actions>Breche Constraint dialog ab</actions>
+<post>Minimal wert wurde genommen
+</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="37" priority="C" title="Marker über &quot;onTab&quot; editieren(Constraint)">
+<description/>
+<pre>MapScreen
+Marker sind vorhanden</pre>
+<actions>-Klicke auf Marker 
+-Editiere Name von Marker 
+-speichern
+-zurück auf Mapscreen</actions>
+<post>Marker sollte neuen Wert gespeichert haben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="38" priority="C" title="Marker über &quot;Nodelist&quot; editieren(Constraint)">
+<description/>
+<pre>Nodelist
+Marker sind vorhanden</pre>
+<actions>-Klicke auf Marker 
+-Editiere Name von Marker 
+-speichern
+-zurück zu Nodelist</actions>
+<post>Marker sollte neuen Wert gespeichert haben</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="39" priority="C" title="ersten und letzen Marker löschen über &quot;onTab&quot;">
+<description/>
+<pre>marker sind vorhanden</pre>
+<actions>-klicke auf Marker 
+- klicke löschen</actions>
+<post>Marker ist nichtmehr vorhanden
+Marker ist nichtmehr auf der Karte sichtbar</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="40" priority="C" title="ersten und letzen Marker löschen über &quot;Nodelist&quot;">
+<description/>
+<pre>marker sind vorhanden</pre>
+<actions>-klicke auf Marker 
+- klicke löschen</actions>
+<post>Marker ist nichtmehr vorhanden
+Marker ist nichtmehr in der Liste vorhanden</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="44" priority="C" title="Constraint von Marker Editieren über &quot;onTab&quot;">
+<description/>
+<pre>Marker vorhanden
+Algorithmen mit Constraints</pre>
+<actions>-klicke auf Marker 
+-klicke auf einen Constraint
+-verändere den Wert
+-gehe zurück
+-speichere </actions>
+<post>Wert wurde erfolgreich geändert</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="45" priority="C" title="Constraint von Marker Editieren über &quot;NodeList&quot;">
+<description/>
+<pre>Marker vorhanden
+Algorithmen mit Constraints</pre>
+<actions>-klicke auf Marker 
+-klicke auf einen Constraint
+-verändere den Wert
+-gehe zurück
+-speichere </actions>
+<post>Wert wurde erfolgreich geändert</post>
+<tags/>
+</testcase>
+</sequence>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="Nodelist_Screen" number="10">
+<description>Testfälle für den Nodelist_Screen</description>
+<pre>Nodelist_Screen ist gestartet</pre>
+<sequence created="09.01.2012" creator="Vivian" name="Nodelist_Screen_Menü" number="11">
+<description>Testfälle für das Nodelist_Screen_Menü</description>
+<pre>Nodelist_Screen ist gestartet</pre>
+<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="52" priority="C" title="Reihenfolge vertauschen">
+<description/>
+<pre>Menü ist aufgerufen</pre>
+<actions>Wähle reihenfolge umkehren aus</actions>
+<post>Marker sind in der Reihenfolge verschieden</post>
+<tags/>
+</testcase>
+</sequence>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="NodePreferences_Screen" number="12">
+<description>Testfälle für den NodePreferences_Screen</description>
+<pre>NodePreferences_Screen ist gestartet</pre>
+</sequence>
+<sequence created="09.01.2012" creator="Vivian" name="EditConstraint_Screen" number="13">
+<description>Testfälle für den EditConstraint_Screen</description>
+<pre>EditConstraint_Screen ist gestartet</pre>
+</sequence>
+</sequence>
+</sequence>
+<tsa name="Project" number="0" revId="0">
+<relatedsequence>0</relatedsequence>
+<tsa name="Unit Test" number="1" revId="1">
+<relatedsequence>1</relatedsequence>
+</tsa>
+<tsa name="Integration Test" number="2" revId="1">
+<relatedsequence>2</relatedsequence>
+</tsa>
+<tsa name="System Test" number="3" revId="1">
+<relatedsequence>3</relatedsequence>
+<tsa name="Server_Screen" number="5" revId="2">
+<relatedsequence>5</relatedsequence>
+</tsa>
+<tsa name="Login_Screen" number="6" revId="2">
+<relatedsequence>6</relatedsequence>
+</tsa>
+<tsa name="Algorithmn_Screen" number="7" revId="3">
+<relatedsequence>7</relatedsequence>
+</tsa>
+<tsa name="Map_Screen" number="8" revId="2">
+<relatedsequence>8</relatedsequence>
+<tsa name="Map_Screen_Menü" number="9" revId="3">
+<relatedsequence>9</relatedsequence>
+</tsa>
+<tsa name="Algorithmen ohne Constraints" number="31" revId="2">
+<relatedsequence>31</relatedsequence>
+</tsa>
+<tsa name="Algorithmen mit Constraints" number="32" revId="2">
+<relatedsequence>32</relatedsequence>
+</tsa>
+</tsa>
+<tsa name="Nodelist_Screen" number="10" revId="2">
+<relatedsequence>10</relatedsequence>
+<tsa name="Nodelist_Screen_Menü" number="11" revId="3">
+<relatedsequence>11</relatedsequence>
+</tsa>
+</tsa>
+<tsa name="NodePreferences_Screen" number="12" revId="2">
+<relatedsequence>12</relatedsequence>
+</tsa>
+<tsa name="EditConstraint_Screen" number="13" revId="2">
+<relatedsequence>13</relatedsequence>
+</tsa>
+<testrun enddate="09.01.2012 14:06" priority="E" startdate="09.01.2012 14:05" tester="Vivian">
+<description/>
+<sut/>
+<executedsequence>
+<sequence created="09.01.2012" creator="Vivian" name="System Test" number="3">
+<description/>
+<pre/>
+</sequence>
+<pre/>
+<executedsequence>
+<sequence created="09.01.2012" creator="Vivian" name="Server_Screen" number="5">
+<description>Testfälle für den Server_Screen</description>
+<pre>Server_Screen wurde gestartet</pre>
+</sequence>
+<pre/>
+<result actionok="Y" endtime="14:05" outcome="NA" postok="Y" preok="Y" starttime="14:06">
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="14" priority="C" title="gültigen Server hinzufügen">
+<description>fügt einen gültigen Server hinzu</description>
+<pre>Serverscreen ist gestartet</pre>
+<actions>- klicken auf "add server" -Serveradresse eingeben
+-bestätigen</actions>
+<post>Server wird in Serverliste angezeigt</post>
+<tags/>
+</testcase>
+<pre/>
+<actions/>
+<post/>
+<comment/>
+</result>
+</executedsequence>
+</executedsequence>
+</testrun>
+</tsa>
+</tsa>
+<author active="N" firstname="" lastname="viiv" uid="viiv">
+<extension name="standarduser" value="N"/>
+</author>
+<author active="Y" firstname="" lastname="Vivian" uid="Vivian">
+<extension name="standarduser" value="Y"/>
+</author>
+<extension name="maxid" value="54"/>
+</tests>
