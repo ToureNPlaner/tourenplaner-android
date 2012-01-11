@@ -129,6 +129,10 @@ Server beliebig verändern	</actions>
 <post>weiterleitung auf Mapscreen</post>
 <tags/>
 </testcase>
+<sequence created="09.01.2012" creator="Vivian" name="Billing" number="60">
+<description>Tesfälle für den BillingScreen</description>
+<pre/>
+</sequence>
 </sequence>
 <sequence created="09.01.2012" creator="Vivian" name="Map_Screen" number="8">
 <description>Testfälle für den Map_Screen</description>
@@ -152,7 +156,8 @@ Server beliebig verändern	</actions>
 </testcase>
 <testcase created="09.01.2012" creator="Vivian" effort="00:00" number="48" priority="C" title="Löschen">
 <description/>
-<pre>Menü ist aufgerufen</pre>
+<pre>Menü ist aufgerufen
+Marker sind vorhanden</pre>
 <actions>Wähle Löschen aus</actions>
 <post>Alle Marker und Pfade sind gelöscht</post>
 <tags/>
@@ -283,28 +288,6 @@ Algorithmus mit Constraints</pre>
 </post>
 <tags/>
 </testcase>
-<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="37" priority="C" title="Marker über &quot;onTab&quot; editieren(Constraint)">
-<description/>
-<pre>MapScreen
-Marker sind vorhanden</pre>
-<actions>-Klicke auf Marker 
--Editiere Name von Marker 
--speichern
--zurück auf Mapscreen</actions>
-<post>Marker sollte neuen Wert gespeichert haben</post>
-<tags/>
-</testcase>
-<testcase created="09.01.2012" creator="Vivian" effort="00:01" number="38" priority="C" title="Marker über &quot;Nodelist&quot; editieren(Constraint)">
-<description/>
-<pre>Nodelist
-Marker sind vorhanden</pre>
-<actions>-Klicke auf Marker 
--Editiere Name von Marker 
--speichern
--zurück zu Nodelist</actions>
-<post>Marker sollte neuen Wert gespeichert haben</post>
-<tags/>
-</testcase>
 <testcase created="09.01.2012" creator="Vivian" effort="00:01" number="39" priority="C" title="ersten und letzen Marker löschen über &quot;onTab&quot;">
 <description/>
 <pre>marker sind vorhanden</pre>
@@ -363,15 +346,58 @@ Algorithmen mit Constraints</pre>
 <tags/>
 </testcase>
 </sequence>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="55" priority="C" title="Drag&amp;Drop">
+<description/>
+<pre>Nodelist
+mehr als 1 Marker sind in der Liste vorhanden	</pre>
+<actions>Ändere die Position von zwei Markern durch Drag &amp; Drop(rechtes Icon in der Nodelist)</actions>
+<post>Die Position der beiden Ausgewählten Marker ist vertauscht</post>
+<tags/>
+</testcase>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="56" priority="C" title="Node auswählen">
+<description/>
+<pre>Nodelist
+mindestens ein Node ist vorhanden	</pre>
+<actions>klicken auf einen beliebigen Node</actions>
+<post>man kommt auf EditNode des entsprechenden Nodes</post>
+<tags/>
+</testcase>
 </sequence>
 <sequence created="09.01.2012" creator="Vivian" name="NodePreferences_Screen" number="12">
 <description>Testfälle für den NodePreferences_Screen</description>
 <pre>NodePreferences_Screen ist gestartet</pre>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="57" priority="C" title="Allgemein">
+<description/>
+<pre>NodePreference Screen	</pre>
+<actions>-</actions>
+<post>korrekte Werte werden angezeigt, keine Anzeigefehler, Constraints sind nur sichtbar wenn der Algorithmus diese bereitstellt</post>
+<tags/>
+</testcase>
 </sequence>
 <sequence created="09.01.2012" creator="Vivian" name="EditConstraint_Screen" number="13">
 <description>Testfälle für den EditConstraint_Screen</description>
 <pre>EditConstraint_Screen ist gestartet</pre>
+<testcase created="09.01.2012" creator="Vivian" effort="00:00" number="58" priority="C" title="Allgemein">
+<description/>
+<pre>NodePreference Screen	</pre>
+<actions>-</actions>
+<post>korrekte Werte werden angezeigt, keine Anzeigefehler.</post>
+<tags/>
+</testcase>
 </sequence>
+<testcase created="09.01.2012" creator="Vivian" effort="00:05" number="59" priority="C" title="Test Wiederholen(Querformat)">
+<description>Anzeigerelevante Komponenten auf Anzeigeprobleme bei Querformat überprüfen</description>
+<pre>Querformat</pre>
+<actions>-serverscreen
+-loginscreen
+-algorithmscreen
+-mapscreen
+-nodelistscreen
+-editnodescreen
+-editconstraintscreen</actions>
+<post>Alle Activities und Komponenten sind gut sichtbar und haben keine Anzeigefehler</post>
+<tags/>
+</testcase>
 </sequence>
 </sequence>
 <tsa name="Project" number="0" revId="0">
@@ -384,37 +410,40 @@ Algorithmen mit Constraints</pre>
 </tsa>
 <tsa name="System Test" number="3" revId="1">
 <relatedsequence>3</relatedsequence>
-<tsa name="Server_Screen" number="5" revId="2">
+<tsa name="Server_Screen" number="5" revId="1">
 <relatedsequence>5</relatedsequence>
 </tsa>
-<tsa name="Login_Screen" number="6" revId="2">
+<tsa name="Login_Screen" number="6" revId="1">
 <relatedsequence>6</relatedsequence>
 </tsa>
-<tsa name="Algorithmn_Screen" number="7" revId="3">
+<tsa name="Algorithmn_Screen" number="7" revId="1">
 <relatedsequence>7</relatedsequence>
+<tsa name="Billing" number="60" revId="2">
+<relatedsequence>60</relatedsequence>
 </tsa>
-<tsa name="Map_Screen" number="8" revId="2">
+</tsa>
+<tsa name="Map_Screen" number="8" revId="1">
 <relatedsequence>8</relatedsequence>
-<tsa name="Map_Screen_Menü" number="9" revId="3">
+<tsa name="Map_Screen_Menü" number="9" revId="1">
 <relatedsequence>9</relatedsequence>
 </tsa>
-<tsa name="Algorithmen ohne Constraints" number="31" revId="2">
+<tsa name="Algorithmen ohne Constraints" number="31" revId="1">
 <relatedsequence>31</relatedsequence>
 </tsa>
-<tsa name="Algorithmen mit Constraints" number="32" revId="2">
+<tsa name="Algorithmen mit Constraints" number="32" revId="1">
 <relatedsequence>32</relatedsequence>
 </tsa>
 </tsa>
-<tsa name="Nodelist_Screen" number="10" revId="2">
+<tsa name="Nodelist_Screen" number="10" revId="1">
 <relatedsequence>10</relatedsequence>
-<tsa name="Nodelist_Screen_Menü" number="11" revId="3">
+<tsa name="Nodelist_Screen_Menü" number="11" revId="1">
 <relatedsequence>11</relatedsequence>
 </tsa>
 </tsa>
-<tsa name="NodePreferences_Screen" number="12" revId="2">
+<tsa name="NodePreferences_Screen" number="12" revId="1">
 <relatedsequence>12</relatedsequence>
 </tsa>
-<tsa name="EditConstraint_Screen" number="13" revId="2">
+<tsa name="EditConstraint_Screen" number="13" revId="1">
 <relatedsequence>13</relatedsequence>
 </tsa>
 <testrun enddate="09.01.2012 14:06" priority="E" startdate="09.01.2012 14:05" tester="Vivian">
@@ -457,5 +486,5 @@ Algorithmen mit Constraints</pre>
 <author active="Y" firstname="" lastname="Vivian" uid="Vivian">
 <extension name="standarduser" value="Y"/>
 </author>
-<extension name="maxid" value="54"/>
+<extension name="maxid" value="60"/>
 </tests>
