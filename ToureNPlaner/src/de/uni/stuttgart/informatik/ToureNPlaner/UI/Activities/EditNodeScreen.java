@@ -30,14 +30,12 @@ public class EditNodeScreen extends Activity {
     public static final int RESULT_DELETE = RESULT_FIRST_USER;
 	private Bundle data;
 	private ConstraintListAdapter adapter;
-	
 	 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(Session.IDENTIFIER, session);
         super.onSaveInstanceState(outState);
     }
-
     void finishActivity() {
         Intent data = new Intent();
         data.putExtra("node", node);
@@ -45,23 +43,16 @@ public class EditNodeScreen extends Activity {
         setResult(RESULT_OK, data);
         finish();
     }
-
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nodepreferences);
-		
-		 // If we get created for the first time we get our data from the intent
+		// If we get created for the first time we get our data from the intent
         if(savedInstanceState != null) {
             session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
         } else {
             session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
         }
-       
-       
-      
-        
-		// generates the NodePreferences layout and fill content in the Textviews
 		try {
             if (savedInstanceState != null) {
 	            data = savedInstanceState;
@@ -70,48 +61,14 @@ public class EditNodeScreen extends Activity {
 	            data = getIntent().getExtras();
                 node = (Node) data.getSerializable("node");
             }
-            
-            //  TODO: uncomment when there are algorithms with constraints
-            //  setup ConstraintListview
-            
-            //  if(session.getSelectedAlgorithm().getPointConstraints().size() > 0){
-            setupListView();
-            //  }
-            
-			// -------------- get EditTexts --------------
-			final EditText etName = (EditText) findViewById(R.id.etName);
-			// -------------- get Buttons --------------
-			Button btnDelete = (Button) findViewById(R.id.btnDelete);
-			Button btnSave = (Button) findViewById(R.id.btnSave);
-			Button btnReturn = (Button) findViewById(R.id.btnReturn);
-			etName.setText(node.getName());
-			// -----------------btnSave-----------------------
-			btnSave.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					node.setName(etName.getText().toString());
-                    finishActivity();
-				}
-			});
-
-			btnReturn.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-                    setResult(RESULT_CANCELED, null);
-                    finish();
-				}
-			});
-			// -----------------btnDelete-----------------------
-			btnDelete.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-                    setResult(RESULT_DELETE, new Intent().putExtra("index",data.getInt("index", 0)));
-                    finish();
-				}
-			});
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}
+        if(session.getSelectedAlgorithm().getPointConstraints().size() > 0){
+            	setupListView();
+        }
+        setupButtons();
+    }    
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -122,15 +79,44 @@ public class EditNodeScreen extends Activity {
                 break;
         }
     }
+    
+    private void setupButtons(){
+    	// -------------- get EditTexts --------------
+		final EditText etName = (EditText) findViewById(R.id.etName);
+		// -------------- get Buttons --------------
+		Button btnDelete = (Button) findViewById(R.id.btnDelete);
+		Button btnSave = (Button) findViewById(R.id.btnSave);
+		Button btnReturn = (Button) findViewById(R.id.btnReturn);
+		etName.setText(node.getName());
+		// -----------------btnSave-----------------------
+		btnSave.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				node.setName(etName.getText().toString());
+                finishActivity();
+			}
+		});
+		btnReturn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+                setResult(RESULT_CANCELED, null);
+                finish();
+			}
+		});
+		// -----------------btnDelete-----------------------
+		btnDelete.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+                setResult(RESULT_DELETE, new Intent().putExtra("index",data.getInt("index", 0)));
+                finish();
+			}
+		});
+
+	
+    }
     private void setupListView() {
  
         ListView listView = (ListView) findViewById(R.id.listViewNodePreferences);
         TextView constraintLabel = (TextView) this.findViewById(R.id.lblNodePreferencesConstraintText);
         // set title visible
         constraintLabel.setVisibility(0);
-        //  TODO replace "node.getConstraintList()" with
-        // "session.getSelectedAlgorithm().getPointConstraints()" if an algorithm with constraints is 
-        //  available
         adapter = new ConstraintListAdapter(node.getConstraintList(), this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

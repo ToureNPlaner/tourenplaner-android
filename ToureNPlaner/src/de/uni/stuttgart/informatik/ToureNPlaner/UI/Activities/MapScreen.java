@@ -195,6 +195,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.back:
 				finish();
 				return true;
+			case R.id.settings:
+				startActivity(new Intent(this, Preferences.class));
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}

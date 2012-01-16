@@ -16,6 +16,7 @@
         <activity android:name=".UI.Activities.BillingScreen"></activity>
         <activity android:name=".UI.Activities.NodelistScreen"></activity>
         <activity android:name=".UI.Activities.NodeResultlistScreen"></activity>
+        <activity android:name=".UI.Activities.Preferences"></activity>
                 <activity android:name=".UI.Activities.EditConstraintScreen"></activity>
          <activity android:name=".UI.Activities.ServerScreen">
         	<intent-filter>

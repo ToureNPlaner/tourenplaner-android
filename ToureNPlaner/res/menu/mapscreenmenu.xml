@@ -13,16 +13,18 @@
      <item android:id="@+id/resultlist"
           android:icon="@drawable/list"
           android:title="Ergebnis" />
-       <item android:id="@+id/gps"
+      <item android:id="@+id/gps"
           android:icon="@drawable/myplace"
           android:title="Ihre Position" />
-          <item android:id="@+id/back"
+      <item android:id="@+id/back"
           android:icon="@drawable/back"
           android:title="Zurück" />
      <!--  <item android:id="@+id/gotofirst"
           android:icon="@drawable/list"
           android:title="Ihr Startpunkt" />
       -->
-          
+       <item android:id="@+id/settings"
+          android:icon="@drawable/back"
+          android:title="Einstellungen" />
           
 </menu>
