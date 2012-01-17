@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.view.*;
 import android.widget.Toast;
@@ -35,6 +37,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODE = 1;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
+	public static String tileServer = "gerbera.informatik.uni-stuttgart.de/osm/tiles";
+	
+
+	
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -89,9 +95,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		} else {
 			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
-
+		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
+		//-----get mapScreen_Preferences
+		SharedPreferences mapScreen_preferences= PreferenceManager.getDefaultSharedPreferences(this);
+		String tileServer = mapScreen_preferences.getString("tile_server","gerbera.informatik.uni-stuttgart.de/osm/tiles");
+		String offlineMapLocation = mapScreen_preferences.getString("offline_map_location","/sdcard/...");
+		Boolean isOfflineMap = mapScreen_preferences.getBoolean("is_offline_map",false);
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
 		this.mapView = (MapView) findViewById(R.id.mapView);
@@ -100,8 +111,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
 		//mapView.setRenderTheme(MapView.DEFAULT_RENDER_THEME);
-		//mapView.setMapTileDownloadServer("gerbera.informatik.uni-stuttgart.de/osm/tiles");
-		// mapView.setMapFile("/sdcard/berlin.map");
+		//mapView.setMapTileDownloadServer(tileServer);
+		if(isOfflineMap){
+		//mapView.setMapFile(offlineMapLocation);
+		}
 		//mapView.setFpsCounter(true);
 		//mapView.setMemoryCardCachePersistence(true);
 		//mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
