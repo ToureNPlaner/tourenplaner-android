@@ -37,11 +37,16 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODE = 1;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
+	
+	
+	// preference variables
+	private SharedPreferences mapScreen_preferences;
+	private Boolean isInstantRequest;
+	private Boolean isOfflineMap;
+	private String offlineMapLocation;
 	public static String tileServer = "gerbera.informatik.uni-stuttgart.de/osm/tiles";
 	
-
 	
-
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
 	private final Observer requestListener = new Observer() {
@@ -99,10 +104,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		//-----get mapScreen_Preferences
-		SharedPreferences mapScreen_preferences= PreferenceManager.getDefaultSharedPreferences(this);
-		String tileServer = mapScreen_preferences.getString("tile_server","gerbera.informatik.uni-stuttgart.de/osm/tiles");
-		String offlineMapLocation = mapScreen_preferences.getString("offline_map_location","/sdcard/...");
-		Boolean isOfflineMap = mapScreen_preferences.getBoolean("is_offline_map",false);
+		mapScreen_preferences= PreferenceManager.getDefaultSharedPreferences(this);
+		tileServer = mapScreen_preferences.getString("tile_server","gerbera.informatik.uni-stuttgart.de/osm/tiles");
+		offlineMapLocation = mapScreen_preferences.getString("offline_map_location","/sdcard/...");
+	    isOfflineMap = mapScreen_preferences.getBoolean("is_offline_map",false);
+
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
 		this.mapView = (MapView) findViewById(R.id.mapView);
@@ -303,6 +309,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
@@ -335,6 +342,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	public void onChange(final int change) {
 		runOnUiThread(new Runnable() {
+			
 			@Override
 			public void run() {
 				if (0 < (change & Session.RESULT_CHANGE)) {
@@ -349,7 +357,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
 					}
+					isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request",false);
+					if(isInstantRequest){
 					performRequest();
+					}
 				}
 			}
 		});

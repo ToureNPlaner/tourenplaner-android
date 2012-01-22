@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 <PreferenceCategory
-            android:title="MapScreen Preferences">
+            android:title="@string/mapscreen_preferences">
     <EditTextPreference
                 android:key="tile_server"
-                android:title="Tile-Server"
-                android:dialogTitle="Tile-Server" />
+                android:title="@string/tile_server"
+                android:dialogTitle="@string/input_tile_server" />
     
     <CheckBoxPreference
         	android:key="is_offline_map"
-        	android:title="offline_map"
+        	android:title="@string/is_offline_map"
         	android:defaultValue="false"
         	 />
     
     <EditTextPreference
                 android:key="offline_map_location"
-                android:title="offline_map_location"
-                android:dialogTitle="map location" />
+                android:title="@string/offline_map_location"
+                android:dialogTitle="@string/input_offline_map_location" />
+    <CheckBoxPreference
+        	android:key="is_instant_request"
+        	android:title="@string/is_instant_request"
+        	android:defaultValue="false"
+        	 />
  
 </PreferenceCategory>
 <PreferenceCategory
