@@ -12,6 +12,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	private EditTextPreference tileServer;
 	private EditTextPreference offlineMapLoc ;
     private CheckBoxPreference isOfflineMap ;
+    private CheckBoxPreference isInstantRequest ;
     private String defaultTileServer = MapScreen.tileServer;
     private String defaultMapLocation = "/sdcard/...";
 	@Override
@@ -21,6 +22,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             tileServer =(EditTextPreference) getPreferenceScreen().findPreference("tile_server");
             offlineMapLoc =(EditTextPreference) getPreferenceScreen().findPreference("offline_map_location");
             isOfflineMap  =(CheckBoxPreference) getPreferenceScreen().findPreference("is_offline_map");
+            isInstantRequest  =(CheckBoxPreference) getPreferenceScreen().findPreference("is_instant_request");
             // Initialize components
             String tileServerText = tileServer.getSharedPreferences().getString("tile_server", defaultTileServer);
     	 	tileServer.setSummary(tileServerText);
@@ -31,6 +33,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     	 	offlineMapLoc.setText(offlineMapText);
     	 	
     	 	offlineMapLoc.setEnabled(isOfflineMap.isChecked());
+    	 	
+    	 	
 	}
 
 	@Override

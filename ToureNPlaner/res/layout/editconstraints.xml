@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Name" >
+                android:text="@string/name" >
             </TextView>
 
             <EditText
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Typ"
+                android:text="@string/type"
                  >
 
             </TextView>
@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Value"
+                android:text="@string/value"
                  >
 
             </TextView>
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="min" />
+            android:text="@string/minimum" />
 
         <SeekBar
             android:id="@+id/editconstraintseekBar"
@@ -116,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="max" />
+            android:text="@string/maximum" />
 
     </LinearLayout>
 
@@ -130,7 +130,7 @@
         android:id="@+id/btnconstReturn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="back" />
+        android:text="@string/back" />
 
 </LinearLayout>
  

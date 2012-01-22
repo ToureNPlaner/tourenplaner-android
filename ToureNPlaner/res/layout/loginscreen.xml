@@ -4,16 +4,16 @@
   android:orientation="vertical"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
-    <EditText android:id="@+id/emailTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textEmailAddress" android:hint="email">
+    <EditText android:id="@+id/emailTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textEmailAddress" android:hint="@string/email">
         <requestFocus></requestFocus>
     </EditText>
-    <EditText android:id="@+id/passwordTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textPassword" android:hint="password"></EditText>
-    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Login" android:id="@+id/btnlogin"></Button>
+    <EditText android:id="@+id/passwordTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textPassword" android:hint="@string/password"></EditText>
+    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/login" android:id="@+id/btnlogin"></Button>
 
     <CheckBox
         android:id="@+id/chkb_login_screen_save_credentials"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="save credentials" />
+        android:text="@string/save_credentials" />
     
 </LinearLayout>

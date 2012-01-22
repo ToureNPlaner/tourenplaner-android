@@ -15,7 +15,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Name" >
+                android:text="@string/name" >
 </TextView>
 
                 
@@ -32,16 +32,16 @@
 
         </TableRow>
      </TableLayout>
-    <Button android:text="save" android:id="@+id/btnSave" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-    <Button android:text="delete" android:id="@+id/btnDelete" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-    <Button android:layout_height="wrap_content" android:text="back" android:id="@+id/btnReturn" android:layout_width="fill_parent"></Button>
+    <Button android:text="@string/save" android:id="@+id/btnSave" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+    <Button android:text="@string/delete" android:id="@+id/btnDelete" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+    <Button android:layout_height="wrap_content" android:text="@string/back" android:id="@+id/btnReturn" android:layout_width="fill_parent"></Button>
 
     <TextView
         android:id="@+id/lblNodePreferencesConstraintText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Constraints"
+        android:text="@string/constraints"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="invisible" />
 

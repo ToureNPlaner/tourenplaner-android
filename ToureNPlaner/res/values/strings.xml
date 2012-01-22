@@ -20,6 +20,16 @@
 
     <!--mapscreen-->
     <string name="map_screen">mapscreen</string>
+    
+    <!--mapscreen_preferences-->
+    <string name="mapscreen_preferences">mapscreen preferences</string>
+    <string name="input_tile_server">enter tile-server</string>
+    <string name="tile_server">tile-server</string>
+    <string name="is_offline_map">use offline map</string>
+    <string name="offline_map_location">offline map location</string>
+    <string name="input_offline_map_location">enter offline map location</string>
+    <string name="is_instant_request">instant request</string>
+    
 
     <!--menu-->
     <string name="nodelist">nodelist</string>
@@ -36,6 +46,8 @@
     <!--constraints-->
     <string name="type">type</string>
     <string name="value">value</string>
+    <string name="maximum">maximum</string>
+    <string name="minimum">minimum</string>
 
     <!--various-->
     <string name="connecting">connecting</string>
