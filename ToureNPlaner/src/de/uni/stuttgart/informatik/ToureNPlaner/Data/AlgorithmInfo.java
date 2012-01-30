@@ -49,11 +49,12 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.version = object.getString("version");
 		info.name = object.getString("name");
 		info.urlsuffix = object.getString("urlsuffix");
-		if (!object.isNull("constraints")) {
-			info.minPoints = object.getJSONObject("constraints").getInt("minPoints");
-			info.sourceIsTarget = object.getJSONObject("constraints").getBoolean("sourceIsTarget");
+		if (!object.isNull("details")) {
+			info.minPoints = object.getJSONObject("details").getInt("minpoints");
+			info.sourceIsTarget = object.getJSONObject("details").getBoolean("sourceistarget");
+			info.isHidden = object.getJSONObject("details").getBoolean("hidden");
 		}
-		info.isHidden = object.getBoolean("hidden");
+	
 
 		if (object.isNull("pointconstraints")) {
 			info.point_constraints = new ArrayList<Constraint>();
