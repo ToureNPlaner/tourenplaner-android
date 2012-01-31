@@ -14,6 +14,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     private CheckBoxPreference isOfflineMap ;
     private CheckBoxPreference isInstantRequest ;
     private CheckBoxPreference backIsDeleteMarker ;
+
     private String defaultTileServer = MapScreen.tileServer;
     private String defaultMapLocation = "/sdcard/...";
 	@Override
@@ -25,6 +26,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             isOfflineMap  =(CheckBoxPreference) getPreferenceScreen().findPreference("is_offline_map");
             isInstantRequest  =(CheckBoxPreference) getPreferenceScreen().findPreference("is_instant_request");
             backIsDeleteMarker  =(CheckBoxPreference) getPreferenceScreen().findPreference("back_is_delete_marker");
+           
             // Initialize components
             String tileServerText = tileServer.getSharedPreferences().getString("tile_server", defaultTileServer);
     	 	tileServer.setSummary(tileServerText);
