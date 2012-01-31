@@ -277,6 +277,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						edit.perform();
 						break;
 				}
+            case REQUEST_CONSTRAINTS:
+                switch (resultCode) {
+                    case RESULT_OK:
+                        // TODO
+                }
 		}
 	}
 

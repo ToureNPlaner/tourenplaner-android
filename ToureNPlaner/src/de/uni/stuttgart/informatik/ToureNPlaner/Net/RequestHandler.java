@@ -26,7 +26,7 @@ public class RequestHandler extends ConnectionHandler {
 			HttpURLConnection urlConnection = session.openPostConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix(), true);
 
 			try {
-				String str = Request.generate(session.getNodeModel().getNodeVector()).toString();
+				String str = Request.generate(session.getNodeModel().getNodeVector(), session.getSelectedAlgorithm().getConstraints()).toString();
 				OutputStream outputStream = urlConnection.getOutputStream();
 				outputStream.write(str.getBytes("US-ASCII"));
 				InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());

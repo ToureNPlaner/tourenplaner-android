@@ -33,4 +33,33 @@ public class Request {
 
         return o;
     }
+
+    public static JSONObject generate(ArrayList<Node> nodes, ArrayList<Constraint> constraints) {
+            JSONObject o = new JSONObject();
+            JSONArray nodesArray = new JSONArray();
+            JSONObject constraintsObject = new JSONObject();
+            try {
+                for (int i = 0; i < nodes.size(); i++) {
+                    nodesArray.put(generate(nodes.get(i)));
+                }
+                o.put("points", nodesArray);
+
+                if(!constraints.isEmpty()) {
+                    for (int i = 0; i < constraints.size(); i++) {
+                        constraintsObject.put(constraints.get(i).getName(), constraints.get(i).getValue());
+                    }
+                    o.put("constraints", constraintsObject);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return o;
+        }
+
+    private static JSONObject generate(Constraint constraint) throws JSONException {
+        JSONObject o = new JSONObject();
+        o.put(constraint.getName(), constraint.getValue().toString());
+        return o;
+    }
 }
