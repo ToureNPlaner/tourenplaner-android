@@ -16,8 +16,9 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private int minPoints;
 	private boolean sourceIsTarget;
 	private boolean isHidden;
+    private ArrayList<Constraint> constraints;
 
-	private AlgorithmInfo() {
+    private AlgorithmInfo() {
 	}
 
 	@Override
@@ -61,6 +62,16 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 			info.sourceIsTarget = object.getJSONObject("details").getBoolean("sourceistarget");
 			info.isHidden = object.getJSONObject("details").getBoolean("hidden");
 		}
+
+        if (object.isNull("constraints")) {
+            info.constraints = new ArrayList<Constraint>();
+        } else {
+            JSONArray array = object.getJSONArray("constraints");
+            info.constraints = new ArrayList<Constraint>(array.length());
+            for (int i = 0; i < array.length(); i++) {
+                info.constraints.add(Constraint.parse(array.getJSONObject(i)));
+            }
+        }
 	
 
 		if (object.isNull("pointconstraints")) {
@@ -92,4 +103,8 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.point_constraints.add(new Constraint("Price", "price", 0.0, 2000.0));
 		return info;
 	}
+
+    public ArrayList<Constraint> getConstraints() {
+        return constraints;
+    }
 }

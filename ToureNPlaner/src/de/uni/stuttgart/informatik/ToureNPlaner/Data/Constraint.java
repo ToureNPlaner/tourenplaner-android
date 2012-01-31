@@ -76,7 +76,7 @@ public class Constraint implements Serializable {
         String name = object.getString("name");
         String type = object.getString("type");
         Double min = object.getDouble("min");
-        Double max = object.getDouble("max");
+        Double max = object.optDouble("max");
         return new Constraint(name,type,min,max);
     }
 }

@@ -35,6 +35,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private Session session;
 	public static final int REQUEST_NODEMODEL = 0;
 	public static final int REQUEST_NODE = 1;
+    public static final int REQUEST_CONSTRAINTS = 2;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 	
@@ -184,10 +185,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+        Intent myIntent;
 		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.nodelist:
-				Intent myIntent = new Intent(this, NodelistScreen.class);
+				myIntent = new Intent(this, NodelistScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
 				startActivityForResult(myIntent, REQUEST_NODEMODEL);
 				return true;
@@ -211,6 +213,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.gps:
 				mapView.getController().setCenter(nodeOverlay.getGpsPosition());
 				return true;
+            case R.id.algorithm_constraints:
+                myIntent = new Intent(this, AlgorithmConstraintsScreen.class);
+                myIntent.putExtra(Session.IDENTIFIER, session);
+                startActivityForResult(myIntent, REQUEST_CONSTRAINTS);
+                return true;
 			case R.id.back:
 				finish();
 				return true;
@@ -336,6 +343,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (Build.VERSION.SDK_INT < 11) {
 			menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
 		}
+        menu.findItem(R.id.algorithm_constraints).setEnabled(
+                !session.getSelectedAlgorithm().getConstraints().isEmpty());
 		return true;
 	}
 

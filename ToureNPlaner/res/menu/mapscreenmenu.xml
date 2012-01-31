@@ -13,6 +13,9 @@
      <item android:id="@+id/resultlist"
           android:icon="@drawable/list"
           android:title="Ergebnis" />
+    <item android:id="@+id/algorithm_constraints"
+          android:icon="@drawable/list"
+          android:title="Constraints" />
       <item android:id="@+id/gps"
           android:icon="@drawable/myplace"
           android:title="Ihre Position" />
