@@ -43,6 +43,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	// preference variables
 	private SharedPreferences mapScreen_preferences;
 	private Boolean isInstantRequest;
+	private Boolean backIsDeleteMarker;
 	private Boolean isOfflineMap;
 	private String offlineMapLocation;
 	public static String tileServer = "gerbera.informatik.uni-stuttgart.de/osm/tiles";
@@ -244,11 +245,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			int NodeModelsize = session.getNodeModel().size();
-
-			if (NodeModelsize > 0) {
+			backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker",true);
+			if (NodeModelsize > 0 && backIsDeleteMarker == true) {
 				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
 				edit.perform();
 				return true;
+			}else{
+				return super.onKeyDown(keyCode, event);
 			}
 		}
 		return super.onKeyDown(keyCode, event);

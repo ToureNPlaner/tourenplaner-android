@@ -32,6 +32,7 @@
     <string name="offline_map_location">offline map location</string>
     <string name="input_offline_map_location">enter offline map location</string>
     <string name="is_instant_request">instant request</string>
+    <string name="back_is_delete_marker">use back to delete markers</string>
     
 
     <!--menu-->
