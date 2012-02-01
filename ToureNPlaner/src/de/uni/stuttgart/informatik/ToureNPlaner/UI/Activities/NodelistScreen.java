@@ -21,7 +21,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.RemoveListener;
 
 import java.io.Serializable;
 
-public class NodelistScreen extends ListActivity {
+public class NodelistScreen extends ListActivity implements Session.Listener {
 	private NodeListAdapter adapter;
 	private Session session;
 	private boolean dirty;
@@ -46,6 +46,8 @@ public class NodelistScreen extends ListActivity {
 		} else {
 			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
+
+        session.registerListener(this);
 
 		setContentView(R.layout.dragndroplistview);
 
@@ -87,8 +89,6 @@ public class NodelistScreen extends ListActivity {
 
 				}
 			});
-
-
 		}
 	}
 
@@ -210,4 +210,15 @@ public class NodelistScreen extends ListActivity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+    @Override
+    protected void onDestroy() {
+        session.removeListener(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onChange(int change) {
+        adapter.notifyDataSetChanged();
+    }
 }
