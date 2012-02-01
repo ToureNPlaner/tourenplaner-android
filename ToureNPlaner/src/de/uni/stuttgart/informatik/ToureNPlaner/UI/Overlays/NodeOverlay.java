@@ -108,7 +108,9 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 				for (int i = 0; i < cl.size(); i++) {
 					ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
 				}
+				if(session.getNodeModel().size() > 0){
 				session.getNodeModel().getNodeVector().set(session.getNodeModel().size() - 1, session.getNodeModel().getNodeVector().get(session.getNodeModel().size() - 1));
+				}
 			}
 		});
 

@@ -43,6 +43,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	// preference variables
 	private SharedPreferences mapScreen_preferences;
 	private Boolean isInstantRequest;
+	private Boolean backIsDeleteMarker;
 	private Boolean isOfflineMap;
 	private String offlineMapLocation;
 	public static String tileServer = "gerbera.informatik.uni-stuttgart.de/osm/tiles";
@@ -244,11 +245,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			int NodeModelsize = session.getNodeModel().size();
-
-			if (NodeModelsize > 0) {
+		
+			if (NodeModelsize > 0 && backIsDeleteMarker == true) {
 				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
 				edit.perform();
 				return true;
+			}else{
+				return super.onKeyDown(keyCode, event);
 			}
 		}
 		return super.onKeyDown(keyCode, event);
@@ -322,6 +325,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	protected void onResume() {
 		super.onResume();
 		
+		isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request",false);
+		backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker",true);
+		
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
@@ -371,7 +377,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
 					}
-					isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request",false);
+					
 					if(isInstantRequest){
 					performRequest();
 					}

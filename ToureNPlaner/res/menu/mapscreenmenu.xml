@@ -3,31 +3,31 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
      <item android:id="@+id/nodelist"
           android:icon="@drawable/list"
-          android:title="Knotenliste" />
+          android:title="@string/nodelist" />
     <item android:id="@+id/calculate"
           android:icon="@drawable/calculate"
-          android:title="Berechnen" />
+          android:title="@string/calculate" />
     <item android:id="@+id/reset"
           android:icon="@drawable/trash"
-          android:title="Löschen" />
+          android:title="@string/delete" />
      <item android:id="@+id/resultlist"
           android:icon="@drawable/list"
-          android:title="Ergebnis" />
+          android:title="@string/resultlist" />
     <item android:id="@+id/algorithm_constraints"
           android:icon="@drawable/list"
-          android:title="Constraints" />
+          android:title="@string/constraints" />
       <item android:id="@+id/gps"
           android:icon="@drawable/myplace"
-          android:title="Ihre Position" />
+          android:title="@string/your_location" />
       <item android:id="@+id/back"
           android:icon="@drawable/back"
-          android:title="Zurück" />
+          android:title="@string/back" />
      <!--  <item android:id="@+id/gotofirst"
           android:icon="@drawable/list"
           android:title="Ihr Startpunkt" />
       -->
        <item android:id="@+id/settings"
           android:icon="@drawable/back"
-          android:title="Einstellungen" />
+          android:title="@string/settings" />
           
 </menu>
