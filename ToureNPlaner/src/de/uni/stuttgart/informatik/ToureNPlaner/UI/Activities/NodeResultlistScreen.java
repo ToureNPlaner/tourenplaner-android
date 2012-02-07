@@ -15,14 +15,11 @@ public class NodeResultlistScreen extends ListActivity {
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 
-		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-		}
+		// If we get created for the first time we get our data from the intent
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 
 		adapter = new NodeResultListAdapter(session.getNodeModel().getNodeVector(), this);

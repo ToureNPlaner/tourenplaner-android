@@ -40,14 +40,15 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// If we get created for the first time we get our data from the intent
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
+
 		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
 			dirty = savedInstanceState.getBoolean("dirty");
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
 
-        session.registerListener(this);
+		session.registerListener(this);
 
 		setContentView(R.layout.dragndroplistview);
 
@@ -211,14 +212,14 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-    @Override
-    protected void onDestroy() {
-        session.removeListener(this);
-        super.onDestroy();
-    }
+	@Override
+	protected void onDestroy() {
+		session.removeListener(this);
+		super.onDestroy();
+	}
 
-    @Override
-    public void onChange(int change) {
-        adapter.notifyDataSetChanged();
-    }
+	@Override
+	public void onChange(int change) {
+		adapter.notifyDataSetChanged();
+	}
 }

@@ -94,11 +94,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		boolean isFirstStart = savedInstanceState == null;
 		// If we get created for the first time we get our data from the intent
-		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-		}
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 

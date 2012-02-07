@@ -13,54 +13,51 @@ import java.io.Serializable;
 
 public class AlgorithmConstraintsScreen extends ListActivity {
 
-    private Session session;
+	private Session session;
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(Session.IDENTIFIER, session);
-        super.onSaveInstanceState(outState);
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(Session.IDENTIFIER, session);
+		super.onSaveInstanceState(outState);
+	}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        // If we get created for the first time we get our data from the intent
-        if (savedInstanceState != null) {
-            session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-        } else {
-            session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-        }
+		// If we get created for the first time we get our data from the intent
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
-        setupListView();
-    }
+		setupListView();
+	}
 
-    private void setupListView() {
-        ConstraintListAdapter adapter = new ConstraintListAdapter(session.getSelectedAlgorithm().getConstraints(), this);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent myIntent = new Intent(AlgorithmConstraintsScreen.this,
-                        EditConstraintScreen.class);
-                myIntent.putExtra("constraint", (Serializable) adapterView.getItemAtPosition(i));
-                myIntent.putExtra("index", i);
-                myIntent.putExtra(Session.IDENTIFIER, session);
-                startActivityForResult(myIntent, 0);
-            }
-        });
-    }
+	private void setupListView() {
+		ConstraintListAdapter adapter = new ConstraintListAdapter(session.getSelectedAlgorithm().getConstraints(), this);
+		setListAdapter(adapter);
+		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				Intent myIntent = new Intent(AlgorithmConstraintsScreen.this,
+						EditConstraintScreen.class);
+				myIntent.putExtra("constraint", (Serializable) adapterView.getItemAtPosition(i));
+				myIntent.putExtra("index", i);
+				myIntent.putExtra(Session.IDENTIFIER, session);
+				startActivityForResult(myIntent, 0);
+			}
+		});
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case RESULT_OK:
-                session.getSelectedAlgorithm().getConstraints().set(
-                        data.getExtras().getInt("index"),
-                        (Constraint) data.getSerializableExtra("constraint"));
-                ((ConstraintListAdapter)getListAdapter()).notifyDataSetChanged();
-                break;
-        }
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+			case RESULT_OK:
+				session.getSelectedAlgorithm().getConstraints().set(
+						data.getExtras().getInt("index"),
+						(Constraint) data.getSerializableExtra("constraint"));
+				((ConstraintListAdapter) getListAdapter()).notifyDataSetChanged();
+				break;
+		}
+	}
 }
 

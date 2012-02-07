@@ -66,11 +66,8 @@ public class LoginScreen extends FragmentActivity implements Observer {
 		chk_saveCredentials.setChecked(applicationPreferences.getBoolean("chk_isChecked", false));
 
 		// If we get created for the first time we get our data from the intent
-		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-		}
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		setupLoginButton();
 

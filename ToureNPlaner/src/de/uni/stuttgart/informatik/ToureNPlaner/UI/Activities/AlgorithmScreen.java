@@ -33,11 +33,8 @@ public class AlgorithmScreen extends Activity {
 		setContentView(R.layout.algorithmscreen);
 
 		// If we get created for the first time we get our data from the intent
-		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-		}
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		setupListView();
 		setupBillingButton();
