@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
+import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.smile.SmileFactory;
 
@@ -9,7 +10,7 @@ public class JacksonManager {
 
 	public static ObjectMapper getJsonMapper() {
 		if (jsonMapper == null)
-			jsonMapper = new ObjectMapper();
+			jsonMapper = new ObjectMapper(new JsonFactory());
 		return jsonMapper;
 	}
 

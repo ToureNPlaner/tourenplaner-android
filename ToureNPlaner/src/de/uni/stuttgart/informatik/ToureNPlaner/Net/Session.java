@@ -6,6 +6,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.User;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 
@@ -241,7 +242,8 @@ public class Session implements Serializable {
 				String userPassword = getUsername() + ":" + getPassword();
 				String encoding = Base64.encodeString(userPassword);
 				con.setRequestProperty("Authorization", "Basic " + encoding);
-				con.setRequestProperty("Accept", JacksonManager.ContentType.JSON.identifier);
+				con.setRequestProperty("Accept",
+						JacksonManager.ContentType.SMILE.identifier + ", " + JacksonManager.ContentType.JSON.identifier);
 				return con;
 			} catch (Exception e) {
 				Log.e("TP", "SSL", e);
@@ -251,18 +253,12 @@ public class Session implements Serializable {
 		return (HttpURLConnection) uri.openConnection();
 	}
 
-	public HttpURLConnection openPostConnection(String path, boolean acceptSmile) throws IOException {
+	public HttpURLConnection openPostConnection(String path) throws IOException {
 		HttpURLConnection con = openGetConnection(path);
 
 		con.setDoOutput(true);
 		con.setChunkedStreamingMode(0);
 		con.setRequestProperty("Content-Type", "application/json;");
-		String acceptString;
-		if (acceptSmile)
-			acceptString = JacksonManager.ContentType.SMILE.identifier + ", " + JacksonManager.ContentType.JSON.identifier;
-		else
-			acceptString = JacksonManager.ContentType.JSON.identifier;
-		con.setRequestProperty("Accept", acceptString);
 
 		return con;
 	}

@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.ConnectionHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
@@ -221,7 +221,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	@Override
-	public void onCompleted(ConnectionHandler caller, Object object) {
+	public void onCompleted(RawHandler caller, Object object) {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
@@ -241,7 +241,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	@Override
-	public void onError(ConnectionHandler caller, Object object) {
+	public void onError(RawHandler caller, Object object) {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);

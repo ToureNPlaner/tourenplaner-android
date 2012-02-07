@@ -17,7 +17,11 @@ import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.MapActivity;
@@ -53,7 +57,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private final Observer requestListener = new Observer() {
 		@Override
-		public void onCompleted(ConnectionHandler caller, Object object) {
+		public void onCompleted(RawHandler caller, Object object) {
 			handler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
@@ -61,7 +65,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 
 		@Override
-		public void onError(ConnectionHandler caller, Object object) {
+		public void onError(RawHandler caller, Object object) {
 			handler = null;
 			setProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
@@ -70,14 +74,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private final Observer nnsListener = new Observer() {
 		@Override
-		public void onCompleted(ConnectionHandler caller, Object object) {
-			Edit edit = new UpdateNNSEdit(session, ((RequestNN) caller).getNode(), ((Node) object).getGeoPoint());
+		public void onCompleted(RawHandler caller, Object object) {
+			Edit edit = new UpdateNNSEdit(session, ((RequestNN) caller).getNode(), ((Result) object).getPoints().get(0).getGeoPoint());
 			edit.perform();
 			requestList.remove((RequestNN) caller);
 		}
 
 		@Override
-		public void onError(ConnectionHandler caller, Object object) {
+		public void onError(RawHandler caller, Object object) {
 			Toast.makeText(getApplicationContext(), object.toString(),
 					Toast.LENGTH_LONG).show();
 			requestList.remove((RequestNN) caller);
@@ -236,7 +240,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints()) {
 			if (handler != null)
 				handler.cancel(true);
-			handler = (RequestHandler) new RequestHandler(session, requestListener).execute();
+			handler = (RequestHandler) new RequestHandler(requestListener, session).execute();
 			setProgressBarIndeterminateVisibility(true);
 		}
 	}
