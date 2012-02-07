@@ -43,15 +43,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 
-
-	// preference variables
-	private SharedPreferences mapScreen_preferences;
-	private Boolean isInstantRequest;
-	private Boolean backIsDeleteMarker;
-	private Boolean isOfflineMap;
-	private String offlineMapLocation;
-	public static String tileServer = "gerbera.informatik.uni-stuttgart.de/osm/tiles";
-
+	private boolean isInstantRequest;
+	private boolean backIsDeleteMarker;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -110,10 +103,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		//-----get mapScreen_Preferences
-		mapScreen_preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		tileServer = mapScreen_preferences.getString("tile_server", "gerbera.informatik.uni-stuttgart.de/osm/tiles");
-		offlineMapLocation = mapScreen_preferences.getString("offline_map_location", "/sdcard/...");
-		isOfflineMap = mapScreen_preferences.getBoolean("is_offline_map", false);
+		SharedPreferences mapScreen_preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String tileServer = mapScreen_preferences.getString("tile_server", "gerbera.informatik.uni-stuttgart.de/osm/tiles");
+		String offlineMapLocation = mapScreen_preferences.getString("offline_map_location", "/sdcard/...");
+		boolean offlineMap = mapScreen_preferences.getBoolean("is_offline_map", false);
+
+		isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request", false);
+		backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker", true);
 
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
@@ -124,7 +120,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setMapGenerator(new MapnikTileDownloader());
 		//mapView.setRenderTheme(MapView.DEFAULT_RENDER_THEME);
 		//mapView.setMapTileDownloadServer(tileServer);
-		if (isOfflineMap) {
+		if (offlineMap) {
 			//mapView.setMapFile(offlineMapLocation);
 		}
 		//mapView.setFpsCounter(true);
@@ -328,9 +324,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request", false);
-		backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker", true);
 
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
