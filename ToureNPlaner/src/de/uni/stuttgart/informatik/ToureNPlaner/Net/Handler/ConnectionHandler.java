@@ -30,8 +30,9 @@ public abstract class ConnectionHandler extends RawHandler {
 
 		try {
 			handleOutput(connection.getOutputStream());
-		} finally {
+		} catch (Exception e) {
 			connection.disconnect();
+			throw e;
 		}
 
 		return connection;
