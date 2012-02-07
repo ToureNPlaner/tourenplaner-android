@@ -22,7 +22,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
-import org.mapsforge.android.maps.MapViewMode;
+import org.mapsforge.android.maps.mapgenerator.tiledownloader.MapnikTileDownloader;
 import org.mapsforge.android.maps.overlay.ArrayWayOverlay;
 import org.mapsforge.android.maps.overlay.OverlayWay;
 import org.mapsforge.core.GeoPoint;
@@ -35,11 +35,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private Session session;
 	public static final int REQUEST_NODEMODEL = 0;
 	public static final int REQUEST_NODE = 1;
-    public static final int REQUEST_CONSTRAINTS = 2;
+	public static final int REQUEST_CONSTRAINTS = 2;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
-	
-	
+
+
 	// preference variables
 	private SharedPreferences mapScreen_preferences;
 	private Boolean isInstantRequest;
@@ -47,8 +47,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private Boolean isOfflineMap;
 	private String offlineMapLocation;
 	public static String tileServer = "gerbera.informatik.uni-stuttgart.de/osm/tiles";
-	
-	
+
+
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
 	private final Observer requestListener = new Observer() {
@@ -102,14 +102,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		} else {
 			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
 		}
-		
+
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		//-----get mapScreen_Preferences
-		mapScreen_preferences= PreferenceManager.getDefaultSharedPreferences(this);
-		tileServer = mapScreen_preferences.getString("tile_server","gerbera.informatik.uni-stuttgart.de/osm/tiles");
-		offlineMapLocation = mapScreen_preferences.getString("offline_map_location","/sdcard/...");
-	    isOfflineMap = mapScreen_preferences.getBoolean("is_offline_map",false);
+		mapScreen_preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		tileServer = mapScreen_preferences.getString("tile_server", "gerbera.informatik.uni-stuttgart.de/osm/tiles");
+		offlineMapLocation = mapScreen_preferences.getString("offline_map_location", "/sdcard/...");
+		isOfflineMap = mapScreen_preferences.getBoolean("is_offline_map", false);
 
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
@@ -117,11 +117,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.setMapViewMode(MapViewMode.MAPNIK_TILE_DOWNLOAD);
+		mapView.setMapGenerator(new MapnikTileDownloader());
 		//mapView.setRenderTheme(MapView.DEFAULT_RENDER_THEME);
 		//mapView.setMapTileDownloadServer(tileServer);
-		if(isOfflineMap){
-		//mapView.setMapFile(offlineMapLocation);
+		if (isOfflineMap) {
+			//mapView.setMapFile(offlineMapLocation);
 		}
 		//mapView.setFpsCounter(true);
 		//mapView.setMemoryCardCachePersistence(true);
@@ -186,7 +186,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent;
+		Intent myIntent;
 		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.nodelist:
@@ -214,11 +214,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.gps:
 				mapView.getController().setCenter(nodeOverlay.getGpsPosition());
 				return true;
-            case R.id.algorithm_constraints:
-                myIntent = new Intent(this, AlgorithmConstraintsScreen.class);
-                myIntent.putExtra(Session.IDENTIFIER, session);
-                startActivityForResult(myIntent, REQUEST_CONSTRAINTS);
-                return true;
+			case R.id.algorithm_constraints:
+				myIntent = new Intent(this, AlgorithmConstraintsScreen.class);
+				myIntent.putExtra(Session.IDENTIFIER, session);
+				startActivityForResult(myIntent, REQUEST_CONSTRAINTS);
+				return true;
 			case R.id.back:
 				finish();
 				return true;
@@ -245,12 +245,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			int NodeModelsize = session.getNodeModel().size();
-		
+
 			if (NodeModelsize > 0 && backIsDeleteMarker == true) {
 				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
 				edit.perform();
 				return true;
-			}else{
+			} else {
 				return super.onKeyDown(keyCode, event);
 			}
 		}
@@ -280,11 +280,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						edit.perform();
 						break;
 				}
-            case REQUEST_CONSTRAINTS:
-                switch (resultCode) {
-                    case RESULT_OK:
-                        // TODO
-                }
+			case REQUEST_CONSTRAINTS:
+				switch (resultCode) {
+					case RESULT_OK:
+						// TODO
+				}
 		}
 	}
 
@@ -324,10 +324,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request",false);
-		backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker",true);
-		
+
+		isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request", false);
+		backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker", true);
+
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
@@ -354,15 +354,15 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (Build.VERSION.SDK_INT < 11) {
 			menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
 		}
-        menu.findItem(R.id.algorithm_constraints).setEnabled(
-                !session.getSelectedAlgorithm().getConstraints().isEmpty());
+		menu.findItem(R.id.algorithm_constraints).setEnabled(
+				!session.getSelectedAlgorithm().getConstraints().isEmpty());
 		return true;
 	}
 
 	@Override
 	public void onChange(final int change) {
 		runOnUiThread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				if (0 < (change & Session.RESULT_CHANGE)) {
@@ -377,9 +377,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
 					}
-					
-					if(isInstantRequest){
-					performRequest();
+
+					if (isInstantRequest) {
+						performRequest();
 					}
 				}
 			}
