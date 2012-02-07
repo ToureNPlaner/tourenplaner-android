@@ -1,8 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,9 +14,9 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private int minPoints;
 	private boolean sourceIsTarget;
 	private boolean isHidden;
-    private ArrayList<Constraint> constraints;
+	private ArrayList<Constraint> constraints;
 
-    private AlgorithmInfo() {
+	private AlgorithmInfo() {
 	}
 
 	@Override
@@ -45,44 +43,44 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	public int getMinPoints() {
 		return minPoints;
 	}
-	
+
 	public String getSSLPort() {
 		return sslport;
 	}
 
-	public static AlgorithmInfo parse(JSONObject object) throws JSONException {
+	public static AlgorithmInfo parse(JsonNode object) {
 		AlgorithmInfo info = new AlgorithmInfo();
-		info.version = object.getString("version");
-		info.name = object.getString("name");
-		info.urlsuffix = object.getString("urlsuffix");
-	//	info.sslport = object.getString("sslport");
-		
-		if (!object.isNull("details")) {
-			info.minPoints = object.getJSONObject("details").getInt("minpoints");
-			info.sourceIsTarget = object.getJSONObject("details").getBoolean("sourceistarget");
-			info.isHidden = object.getJSONObject("details").getBoolean("hidden");
+		info.version = object.get("version").asText();
+		info.name = object.get("name").asText();
+		info.urlsuffix = object.get("urlsuffix").asText();
+
+		JsonNode details = object.get("details");
+		if (details != null) {
+			info.minPoints = details.get("minpoints").asInt();
+			info.sourceIsTarget = details.get("sourceistarget").asBoolean();
+			info.isHidden = details.get("hidden").asBoolean();
 		}
 
-        if (object.isNull("constraints")) {
-            info.constraints = new ArrayList<Constraint>();
-        } else {
-            JSONArray array = object.getJSONArray("constraints");
-            info.constraints = new ArrayList<Constraint>(array.length());
-            for (int i = 0; i < array.length(); i++) {
-                info.constraints.add(Constraint.parse(array.getJSONObject(i)));
-            }
-        }
-	
-
-		if (object.isNull("pointconstraints")) {
-			info.point_constraints = new ArrayList<Constraint>();
+		JsonNode constraints = object.get("constraints");
+		if (constraints == null) {
+			info.constraints = new ArrayList<Constraint>();
 		} else {
-			JSONArray array = object.getJSONArray("pointconstraints");
-			info.point_constraints = new ArrayList<Constraint>(array.length());
-			for (int i = 0; i < array.length(); i++) {
-				info.point_constraints.add(Constraint.parse(array.getJSONObject(i)));
+			info.constraints = new ArrayList<Constraint>(constraints.size());
+			for (JsonNode constraint : constraints) {
+				info.constraints.add(Constraint.parse(constraint));
 			}
 		}
+
+		JsonNode pointconstraints = object.get("pointconstraints");
+		if (pointconstraints == null) {
+			info.point_constraints = new ArrayList<Constraint>();
+		} else {
+			info.point_constraints = new ArrayList<Constraint>(pointconstraints.size());
+			for (JsonNode constraint : pointconstraints) {
+				info.constraints.add(Constraint.parse(constraint));
+			}
+		}
+
 		return info;
 	}
 
@@ -104,7 +102,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		return info;
 	}
 
-    public ArrayList<Constraint> getConstraints() {
-        return constraints;
-    }
+	public ArrayList<Constraint> getConstraints() {
+		return constraints;
+	}
 }

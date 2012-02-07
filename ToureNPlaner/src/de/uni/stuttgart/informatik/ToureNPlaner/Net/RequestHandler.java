@@ -1,16 +1,14 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class RequestHandler extends ConnectionHandler {
 	private final Session session;
@@ -26,13 +24,19 @@ public class RequestHandler extends ConnectionHandler {
 			HttpURLConnection urlConnection = session.openPostConnection("/alg" + session.getSelectedAlgorithm().getUrlsuffix(), true);
 
 			try {
-				String str = Request.generate(session.getNodeModel().getNodeVector(), session.getSelectedAlgorithm().getConstraints()).toString();
-				OutputStream outputStream = urlConnection.getOutputStream();
-				outputStream.write(str.getBytes("US-ASCII"));
+				ObjectMapper mapper = JacksonManager.getJsonMapper();
+				JsonNode root = Request.generate(mapper.getNodeFactory(),
+						session.getNodeModel().getNodeVector(),
+						session.getSelectedAlgorithm().getConstraints());
+				JsonGenerator generator = mapper.getJsonFactory()
+						.createJsonGenerator(urlConnection.getOutputStream());
+				mapper.writeTree(generator, root);
+				generator.close();
+
 				InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
 
 				final long t0 = System.currentTimeMillis();
-				Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
+				Result result = Result.parse(JacksonManager.ContentType.parse(urlConnection.getContentType()), stream);
 				Log.v("TP", "ResultParse: " + (System.currentTimeMillis() - t0) + " ms");
 
 				return result;

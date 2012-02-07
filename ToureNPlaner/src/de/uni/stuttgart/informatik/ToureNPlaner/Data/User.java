@@ -1,11 +1,9 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import org.codehaus.jackson.JsonNode;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
 public class User implements Serializable {
@@ -16,19 +14,15 @@ public class User implements Serializable {
 	private String firstname;
 	private String lastname;
 
-	public static User parse(JSONObject object) throws JSONException {
+	public static User parse(JsonNode object) {
 		User user = new User();
-        try{
-            user.address = object.getString("email");
-            user.address = object.getString("address");
-            user.address = object.getString("status");
-            user.address = object.getString("admin");
-            user.address = object.getString("firstname");
-            user.address = object.getString("lastname");
-        } catch (JSONException e) {
-            // ignore
-        }
+		user.address = object.get("email").asText();
+		user.address = object.get("address").asText();
+		user.address = object.get("status").asText();
+		user.address = object.get("admin").asText();
+		user.address = object.get("firstname").asText();
+		user.address = object.get("lastname").asText();
 
-        return new User();
+		return new User();
 	}
 }

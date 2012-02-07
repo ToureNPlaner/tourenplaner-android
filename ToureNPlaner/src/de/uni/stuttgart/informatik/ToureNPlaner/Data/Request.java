@@ -1,65 +1,45 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 
 import java.util.ArrayList;
 
 public class Request {
 
-    private static JSONObject generate(Node node) throws JSONException {
-        JSONObject o = new JSONObject();
-        o.put("lt", node.getLaE7());
-        o.put("ln", node.getLoE7());
-	    o.put("name", node.getName());
-	    return o;
-    }
+	private static JsonNode generate(JsonNodeFactory factory, Node node) {
+		ObjectNode o = new ObjectNode(factory);
+		o.put("lt", node.getLaE7());
+		o.put("ln", node.getLoE7());
+		o.put("name", node.getName());
+		return o;
+	}
 
+	public static ObjectNode generate(JsonNodeFactory factory, ArrayList<Node> nodes, ArrayList<Constraint> constraints) {
+		ObjectNode root = new ObjectNode(factory);
+		ArrayNode nodesArray = new ArrayNode(factory);
 
-    public static JSONObject generate(ArrayList<Node> nodes) {
-        JSONObject o = new JSONObject();
-        JSONArray a = new JSONArray();
-        try {
-            for (int i = 0; i < nodes.size(); i++) {
-                a.put(generate(nodes.get(i)));
-            }
+		for (int i = 0; i < nodes.size(); i++) {
+			nodesArray.add(generate(factory, nodes.get(i)));
+		}
+		root.put("points", nodesArray);
 
-            o.put("points", a);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+		if (constraints != null && !constraints.isEmpty()) {
+			ArrayNode constraintsArray = new ArrayNode(factory);
+			for (int i = 0; i < constraints.size(); i++) {
+				constraintsArray.add(generate(factory, constraints.get(i)));
+			}
+			root.put("constraints", constraintsArray);
+		}
 
-        return o;
-    }
+		return root;
+	}
 
-    public static JSONObject generate(ArrayList<Node> nodes, ArrayList<Constraint> constraints) {
-            JSONObject o = new JSONObject();
-            JSONArray nodesArray = new JSONArray();
-            JSONObject constraintsObject = new JSONObject();
-            try {
-                for (int i = 0; i < nodes.size(); i++) {
-                    nodesArray.put(generate(nodes.get(i)));
-                }
-                o.put("points", nodesArray);
-
-                if(!constraints.isEmpty()) {
-                    for (int i = 0; i < constraints.size(); i++) {
-                        constraintsObject.put(constraints.get(i).getName(), constraints.get(i).getValue());
-                    }
-                    o.put("constraints", constraintsObject);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return o;
-        }
-
-    private static JSONObject generate(Constraint constraint) throws JSONException {
-        JSONObject o = new JSONObject();
-        o.put(constraint.getName(), constraint.getValue().toString());
-        return o;
-    }
+	private static JsonNode generate(JsonNodeFactory factory, Constraint constraint) {
+		ObjectNode node = new ObjectNode(factory);
+		node.put(constraint.getName(), constraint.getValue().toString());
+		return node;
+	}
 }

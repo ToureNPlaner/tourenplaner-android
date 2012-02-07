@@ -1,7 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -20,13 +21,13 @@ public class ServerInfoHandler extends ConnectionHandler {
 		try {
 			URL uri = new URL(url + "/info");
 			HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
-			urlConnection.setRequestProperty("Accept", Util.ContentType.JSON.identifier);
+			urlConnection.setRequestProperty("Accept", JacksonManager.ContentType.JSON.identifier);
 
 			try {
 				InputStream stream = new DoneHandlerInputStream(urlConnection.getInputStream());
-				String content = Util.streamToString(stream);
+				ObjectMapper mapper = JacksonManager.getMapper(JacksonManager.ContentType.parse(urlConnection.getContentType()));
 				Session session = new Session();
-				session.setServerInfo(ServerInfo.parse(new JSONObject(content)));
+				session.setServerInfo(ServerInfo.parse(mapper.readValue(stream, JsonNode.class)));
 				session.setUrl(url);
 				return session;
 			} finally {

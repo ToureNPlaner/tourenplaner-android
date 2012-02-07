@@ -3,9 +3,11 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
@@ -35,14 +37,19 @@ public class RequestNN extends ConnectionHandler {
 			nodes.add(node);
 
 			try {
-				String str = Request.generate(nodes).toString();
-				OutputStream outputStream = urlConnection.getOutputStream();
-				outputStream.write(str.getBytes("US-ASCII"));
+				ObjectMapper mapper = JacksonManager.getJsonMapper();
+				JsonNode root = Request.generate(mapper.getNodeFactory(),
+						nodes,
+						null);
+				JsonGenerator generator = mapper.getJsonFactory()
+						.createJsonGenerator(urlConnection.getOutputStream());
+				mapper.writeTree(generator, root);
+				generator.close();
+
 				InputStream stream = urlConnection.getInputStream();
-				Result result = Result.parse(Util.ContentType.parse(urlConnection.getContentType()), stream);
+
+				Result result = Result.parse(JacksonManager.ContentType.parse(urlConnection.getContentType()), stream);
 				return result.getPoints().get(0);
-
-
 			} finally {
 				urlConnection.disconnect();
 			}
