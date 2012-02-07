@@ -85,6 +85,10 @@ public class Session implements Serializable {
 	public Session() {
 		this.uuid = UUID.randomUUID();
 		d = new Data();
+		// Also initialize the files on the disc
+		safeData();
+		safeNodeModel();
+		safeResult();
 	}
 
 	private void safe(Object o, String name) {
@@ -119,10 +123,10 @@ public class Session implements Serializable {
 
 	private void loadAll() {
 		d = (Data) load("data");
-		result = (Result) load("result");
 		nodeModel = (NodeModel) load("nodeModel");
 		if (nodeModel == null)
 			nodeModel = new NodeModel();
+		result = (Result) load("result");
 	}
 
 	private Object load(String name) {
