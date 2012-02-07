@@ -28,7 +28,11 @@ public abstract class ConnectionHandler extends RawHandler {
 
 		HttpURLConnection connection = session.openPostConnection(getSuffix());
 
-		handleOutput(connection.getOutputStream());
+		try {
+			handleOutput(connection.getOutputStream());
+		} finally {
+			connection.disconnect();
+		}
 
 		return connection;
 	}
