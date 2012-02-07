@@ -237,7 +237,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void performRequest() {
-		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints()) {
+		if (session.canPerformRequest()) {
 			if (handler != null)
 				handler.cancel(true);
 			handler = (RequestHandler) new RequestHandler(requestListener, session).execute();

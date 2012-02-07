@@ -226,6 +226,12 @@ public class Session implements Serializable {
 		}
 	}
 
+	public boolean canPerformRequest() {
+		return getNodeModel().size() >= getSelectedAlgorithm().getMinPoints() &&
+				getNodeModel().size() <= getSelectedAlgorithm().getMaxPoints();
+
+	}
+
 	public String getUrl() {
 		return d.serverInfo.getURL();
 	}

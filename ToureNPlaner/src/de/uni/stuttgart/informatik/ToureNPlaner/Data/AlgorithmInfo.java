@@ -12,6 +12,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String sslport;
 	private ArrayList<Constraint> point_constraints;
 	private int minPoints;
+	private int maxPoints;
 	private boolean sourceIsTarget;
 	private boolean isHidden;
 	private ArrayList<Constraint> constraints;
@@ -44,6 +45,10 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		return minPoints;
 	}
 
+	public int getMaxPoints() {
+		return maxPoints;
+	}
+
 	public String getSSLPort() {
 		return sslport;
 	}
@@ -56,9 +61,12 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 		JsonNode details = object.get("details");
 		if (details != null) {
-			info.minPoints = details.get("minpoints").asInt();
-			info.sourceIsTarget = details.get("sourceistarget").asBoolean();
-			info.isHidden = details.get("hidden").asBoolean();
+			info.minPoints = details.path("minpoints").asInt(0);
+			info.maxPoints = details.path("maxpoints").asInt(Integer.MAX_VALUE);
+			if (details.path("maxpoints").isMissingNode())
+				info.maxPoints = Integer.MAX_VALUE;
+			info.sourceIsTarget = details.path("sourceistarget").asBoolean();
+			info.isHidden = details.path("hidden").asBoolean();
 		}
 
 		JsonNode constraints = object.get("constraints");
