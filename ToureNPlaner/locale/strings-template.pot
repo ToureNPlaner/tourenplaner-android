@@ -1,4 +1,4 @@
-# German translations for PROJECT.
+# Translations template for PROJECT.
 # Copyright (C) 2012 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
@@ -8,30 +8,26 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-02-08 19:38+0100\n"
-"PO-Revision-Date: 2012-02-08 19:38+0100\n"
+"POT-Creation-Date: 2012-02-08 19:43+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
-#, fuzzy
 msgctxt "app_name"
 msgid "ToureNPlaner"
-msgstr "ToureNPlaner"
+msgstr ""
 
-#, fuzzy
 msgctxt "choose_server_screen"
 msgid "Choose a server"
-msgstr "Wählen sie einen Server"
+msgstr ""
 
-#, fuzzy
 msgctxt "add_server"
 msgid "Add server"
-msgstr "Server hinzufügen"
+msgstr ""
 
 msgctxt "login_screen"
 msgid "enter your credentials"
@@ -129,10 +125,9 @@ msgctxt "map_generator"
 msgid "Map Generator"
 msgstr ""
 
-#, fuzzy
 msgctxt "input_map_generator"
 msgid "Choose Map Generator"
-msgstr "Wählen sie einen Server"
+msgstr ""
 
 msgctxt "mapnik"
 msgid "Mapnik"
@@ -237,8 +232,4 @@ msgstr ""
 msgctxt "edit"
 msgid "edit"
 msgstr ""
-
-#~ msgctxt "yourlocation"
-#~ msgid "your location"
-#~ msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-01-06 16:42+0100\n"
+"POT-Creation-Date: 2012-02-08 19:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,8 +57,96 @@ msgctxt "billing"
 msgid "billing"
 msgstr ""
 
+msgctxt "billingscreen_preferences"
+msgid "billingscreen preferences"
+msgstr ""
+
+msgctxt "offset"
+msgid "offset"
+msgstr ""
+
+msgctxt "limit"
+msgid "limit"
+msgstr ""
+
+msgctxt "set_offset"
+msgid "enter offset"
+msgstr ""
+
+msgctxt "set_limit"
+msgid "enter limit"
+msgstr ""
+
 msgctxt "map_screen"
 msgid "mapscreen"
+msgstr ""
+
+msgctxt "change_order"
+msgid "change order"
+msgstr ""
+
+msgctxt "map_file_error"
+msgid "Mapfile is not valid. Falling back."
+msgstr ""
+
+msgctxt "mapscreen_preferences"
+msgid "mapscreen preferences"
+msgstr ""
+
+msgctxt "input_tile_server"
+msgid "enter tile-server"
+msgstr ""
+
+msgctxt "tile_server"
+msgid "tile-server"
+msgstr ""
+
+msgctxt "is_offline_map"
+msgid "use offline map"
+msgstr ""
+
+msgctxt "offline_map_location"
+msgid "offline map location"
+msgstr ""
+
+msgctxt "input_offline_map_location"
+msgid "enter offline map location"
+msgstr ""
+
+msgctxt "is_instant_request"
+msgid "instant request"
+msgstr ""
+
+msgctxt "back_is_delete_marker"
+msgid "use back to delete markers"
+msgstr ""
+
+msgctxt "map_generator"
+msgid "Map Generator"
+msgstr ""
+
+msgctxt "input_map_generator"
+msgid "Choose Map Generator"
+msgstr ""
+
+msgctxt "mapnik"
+msgid "Mapnik"
+msgstr ""
+
+msgctxt "opencycle"
+msgid "OpenCycle"
+msgstr ""
+
+msgctxt "osmander"
+msgid "Osmander"
+msgstr ""
+
+msgctxt "map_file"
+msgid "Map file"
+msgstr ""
+
+msgctxt "custom_tile_downloader"
+msgid "Custom"
 msgstr ""
 
 msgctxt "nodelist"
@@ -73,8 +161,12 @@ msgctxt "calculate"
 msgid "calculate"
 msgstr ""
 
-msgctxt "yourlocation"
+msgctxt "your_location"
 msgid "your location"
+msgstr ""
+
+msgctxt "settings"
+msgid "settings"
 msgstr ""
 
 msgctxt "save"
@@ -95,6 +187,14 @@ msgstr ""
 
 msgctxt "value"
 msgid "value"
+msgstr ""
+
+msgctxt "maximum"
+msgid "maximum"
+msgstr ""
+
+msgctxt "minimum"
+msgid "minimum"
 msgstr ""
 
 msgctxt "connecting"
@@ -127,5 +227,9 @@ msgstr ""
 
 msgctxt "delete"
 msgid "delete"
+msgstr ""
+
+msgctxt "edit"
+msgid "edit"
 msgstr ""
 

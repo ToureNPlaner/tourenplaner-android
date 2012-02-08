@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-02-08 19:38+0100\n"
-"PO-Revision-Date: 2012-02-08 19:38+0100\n"
+"POT-Creation-Date: 2012-02-08 19:43+0100\n"
+"PO-Revision-Date: 2012-02-08 19:43+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,17 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
-#, fuzzy
 msgctxt "app_name"
 msgid "ToureNPlaner"
 msgstr "ToureNPlaner"
 
-#, fuzzy
 msgctxt "choose_server_screen"
 msgid "Choose a server"
 msgstr "Wählen sie einen Server"
 
-#, fuzzy
 msgctxt "add_server"
 msgid "Add server"
 msgstr "Server hinzufügen"
@@ -129,10 +126,9 @@ msgctxt "map_generator"
 msgid "Map Generator"
 msgstr ""
 
-#, fuzzy
 msgctxt "input_map_generator"
 msgid "Choose Map Generator"
-msgstr "Wählen sie einen Server"
+msgstr ""
 
 msgctxt "mapnik"
 msgid "Mapnik"
@@ -237,8 +233,4 @@ msgstr ""
 msgctxt "edit"
 msgid "edit"
 msgstr ""
-
-#~ msgctxt "yourlocation"
-#~ msgid "your location"
-#~ msgstr ""
 

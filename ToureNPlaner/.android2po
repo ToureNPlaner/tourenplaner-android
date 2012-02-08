@@ -23,7 +23,7 @@
 # However, you may often find it necessary to restrict the
 # files used. This option allows to explicitly define
 # the groups being processed.
---groups strings arrays
+# --groups strings arrays
 
 
 # Specify a custom gettext domain. A gettext domain is

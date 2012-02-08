@@ -1,0 +1,44 @@
+# German translations for PROJECT.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2012-02-08 19:43+0100\n"
+"PO-Revision-Date: 2012-02-08 19:43+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "colors:0"
+msgid "red"
+msgstr "rot"
+
+msgctxt "colors:1"
+msgid "orange"
+msgstr "orange"
+
+msgctxt "colors:2"
+msgid "yellow"
+msgstr "gelb"
+
+msgctxt "colors:3"
+msgid "green"
+msgstr "grün"
+
+msgctxt "colors:4"
+msgid "blue"
+msgstr "blau"
+
+msgctxt "colors:5"
+msgid "violet"
+msgstr "violett"
+
