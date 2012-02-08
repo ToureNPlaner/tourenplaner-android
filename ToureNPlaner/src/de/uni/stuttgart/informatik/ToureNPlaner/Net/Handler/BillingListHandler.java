@@ -17,17 +17,19 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.BillingScreen;
 
 public class BillingListHandler extends ConnectionHandler{
 private ArrayList<BillingItem> billinglist;
+private String limitString = "limit=100";
+private String offsetString = "offset=0";
 	public BillingListHandler(Observer listener, Session session) {
 		super(listener, session);
 	
 	}
-
+	public void setLimit(int i){
+		limitString = "limit="+Integer.valueOf(i);
+	}
 	@Override
 	protected String getSuffix() {
-		//return "/authuser";
-		return "/listrequests?limit=100&offset=0";
+		return "/listrequests?" + limitString + "&" + offsetString;
 	}
-
 	@Override
 	protected boolean isPost() {
 		return false;

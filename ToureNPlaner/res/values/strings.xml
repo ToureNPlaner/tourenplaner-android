@@ -17,6 +17,15 @@
     <!--algorithmscreen-->
     <string name="choose_algorithmn_screen">Choose an algorithmn</string>
     <string name="billing">billing</string>
+    
+    <!-- billingscreen -->
+    
+    <!-- billingscreenpreferences -->
+    <string name="billingscreen_preferences">billingscreen preferences</string>
+    <string name="offset">offset</string>
+    <string name="limit">limit</string>
+    <string name="set_offset">enter offset</string>
+    <string name="set_limit">enter limit</string>
 
     <!--mapscreen-->
     <string name="map_screen">mapscreen</string>

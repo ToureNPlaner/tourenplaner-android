@@ -14,10 +14,11 @@
         <activity android:name=".UI.Activities.AlgorithmScreen"></activity>
         <activity android:name=".UI.Activities.MapScreen" android:configChanges="orientation"></activity>
         <activity android:name=".UI.Activities.BillingScreen"></activity>
+        <activity android:name=".UI.Activities.BillingScreenPreferences"></activity>
         <activity android:name=".UI.Activities.NodelistScreen"></activity>
         <activity android:name=".UI.Activities.NodeResultlistScreen"></activity>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"></activity>
-        <activity android:name=".UI.Activities.Preferences"></activity>
+        <activity android:name=".UI.Activities.MapScreenPreferences"></activity>
         <activity android:name=".UI.Activities.EditConstraintScreen"></activity>
          <activity android:name=".UI.Activities.ServerScreen">
         	<intent-filter>
