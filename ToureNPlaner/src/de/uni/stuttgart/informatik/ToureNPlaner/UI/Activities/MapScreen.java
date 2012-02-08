@@ -147,7 +147,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 
 		// setting up LocationManager and set MapFocus on lastknown GPS-Location
-		if (isFirstStart) {
+		if (isFirstStart && gpsGeoPoint != null) {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
