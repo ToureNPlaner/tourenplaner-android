@@ -16,4 +16,9 @@ public class Error extends Exception {
 
 		return error;
 	}
+
+	@Override
+	public String toString() {
+		return message;
+	}
 }
