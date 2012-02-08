@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-<PreferenceCategory
+    <PreferenceCategory
             android:title="@string/mapscreen_preferences">
-    <EditTextPreference
-                android:key="tile_server"
-                android:title="@string/tile_server"
-                android:dialogTitle="@string/input_tile_server" />
-    
-    <CheckBoxPreference
-        	android:key="is_offline_map"
-        	android:title="@string/is_offline_map"
-        	android:defaultValue="false"
-        	 />
-    
-    <EditTextPreference
+        <ListPreference
+                android:key="map_generator"
+                android:title="@string/map_generator"
+                android:dialogTitle="@string/input_map_generator"/>
+        <EditTextPreference
                 android:key="offline_map_location"
                 android:title="@string/offline_map_location"
-                android:dialogTitle="@string/input_offline_map_location" />
-    <CheckBoxPreference
-        	android:key="is_instant_request"
-        	android:title="@string/is_instant_request"
-        	android:defaultValue="false"
-        	 />
-        	 
-     <CheckBoxPreference
-        	android:key="back_is_delete_marker"
-        	android:title="@string/back_is_delete_marker"
-        	android:defaultValue="true"
-        	 />
-         
-</PreferenceCategory>
-<PreferenceCategory
-            android:title="Others">
-    
-    
+                android:dialogTitle="@string/input_offline_map_location"/>
+        <EditTextPreference
+                android:key="tile_server"
+                android:title="@string/tile_server"
+                android:dialogTitle="@string/input_tile_server"/>
+    </PreferenceCategory>
 
+    <PreferenceCategory
+            android:title="Others">
+        <CheckBoxPreference
+                android:key="is_instant_request"
+                android:title="@string/is_instant_request"
+                android:defaultValue="false"
+                />
+        <CheckBoxPreference
+                android:key="back_is_delete_marker"
+                android:title="@string/back_is_delete_marker"
+                android:defaultValue="true"
+                />
     </PreferenceCategory>
 </PreferenceScreen>

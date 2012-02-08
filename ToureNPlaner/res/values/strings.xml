@@ -17,9 +17,9 @@
     <!--algorithmscreen-->
     <string name="choose_algorithmn_screen">Choose an algorithmn</string>
     <string name="billing">billing</string>
-    
+
     <!-- billingscreen -->
-    
+
     <!-- billingscreenpreferences -->
     <string name="billingscreen_preferences">billingscreen preferences</string>
     <string name="offset">offset</string>
@@ -29,20 +29,22 @@
 
     <!--mapscreen-->
     <string name="map_screen">mapscreen</string>
-    
+
     <!--nodelist_menu-->
     <string name="change_order">change order</string>
-    
+    <string name="map_file_error">Mapfile is not valid. Falling back.</string>
+
     <!--mapscreen_preferences-->
     <string name="mapscreen_preferences">mapscreen preferences</string>
     <string name="input_tile_server">enter tile-server</string>
     <string name="tile_server">tile-server</string>
-    <string name="is_offline_map">use offline map</string>
     <string name="offline_map_location">offline map location</string>
     <string name="input_offline_map_location">enter offline map location</string>
     <string name="is_instant_request">instant request</string>
     <string name="back_is_delete_marker">use back to delete markers</string>
-    
+    <string name="map_generator">Map Generator</string>
+    <string name="input_map_generator">Choose Map Generator</string>
+
 
     <!--menu-->
     <string name="nodelist">nodelist</string>

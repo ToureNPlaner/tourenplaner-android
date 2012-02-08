@@ -30,7 +30,7 @@ public class CustomTileDownloader extends TileDownloader {
 
 	@Override
 	public String getTilePath(Tile tile) {
-		return String.format(path, tile.tileY, tile.tileX, tile.zoomLevel);
+		return String.format(path, tile.zoomLevel, tile.tileX, tile.tileY);
 	}
 
 	@Override

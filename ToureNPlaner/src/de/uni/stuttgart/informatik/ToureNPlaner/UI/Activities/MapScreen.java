@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
@@ -23,14 +24,20 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
+import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.MapnikTileDownloader;
+import org.mapsforge.android.maps.mapgenerator.tiledownloader.OpenCycleMapTileDownloader;
+import org.mapsforge.android.maps.mapgenerator.tiledownloader.OsmarenderTileDownloader;
 import org.mapsforge.android.maps.overlay.ArrayWayOverlay;
 import org.mapsforge.android.maps.overlay.OverlayWay;
 import org.mapsforge.core.GeoPoint;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MapScreen extends MapActivity implements Session.Listener {
@@ -91,7 +98,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
 		boolean isFirstStart = savedInstanceState == null;
 		// If we get created for the first time we get our data from the intent
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
@@ -100,29 +106,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		//-----get mapScreen_Preferences
-		SharedPreferences mapScreen_preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String tileServer = mapScreen_preferences.getString("tile_server", "gerbera.informatik.uni-stuttgart.de/osm/tiles");
-		String offlineMapLocation = mapScreen_preferences.getString("offline_map_location", "/sdcard/...");
-		boolean offlineMap = mapScreen_preferences.getBoolean("is_offline_map", false);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		isInstantRequest = mapScreen_preferences.getBoolean("is_instant_request", false);
-		backIsDeleteMarker = mapScreen_preferences.getBoolean("back_is_delete_marker", true);
+		isInstantRequest = preferences.getBoolean("is_instant_request", false);
+		backIsDeleteMarker = preferences.getBoolean("back_is_delete_marker", true);
 
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
-		this.mapView = (MapView) findViewById(R.id.mapView);
+		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.setMapGenerator(new MapnikTileDownloader());
-		//mapView.setRenderTheme(MapView.DEFAULT_RENDER_THEME);
-		//mapView.setMapTileDownloadServer(tileServer);
-		if (offlineMap) {
-			//mapView.setMapFile(offlineMapLocation);
-		}
-		//mapView.setFpsCounter(true);
-		//mapView.setMemoryCardCachePersistence(true);
-		//mapView.setMemoryCardCacheSize(100);//overlay for nodeItems
 
 		initializeHandler();
 
@@ -134,6 +128,37 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		session.registerListener(nodeOverlay);
 		session.registerListener(this);
+	}
+
+	private void setupMapView(SharedPreferences preferences) {
+		String tileServer = preferences.getString("tile_server", MapScreenPreferences.defaultTileServer);
+		String offlineMapLocation = preferences.getString("offline_map_location", MapScreenPreferences.defaultMapLocation);
+
+		switch (MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPNIK.name()))) {
+			case MAPNIK:
+				mapView.setMapGenerator(new MapnikTileDownloader());
+				break;
+			case OSMANDER:
+				mapView.setMapGenerator(new OsmarenderTileDownloader());
+				break;
+			case OPENCYCLE:
+				mapView.setMapGenerator(new OpenCycleMapTileDownloader());
+				break;
+			case FILE:
+				mapView.setMapGenerator(new DatabaseRenderer());
+				if (!mapView.setMapFile(offlineMapLocation)) {
+					mapView.setMapGenerator(new MapnikTileDownloader());
+					Toast.makeText(this, getResources().getString(R.string.map_file_error), Toast.LENGTH_LONG).show();
+				}
+				break;
+			case CUSTOM:
+				try {
+					mapView.setMapGenerator(new CustomTileDownloader(new URL(tileServer), (byte) 17));
+				} catch (MalformedURLException e) {
+					Log.w("TP", e);
+				}
+				break;
+		}
 	}
 
 	private void setupGPS(boolean isFirstStart) {
@@ -321,6 +346,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		setupMapView(PreferenceManager.getDefaultSharedPreferences(this));
 
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
