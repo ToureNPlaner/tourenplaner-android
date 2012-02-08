@@ -4,6 +4,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters;
 import java.util.ArrayList;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
@@ -13,44 +14,41 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 public class BillingListAdapter extends BaseExpandableListAdapter {
-	private ArrayList<Billing> billingList = new ArrayList<Billing>();
-	Billing billingItem = new Billing(1, 0, "tsp", "no_request","no_response", 1337, "01.01.0001", "21.12.2012", 5021, "ok");
-	Billing billingItem2 = new Billing(2, 0, "csp", "no_request","no_response", 1337, "01.01.0002", "21.12.2013", 5021, "ok");
-    private String[] textCaptions;
-    private String[][] textItem;
+	private ArrayList<BillingItem> billingListItem = new ArrayList<BillingItem>();
+    private String[] billingCaptions;
+    private String[][] billingItem;
     private Context context;
+    private ArrayList<BillingItem> billingItemlist;
     
-    public BillingListAdapter(Context context){
-    	SetupList();
+    public BillingListAdapter(Context context,ArrayList<BillingItem> billingItemlist){
     	this.context = context;
-    }
-    
-    private void SetupList(){
-    	// TODO:: create BillingList which contains all Billings
-    	billingList.add(billingItem);
-    	billingList.add(billingItem2);
-    	textCaptions = new String[billingList.size()];
-    	for (int i = 0;i<billingList.size();i++){
-    		textCaptions[i] = "Tour " + String.valueOf(billingList.get(i).getRequestid());
-    	}
-    	textItem = new String[textCaptions.length][10];
-    	for (int i = 0;i<textCaptions.length;i++){
-    		textItem[i][0] = "reqID: " +String.valueOf(billingList.get(i).getRequestid());
-    		textItem[i][1] = "userID: " + String.valueOf(billingList.get(i).getUserid());
-    		textItem[i][2] = "algorithmus: "+ String.valueOf(billingList.get(i).getAlgorithm());
-    		textItem[i][3] = "request: "+ String.valueOf(billingList.get(i).getRequest());
-    		textItem[i][4] = "response: "+ String.valueOf(billingList.get(i).getResponse());
-    		textItem[i][5] = "cost: "+ String.valueOf(billingList.get(i).getCost());
-    		textItem[i][6] = "requestDate: "+ String.valueOf(billingList.get(i).getRequestDate());
-    		textItem[i][7] = "finishedDate: "+ String.valueOf(billingList.get(i).getFinishedDate());
-    		textItem[i][8] = "duration: "+ String.valueOf(billingList.get(i).getDuration());
-    		textItem[i][9] = "status: "+ String.valueOf(billingList.get(i).getStatus());
-    	}
+    	this.billingItemlist = billingItemlist;
+    	SetupList();
     	
     }
     
+    private void SetupList(){
+       	billingCaptions = new String[billingItemlist.size()];
+    	for (int i = 0;i<billingItemlist.size();i++){
+    		billingCaptions[i] = "Tour " + String.valueOf(billingItemlist.get(i).getRequestid());
+    	}
+    	billingItem = new String[billingCaptions.length][10];
+    	for (int i = 0;i<billingCaptions.length;i++){	
+    		billingItem[i][0] = "reqID: " +billingItemlist.get(i).getRequestid();
+    		billingItem[i][1] = "userID: "+billingItemlist.get(i).getUserid();
+    		billingItem[i][2] = "algorithmus: "+billingItemlist.get(i).getAlgorithm();
+    		billingItem[i][3] = "request: "+billingItemlist.get(i).getRequest();
+    		billingItem[i][4] = "response: "+billingItemlist.get(i).getResponse();
+    		billingItem[i][5] = "cost: "+billingItemlist.get(i).getCost();
+    		billingItem[i][6] = "requestDate: "+billingItemlist.get(i).getRequestdate();
+    		billingItem[i][7] = "finishedDate: "+billingItemlist.get(i).getFinishdate();
+    		billingItem[i][8] = "duration: "+billingItemlist.get(i).getDuration();
+    		billingItem[i][9] = "status: "+billingItemlist.get(i).getStatus();
+    	}   	
+    }
+    
     public Object getChild(int groupPosition, int childPosition) {
-        return textItem[groupPosition][childPosition];
+        return billingItem[groupPosition][childPosition];
     }
 
     public long getChildId(int groupPosition, int childPosition) {
@@ -58,7 +56,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
     }
 
     public int getChildrenCount(int groupPosition) {
-        return textItem[groupPosition].length;
+        return billingItem[groupPosition].length;
     }
 
     public TextView getGenericView() {
@@ -84,11 +82,11 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
     }
 
     public Object getGroup(int groupPosition) {
-        return textCaptions[groupPosition];
+        return billingCaptions[groupPosition];
     }
 
     public int getGroupCount() {
-        return textCaptions.length;
+        return billingCaptions.length;
     }
 
     public long getGroupId(int groupPosition) {

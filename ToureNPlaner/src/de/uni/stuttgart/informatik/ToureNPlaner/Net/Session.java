@@ -3,6 +3,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.User;
@@ -27,19 +28,21 @@ import java.util.zip.GZIPOutputStream;
 public class Session implements Serializable {
 	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
-
+	
 	private static class Data implements Serializable {
 		private ServerInfo serverInfo;
 		private String username;
 		private String password;
 		private AlgorithmInfo selectedAlgorithm;
 		private User user;
+	
 	}
 
 	private final UUID uuid;
 	private static transient Data d;
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
+	private static transient ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
 
 	private static HostnameVerifier acceptAllHostnameVerifier = new HostnameVerifier() {
 		@Override
@@ -318,5 +321,13 @@ public class Session implements Serializable {
 		ServerInfoHandler handler = new ServerInfoHandler(listener, url);
 		handler.execute();
 		return handler;
+	}
+	
+	public ArrayList<BillingItem> getBillingList(){
+		return Session.billinglist;
+	
+	}
+	public void setBillingItemlist(ArrayList<BillingItem> billingItemlist){
+		 Session.billinglist = billingItemlist;
 	}
 }
