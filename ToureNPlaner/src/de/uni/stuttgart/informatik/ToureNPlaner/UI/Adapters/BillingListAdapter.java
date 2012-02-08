@@ -14,36 +14,35 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 public class BillingListAdapter extends BaseExpandableListAdapter {
-	private ArrayList<BillingItem> billingListItem = new ArrayList<BillingItem>();
+	private ArrayList<BillingItem> billinglist ;
     private String[] billingCaptions;
     private String[][] billingItem;
     private Context context;
-    private ArrayList<BillingItem> billingItemlist;
     
-    public BillingListAdapter(Context context,ArrayList<BillingItem> billingItemlist){
+    public BillingListAdapter(Context context,ArrayList<BillingItem> billinglist){
     	this.context = context;
-    	this.billingItemlist = billingItemlist;
+    	this.billinglist = billinglist;
     	SetupList();
     	
     }
     
     private void SetupList(){
-       	billingCaptions = new String[billingItemlist.size()];
-    	for (int i = 0;i<billingItemlist.size();i++){
-    		billingCaptions[i] = "Tour " + String.valueOf(billingItemlist.get(i).getRequestid());
+       	billingCaptions = new String[billinglist.size()];
+    	for (int i = 0;i<billinglist.size();i++){
+    		billingCaptions[i] = "Tour " + String.valueOf(billinglist.get(i).getRequestid());
     	}
     	billingItem = new String[billingCaptions.length][10];
     	for (int i = 0;i<billingCaptions.length;i++){	
-    		billingItem[i][0] = "reqID: " +billingItemlist.get(i).getRequestid();
-    		billingItem[i][1] = "userID: "+billingItemlist.get(i).getUserid();
-    		billingItem[i][2] = "algorithmus: "+billingItemlist.get(i).getAlgorithm();
-    		billingItem[i][3] = "request: "+billingItemlist.get(i).getRequest();
-    		billingItem[i][4] = "response: "+billingItemlist.get(i).getResponse();
-    		billingItem[i][5] = "cost: "+billingItemlist.get(i).getCost();
-    		billingItem[i][6] = "requestDate: "+billingItemlist.get(i).getRequestdate();
-    		billingItem[i][7] = "finishedDate: "+billingItemlist.get(i).getFinishdate();
-    		billingItem[i][8] = "duration: "+billingItemlist.get(i).getDuration();
-    		billingItem[i][9] = "status: "+billingItemlist.get(i).getStatus();
+    		billingItem[i][0] = "reqID: " +billinglist.get(i).getRequestid();
+    		billingItem[i][1] = "userID: "+billinglist.get(i).getUserid();
+    		billingItem[i][2] = "algorithmus: "+billinglist.get(i).getAlgorithm();
+    		billingItem[i][3] = "request: "+billinglist.get(i).getRequest();
+    		billingItem[i][4] = "response: "+billinglist.get(i).getResponse();
+    		billingItem[i][5] = "cost: "+billinglist.get(i).getCost();
+    		billingItem[i][6] = "requestDate: "+billinglist.get(i).getRequestdate();
+    		billingItem[i][7] = "finishedDate: "+billinglist.get(i).getFinishdate();
+    		billingItem[i][8] = "duration: "+billinglist.get(i).getDuration();
+    		billingItem[i][9] = "status: "+billinglist.get(i).getStatus();
     	}   	
     }
     

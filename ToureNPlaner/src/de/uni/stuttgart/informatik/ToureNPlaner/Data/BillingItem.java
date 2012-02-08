@@ -62,34 +62,27 @@ public class BillingItem implements Serializable {
 	public String getStatus() {
 		return status;
 	}
-
+	public static BillingItem parseItem(JsonNode object){
+		BillingItem billing = new BillingItem();
+		billing.algorithm = object.get("algorithm").asText();
+		billing.requestid = object.get("requestid").asInt();
+		billing.userid = object.get("userid").asInt();
+		billing.request ="null";//object.get("request").asText();
+		billing.response = "null";//object.get("response").asText();
+		billing.cost= object.get("cost").asInt();
+		billing.requestdate = object.get("requestdate").asText();
+		billing.finishdate ="null";//object.get("finishdate").asText();
+		billing.duration = object.get("duration").asInt();
+		billing.status = object.get("status").asText();
+		return billing;
+		
+	}
 	public static ArrayList<BillingItem> parse(JsonNode object) {
 		
 		ArrayList<BillingItem> billingItemlist = new ArrayList<BillingItem>();
-		//TODO:: reimplement when /requestlist is available
-		//JsonNode requests = object.get("requests");
-		//Integer numbers = object.get("numbers").asInt();
-		Integer numbers = 1;
-		for(int i = 0;i<numbers;i++){
-			
-			BillingItem billing = new BillingItem();
-			//TODO:: implement rest of BillingItem when available
-			//TODO:: replace static BillingItem
-			//billing.algorithm = requests.get("algorithm").asText();
-			//...
-			billing.algorithm = "tsp";
-			billing.requestid = 1;
-			billing.userid = 42;
-			billing.request ="{...}";
-			billing.response = "{...}";
-			billing.cost= 512;
-			billing.requestdate = "2012-01-01 13:37";
-			billing.finishdate ="2012-01-01 13:42";
-			billing.duration = 300;
-			billing.status = "OK";
-			
-			
-			billingItemlist.add(billing);
+		JsonNode requests = object.get("requests");
+		for (JsonNode listItem : requests) {
+			billingItemlist.add(parseItem(listItem));
 		}
 		return billingItemlist;
 	}
