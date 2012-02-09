@@ -54,7 +54,12 @@ public abstract class RawHandler extends AsyncTask<Void, Void, Object> {
 				try {
 					stream = new DoneHandlerInputStream(urlConnection.getInputStream());
 				} catch (IOException exception) {
-					stream = new DoneHandlerInputStream(urlConnection.getErrorStream());
+					stream = urlConnection.getErrorStream();
+					if (stream == null) {
+						throw exception;
+					}
+					stream = new DoneHandlerInputStream(stream);
+
 				}
 				JacksonManager.ContentType type = JacksonManager.ContentType.parse(urlConnection.getContentType());
 
