@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.AddNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNNSEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -34,12 +36,13 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
 
 	private final Context context;
-	private Session session;
+	private final Session session;
 
 	private static final int GPS_RADIUS = 10;
 	private OverlayItem gpsMarker;
 	private String constraintValue;
 	private boolean useGps = false;
+	private boolean isInstantRequest = false;
 
 	private GpsDrawable gpsDrawable;
 	private Drawable defaultDrawable;
@@ -50,6 +53,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		this.session = session;
 		this.context = context;
 		this.defaultDrawable = defaultDrawable;
+
+		this.isInstantRequest = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("is_instant_request", false);
 		setupGpsDrawable();
 
 		loadFromModel();
@@ -69,12 +74,63 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		return gpsMarker == null ? null : gpsMarker.getPoint();
 	}
 
-	synchronized private void loadFromModel() {
+	private synchronized void loadFromModel() {
 		list.clear();
 		for (int i = 0; i < session.getNodeModel().size(); i++) {
 			addMarkerToMap(session.getNodeModel().get(i));
 		}
 		updateIcons();
+	}
+
+	private Node dragging = null;
+
+	@Override
+	protected boolean onDragStart(int index) {
+		// don't select the GPS point
+		if (index < list.size())
+			dragging = session.getNodeModel().get(index);
+		return true;
+	}
+
+	@Override
+	public void onDragStop(GeoPoint geoPoint, MapView mapView) {
+		final int index = session.getNodeModel().getNodeVector().indexOf(dragging);
+		if (index != -1) {
+			final Node node = dragging;
+			node.setGeoPoint(geoPoint);
+			((MapScreen) context).runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					((MapScreen) context).performNNSearch(node);
+					if (isInstantRequest) {
+						Edit edit = new UpdateNodeEdit(session, index, node);
+						edit.perform();
+					}
+				}
+			});
+
+		}
+		dragging = null;
+	}
+
+	@Override
+	public void onDragMove(GeoPoint geoPoint, MapView mapView) {
+		int index = session.getNodeModel().getNodeVector().indexOf(dragging);
+		if (index != -1) {
+			Edit edit;
+			if (isInstantRequest) {
+				dragging.setGeoPoint(geoPoint);
+				edit = new UpdateNodeEdit(session, index, dragging);
+			} else {
+				edit = new UpdateNNSEdit(session, dragging, geoPoint);
+			}
+			edit.perform();
+		}
+	}
+
+	@Override
+	public void onDragCancel() {
+		dragging = null;
 	}
 
 	@Override
@@ -108,8 +164,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 				for (int i = 0; i < cl.size(); i++) {
 					ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
 				}
-				if(session.getNodeModel().size() > 0){
-				session.getNodeModel().getNodeVector().set(session.getNodeModel().size() - 1, session.getNodeModel().getNodeVector().get(session.getNodeModel().size() - 1));
+				if (session.getNodeModel().size() > 0) {
+					session.getNodeModel().getNodeVector().set(session.getNodeModel().size() - 1, session.getNodeModel().getNodeVector().get(session.getNodeModel().size() - 1));
 				}
 			}
 		});
@@ -132,9 +188,9 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 			return list.get(i);
 	}
 
+
 	@Override
 	public boolean onTap(int i) {
-
 		if (i == list.size()) {
 			final GeoPoint gpsPoint = this.gpsMarker.getPoint();
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
