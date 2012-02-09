@@ -27,19 +27,15 @@ public class Request {
 		root.put("points", nodesArray);
 
 		if (constraints != null && !constraints.isEmpty()) {
-			ArrayNode constraintsArray = new ArrayNode(factory);
+			ObjectNode constraintsNode = new ObjectNode(factory);
 			for (int i = 0; i < constraints.size(); i++) {
-				constraintsArray.add(generate(factory, constraints.get(i)));
+				if (constraints.get(i).getValue() != null) {
+					constraintsNode.put(constraints.get(i).getName(), constraints.get(i).getValue().toString());
+				}
 			}
-			root.put("constraints", constraintsArray);
+			root.put("constraints", constraintsNode);
 		}
 
 		return root;
-	}
-
-	private static JsonNode generate(JsonNodeFactory factory, Constraint constraint) {
-		ObjectNode node = new ObjectNode(factory);
-		node.put(constraint.getName(), constraint.getValue().toString());
-		return node;
 	}
 }
