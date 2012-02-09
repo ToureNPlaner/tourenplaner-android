@@ -40,16 +40,18 @@ public class JacksonManager {
 		}
 
 		public static ContentType parse(String header) {
+			if (header == null)
+				throw new IllegalArgumentException("No Content-Type Header.");
 			String[] s = header.split(";");
 			if (s.length < 0)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Wrong Content-Type Header. Was: \"" + header + "\".");
 
 			for (ContentType t : ContentType.values()) {
 				if (s[0].toLowerCase().equals(t.identifier))
 					return t;
 			}
 
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Wrong Content-Type Header. Was: \"" + header + "\".");
 		}
 	}
 }
