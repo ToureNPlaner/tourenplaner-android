@@ -137,7 +137,11 @@ public class LoginScreen extends FragmentActivity implements Observer {
 	public void onCompleted(RawHandler caller, Object object) {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
-		dialog.dismiss();
+		try {
+			dialog.dismiss();
+		} catch (IllegalStateException e) {
+			// Can not perform this action after onSaveInstanceState
+		}
 		Intent myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
 		myIntent.putExtra(Session.IDENTIFIER, session);
 		startActivity(myIntent);
@@ -147,7 +151,11 @@ public class LoginScreen extends FragmentActivity implements Observer {
 	public void onError(RawHandler caller, Object object) {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
-		dialog.dismiss();
+		try {
+			dialog.dismiss();
+		} catch (IllegalStateException e) {
+			// Can not perform this action after onSaveInstanceState
+		}
 		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 	}
 }
