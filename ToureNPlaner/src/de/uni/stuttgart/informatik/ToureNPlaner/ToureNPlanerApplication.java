@@ -12,13 +12,18 @@ import java.util.Date;
 public class ToureNPlanerApplication extends Application {
 	private static Context context;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-	    context = getApplicationContext();
-        disableConnectionReuseIfNecessary();
-	    performCleanUp();
-    }
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		context = getApplicationContext();
+		disableConnectionReuseIfNecessary();
+		new Thread() {
+			@Override
+			public void run() {
+				performCleanUp();
+			}
+		}.start();
+	}
 
 	public static Context getContext() {
 		return context;
@@ -27,28 +32,28 @@ public class ToureNPlanerApplication extends Application {
 	/**
 	 * Cleans up old Session Files
 	 */
-	private void performCleanUp() {
+	private static void performCleanUp() {
 		File[] files = Session.openCacheDir().listFiles();
 
-		if(files == null)
+		if (files == null)
 			return;
 
 		long currentTime = new Date().getTime();
 
-		for(File file : files) {
+		for (File file : files) {
 			// If file is older than a day
-			if(currentTime - file.lastModified() >= 24 * 60 * 60 * 1000) {
+			if (currentTime - file.lastModified() >= 24 * 60 * 60 * 1000) {
 				file.delete();
 			}
 		}
 	}
 
-    private void disableConnectionReuseIfNecessary() {
-        // HTTP connection reuse which was buggy pre-froyo
-        // Build.VERSION_CODES.FROYO
-        if (Build.VERSION.SDK_INT < 8) {
-            System.setProperty("http.keepAlive", "false");
-	        Log.i("ToureNPlaner","HTTP keep-alive disabled");
-        }
-    }
+	private static void disableConnectionReuseIfNecessary() {
+		// HTTP connection reuse which was buggy pre-froyo
+		// Build.VERSION_CODES.FROYO
+		if (Build.VERSION.SDK_INT < 8) {
+			System.setProperty("http.keepAlive", "false");
+			Log.i("ToureNPlaner", "HTTP keep-alive disabled");
+		}
+	}
 }
