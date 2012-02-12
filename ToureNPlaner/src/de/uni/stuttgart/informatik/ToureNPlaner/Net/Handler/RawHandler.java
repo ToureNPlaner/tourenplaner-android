@@ -11,17 +11,18 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 
 public abstract class RawHandler extends AsyncTask<Void, Void, Object> {
-	private Observer listener;
+	private WeakReference<Observer> listener;
 
 	public RawHandler(Observer listener) {
-		this.listener = listener;
+		setListener(listener);
 	}
 
 	public void setListener(Observer listener) {
-		this.listener = listener;
+		this.listener = new WeakReference<Observer>(listener);
 	}
 
 	/**
@@ -32,15 +33,20 @@ public abstract class RawHandler extends AsyncTask<Void, Void, Object> {
 	@Override
 	public void onPostExecute(Object object) {
 		if (listener == null) {
-			// TODO remove
 			Log.w("TP", "Null Listener!");
 			return;
 		}
 
+		Observer l = listener.get();
+
+		// The listener has been collected
+		if (l == null)
+			return;
+
 		if (object instanceof Exception) {
-			listener.onError(this, object);
+			l.onError(this, object);
 		} else {
-			listener.onCompleted(this, object);
+			l.onCompleted(this, object);
 		}
 	}
 
