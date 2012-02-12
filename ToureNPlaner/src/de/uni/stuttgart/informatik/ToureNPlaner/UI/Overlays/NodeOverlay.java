@@ -11,15 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.widget.EditText;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.AddNodeEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNNSEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNodeEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -42,7 +38,6 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private OverlayItem gpsMarker;
 	private String constraintValue;
 	private boolean useGps = false;
-	private boolean isInstantRequest = false;
 
 	private GpsDrawable gpsDrawable;
 	private Drawable defaultDrawable;
@@ -58,10 +53,6 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 		loadFromModel();
 		updateGpsMarker(gpsPoint);
-	}
-
-	public void onResume() {
-		this.isInstantRequest = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("is_instant_request", false);
 	}
 
 	private void setupGpsDrawable() {
@@ -125,13 +116,9 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public void onDragMove(GeoPoint geoPoint, MapView mapView) {
 		int index = session.getNodeModel().getNodeVector().indexOf(dragging);
 		if (index != -1) {
-			Edit edit;
-			if (isInstantRequest) {
-				dragging.setGeoPoint(geoPoint);
-				edit = new UpdateNodeEdit(session, index, dragging);
-			} else {
-				edit = new UpdateNNSEdit(session, dragging, geoPoint);
-			}
+			list.get(index).setPoint(geoPoint);
+			requestRedraw();
+			Edit edit = new UpdateDndEdit(session, dragging, geoPoint);
 			edit.perform();
 		}
 	}

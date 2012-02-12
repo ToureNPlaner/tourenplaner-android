@@ -234,7 +234,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				edit.perform();
 				return true;
 			case R.id.calculate:
-				performRequest();
+				performRequest(true);
 				return true;
 			case R.id.resultlist:
 //				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
@@ -262,11 +262,16 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	}
 
-	private void performRequest() {
-		if (session.canPerformRequest()) {
-			if (handler != null)
-				handler.cancel(true);
-			handler = (RequestHandler) new RequestHandler(requestListener, session).execute();
+	private void performRequest(boolean force) {
+		if (handler != null && !force)
+			return;
+
+		if (handler != null)
+			handler.cancel(true);
+
+		RequestHandler h = session.performRequest(requestListener);
+		if (h != null) {
+			handler = h;
 			setProgressBarIndeterminateVisibility(true);
 		}
 	}
@@ -363,8 +368,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupMapView(preferences);
 
-		nodeOverlay.onResume();
-
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
@@ -409,14 +412,16 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						addPathToMap(session.getResult().getWay());
 					}
 				}
+				if (0 < (change & Session.DND_CHANGE) && isInstantRequest) {
+					performRequest(false);
+				}
 				if (0 < (change & Session.MODEL_CHANGE)) {
+					if (isInstantRequest) {
+						performRequest(true);
+					}
 					if (0 == (change & Session.ADD_CHANGE)) {
 						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
-					}
-
-					if (isInstantRequest) {
-						performRequest();
 					}
 				}
 			}

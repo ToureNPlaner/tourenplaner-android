@@ -6,6 +6,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.User;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
@@ -153,6 +154,7 @@ public class Session implements Serializable {
 	public static final int RESULT_CHANGE = 2;
 	public static final int NNS_CHANGE = 4;
 	public static final int ADD_CHANGE = 8;
+	public static final int DND_CHANGE = 16;
 
 	public interface Listener {
 		void onChange(int change);
@@ -176,6 +178,9 @@ public class Session implements Serializable {
 	}
 
 	public void notifyChangeListerners(final int change) {
+		if (0 < (change & MODEL_CHANGE) || 0 < (change & DND_CHANGE)) {
+			nodeModel.incVersion();
+		}
 		for (int i = 0; i < listeners.size(); i++) {
 			listeners.get(i).onChange(change);
 		}
@@ -320,5 +325,13 @@ public class Session implements Serializable {
 		ServerInfoHandler handler = new ServerInfoHandler(listener, url);
 		handler.execute();
 		return handler;
+	}
+
+	public RequestHandler performRequest(Observer requestListener) {
+		if (canPerformRequest() && (result == null || nodeModel.getVersion() != result.getVersion())) {
+			return (RequestHandler) new RequestHandler(requestListener, this).execute();
+		} else {
+			return null;
+		}
 	}
 }

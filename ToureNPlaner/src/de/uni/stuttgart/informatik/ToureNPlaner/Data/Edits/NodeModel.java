@@ -10,6 +10,16 @@ public class NodeModel implements Serializable {
 
 	private ArrayList<Node> nodeArrayList = new ArrayList<Node>();
 
+	private int version = 0;
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void incVersion() {
+		this.version++;
+	}
+
 	public static final String IDENTIFIER = "nodemodel";
 
 	public ArrayList<Node> getNodeVector() {

@@ -17,6 +17,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class RequestHandler extends ConnectionHandler {
+	private int version;
+
 	public RequestHandler(Observer listener, Session session) {
 		super(listener, session);
 	}
@@ -42,6 +44,7 @@ public class RequestHandler extends ConnectionHandler {
 	@Override
 	protected void handleOutput(OutputStream outputStream) throws Exception {
 		ObjectMapper mapper = JacksonManager.getJsonMapper();
+		version = session.getNodeModel().getVersion();
 		JsonNode root = Request.generate(mapper.getNodeFactory(),
 				getNodes(),
 				getConstraints());
@@ -56,7 +59,7 @@ public class RequestHandler extends ConnectionHandler {
 		final long t0 = System.currentTimeMillis();
 		Result result = Result.parse(type, inputStream);
 		Log.v("TP", "ResultParse: " + (System.currentTimeMillis() - t0) + " ms");
-
+		result.setVersion(version);
 		return result;
 	}
 }

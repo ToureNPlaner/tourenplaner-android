@@ -15,6 +15,16 @@ public class Result implements Serializable {
 	private GeoPoint[][] way;
 	private ArrayList<Node> points;
 
+	private int version = 0;
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public GeoPoint[][] getWay() {
 		return way;
 	}
