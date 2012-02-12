@@ -54,11 +54,14 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		this.context = context;
 		this.defaultDrawable = defaultDrawable;
 
-		this.isInstantRequest = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("is_instant_request", false);
 		setupGpsDrawable();
 
 		loadFromModel();
 		updateGpsMarker(gpsPoint);
+	}
+
+	public void onResume() {
+		this.isInstantRequest = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("is_instant_request", false);
 	}
 
 	private void setupGpsDrawable() {
@@ -102,10 +105,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 				@Override
 				public void run() {
 					((MapScreen) context).performNNSearch(node);
-					if (isInstantRequest) {
-						Edit edit = new UpdateNodeEdit(session, index, node);
-						edit.perform();
-					}
+					Edit edit = new UpdateNodeEdit(session, index, node);
+					edit.perform();
 				}
 			});
 
