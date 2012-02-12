@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
-import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
@@ -124,35 +123,50 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		session.registerListener(this);
 	}
 
-	private void setupMapView(SharedPreferences preferences) {
-		String tileServer = preferences.getString("tile_server", MapScreenPreferences.defaultTileServer);
-		String offlineMapLocation = preferences.getString("offline_map_location", MapScreenPreferences.defaultMapLocation);
+	private String tileServer;
+	private String offlineMapLocation;
+	private MapScreenPreferences.MapGenerator mapGenerator;
 
-		switch (MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPNIK.name()))) {
-			case MAPNIK:
-				mapView.setMapGenerator(new MapnikTileDownloader());
-				break;
-			case OSMANDER:
-				mapView.setMapGenerator(new OsmarenderTileDownloader());
-				break;
-			case OPENCYCLE:
-				mapView.setMapGenerator(new OpenCycleMapTileDownloader());
-				break;
-			case FILE:
-				mapView.setMapGenerator(new DatabaseRenderer());
-				if (!mapView.setMapFile(offlineMapLocation)) {
+	private void setupMapView(SharedPreferences preferences) {
+		String newTileServer = preferences.getString("tile_server", MapScreenPreferences.defaultTileServer);
+		String newOfflineMapLocation = preferences.getString("offline_map_location", MapScreenPreferences.defaultMapLocation);
+		MapScreenPreferences.MapGenerator newMapGenerator = MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPNIK.name()));
+
+		if (mapGenerator != newMapGenerator) {
+			switch (newMapGenerator) {
+				case MAPNIK:
 					mapView.setMapGenerator(new MapnikTileDownloader());
-					Toast.makeText(this, getResources().getString(R.string.map_file_error), Toast.LENGTH_LONG).show();
-				}
-				break;
-			case CUSTOM:
-				try {
-					mapView.setMapGenerator(new CustomTileDownloader(new URL(tileServer), (byte) 17));
-				} catch (MalformedURLException e) {
-					Log.w("TP", e);
-				}
-				break;
+					break;
+				case OSMANDER:
+					mapView.setMapGenerator(new OsmarenderTileDownloader());
+					break;
+				case OPENCYCLE:
+					mapView.setMapGenerator(new OpenCycleMapTileDownloader());
+					break;
+			}
 		}
+		if (newMapGenerator == MapScreenPreferences.MapGenerator.CUSTOM &&
+				((newMapGenerator != mapGenerator) || !tileServer.equals(newTileServer))) {
+			try {
+				mapView.setMapGenerator(new CustomTileDownloader(new URL(newTileServer), (byte) 17));
+			} catch (MalformedURLException e) {
+				mapView.setMapGenerator(new MapnikTileDownloader());
+				Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+			}
+		} else if (newMapGenerator == MapScreenPreferences.MapGenerator.FILE &&
+				((newMapGenerator != mapGenerator) || !offlineMapLocation.equals(newOfflineMapLocation))) {
+			if (mapGenerator != newMapGenerator) {
+				mapView.setMapGenerator(new DatabaseRenderer());
+			}
+			if (!mapView.setMapFile(offlineMapLocation)) {
+				mapView.setMapGenerator(new MapnikTileDownloader());
+				Toast.makeText(this, getResources().getString(R.string.map_file_error), Toast.LENGTH_LONG).show();
+			}
+		}
+
+		tileServer = newTileServer;
+		mapGenerator = newMapGenerator;
+		offlineMapLocation = newOfflineMapLocation;
 	}
 
 	private void setupGPS(boolean isFirstStart) {
@@ -262,7 +276,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			int NodeModelsize = session.getNodeModel().size();
 
-			if (NodeModelsize > 0 && backIsDeleteMarker == true) {
+			if (NodeModelsize > 0 && backIsDeleteMarker) {
 				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
 				edit.perform();
 				return true;
