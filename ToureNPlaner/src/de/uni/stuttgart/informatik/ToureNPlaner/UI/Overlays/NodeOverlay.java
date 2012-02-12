@@ -90,8 +90,15 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	@Override
 	protected boolean onDragStart(int index) {
 		// don't select the GPS point
-		if (index < list.size())
-			dragging = session.getNodeModel().get(index);
+		if (index >= list.size())
+			return false;
+
+		// If we drag the first node disable GPS
+		if (index == 0)
+			useGps = false;
+
+		dragging = session.getNodeModel().get(index);
+
 		return true;
 	}
 
