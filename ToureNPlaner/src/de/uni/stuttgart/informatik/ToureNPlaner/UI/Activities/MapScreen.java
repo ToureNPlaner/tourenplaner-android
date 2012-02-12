@@ -105,12 +105,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-		//-----get mapScreen_Preferences
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-		isInstantRequest = preferences.getBoolean("is_instant_request", false);
-		backIsDeleteMarker = preferences.getBoolean("back_is_delete_marker", true);
-
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
 		mapView = (MapView) findViewById(R.id.mapView);
@@ -347,7 +341,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	protected void onResume() {
 		super.onResume();
 
-		setupMapView(PreferenceManager.getDefaultSharedPreferences(this));
+		//-----get mapScreen_Preferences
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		isInstantRequest = preferences.getBoolean("is_instant_request", false);
+		backIsDeleteMarker = preferences.getBoolean("back_is_delete_marker", true);
+
+		setupMapView(preferences);
 
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
