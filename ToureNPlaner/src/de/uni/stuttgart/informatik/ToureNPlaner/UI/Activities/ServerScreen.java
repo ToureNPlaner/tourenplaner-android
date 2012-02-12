@@ -262,6 +262,10 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	private void serverSelected(String url) {
+		// prevent double clicks
+		if (handler != null)
+			return;
+
 		ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
 				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		handler = Session.createSession(url, this);
