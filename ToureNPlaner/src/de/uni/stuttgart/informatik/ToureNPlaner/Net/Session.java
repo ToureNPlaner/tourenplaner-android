@@ -85,6 +85,8 @@ public class Session implements Serializable {
 	public Session() {
 		this.uuid = UUID.randomUUID();
 		d = new Data();
+		nodeModel = new NodeModel();
+		result = new Result();
 		// Also initialize the files on the disc
 		safeData();
 		safeNodeModel();
