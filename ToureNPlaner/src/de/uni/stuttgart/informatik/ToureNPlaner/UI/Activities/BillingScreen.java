@@ -1,13 +1,9 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.ExpandableListActivity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -17,7 +13,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.BillingListAdapter;
 
 import java.util.ArrayList;
@@ -33,11 +28,9 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-		}
+		// If we get created for the first time we get our data from the intent
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 		billingscreen_preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);

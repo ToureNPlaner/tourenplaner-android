@@ -37,11 +37,8 @@ public class EditConstraintScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editconstraints);
 		// If we get created for the first time we get our data from the intent
-		if (savedInstanceState != null) {
-			session = (Session) savedInstanceState.getSerializable(Session.IDENTIFIER);
-		} else {
-			session = (Session) getIntent().getSerializableExtra(Session.IDENTIFIER);
-		}
+		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		// generates the EditConstraints layout and fill content in the Textviews
 		try {
