@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="de.uni.stuttgart.informatik.ToureNPlaner"
-      android:versionCode="1"
-      android:versionName="1.1">
+          package="de.uni.stuttgart.informatik.ToureNPlaner"
+          android:versionCode="1"
+          android:versionName="1.1">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14"/>
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
 
     <application android:label="@string/app_name" android:name=".ToureNPlanerApplication" android:icon="@drawable/icon">
         <activity android:name=".UI.Activities.LoginScreen"></activity>
@@ -16,18 +16,17 @@
         <activity android:name=".UI.Activities.BillingScreen"></activity>
         <activity android:name=".UI.Activities.BillingScreenPreferences"></activity>
         <activity android:name=".UI.Activities.NodelistScreen"></activity>
-        <activity android:name=".UI.Activities.NodeResultlistScreen"></activity>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"></activity>
         <activity android:name=".UI.Activities.MapScreenPreferences"></activity>
         <activity android:name=".UI.Activities.EditConstraintScreen"></activity>
-         <activity android:name=".UI.Activities.ServerScreen">
-        	<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+        <activity android:name=".UI.Activities.ServerScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-             </activity>
-           <activity android:name=".UI.Activities.EditNodeScreen"></activity>
-       
-           
-          </application>
+        </activity>
+        <activity android:name=".UI.Activities.EditNodeScreen"></activity>
+
+
+    </application>
 </manifest>

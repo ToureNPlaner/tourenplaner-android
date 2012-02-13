@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-  xmlns:android="http://schemas.android.com/apk/res/android">
-     <item android:id="@+id/nodelist"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nodelist"
           android:icon="@drawable/list"
-          android:title="@string/nodelist" />
+          android:title="@string/nodelist"/>
     <item android:id="@+id/calculate"
           android:icon="@drawable/calculate"
-          android:title="@string/calculate" />
+          android:title="@string/calculate"/>
     <item android:id="@+id/reset"
           android:icon="@drawable/trash"
-          android:title="@string/delete" />
-     <item android:id="@+id/resultlist"
-          android:icon="@drawable/list"
-          android:title="@string/resultlist" />
+          android:title="@string/delete"/>
     <item android:id="@+id/algorithm_constraints"
           android:icon="@drawable/list"
-          android:title="@string/constraints" />
-      <item android:id="@+id/gps"
+          android:title="@string/constraints"/>
+    <item android:id="@+id/gps"
           android:icon="@drawable/myplace"
-          android:title="@string/your_location" />
-      <item android:id="@+id/back"
+          android:title="@string/your_location"/>
+    <item android:id="@+id/back"
           android:icon="@drawable/back"
-          android:title="@string/back" />
-     <!--  <item android:id="@+id/gotofirst"
-          android:icon="@drawable/list"
-          android:title="Ihr Startpunkt" />
-      -->
-       <item android:id="@+id/settings"
+          android:title="@string/back"/>
+    <item android:id="@+id/settings"
           android:icon="@drawable/back"
-          android:title="@string/settings" />
-          
+          android:title="@string/settings"/>
 </menu>

@@ -249,11 +249,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.calculate:
 				performRequest(true);
 				return true;
-			case R.id.resultlist:
-//				Intent myIntentResult = new Intent(this, NodeResultlistScreen.class);
-//				myIntentResult.putExtra(Session.IDENTIFIER, session);
-//				startActivity(myIntentResult);
-				return true;
 			case R.id.gps:
 				mapView.getController().setCenter(nodeOverlay.getGpsPosition());
 				return true;
