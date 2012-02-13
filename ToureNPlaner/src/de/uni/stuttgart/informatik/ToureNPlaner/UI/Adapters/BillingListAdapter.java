@@ -43,7 +43,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
     	isEnd = false;
     	billingCaptions = new String[billinglist.size()];
      	billingItem = new String[billinglist.size()][10];
-       	if(count >= billinglist.size()){
+       	if(count > billinglist.size()){
       		count = billinglist.size();
       		isEnd=true;
        	}

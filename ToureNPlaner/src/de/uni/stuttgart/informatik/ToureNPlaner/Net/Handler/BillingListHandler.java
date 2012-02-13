@@ -12,7 +12,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager.ContentType;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.BillingScreen;
 
 public class BillingListHandler extends ConnectionHandler{
-private String limitString = "limit=200";
+private String limitString = "limit=50";
 private String offsetString = "offset=0";
 private Integer offset = 0;
 	public BillingListHandler(Observer listener, Session session) {

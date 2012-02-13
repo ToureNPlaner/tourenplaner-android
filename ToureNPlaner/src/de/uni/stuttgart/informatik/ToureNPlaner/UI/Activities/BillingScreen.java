@@ -61,9 +61,7 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
   	  	registerForContextMenu(getExpandableListView());
 	    isInitialized = true;
 			}
-		   adapter.setBillinglist(billinglist);
-	       adapter.SetupList();
-		   adapter.notifyDataSetChanged();
+		
    	}
 	@Override
 	public void onResume(){
@@ -96,14 +94,17 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore = /* maybe add a padding */
-				firstVisible + visibleCount >= totalCount;
+				firstVisible + visibleCount >= totalCount-25;
 
 				if(loadMore && !adapter.isEnd) {
 					   adapter.count += 25;
 					   handler = new BillingListHandler(BillingScreen.this, session);
-					  // handler.setLimit(adapter.count);
-					   handler.execute();
+					   handler.setLimit(adapter.count);
+					   adapter.setBillinglist(billinglist);
+				       adapter.SetupList();
 					   adapter.notifyDataSetChanged();
+					   handler.execute();
+					 
 					}
 			
 	}
