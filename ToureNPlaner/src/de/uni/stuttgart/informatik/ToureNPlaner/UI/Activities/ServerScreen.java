@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -269,5 +270,25 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
 				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		handler = Session.createSession(url, this);
+	}
+	
+	//------------menu---------------
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.serverscreenmenu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+			case R.id.servercertificates:
+				startActivity(new Intent(this, CertificateScreen.class));
+				return true;
+
+		}
+		return false;
 	}
 }

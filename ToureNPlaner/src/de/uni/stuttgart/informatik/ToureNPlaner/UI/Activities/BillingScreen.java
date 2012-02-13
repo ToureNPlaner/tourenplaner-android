@@ -74,26 +74,6 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 		//TODO::better error message
 	}
 
-	//------------menu---------------
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.billingscreenmenu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		switch (item.getItemId()) {
-			case R.id.billinglistpreferences:
-				startActivity(new Intent(this, BillingScreenPreferences.class));
-				return true;
-
-		}
-		return false;
-	}
-
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore =

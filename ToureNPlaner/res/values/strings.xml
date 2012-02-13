@@ -6,6 +6,10 @@
     <!--serverscreen-->
     <string name="choose_server_screen">Choose a server</string>
     <string name="add_server">Add server</string>
+    
+    <!-- certificatescreen -->
+    <string name="add_certificate">add certificate</string>
+    <string name="certificates">certificates</string>
 
     <!--loginscreen-->
     <string name="login_screen">enter your credentials</string>

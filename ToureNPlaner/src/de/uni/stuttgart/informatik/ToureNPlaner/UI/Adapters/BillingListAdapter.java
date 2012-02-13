@@ -17,8 +17,6 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	private String[][] billingItem;
 	private Context context;
 
-	public boolean isEnd;
-
 	public ArrayList<BillingItem> getBillinglist() {
 		return billinglist;
 	}
@@ -36,7 +34,6 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	}
 
 	public void SetupList() {
-		isEnd = false;
 		billingCaptions = new String[billinglist.size()];
 		billingItem = new String[billinglist.size()][10];
 
