@@ -1,7 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;

@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.Data;
+package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints;
 
 import org.codehaus.jackson.JsonNode;
 

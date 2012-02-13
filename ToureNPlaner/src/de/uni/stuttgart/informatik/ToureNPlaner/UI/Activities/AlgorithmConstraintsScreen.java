@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapter;
 
