@@ -26,7 +26,7 @@ public class EditConstraintScreen extends Activity {
 
 	void finishActivity() {
 		Intent data = new Intent();
-		data.putExtra("constraint", constraint);
+		data.putExtra("value", constraint.getValue());
 		data.putExtra("index", this.data.getInt("index", 0));
 		setResult(RESULT_OK, data);
 		finish();
@@ -63,7 +63,7 @@ public class EditConstraintScreen extends Activity {
 
 			Button btnReturn = (Button) findViewById(R.id.btnconstReturn);
 
-			etName.setText(String.valueOf(constraint.getName()));
+			etName.setText(String.valueOf(constraint.getType().getName()));
 			etType.setText(String.valueOf(constraint.getType()));
 			if (constraint.getValue() != null) {
 				etValue.setText(String.valueOf(constraint.getValue()));
@@ -72,8 +72,8 @@ public class EditConstraintScreen extends Activity {
 			//------------------get TextView ------------------
 			TextView lblMin = (TextView) findViewById(R.id.lblconstMin);
 			TextView lblMax = (TextView) findViewById(R.id.lblconstMax);
-			lblMin.setText(String.valueOf(constraint.getMinimumValue()));
-			lblMax.setText(String.valueOf(constraint.getMaximumValue()));
+			//lblMin.setText(String.valueOf(constraint.getMinimumValue()));
+			//lblMax.setText(String.valueOf(constraint.getMaximumValue()));
 
 			//------------------get seekBar -------------------
 			final SeekBar seekbar = (SeekBar) findViewById(R.id.editconstraintseekBar);
@@ -86,7 +86,7 @@ public class EditConstraintScreen extends Activity {
 				divisionFactor = 1;
 			}
 
-			seekbar.setMax(constraint.getMaximumValue().intValue() * divisionFactor);
+			//seekbar.setMax(constraint.getMaximumValue().intValue() * divisionFactor);
 			if (constraint.getValue() != null) {
 
 				if (constraintType.equals("integer") || constraintType.equals("meter")) {

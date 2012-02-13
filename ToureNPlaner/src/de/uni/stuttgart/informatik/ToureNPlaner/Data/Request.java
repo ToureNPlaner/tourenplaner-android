@@ -31,7 +31,7 @@ public class Request {
 			ObjectNode constraintsNode = new ObjectNode(factory);
 			for (int i = 0; i < constraints.size(); i++) {
 				if (constraints.get(i).getValue() != null) {
-					constraintsNode.put(constraints.get(i).getName(), constraints.get(i).getValue().toString());
+					constraints.get(i).generate(constraintsNode);
 				}
 			}
 			root.put("constraints", constraintsNode);

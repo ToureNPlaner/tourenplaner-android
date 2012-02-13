@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
@@ -33,7 +34,7 @@ public class Result implements Serializable {
 		return points;
 	}
 
-	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<Node> points) throws IOException {
+	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<Node> points, ArrayList<ConstraintType> pointConstraintTypes) throws IOException {
 		int lt = 0, ln = 0;
 		while (jp.nextToken() != JsonToken.END_OBJECT) {
 			if ("points".equals(jp.getCurrentName())) {
@@ -48,7 +49,7 @@ public class Result implements Serializable {
 								ln = jp.getIntValue();
 							}
 						}
-						points.add(new Node("", lt, ln));
+						points.add(new Node("", lt, ln, pointConstraintTypes));
 					}
 				}
 			}
@@ -84,7 +85,7 @@ public class Result implements Serializable {
 		}
 	}
 
-	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
+	public static Result parse(JacksonManager.ContentType type, InputStream stream, ArrayList<ConstraintType> pointConstraintTypes) throws IOException {
 		Result result = new Result();
 		ArrayList<ArrayList<GeoPoint>> ways = new ArrayList<ArrayList<GeoPoint>>();
 		ArrayList<Node> points = new ArrayList<Node>();
@@ -93,7 +94,7 @@ public class Result implements Serializable {
 
 		JsonParser jp = mapper.getJsonFactory().createJsonParser(stream);
 		try {
-			jacksonParse(jp, ways, points);
+			jacksonParse(jp, ways, points, pointConstraintTypes);
 		} finally {
 			jp.close();
 		}

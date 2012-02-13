@@ -29,18 +29,16 @@ public class ConstraintListAdapter extends ArrayAdapter<Constraint> {
 		itemLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.constraintlistadapteritem, parent, false);
 
 		TextView tvname = (TextView) itemLayout.findViewById(R.id.constName);
-		tvname.setText(constraint.getName());
+		tvname.setText(constraint.getType().getName());
 
 
 		TextView tvValue = (TextView) itemLayout.findViewById(R.id.constValue);
 		if (constraint.getValue() != null) {
 			tvValue.setText(constraint.getValue().toString());
-		} else {
-			tvValue.setText(constraint.getMinimumValue().toString());
 		}
 
 		TextView tvtype = (TextView) itemLayout.findViewById(R.id.constType);
-		tvtype.setText(constraint.getType());
+		tvtype.setText(constraint.getType().getTypename());
 
 
 		return itemLayout;

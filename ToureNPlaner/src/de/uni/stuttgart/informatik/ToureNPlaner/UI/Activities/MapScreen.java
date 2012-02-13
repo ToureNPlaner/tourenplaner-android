@@ -403,7 +403,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
 		}
 		menu.findItem(R.id.algorithm_constraints).setEnabled(
-				!session.getSelectedAlgorithm().getConstraints().isEmpty());
+				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 		return true;
 	}
 

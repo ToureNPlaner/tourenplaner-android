@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapter;
 
@@ -52,9 +51,8 @@ public class AlgorithmConstraintsScreen extends ListActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 			case RESULT_OK:
-				session.getSelectedAlgorithm().getConstraints().set(
-						data.getExtras().getInt("index"),
-						(Constraint) data.getSerializableExtra("constraint"));
+				session.getSelectedAlgorithm().getConstraints().get(
+						data.getExtras().getInt("index")).setValue(data.getSerializableExtra("value"));
 				((ConstraintListAdapter) getListAdapter()).notifyDataSetChanged();
 				break;
 		}

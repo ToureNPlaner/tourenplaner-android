@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
 import org.codehaus.jackson.JsonNode;
 
 import java.io.Serializable;
@@ -11,12 +12,13 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String name;
 	private String urlsuffix;
 	private String sslport;
-	private ArrayList<Constraint> point_constraints;
 	private int minPoints;
 	private int maxPoints;
 	private boolean sourceIsTarget;
 	private boolean isHidden;
 	private ArrayList<Constraint> constraints;
+	private ArrayList<ConstraintType> constraintTypes;
+	private ArrayList<ConstraintType> pointConstraintTypes;
 
 	private AlgorithmInfo() {
 	}
@@ -34,8 +36,8 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		return urlsuffix;
 	}
 
-	public ArrayList<Constraint> getPointConstraints() {
-		return point_constraints;
+	public ArrayList<ConstraintType> getPointConstraintTypes() {
+		return pointConstraintTypes;
 	}
 
 	public boolean isHidden() {
@@ -72,21 +74,26 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 		JsonNode constraints = object.get("constraints");
 		if (constraints == null) {
-			info.constraints = new ArrayList<Constraint>();
+			info.constraintTypes = new ArrayList<ConstraintType>();
 		} else {
-			info.constraints = new ArrayList<Constraint>(constraints.size());
+			info.constraintTypes = new ArrayList<ConstraintType>(constraints.size());
 			for (JsonNode constraint : constraints) {
-				info.constraints.add(Constraint.parse(constraint));
+				info.constraintTypes.add(ConstraintType.parse(constraint));
 			}
+		}
+
+		info.constraints = new ArrayList<Constraint>(info.constraintTypes.size());
+		for (int i = 0; i < info.constraintTypes.size(); i++) {
+			info.constraints.add(new Constraint(info.constraintTypes.get(i)));
 		}
 
 		JsonNode pointconstraints = object.get("pointconstraints");
 		if (pointconstraints == null) {
-			info.point_constraints = new ArrayList<Constraint>();
+			info.pointConstraintTypes = new ArrayList<ConstraintType>();
 		} else {
-			info.point_constraints = new ArrayList<Constraint>(pointconstraints.size());
+			info.pointConstraintTypes = new ArrayList<ConstraintType>(pointconstraints.size());
 			for (JsonNode constraint : pointconstraints) {
-				info.constraints.add(Constraint.parse(constraint));
+				info.pointConstraintTypes.add(ConstraintType.parse(constraint));
 			}
 		}
 
@@ -106,9 +113,13 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.name = "Mock";
 		info.version = "";
 		info.urlsuffix = "";
-		info.point_constraints = new ArrayList<Constraint>();
-		info.point_constraints.add(new Constraint("Price", "price", 0.0, 2000.0));
+		info.pointConstraintTypes = new ArrayList<ConstraintType>();
+		//info.pointConstraintTypes.add(new Constraint("Price", "price", 0.0, 2000.0));
 		return info;
+	}
+
+	public ArrayList<ConstraintType> getConstraintTypes() {
+		return constraintTypes;
 	}
 
 	public ArrayList<Constraint> getConstraints() {

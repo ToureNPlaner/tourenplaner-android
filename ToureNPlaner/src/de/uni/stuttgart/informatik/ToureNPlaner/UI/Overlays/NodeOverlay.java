@@ -15,7 +15,7 @@ import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.widget.EditText;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -132,14 +132,9 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		String markerName = String.valueOf(session.getNodeModel().size() + 1);
 
+		final ArrayList<ConstraintType> tempcl = session.getSelectedAlgorithm().getPointConstraintTypes();
 
-		final ArrayList<Constraint> cl = new ArrayList<Constraint>();
-		ArrayList<Constraint> tempcl = session.getSelectedAlgorithm().getPointConstraints();
-		for (int i = 0; i < session.getSelectedAlgorithm().getPointConstraints().size(); i++) {
-			cl.add(new Constraint(session.getSelectedAlgorithm().getPointConstraints().get(i)));
-		}
-
-		final Node node = new Node(markerName, geoPoint, cl);
+		final Node node = new Node(markerName, geoPoint, tempcl);
 
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
@@ -156,8 +151,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		((MapScreen) context).runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				for (int i = 0; i < cl.size(); i++) {
-					ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
+				for (int i = 0; i < tempcl.size(); i++) {
+					//ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
 				}
 				if (session.getNodeModel().size() > 0) {
 					session.getNodeModel().getNodeVector().set(session.getNodeModel().size() - 1, session.getNodeModel().getNodeVector().get(session.getNodeModel().size() - 1));
@@ -194,7 +189,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 					.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							// transform the GpsMarker into a regular mapMarker on Position 0
-							Node gpsStartnode = new Node("gpsLocation", gpsPoint);
+							Node gpsStartnode = new Node("gpsLocation", gpsPoint, session.getSelectedAlgorithm().getPointConstraintTypes());
 							useGps = true;
 							Edit edit = new AddNodeEdit(session, gpsStartnode, AddNodeEdit.Position.BEGINNING);
 							edit.perform();

@@ -1,6 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
-import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
@@ -56,9 +55,7 @@ public class RequestHandler extends ConnectionHandler {
 
 	@Override
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
-		final long t0 = System.currentTimeMillis();
-		Result result = Result.parse(type, inputStream);
-		Log.v("TP", "ResultParse: " + (System.currentTimeMillis() - t0) + " ms");
+		Result result = Result.parse(type, inputStream, session.getSelectedAlgorithm().getPointConstraintTypes());
 		result.setVersion(version);
 		return result;
 	}

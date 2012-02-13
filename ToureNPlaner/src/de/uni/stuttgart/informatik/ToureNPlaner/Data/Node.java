@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
 import org.mapsforge.core.GeoPoint;
 
 import java.io.Serializable;
@@ -8,23 +9,21 @@ import java.util.ArrayList;
 
 public class Node implements Serializable {
 	private String name;
-	private String type;
-	private ArrayList<Constraint> constraintList;
+
+	private final ArrayList<Constraint> constraintList;
 	private GeoPoint geoPoint;
 
-	public Node(String name, GeoPoint point) {
+	public Node(String name, GeoPoint point, ArrayList<ConstraintType> constraintTypes) {
 		this.name = name;
 		this.geoPoint = point;
+		constraintList = new ArrayList<Constraint>(constraintTypes.size());
+		for (int i = 0; i < constraintTypes.size(); i++) {
+			constraintList.add(new Constraint(constraintTypes.get(i)));
+		}
 	}
 
-	public Node(String name, GeoPoint point, ArrayList<Constraint> constraintList) {
-		this(name, point);
-		this.constraintList = constraintList;
-	}
-
-	public Node(String name, int laE7, int loE7) {
-		this.name = name;
-		this.geoPoint = new GeoPoint(laE7 / 10, loE7 / 10);
+	public Node(String name, int laE7, int loE7, ArrayList<ConstraintType> constraintTypes) {
+		this(name, new GeoPoint(laE7 / 10, loE7 / 10), constraintTypes);
 	}
 
 	public void setGeoPoint(GeoPoint geoPoint) {
@@ -39,14 +38,6 @@ public class Node implements Serializable {
 		this.name = name;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public int getLaE7() {
 		return geoPoint.latitudeE6 * 10;
 	}
@@ -57,10 +48,6 @@ public class Node implements Serializable {
 
 	public ArrayList<Constraint> getConstraintList() {
 		return constraintList;
-	}
-
-	public void setConstraintList(ArrayList<Constraint> constraintList) {
-		this.constraintList = constraintList;
 	}
 
 	public GeoPoint getGeoPoint() {
