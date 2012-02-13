@@ -33,7 +33,7 @@ public class Result implements Serializable {
 		return points;
 	}
 
-	static void jacksonParse(JsonParser jp, ArrayList<GeoPoint> way, ArrayList<Node> points) throws IOException {
+	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<Node> points) throws IOException {
 		int lt = 0, ln = 0;
 		while (jp.nextToken() != JsonToken.END_OBJECT) {
 			if ("points".equals(jp.getCurrentName())) {
@@ -54,17 +54,30 @@ public class Result implements Serializable {
 			}
 			if ("way".equals(jp.getCurrentName())) {
 				if (jp.nextToken() == JsonToken.START_ARRAY) {
-					while (jp.nextToken() != JsonToken.END_ARRAY) {
-						while (jp.nextToken() != JsonToken.END_OBJECT) {
-							if (jp.getCurrentName().equals("lt")) {
-								jp.nextToken();
-								lt = jp.getIntValue() / 10;
-							} else if (jp.getCurrentName().equals("ln")) {
-								jp.nextToken();
-								ln = jp.getIntValue() / 10;
+					JsonToken curr;
+					while ((curr = jp.nextToken()) != JsonToken.END_ARRAY) {
+						if (curr == JsonToken.START_ARRAY) {
+							ArrayList<GeoPoint> currentWay = new ArrayList<GeoPoint>();
+							ways.add(currentWay);
+							while (jp.nextToken() != JsonToken.END_ARRAY) {
+								while (jp.nextToken() != JsonToken.END_OBJECT) {
+									if (jp.getCurrentName().equals("lt")) {
+										jp.nextToken();
+										lt = jp.getIntValue() / 10;
+									} else if (jp.getCurrentName().equals("ln")) {
+										jp.nextToken();
+										ln = jp.getIntValue() / 10;
+									}
+								}
+								currentWay.add(new GeoPoint(lt, ln));
+							}
+							// duplicate the last one
+							if (ways.size() > 1) {
+								ArrayList<GeoPoint> second_last = ways.get(ways.size() - 2);
+								ArrayList<GeoPoint> last = ways.get(ways.size() - 1);
+								second_last.add(last.get(0));
 							}
 						}
-						way.add(new GeoPoint(lt, ln));
 					}
 				}
 			}
@@ -73,19 +86,23 @@ public class Result implements Serializable {
 
 	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		Result result = new Result();
-		ArrayList<GeoPoint> way = new ArrayList<GeoPoint>();
+		ArrayList<ArrayList<GeoPoint>> ways = new ArrayList<ArrayList<GeoPoint>>();
 		ArrayList<Node> points = new ArrayList<Node>();
 
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 
 		JsonParser jp = mapper.getJsonFactory().createJsonParser(stream);
 		try {
-			jacksonParse(jp, way, points);
+			jacksonParse(jp, ways, points);
 		} finally {
 			jp.close();
 		}
 
-		result.way = new GeoPoint[][]{way.toArray(new GeoPoint[way.size()])};
+		int size = ways.size();
+		result.way = new GeoPoint[size][];
+		for (int i = 0; i < size; i++) {
+			result.way[i] = ways.get(i).toArray(new GeoPoint[ways.get(i).size()]);
+		}
 		result.points = points;
 
 		return result;
