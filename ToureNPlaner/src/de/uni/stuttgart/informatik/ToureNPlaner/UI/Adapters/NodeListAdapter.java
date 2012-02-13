@@ -16,63 +16,64 @@ import java.util.ArrayList;
 
 public class NodeListAdapter extends ArrayAdapter<Node> {
 	private ArrayList<Node> nodeList;
-    public NodeListAdapter(ArrayList<Node> nodeList, Context context) {
-        super(context, android.R.layout.simple_list_item_1, nodeList);
-        this.nodeList = nodeList;
-    }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        LinearLayout itemLayout;
+	public NodeListAdapter(ArrayList<Node> nodeList, Context context) {
+		super(context, android.R.layout.simple_list_item_1, nodeList);
+		this.nodeList = nodeList;
+	}
 
-        Node node = getItem(position);
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		LinearLayout itemLayout;
 
-        itemLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.nodelistadapteritem, parent, false);
+		Node node = getItem(position);
 
-        TextView tvUser = (TextView) itemLayout.findViewById(R.id.toptext);
-        tvUser.setText(node.getName());
+		itemLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.nodelistadapteritem, parent, false);
 
-        TextView tvText = (TextView) itemLayout.findViewById(R.id.bottomtext);
-        tvText.setText(node.getGeoPoint().toString());
+		TextView tvUser = (TextView) itemLayout.findViewById(R.id.toptext);
+		tvUser.setText(node.getName());
 
-        ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.nodelisticon);
-        Drawable icon;
+		TextView tvText = (TextView) itemLayout.findViewById(R.id.bottomtext);
+		tvText.setText(node.getGeoPoint().toString());
 
-        // sets the icon depending on the index
-        if (position == 0) {
-            icon = getContext().getResources().getDrawable(R.drawable.markerstart);
-        } else if (position == getCount() - 1) {
-            icon = getContext().getResources().getDrawable(R.drawable.markerendger);
-        } else {
-            icon = getContext().getResources().getDrawable(R.drawable.markericon);
-        }
-        ImageView.setImageDrawable(icon);
-        return itemLayout;
-    }
-    
-   
-    public int getCount() {
-        return nodeList.size();
-    }
+		ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.nodelisticon);
+		Drawable icon;
 
- 
-    public Node getItem(int position) {
-        return nodeList.get(position);
-    }
+		// sets the icon depending on the index
+		if (position == 0) {
+			icon = getContext().getResources().getDrawable(R.drawable.markerstart);
+		} else if (position == getCount() - 1) {
+			icon = getContext().getResources().getDrawable(R.drawable.markerend);
+		} else {
+			icon = getContext().getResources().getDrawable(R.drawable.markericon);
+		}
+		ImageView.setImageDrawable(icon);
+		return itemLayout;
+	}
 
-    
-    public long getItemId(int position) {
-        return position;
-    }
-    
-    public void onRemove(int index) {
-		if (index < 0 || index > nodeList.size()) return;		
+
+	public int getCount() {
+		return nodeList.size();
+	}
+
+
+	public Node getItem(int position) {
+		return nodeList.get(position);
+	}
+
+
+	public long getItemId(int position) {
+		return position;
+	}
+
+	public void onRemove(int index) {
+		if (index < 0 || index > nodeList.size()) return;
 		nodeList.remove(index);
 	}
 
 	public void onDrop(int from, int to) {
 		Node temp = nodeList.get(from);
 		nodeList.remove(from);
-		nodeList.add(to,temp);
+		nodeList.add(to, temp);
 	}
 }
