@@ -230,7 +230,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 				list.get(i).setMarker(d);
 			}
 
-			Drawable dend = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerendger));
+			Drawable dend = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerend));
 			list.get(list.size() - 1).setMarker(dend);
 			Drawable dstart = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart));
 			list.get(0).setMarker(dstart);
