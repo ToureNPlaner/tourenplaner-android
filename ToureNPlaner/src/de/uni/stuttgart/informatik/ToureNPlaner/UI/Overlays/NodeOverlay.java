@@ -226,7 +226,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private synchronized void updateIcons() {
 		if (!session.getSelectedAlgorithm().sourceIsTarget() && !list.isEmpty()) {
 			for (int i = 1; i < list.size() - 1; i++) {
-				Drawable d = boundCenterBottom(context.getResources().getDrawable(R.drawable.markericon));
+				Drawable d = boundCenterBottom(context.getResources().getDrawable(R.drawable.marker));
 				list.get(i).setMarker(d);
 			}
 

@@ -45,7 +45,7 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 		} else if (position == getCount() - 1) {
 			icon = getContext().getResources().getDrawable(R.drawable.markerend);
 		} else {
-			icon = getContext().getResources().getDrawable(R.drawable.markericon);
+			icon = getContext().getResources().getDrawable(R.drawable.marker);
 		}
 		ImageView.setImageDrawable(icon);
 		return itemLayout;

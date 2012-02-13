@@ -185,7 +185,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
-		Drawable drawable = getResources().getDrawable(R.drawable.markericon);
+		Drawable drawable = getResources().getDrawable(R.drawable.marker);
 		nodeOverlay = new NodeOverlay(this, session, gpsGeoPoint, drawable);
 	}
 
