@@ -19,20 +19,40 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
     private String[][] billingItem;
     private Context context;
     
-    public BillingListAdapter(Context context,ArrayList<BillingItem> billinglist){
+    public int count = 50; /* starting amount */
+    public boolean isEnd;
+    public int precount = 0;
+
+    public ArrayList<BillingItem> getBillinglist() {
+		return billinglist;
+	}
+
+	public void setBillinglist(ArrayList<BillingItem> billinglist) {
+		this.billinglist = billinglist;
+	}
+
+	public BillingListAdapter(Context context,ArrayList<BillingItem> billinglist){
     	this.context = context;
     	this.billinglist = billinglist;
+    	
     	SetupList();
     	
     }
     
-    private void SetupList(){
-       	billingCaptions = new String[billinglist.size()];
-    	for (int i = 0;i<billinglist.size();i++){
+    public void SetupList(){
+    	isEnd = false;
+    	billingCaptions = new String[billinglist.size()];
+     	billingItem = new String[billinglist.size()][10];
+       	if(count > billinglist.size()){
+      		count = billinglist.size();
+      		isEnd=true;
+       	}
+       	
+    	for (int i = 0;i<count;i++){
     		billingCaptions[i] = "Tour " + String.valueOf(billinglist.get(i).getRequestid());
     	}
-    	billingItem = new String[billingCaptions.length][10];
-    	for (int i = 0;i<billingCaptions.length;i++){	
+    	
+    	for (int i = 0;i<count;i++){	
     		billingItem[i][0] = "reqID: " +billinglist.get(i).getRequestid();
     		billingItem[i][1] = "userID: "+billinglist.get(i).getUserid();
     		billingItem[i][2] = "algorithmus: "+billinglist.get(i).getAlgorithm();
@@ -85,7 +105,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
     }
 
     public int getGroupCount() {
-        return billingCaptions.length;
+        return count ;
     }
 
     public long getGroupId(int groupPosition) {
