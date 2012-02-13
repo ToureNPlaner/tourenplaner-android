@@ -111,6 +111,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
+		mapView.getFileSystemTileCache().setPersistent(true);
 
 		initializeHandler();
 

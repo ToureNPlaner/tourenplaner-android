@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
@@ -35,6 +36,7 @@ public class Session implements Serializable {
 		private String password;
 		private AlgorithmInfo selectedAlgorithm;
 		private User user;
+		private ArrayList<Constraint> constraints;
 	}
 
 	private final UUID uuid;
@@ -238,9 +240,13 @@ public class Session implements Serializable {
 	}
 
 	public boolean canPerformRequest() {
+		for (int i = 0; i < d.constraints.size(); i++) {
+			if (d.constraints.get(i).getValue() == null)
+				return false;
+		}
+
 		return nodeModel.size() >= getSelectedAlgorithm().getMinPoints() &&
 				nodeModel.size() <= getSelectedAlgorithm().getMaxPoints();
-
 	}
 
 	public String getUrl() {
@@ -293,8 +299,18 @@ public class Session implements Serializable {
 	}
 
 	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
-		d.selectedAlgorithm = selectedAlgorithm;
-		safeData();
+		if (!selectedAlgorithm.equals(d.selectedAlgorithm)) {
+			d.selectedAlgorithm = selectedAlgorithm;
+			d.constraints = new ArrayList<Constraint>(selectedAlgorithm.getConstraintTypes().size());
+			for (int i = 0; i < selectedAlgorithm.getConstraintTypes().size(); i++) {
+				d.constraints.add(new Constraint(selectedAlgorithm.getConstraintTypes().get(i)));
+			}
+			safeData();
+		}
+	}
+
+	public ArrayList<Constraint> getConstraints() {
+		return d.constraints;
 	}
 
 	public void setServerInfo(ServerInfo serverInfo) {

@@ -1,6 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
 import org.codehaus.jackson.JsonNode;
 
@@ -16,7 +15,6 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private int maxPoints;
 	private boolean sourceIsTarget;
 	private boolean isHidden;
-	private ArrayList<Constraint> constraints;
 	private ArrayList<ConstraintType> constraintTypes;
 	private ArrayList<ConstraintType> pointConstraintTypes;
 
@@ -82,11 +80,6 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 			}
 		}
 
-		info.constraints = new ArrayList<Constraint>(info.constraintTypes.size());
-		for (int i = 0; i < info.constraintTypes.size(); i++) {
-			info.constraints.add(new Constraint(info.constraintTypes.get(i)));
-		}
-
 		JsonNode pointconstraints = object.get("pointconstraints");
 		if (pointconstraints == null) {
 			info.pointConstraintTypes = new ArrayList<ConstraintType>();
@@ -114,15 +107,12 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.version = "";
 		info.urlsuffix = "";
 		info.pointConstraintTypes = new ArrayList<ConstraintType>();
+		info.constraintTypes = new ArrayList<ConstraintType>();
 		//info.pointConstraintTypes.add(new Constraint("Price", "price", 0.0, 2000.0));
 		return info;
 	}
 
 	public ArrayList<ConstraintType> getConstraintTypes() {
 		return constraintTypes;
-	}
-
-	public ArrayList<Constraint> getConstraints() {
-		return constraints;
 	}
 }

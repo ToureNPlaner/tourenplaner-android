@@ -32,7 +32,7 @@ public class AlgorithmConstraintsScreen extends ListActivity {
 	}
 
 	private void setupListView() {
-		ConstraintListAdapter adapter = new ConstraintListAdapter(session.getSelectedAlgorithm().getConstraints(), this);
+		ConstraintListAdapter adapter = new ConstraintListAdapter(session.getConstraints(), this);
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -51,7 +51,7 @@ public class AlgorithmConstraintsScreen extends ListActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 			case RESULT_OK:
-				session.getSelectedAlgorithm().getConstraints().get(
+				session.getConstraints().get(
 						data.getExtras().getInt("index")).setValue(data.getSerializableExtra("value"));
 				((ConstraintListAdapter) getListAdapter()).notifyDataSetChanged();
 				break;

@@ -15,6 +15,6 @@ public class MeterConstraint extends FloatConstraint {
 	}
 
 	public static ConstraintType parse(JsonNode constraint) {
-		return new FloatConstraint(constraint.path("name").asText());
+		return new MeterConstraint(constraint.path("name").asText());
 	}
 }

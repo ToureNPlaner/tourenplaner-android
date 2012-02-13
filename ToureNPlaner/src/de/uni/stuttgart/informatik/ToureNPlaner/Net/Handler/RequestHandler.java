@@ -37,7 +37,7 @@ public class RequestHandler extends ConnectionHandler {
 	}
 
 	protected ArrayList<Constraint> getConstraints() {
-		return session.getSelectedAlgorithm().getConstraints();
+		return session.getConstraints();
 	}
 
 	@Override

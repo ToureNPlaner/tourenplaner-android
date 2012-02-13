@@ -19,13 +19,13 @@ public abstract class ConstraintType implements Serializable {
 	public abstract String getTypename();
 
 	public static ConstraintType parse(JsonNode constraint) {
-		String typename = constraint.path("typeName").asText();
+		String typename = constraint.path("type").asText();
 		if (FloatConstraint.typename.equals(typename)) {
 			return FloatConstraint.parse(constraint);
 		} else if (MeterConstraint.typename.equals(typename)) {
 			return MeterConstraint.parse(constraint);
 		}
-		return null;
+		throw new IllegalArgumentException("No constraing with that type!");
 	}
 
 	public abstract void generate(ObjectNode node, Object value);
