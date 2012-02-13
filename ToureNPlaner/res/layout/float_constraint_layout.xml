@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
+             android:layout_height="wrap_content">
+    <LinearLayout>
+        <TextView
+                android:id="@+id/lblconstValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/value"
+                >
+
+        </TextView>
+        <EditText
+                android:id="@+id/txtconstValue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout>
+        <TextView
+                android:id="@+id/lblconstMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/minimum"/>
+
+        <SeekBar
+                android:id="@+id/editconstraintseekBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        <TextView
+                android:id="@+id/lblconstMax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/maximum"/>
+    </LinearLayout>
+</TableLayout>

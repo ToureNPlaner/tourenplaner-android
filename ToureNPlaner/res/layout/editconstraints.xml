@@ -1,136 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/popup_element"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" 
-  android:weightSum="1"
-  android:padding="10px" >
+              android:id="@+id/popup_element"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:weightSum="1"
+              android:padding="10px">
 
     <TableLayout
-        android:id="@+id/tableLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+            android:id="@+id/tableLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
         <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false" >
-
-            <TextView
-                android:id="@+id/lblconstName"
+                android:id="@+id/tableRow1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/name" >
+                android:layout_weight="1"
+                android:baselineAligned="false">
+
+            <TextView
+                    android:id="@+id/lblconstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/name">
             </TextView>
 
-            <EditText
-                android:id="@+id/txtconstName"
+            <TextView
+                    android:id="@+id/txtconstName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:editable="false"
+                    android:focusable="false">
+
+            </TextView>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/tableRow2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:editable="false"
-                android:focusable="false" >
-
-            </EditText>
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false" >
+                android:layout_weight="1"
+                android:baselineAligned="false">
 
             <TextView
-                android:id="@+id/lblconstType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/type"
-                 >
+                    android:id="@+id/lblconstType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/type"
+                    >
 
             </TextView>
 
-            <EditText
-                android:id="@+id/txtconstType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:focusable="false" >
-
-            </EditText>
-        </TableRow>
-
-               <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false" >
-
             <TextView
-                android:id="@+id/lblconstValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/value"
-                 >
+                    android:id="@+id/txtconstType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:focusable="false">
 
             </TextView>
-
-            <EditText
-                android:id="@+id/txtconstValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                           >
-
-            </EditText>
         </TableRow>
-            
-       </TableLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+    </TableLayout>
 
-        <TextView
-            android:id="@+id/lblconstMin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/minimum" />
-
-        <SeekBar
-            android:id="@+id/editconstraintseekBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/lblconstMax"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/maximum" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+    <FrameLayout android:id="@+id/EditConstraintPlaceHolder" android:layout_height="wrap_content"
+                 android:layout_width="fill_parent"/>
 
     <Button
-        android:id="@+id/btnconstReturn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/back" />
+            android:id="@+id/btnconstReturn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/back"/>
 
 </LinearLayout>
  

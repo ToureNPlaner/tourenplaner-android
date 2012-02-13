@@ -1,5 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints;
 
+import android.content.Context;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -29,4 +31,6 @@ public abstract class ConstraintType implements Serializable {
 	}
 
 	public abstract void generate(ObjectNode node, Object value);
+
+	public abstract ConstraintView createView(Context context, Constraint constraint);
 }
