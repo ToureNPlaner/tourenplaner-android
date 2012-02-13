@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -189,12 +190,24 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void setupWayOverlay() {
+		Path p = new Path();
+		p.moveTo(4.f, 0.f);
+		p.lineTo(0.f, -4.f);
+		p.lineTo(8.f, -4.f);
+		p.lineTo(12.f, 0.f);
+		p.lineTo(8.f, 4.f);
+		p.lineTo(0.f, 4.f);
+
 		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
 		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
 		wayDefaultPaintOutline.setColor(Color.BLUE);
 		wayDefaultPaintOutline.setAlpha(160);
-		wayDefaultPaintOutline.setStrokeWidth(5);
+		wayDefaultPaintOutline.setStrokeWidth(5.f);
 		wayDefaultPaintOutline.setStrokeJoin(Paint.Join.ROUND);
+		// Too slow needs optimization
+		//wayDefaultPaintOutline.setPathEffect(new ComposePathEffect(
+		//				new PathDashPathEffect(p, 12.f, 0.f, PathDashPathEffect.Style.ROTATE),
+		//				new CornerPathEffect(30.f)));
 
 		// create the WayOverlay and add the ways
 		wayOverlay = new ArrayWayOverlay(wayDefaultPaintOutline, null);
