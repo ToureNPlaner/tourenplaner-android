@@ -8,9 +8,13 @@ import org.codehaus.jackson.node.ObjectNode;
 
 public class FloatConstraint extends ConstraintType {
 	public static String typename = "float";
+	private final float minimum;
+	private final float maximum;
 
-	public FloatConstraint(String name) {
+	public FloatConstraint(String name, float minimum, float maximum) {
 		super(name);
+		this.minimum = minimum;
+		this.maximum = maximum;
 	}
 
 	@Override
@@ -24,11 +28,21 @@ public class FloatConstraint extends ConstraintType {
 	}
 
 	public static ConstraintType parse(JsonNode constraint) {
-		return new FloatConstraint(constraint.path("name").asText());
+		return new FloatConstraint(constraint.path("name").asText(),
+				(float) constraint.path("min").asDouble(0.0),
+				(float) constraint.path("max").asDouble(10000.0));
 	}
 
 	@Override
 	public ConstraintView createView(Context context, Constraint constraint) {
 		return new FloatConstraintView(context, constraint);
+	}
+
+	public float getMinimum() {
+		return minimum;
+	}
+
+	public float getMaximum() {
+		return maximum;
 	}
 }
