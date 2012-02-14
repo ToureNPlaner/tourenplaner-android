@@ -278,7 +278,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (handler != null)
 			handler.cancel(true);
 
-		RequestHandler h = session.performRequest(requestListener);
+		RequestHandler h = session.performRequest(requestListener, force);
 		if (h != null) {
 			handler = h;
 			setProgressBarIndeterminateVisibility(true);

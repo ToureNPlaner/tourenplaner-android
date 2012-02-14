@@ -349,8 +349,8 @@ public class Session implements Serializable {
 		return handler;
 	}
 
-	public RequestHandler performRequest(Observer requestListener) {
-		if (canPerformRequest() && (result == null || nodeModel.getVersion() != result.getVersion())) {
+	public RequestHandler performRequest(Observer requestListener, boolean force) {
+		if (canPerformRequest() && (force || result == null || nodeModel.getVersion() != result.getVersion())) {
 			return (RequestHandler) new RequestHandler(requestListener, this).execute();
 		} else {
 			return null;
