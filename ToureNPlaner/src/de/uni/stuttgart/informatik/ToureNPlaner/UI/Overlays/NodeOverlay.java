@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -40,14 +39,12 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private boolean useGps = false;
 
 	private GpsDrawable gpsDrawable;
-	private Drawable defaultDrawable;
 
-	public NodeOverlay(Context context, Session session, GeoPoint gpsPoint, Drawable defaultDrawable) {
-		// ColorDrawable is just a workaround until the icons are loaded
-		super(boundCenterBottom(defaultDrawable));
+	public NodeOverlay(Context context, Session session, GeoPoint gpsPoint) {
+		// Just a workaround until the icons are loaded
+		super(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)));
 		this.session = session;
 		this.context = context;
-		this.defaultDrawable = defaultDrawable;
 
 		setupGpsDrawable();
 
@@ -212,23 +209,20 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	public void addMarkerToMap(Node node) {
-		//	NodeDrawable dm = new NodeDrawable(nodeParameters, node.getName());
-		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, defaultDrawable);
+		NodeDrawable drawable = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)), context.getResources().getDisplayMetrics());
+		drawable.setLabel(node.getName());
+		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, drawable);
 		list.add(overlayitem);
-		requestRedraw();
 	}
 
 	private synchronized void updateIcons() {
 		if (!session.getSelectedAlgorithm().sourceIsTarget() && !list.isEmpty()) {
 			for (int i = 1; i < list.size() - 1; i++) {
-				Drawable d = boundCenterBottom(context.getResources().getDrawable(R.drawable.marker));
-				list.get(i).setMarker(d);
+				((NodeDrawable) list.get(i).getMarker()).setImage(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)));
 			}
 
-			Drawable dend = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerend));
-			list.get(list.size() - 1).setMarker(dend);
-			Drawable dstart = boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart));
-			list.get(0).setMarker(dstart);
+			((NodeDrawable) list.get(list.size() - 1).getMarker()).setImage(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerend)));
+			((NodeDrawable) list.get(0).getMarker()).setImage(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart)));
 		}
 
 		requestRedraw();
