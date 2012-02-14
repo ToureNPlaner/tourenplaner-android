@@ -3,9 +3,10 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.TileDownloader;
 import org.mapsforge.core.Tile;
 
+import java.io.Serializable;
 import java.net.URL;
 
-public class CustomTileDownloader extends TileDownloader {
+public class CustomTileDownloader extends TileDownloader implements Serializable {
 	private final String hostName;
 	private final String protocol;
 	private final String path;
