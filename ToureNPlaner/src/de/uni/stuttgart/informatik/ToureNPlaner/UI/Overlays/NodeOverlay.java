@@ -261,6 +261,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	@Override
 	public void onProviderDisabled(String s) {
 		gpsMarker = null;
+		requestRedraw();
 	}
 
 
