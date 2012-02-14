@@ -2,9 +2,16 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.ExpandableListActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
@@ -35,8 +42,39 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 		setListAdapter(adapter);
 		getExpandableListView().setOnScrollListener(this);
 		registerForContextMenu(getExpandableListView());
-	}
+		getExpandableListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+			@Override
+			public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+				ExpandableListView.ExpandableListContextMenuInfo info =
+						(ExpandableListView.ExpandableListContextMenuInfo) contextMenuInfo;
+				// 0 - Group
+				// 1 - Child
+				int type =	ExpandableListView.getPackedPositionType(info.packedPosition);
+				if (type == 0){
+				contextMenu.setHeaderTitle(String.valueOf(info.id));
+				String[] menuItems = {"show"};
+				for (int i = 0; i < menuItems.length; i++) {
+					contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+				}
+			}}
 
+		
+		}
+		);
+	}
+	
+@Override
+public boolean onContextItemSelected(MenuItem item) {
+	final ExpandableListView.ExpandableListContextMenuInfo info =
+	(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+	switch (item.getItemId()) {
+		case 0: // showBilling
+				Toast.makeText(getApplicationContext(), "show",Toast.LENGTH_LONG).show();
+						break;
+
+	}
+	return true;
+}
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCompleted(RawHandler caller, Object object) {
