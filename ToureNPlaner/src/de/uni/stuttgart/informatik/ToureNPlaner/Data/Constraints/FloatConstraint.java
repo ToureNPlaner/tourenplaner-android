@@ -28,9 +28,15 @@ public class FloatConstraint extends ConstraintType {
 	}
 
 	public static ConstraintType parse(JsonNode constraint) {
-		return new FloatConstraint(constraint.path("name").asText(),
-				(float) constraint.path("min").asDouble(0.0),
-				(float) constraint.path("max").asDouble(10000.0));
+		float min = (float) constraint.path("min").asDouble(0.0);
+		float max;
+		JsonNode n = constraint.get("max");
+		if (n == null)
+			max = 1000.f;
+		else
+			max = (float) n.getDoubleValue();
+
+		return new FloatConstraint(constraint.path("name").asText(), min, max);
 	}
 
 	@Override

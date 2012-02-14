@@ -18,9 +18,15 @@ public class MeterConstraint extends FloatConstraint {
 	}
 
 	public static ConstraintType parse(JsonNode constraint) {
-		return new MeterConstraint(constraint.path("name").asText(),
-				(float) constraint.path("min").asDouble(0.0),
-				(float) constraint.path("max").asDouble(0.0));
+		float min = (float) constraint.path("min").asDouble(0.0);
+		float max;
+		JsonNode n = constraint.get("max");
+		if (n == null)
+			max = 18000.f;
+		else
+			max = (float) n.getDoubleValue();
+
+		return new MeterConstraint(constraint.path("name").asText(), min, max);
 	}
 
 	@Override
