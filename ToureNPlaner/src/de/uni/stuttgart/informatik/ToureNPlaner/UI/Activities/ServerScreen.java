@@ -4,11 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
@@ -121,7 +117,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 				outputStream.close();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -137,7 +133,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 				inputStream.close();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			servers = new ArrayList<String>();
 		}
 	}
@@ -271,7 +267,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		handler = Session.createSession(url, this);
 	}
-	
+
 	//------------menu---------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
