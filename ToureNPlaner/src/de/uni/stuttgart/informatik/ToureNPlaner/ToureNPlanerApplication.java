@@ -6,11 +6,33 @@ import android.os.Build;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.File;
+import java.security.KeyStore;
 import java.util.Date;
 
 public class ToureNPlanerApplication extends Application {
 	private static Context context;
+	private static KeyStore keyStore;
+	private static SSLContext sslContext;
+
+	public static SSLContext getSslContext() {
+		return sslContext;
+	}
+
+	public static void setupSsl() {
+		try {
+			sslContext = SSLContext.getInstance("TLS");
+			keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keyStore.load(ToureNPlanerApplication.context.openFileInput("keystore"), null);
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance("X509");
+			tmf.init(keyStore);
+			sslContext.init(null, tmf.getTrustManagers(), null);
+		} catch (Exception e) {
+			Log.e("TP", "SSL", e);
+		}
+	}
 
 	@Override
 	public void onCreate() {

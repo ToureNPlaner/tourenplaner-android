@@ -14,6 +14,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.TextDialog;
 
@@ -223,6 +224,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 		dialog.dismiss();
+		ToureNPlanerApplication.setupSsl();
 		Session session = (Session) object;
 		Intent myIntent;
 		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {

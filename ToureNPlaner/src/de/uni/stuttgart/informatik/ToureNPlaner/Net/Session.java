@@ -10,15 +10,11 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 import org.mapsforge.core.GeoPoint;
 
-import javax.net.ssl.*;
+import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -42,43 +38,6 @@ public class Session implements Serializable {
 	private static transient Data d;
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
-
-	private static HostnameVerifier acceptAllHostnameVerifier = new HostnameVerifier() {
-		@Override
-		public boolean verify(String s, SSLSession sslSession) {
-			return true;
-		}
-	};
-
-	private static TrustManager[] acceptAllTrustManager = new TrustManager[]{new X509TrustManager() {
-		@Override
-		public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-		}
-
-		@Override
-		public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-		}
-
-		@Override
-		public X509Certificate[] getAcceptedIssuers() {
-			return null;
-		}
-	}};
-
-	private static SSLContext sslContext;
-
-	static {
-		try {
-			sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, acceptAllTrustManager, null);
-		} catch (NoSuchAlgorithmException e) {
-			Log.e("TP", "SSL", e);
-		} catch (KeyManagementException e) {
-			Log.e("TP", "SSL", e);
-		}
-	}
 
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
@@ -268,8 +227,7 @@ public class Session implements Serializable {
 		if (d.serverInfo.getServerType() == ServerInfo.ServerType.PRIVATE) {
 			try {
 				HttpsURLConnection con = (HttpsURLConnection) uri.openConnection();
-				con.setSSLSocketFactory(sslContext.getSocketFactory());
-				con.setHostnameVerifier(acceptAllHostnameVerifier);
+				con.setSSLSocketFactory(ToureNPlanerApplication.getSslContext().getSocketFactory());
 
 				String userPassword = getUsername() + ":" + getPassword();
 				String encoding = Base64.encodeString(userPassword);
