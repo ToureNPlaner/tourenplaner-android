@@ -240,13 +240,19 @@ public class Session implements Serializable {
 	}
 
 	public boolean canPerformRequest() {
+		// Check if every algorithm constrain is set
 		for (int i = 0; i < d.constraints.size(); i++) {
 			if (d.constraints.get(i).getValue() == null)
 				return false;
 		}
 
-		return nodeModel.size() >= getSelectedAlgorithm().getMinPoints() &&
-				nodeModel.size() <= getSelectedAlgorithm().getMaxPoints();
+		// Check if every point constraint is set
+		if (d.selectedAlgorithm.getPointConstraintTypes().isEmpty())
+			if (!nodeModel.allSet())
+				return false;
+
+		return nodeModel.size() >= d.selectedAlgorithm.getMinPoints() &&
+				nodeModel.size() <= d.selectedAlgorithm.getMaxPoints();
 	}
 
 	public String getUrl() {

@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
 
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 
 import java.io.Serializable;
@@ -60,5 +61,17 @@ public class NodeModel implements Serializable {
 			Node tmp = nodeArrayList.set(front, nodeArrayList.get(back));
 			nodeArrayList.set(back, tmp);
 		}
+	}
+
+	public boolean allSet() {
+		for (int i = 0; i < nodeArrayList.size(); i++) {
+			ArrayList<Constraint> list = nodeArrayList.get(i).getConstraintList();
+			for (int n = 0; n < list.size(); n++) {
+				if (list.get(n).getValue() == null)
+					return false;
+			}
+		}
+
+		return true;
 	}
 }
