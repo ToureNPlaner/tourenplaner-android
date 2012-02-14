@@ -249,7 +249,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				performRequest(true);
 				return true;
 			case R.id.gps:
-				mapView.getController().setCenter(nodeOverlay.getGpsPosition());
+				GeoPoint pos = nodeOverlay.getGpsPosition();
+				if (pos != null)
+					mapView.getController().setCenter(nodeOverlay.getGpsPosition());
 				return true;
 			case R.id.algorithm_constraints:
 				myIntent = new Intent(this, AlgorithmConstraintsScreen.class);
@@ -399,10 +401,15 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// Only disable the button, if we don't have an action bar. Version < HONEYCOMB
 		if (Build.VERSION.SDK_INT < 11) {
-			menu.findItem(R.id.calculate).setEnabled(session.getNodeModel().size() >= session.getSelectedAlgorithm().getMinPoints());
+			menu.findItem(R.id.calculate).setEnabled(session.canPerformRequest());
 		}
-		menu.findItem(R.id.algorithm_constraints).setEnabled(
+		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
+
+		menu.findItem(R.id.back).setVisible(backIsDeleteMarker);
+
+		menu.findItem(R.id.gps).setVisible(nodeOverlay.getGpsPosition() != null);
+
 		return true;
 	}
 

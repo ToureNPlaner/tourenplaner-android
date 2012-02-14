@@ -6,24 +6,29 @@ import android.util.DisplayMetrics;
 
 public class NodeDrawable extends Drawable {
 	private final Paint textPaint;
-	private final float offsetX;
+	private float offsetY;
+	private final float density;
 
 	private Drawable image;
 	private String label = "";
 
+	/**
+	 * Must be of the same size
+	 *
+	 * @param image
+	 */
 	public void setImage(Drawable image) {
 		this.image = image;
 	}
 
 	public NodeDrawable(Drawable image, DisplayMetrics displayMetrics) {
 		this.image = image;
-		this.offsetX = displayMetrics.density * 5.f;
+		this.density = displayMetrics.density;
 		this.textPaint = new Paint();
 		textPaint.setColor(Color.WHITE);
 		textPaint.setTextAlign(Paint.Align.CENTER);
 		textPaint.setAntiAlias(true);
 		textPaint.setSubpixelText(true);
-		textPaint.setTextSize(20.f * displayMetrics.density);
 		setBounds(image.getBounds());
 	}
 
@@ -37,12 +42,29 @@ public class NodeDrawable extends Drawable {
 
 		if (label != null) {
 			// TODO parameters.textPaint.getFontMetrics()
-			canvas.drawText(label, bounds.exactCenterX(), bounds.exactCenterY() + offsetX, textPaint);
+			canvas.drawText(label, bounds.exactCenterX(), bounds.exactCenterY() + offsetY, textPaint);
 		}
+	}
+
+	@Override
+	public int getIntrinsicWidth() {
+		return image.getIntrinsicWidth();
+	}
+
+	@Override
+	public int getIntrinsicHeight() {
+		return image.getIntrinsicHeight();
 	}
 
 	public void setLabel(String label) {
 		this.label = label;
+		if (label.length() == 1) {
+			textPaint.setTextSize(20.f * density);
+			offsetY = density * 5.f;
+		} else {
+			textPaint.setTextSize(15.f * density);
+			offsetY = 0.f;
+		}
 	}
 
 	@Override

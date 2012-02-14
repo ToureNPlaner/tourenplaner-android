@@ -1,6 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 
 public class Result implements Serializable {
 	private GeoPoint[][] way;
-	private ArrayList<Node> points;
+	private ArrayList<ResultNode> points;
 
 	private int version = 0;
 
@@ -30,13 +29,13 @@ public class Result implements Serializable {
 		return way;
 	}
 
-	public ArrayList<Node> getPoints() {
+	public ArrayList<ResultNode> getPoints() {
 		return points;
 	}
 
-	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<Node> points, ArrayList<ConstraintType> pointConstraintTypes) throws IOException {
+	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<ResultNode> points) throws IOException {
 		int lt = 0, ln = 0;
-		String name = "";
+		int id = 0;
 		while (jp.nextToken() != JsonToken.END_OBJECT) {
 			if ("constraints".equals(jp.getCurrentName())) {
 				// consume
@@ -58,12 +57,12 @@ public class Result implements Serializable {
 							} else if (jp.getCurrentName().equals("ln")) {
 								jp.nextToken();
 								ln = jp.getIntValue();
-							} else if (jp.getCurrentName().equals("name")) {
+							} else if (jp.getCurrentName().equals("id")) {
 								jp.nextToken();
-								name = jp.getText();
+								id = jp.getIntValue();
 							}
 						}
-						points.add(new Node(name, lt, ln, pointConstraintTypes));
+						points.add(new ResultNode(id, lt, ln));
 					}
 				}
 			}
@@ -99,16 +98,16 @@ public class Result implements Serializable {
 		}
 	}
 
-	public static Result parse(JacksonManager.ContentType type, InputStream stream, ArrayList<ConstraintType> pointConstraintTypes) throws IOException {
+	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		Result result = new Result();
 		ArrayList<ArrayList<GeoPoint>> ways = new ArrayList<ArrayList<GeoPoint>>();
-		ArrayList<Node> points = new ArrayList<Node>();
+		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
 
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 
 		JsonParser jp = mapper.getJsonFactory().createJsonParser(stream);
 		try {
-			jacksonParse(jp, ways, points, pointConstraintTypes);
+			jacksonParse(jp, ways, points);
 		} finally {
 			jp.close();
 		}

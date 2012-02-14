@@ -14,7 +14,7 @@ public class Request {
 		ObjectNode o = new ObjectNode(factory);
 		o.put("lt", node.getLaE7());
 		o.put("ln", node.getLoE7());
-		o.put("name", node.getName());
+		o.put("id", node.getId());
 		return o;
 	}
 
