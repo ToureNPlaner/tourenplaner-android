@@ -46,6 +46,16 @@ public class NodeDrawable extends Drawable {
 		}
 	}
 
+	@Override
+	public int getIntrinsicWidth() {
+		return image.getIntrinsicWidth();
+	}
+
+	@Override
+	public int getIntrinsicHeight() {
+		return image.getIntrinsicHeight();
+	}
+
 	public void setLabel(String label) {
 		this.label = label;
 	}

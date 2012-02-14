@@ -52,7 +52,7 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 
 		setContentView(R.layout.dragndroplistview);
 
-		adapter = new NodeListAdapter(session.getNodeModel().getNodeVector(), this);
+		adapter = new NodeListAdapter(session.getNodeModel().getNodeVector(), this, session.getSelectedAlgorithm().sourceIsTarget());
 		setListAdapter(adapter);
 		ListView listView = getListView();
 		registerForContextMenu(listView);
@@ -123,7 +123,6 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 				int defaultBackgroundColor;
 
 				public void onDrag(int x, int y, ListView listView) {
-					// TODO Auto-generated method stub
 				}
 
 				public void onStartDrag(View itemView) {

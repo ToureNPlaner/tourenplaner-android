@@ -11,15 +11,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeDrawable;
 
 import java.util.ArrayList;
 
 public class NodeListAdapter extends ArrayAdapter<Node> {
 	private ArrayList<Node> nodeList;
+	private final boolean sourceIsTarget;
 
-	public NodeListAdapter(ArrayList<Node> nodeList, Context context) {
+	public NodeListAdapter(ArrayList<Node> nodeList, Context context, boolean sourceIsTarget) {
 		super(context, android.R.layout.simple_list_item_1, nodeList);
 		this.nodeList = nodeList;
+		this.sourceIsTarget = sourceIsTarget;
+	}
+
+	private static Drawable setBounds(Drawable d) {
+		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+		return d;
 	}
 
 	@Override
@@ -37,16 +45,19 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 		tvText.setText(node.getGeoPoint().toString());
 
 		ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.nodelisticon);
-		Drawable icon;
+		NodeDrawable icon;
 
 		// sets the icon depending on the index
-		if (position == 0) {
-			icon = getContext().getResources().getDrawable(R.drawable.markerstart);
-		} else if (position == getCount() - 1) {
-			icon = getContext().getResources().getDrawable(R.drawable.markerend);
+		if (!sourceIsTarget && position == 0) {
+			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerstart)), getContext().getResources().getDisplayMetrics());
+		} else if (!sourceIsTarget && position == getCount() - 1) {
+			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerend)), getContext().getResources().getDisplayMetrics());
 		} else {
-			icon = getContext().getResources().getDrawable(R.drawable.marker);
+			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.marker)), getContext().getResources().getDisplayMetrics());
 		}
+
+		icon.setLabel(node.getName());
+
 		ImageView.setImageDrawable(icon);
 		return itemLayout;
 	}
