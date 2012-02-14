@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class NodeModel implements Serializable {
-
 	private ArrayList<Node> nodeArrayList = new ArrayList<Node>();
 
 	private int version = 0;
@@ -25,6 +24,10 @@ public class NodeModel implements Serializable {
 
 	public ArrayList<Node> getNodeVector() {
 		return nodeArrayList;
+	}
+
+	public void setNodeVector(ArrayList<Node> nodeArrayList) {
+		this.nodeArrayList = nodeArrayList;
 	}
 
 	public Node get(int i) {
