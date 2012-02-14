@@ -206,7 +206,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	public void addMarkerToMap(Node node) {
-		NodeDrawable drawable = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)), context.getResources().getDisplayMetrics());
+		NodeDrawable drawable = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart)), context.getResources().getDisplayMetrics());
 		drawable.setLabel(node.getName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, drawable);
 		list.add(overlayitem);

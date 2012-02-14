@@ -52,6 +52,8 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerstart)), getContext().getResources().getDisplayMetrics());
 		} else if (!sourceIsTarget && position == getCount() - 1) {
 			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerend)), getContext().getResources().getDisplayMetrics());
+		} else if (sourceIsTarget) {
+			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerstart)), getContext().getResources().getDisplayMetrics());
 		} else {
 			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.marker)), getContext().getResources().getDisplayMetrics());
 		}
