@@ -1,16 +1,14 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.User;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
+import org.mapsforge.core.GeoPoint;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -313,6 +311,10 @@ public class Session implements Serializable {
 			}
 			safeData();
 		}
+	}
+
+	public Node createNode(GeoPoint geoPoint) {
+		return new Node(Character.toString((char) ((nodeModel.size() % 26) + 'A')), geoPoint, d.selectedAlgorithm.getPointConstraintTypes());
 	}
 
 	public ArrayList<Constraint> getConstraints() {

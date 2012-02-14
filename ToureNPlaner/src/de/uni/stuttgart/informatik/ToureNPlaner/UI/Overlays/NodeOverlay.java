@@ -127,14 +127,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-		String markerName = String.valueOf(session.getNodeModel().size() + 1);
-
 		final ArrayList<ConstraintType> tempcl = session.getSelectedAlgorithm().getPointConstraintTypes();
 
-		final Node node = new Node(markerName, geoPoint, tempcl);
+		final Node node = session.createNode(geoPoint);
 
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
 
 		// Important! Try to perform the NNS Search before, notifying any one else about the change.
 		// else through HTTP pipelining the NNS might be performed after the request!
@@ -186,7 +183,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 					.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							// transform the GpsMarker into a regular mapMarker on Position 0
-							Node gpsStartnode = new Node("gpsLocation", gpsPoint, session.getSelectedAlgorithm().getPointConstraintTypes());
+							Node gpsStartnode = session.createNode(gpsPoint);
 							useGps = true;
 							Edit edit = new AddNodeEdit(session, gpsStartnode, AddNodeEdit.Position.BEGINNING);
 							edit.perform();
