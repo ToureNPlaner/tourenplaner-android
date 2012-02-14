@@ -1,9 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.ExpandableListActivity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -21,7 +19,6 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	private BillingListAdapter adapter;
 	private BillingListHandler handler;
 	private Session session;
-	private SharedPreferences billingscreen_preferences;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
 
@@ -31,7 +28,6 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 		// If we get created for the first time we get our data from the intent
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
-		billingscreen_preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
@@ -46,17 +42,8 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	public void onCompleted(RawHandler caller, Object object) {
 		handler = null;
 		setProgressBarIndeterminateVisibility(false);
-		ArrayList<BillingItem> list = (ArrayList<BillingItem>) object;
-		billinglist.addAll(list);
-		adapter.SetupList();
+		adapter.addAll((ArrayList<BillingItem>) object);
 		adapter.notifyDataSetChanged();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		//TODO::refresh new values from preferencescreen
-
 	}
 
 	@Override
@@ -64,7 +51,6 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 		handler = null;
 		setProgressBarIndeterminateVisibility(false);
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
-		//TODO::better error message
 	}
 
 	@Override
@@ -74,15 +60,12 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 
 		if (loadMore && handler == null) {
 			setProgressBarIndeterminateVisibility(true);
-			handler = new BillingListHandler(this, session, 15, billinglist.size());
+			handler = new BillingListHandler(this, session, 15, adapter.getGroupCount());
 			handler.execute();
 		}
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView arg0, int arg1) {
-		// TODO Auto-generated method stub
-
 	}
-
 }
