@@ -15,6 +15,20 @@ public class MyActivity extends Activity {
 		return balloon;
 	}
 
+	private static String createName(int num) {
+		String str = "";
+
+		int modulo;
+		num++;
+		while (num > 0) {
+			modulo = (num - 1) % 26;
+			str = Character.toString((char) (modulo + 'A')) + str;
+			num = (num - modulo) / 26;
+		}
+
+		return str;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,7 +39,7 @@ public class MyActivity extends Activity {
 	}
 
 	private static class SampleView extends View {
-		NodeDrawable[][] drawables = new NodeDrawable[3][26];
+		NodeDrawable[][] drawables = new NodeDrawable[3][1000];
 
 		float height, width;
 
@@ -35,15 +49,15 @@ public class MyActivity extends Activity {
 
 			for (int i = 0; i < drawables[0].length; i++) {
 				drawables[0][i] = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)), getResources().getDisplayMetrics());
-				drawables[0][i].setLabel(Character.toString((char) (i + 65)));
+				drawables[0][i].setLabel(createName(i));
 			}
 			for (int i = 0; i < drawables[1].length; i++) {
 				drawables[1][i] = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart)), getResources().getDisplayMetrics());
-				drawables[0][i].setLabel(Character.toString((char) (i + 65)));
+				drawables[1][i].setLabel(createName(i));
 			}
 			for (int i = 0; i < drawables[2].length; i++) {
 				drawables[2][i] = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerend)), getResources().getDisplayMetrics());
-				drawables[0][i].setLabel(Character.toString((char) (i + 65)));
+				drawables[2][i].setLabel(createName(i));
 			}
 
 			height = (float) drawables[0][0].getBounds().height() * 1.5f;
@@ -52,7 +66,7 @@ public class MyActivity extends Activity {
 
 		@Override
 		protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-			setMeasuredDimension((int) (width * 4.f), (int) (height * 26.f));
+			setMeasuredDimension((int) (width * 4.f), (int) (height * (float) drawables[0].length));
 		}
 
 		@Override
@@ -63,7 +77,7 @@ public class MyActivity extends Activity {
 					drawables[n][i].draw(canvas);
 					canvas.translate(0.f, height);
 				}
-				canvas.translate(width, -height * 26.f);
+				canvas.translate(width, -height * (float) drawables[n].length);
 			}
 		}
 	}
