@@ -35,6 +35,7 @@ public class Session implements Serializable {
 		private AlgorithmInfo selectedAlgorithm;
 		private User user;
 		private ArrayList<Constraint> constraints;
+		private int nameCounter;
 	}
 
 	private final UUID uuid;
@@ -181,6 +182,10 @@ public class Session implements Serializable {
 		if (0 < (change & MODEL_CHANGE) || 0 < (change & DND_CHANGE)) {
 			nodeModel.incVersion();
 		}
+
+		if (nodeModel.size() == 0)
+			d.nameCounter = 0;
+
 		for (int i = 0; i < listeners.size(); i++) {
 			listeners.get(i).onChange(change);
 		}
@@ -303,6 +308,7 @@ public class Session implements Serializable {
 	}
 
 	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
+		d.nameCounter = 0;
 		if (!selectedAlgorithm.equals(d.selectedAlgorithm)) {
 			d.selectedAlgorithm = selectedAlgorithm;
 			d.constraints = new ArrayList<Constraint>(selectedAlgorithm.getConstraintTypes().size());
@@ -313,8 +319,22 @@ public class Session implements Serializable {
 		}
 	}
 
+	private static String createName(int num) {
+		String str = "";
+
+		int modulo;
+		num++;
+		while (num > 0) {
+			modulo = (num - 1) % 26;
+			str = Character.toString((char) (modulo + 'A')) + str;
+			num = (num - modulo) / 26;
+		}
+
+		return str;
+	}
+
 	public Node createNode(GeoPoint geoPoint) {
-		return new Node(Character.toString((char) ((nodeModel.size() % 26) + 'A')), geoPoint, d.selectedAlgorithm.getPointConstraintTypes());
+		return new Node(nodeModel.getVersion(), createName(d.nameCounter++), geoPoint, d.selectedAlgorithm.getPointConstraintTypes());
 	}
 
 	public ArrayList<Constraint> getConstraints() {
