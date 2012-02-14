@@ -54,12 +54,11 @@ public class NodeModel implements Serializable {
 	}
 
 	void reverseNodes() {
-		for (int front = 0, back = nodeArrayList.size() - 1;
-		     front < nodeArrayList.size() / 2;
-		     front++, back--) {
-			// swap
-			Node tmp = nodeArrayList.set(front, nodeArrayList.get(back));
-			nodeArrayList.set(back, tmp);
+		int first = 0;
+		int last = nodeArrayList.size();
+		while ((first != last) && (first != --last)) {
+			Node tmp = nodeArrayList.set(first++, nodeArrayList.get(last));
+			nodeArrayList.set(last, tmp);
 		}
 	}
 
