@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.util.ArrayList;

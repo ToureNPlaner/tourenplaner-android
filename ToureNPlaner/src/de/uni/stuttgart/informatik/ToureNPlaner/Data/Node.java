@@ -1,7 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import org.mapsforge.core.GeoPoint;
 
 import java.io.Serializable;

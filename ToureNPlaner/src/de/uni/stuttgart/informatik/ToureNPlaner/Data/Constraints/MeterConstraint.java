@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints;
+package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
 import android.content.Context;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;

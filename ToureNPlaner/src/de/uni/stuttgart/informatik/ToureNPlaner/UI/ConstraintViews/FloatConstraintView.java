@@ -1,7 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews;
 
 import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class FloatConstraintView extends ConstraintView {

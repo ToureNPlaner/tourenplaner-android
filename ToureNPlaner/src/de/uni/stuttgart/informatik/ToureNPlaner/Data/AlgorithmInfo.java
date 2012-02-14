@@ -1,6 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Constraints.ConstraintType;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import org.codehaus.jackson.JsonNode;
 
 import java.io.Serializable;
