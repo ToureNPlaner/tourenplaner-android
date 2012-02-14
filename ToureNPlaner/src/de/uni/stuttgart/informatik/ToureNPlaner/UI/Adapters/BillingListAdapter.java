@@ -20,7 +20,13 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		this.context = context;
 		addAll(billinglist);
 	}
-
+	public int getRequestID(int itemID){
+		String id = billingItems.get(itemID)[0];
+		id = id.substring(id.indexOf(" ")+1);
+		return Integer.valueOf(id);
+	
+		
+	}
 	public void addAll(ArrayList<BillingItem> items) {
 		setupList(items);
 	}
