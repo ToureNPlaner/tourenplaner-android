@@ -26,6 +26,9 @@ public class NodeModel implements Serializable {
 	public ArrayList<Node> getNodeVector() {
 		return nodeArrayList;
 	}
+	public void setNodeVector(ArrayList<Node> arraylist) {
+		nodeArrayList = arraylist;
+	}
 
 	public Node get(int i) {
 		return nodeArrayList.get(i);

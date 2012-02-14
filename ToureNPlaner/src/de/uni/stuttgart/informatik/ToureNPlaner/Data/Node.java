@@ -26,6 +26,7 @@ public class Node implements Serializable {
 		this(name, new GeoPoint(laE7 / 10, loE7 / 10), constraintTypes);
 	}
 
+	
 	public void setGeoPoint(GeoPoint geoPoint) {
 		this.geoPoint = geoPoint;
 	}

@@ -1,26 +1,28 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import java.util.ArrayList;
+
+import org.mapsforge.core.GeoPoint;
+
 import android.app.ExpandableListActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.BillingListAdapter;
-
-import java.util.ArrayList;
 
 public class BillingScreen extends ExpandableListActivity implements Observer, OnScrollListener {
 	private BillingListAdapter adapter;
@@ -69,8 +71,11 @@ public boolean onContextItemSelected(MenuItem item) {
 	(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
 	switch (item.getItemId()) {
 		case 0: // showBilling
-				Toast.makeText(getApplicationContext(), "show",Toast.LENGTH_LONG).show();
-						break;
+			Integer requestid = adapter.getRequestID((int) info.id);
+			setProgressBarIndeterminateVisibility(true);
+			handler = new BillingListHandler(this, session, requestid ,1);
+			handler.execute();
+			break;
 
 	}
 	return true;
@@ -78,10 +83,21 @@ public boolean onContextItemSelected(MenuItem item) {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCompleted(RawHandler caller, Object object) {
-		handler = null;
+		if(handler.getMode()==0){
 		setProgressBarIndeterminateVisibility(false);
 		adapter.addAll((ArrayList<BillingItem>) object);
 		adapter.notifyDataSetChanged();
+		}
+		if(handler.getMode()==1){
+			setProgressBarIndeterminateVisibility(false);
+			Toast.makeText(getApplicationContext(),"markers successful loaded", Toast.LENGTH_SHORT).show();
+			ArrayList<Node> al = new ArrayList<Node>();
+			al = (ArrayList<Node> )object;
+			NodeModel nm = new NodeModel();
+			nm.setNodeVector(al);
+			session.setNodeModel(nm);
+			}
+		handler = null;
 	}
 
 	@Override
@@ -98,7 +114,7 @@ public boolean onContextItemSelected(MenuItem item) {
 
 		if (loadMore && handler == null) {
 			setProgressBarIndeterminateVisibility(true);
-			handler = new BillingListHandler(this, session, 15, adapter.getGroupCount());
+			handler = new BillingListHandler(this, session, 15, adapter.getGroupCount(),0);
 			handler.execute();
 		}
 	}
