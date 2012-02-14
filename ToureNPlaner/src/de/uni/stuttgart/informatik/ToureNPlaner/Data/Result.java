@@ -36,7 +36,18 @@ public class Result implements Serializable {
 
 	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<Node> points, ArrayList<ConstraintType> pointConstraintTypes) throws IOException {
 		int lt = 0, ln = 0;
+		String name = "";
 		while (jp.nextToken() != JsonToken.END_OBJECT) {
+			if ("constraints".equals(jp.getCurrentName())) {
+				// consume
+				while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != JsonToken.VALUE_NULL) {
+				}
+			}
+			if ("misc".equals(jp.getCurrentName())) {
+				// consume
+				while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != JsonToken.VALUE_NULL) {
+				}
+			}
 			if ("points".equals(jp.getCurrentName())) {
 				if (jp.nextToken() == JsonToken.START_ARRAY) {
 					while (jp.nextToken() != JsonToken.END_ARRAY) {
@@ -47,9 +58,12 @@ public class Result implements Serializable {
 							} else if (jp.getCurrentName().equals("ln")) {
 								jp.nextToken();
 								ln = jp.getIntValue();
+							} else if (jp.getCurrentName().equals("name")) {
+								jp.nextToken();
+								name = jp.getText();
 							}
 						}
-						points.add(new Node("", lt, ln, pointConstraintTypes));
+						points.add(new Node(name, lt, ln, pointConstraintTypes));
 					}
 				}
 			}
