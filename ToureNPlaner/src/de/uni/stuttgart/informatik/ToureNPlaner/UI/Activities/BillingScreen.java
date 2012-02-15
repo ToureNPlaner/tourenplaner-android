@@ -100,18 +100,18 @@ public boolean onContextItemSelected(MenuItem item) {
 			edit.perform();
 			ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
 			resultArray = result.getPoints();
-			ArrayList<Node> nodelist = new ArrayList<Node>();
+			ArrayList<Node> nodeArray = new ArrayList<Node>();
 			String name ="";
 			Integer id;
-			
 			for (int i = 0; i<resultArray.size();i++){
 				id = resultArray.get(i).getId();
+				name = String.valueOf(i);
 				ArrayList<ConstraintType> cl = new ArrayList<ConstraintType>();
 				Node node = new Node(id,name,resultArray.get(i).getGeoPoint(),cl);
-				nodelist.add(node);
+				nodeArray.add(node);
 			}
 			NodeModel nm = new NodeModel();
-			nm.setNodeVector(nodelist);
+			nm.setNodeVector(nodeArray);
 			session.setNodeModel(nm);
 			session.setResult(result);
 			//TODO:: just workaround

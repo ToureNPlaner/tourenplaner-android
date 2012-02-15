@@ -1,7 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Response;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager.ContentType;

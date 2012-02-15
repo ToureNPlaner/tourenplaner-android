@@ -10,6 +10,7 @@ import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BillingListAdapter extends BaseExpandableListAdapter {
 	private ArrayList<String> billingCaptions = new ArrayList<String>();
@@ -31,6 +32,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		setupList(items);
 	}
 
+	@SuppressWarnings("static-access")
 	private void setupList(ArrayList<BillingItem> items) {
 		billingCaptions.ensureCapacity(billingCaptions.size() + items.size());
 		for (int i = 0; i < items.size(); i++) {
@@ -38,20 +40,23 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		}
 
 		billingItems.ensureCapacity(billingItems.size() + items.size());
-
+		Double cost = 0.0;
+		String date;
+		Date dateparsed = new Date();
 		// TODO localize
 		for (int i = 0; i < items.size(); i++) {
-			String[] arr = new String[10];
-			arr[0] = "reqID: " + items.get(i).getRequestid();
-			arr[1] = "userID: " + items.get(i).getUserid();
-			arr[2] = "algorithmus: " + items.get(i).getAlgorithm();
-			arr[3] = "request: " + items.get(i).getRequest();
-			arr[4] = "response: " + items.get(i).getResponse();
-			arr[5] = "cost: " + items.get(i).getCost();
-			arr[6] = "requestDate: " + items.get(i).getRequestdate();
-			arr[7] = "finishedDate: " + items.get(i).getFinishdate();
-			arr[8] = "duration: " + items.get(i).getDuration();
-			arr[9] = "status: " + items.get(i).getStatus();
+			date =  items.get(i).getRequestdate();
+			String DateYearDayMonth = date.substring(0, date.indexOf("T"));
+			String DateTime = date.substring(date.indexOf("T")+1,date.indexOf("."));
+			cost = ((double)items.get(i).getCost())/100;
+			
+			
+			String[] arr = new String[5];
+			arr[0] = "algorithmus: " + items.get(i).getAlgorithm();
+			arr[1] = "cost: " + cost + " Euro";
+			arr[2] = "requestDate: \n" + DateYearDayMonth +" "+DateTime;
+			arr[3] = "duration: " + items.get(i).getDuration() + " seconds";
+			arr[4] = "status: " + items.get(i).getStatus();
 			billingItems.add(arr);
 		}
 	}
