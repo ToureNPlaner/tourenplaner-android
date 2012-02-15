@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements LocationListener, Session.Listener {
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
 
-	private final Context context;
+	private Context context;
 	private final Session session;
 
 	private static final int GPS_RADIUS = 10;
@@ -50,6 +50,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 		loadFromModel();
 		updateGpsMarker(gpsPoint);
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	private void setupGpsDrawable() {
