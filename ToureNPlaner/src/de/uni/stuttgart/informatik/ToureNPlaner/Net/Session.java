@@ -267,8 +267,9 @@ public class Session implements Serializable {
 	}
 
 	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
-		d.nameCounter = 0;
 		if (!selectedAlgorithm.equals(d.selectedAlgorithm)) {
+			d.nameCounter = 0;
+			result = null;
 			d.selectedAlgorithm = selectedAlgorithm;
 			d.constraints = new ArrayList<Constraint>(selectedAlgorithm.getConstraintTypes().size());
 			for (int i = 0; i < selectedAlgorithm.getConstraintTypes().size(); i++) {

@@ -1,7 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -11,16 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AuthRequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.LoginScreen.ConnectionProgressDialog;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.util.ArrayList;
@@ -29,9 +20,9 @@ import java.util.Collections;
 
 public class AlgorithmScreen extends FragmentActivity {
 	private Session session;
-   
 
-    @Override
+
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
 		super.onSaveInstanceState(outState);
@@ -69,8 +60,6 @@ public class AlgorithmScreen extends FragmentActivity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 				AlgorithmInfo alg = (AlgorithmInfo) adapterView.getItemAtPosition(i);
-				if (!alg.equals(session.getSelectedAlgorithm()))
-					session.setResult(null);
 				session.setSelectedAlgorithm(alg);
 				Intent myIntent = new Intent(view.getContext(), MapScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
