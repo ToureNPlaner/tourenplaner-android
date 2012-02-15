@@ -18,6 +18,8 @@ public class ToureNPlanerApplication extends Application {
 	private static SSLContext sslContext;
 
 	public static SSLContext getSslContext() {
+		if (sslContext == null)
+			setupSsl();
 		return sslContext;
 	}
 
@@ -50,7 +52,6 @@ public class ToureNPlanerApplication extends Application {
 		super.onCreate();
 		context = getApplicationContext();
 		disableConnectionReuseIfNecessary();
-		setupSsl();
 		new Thread() {
 			@Override
 			public void run() {
