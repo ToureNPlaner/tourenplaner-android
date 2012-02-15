@@ -18,6 +18,8 @@ public class ToureNPlanerApplication extends Application {
 	private static SSLContext sslContext;
 
 	public static SSLContext getSslContext() {
+        if(sslContext == null)
+            setupSsl();
 		return sslContext;
 	}
 
