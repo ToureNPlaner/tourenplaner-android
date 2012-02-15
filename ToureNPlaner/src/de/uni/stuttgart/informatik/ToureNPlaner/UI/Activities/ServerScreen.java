@@ -14,7 +14,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.TextDialog;
 
@@ -214,7 +213,8 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	private void cancelConnection() {
-		handler.cancel(true);
+		if (handler != null)
+			handler.cancel(true);
 		handler = null;
 	}
 
@@ -223,8 +223,11 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
-		dialog.dismiss();
-		ToureNPlanerApplication.setupSsl();
+		try {
+			dialog.dismiss();
+		} catch (IllegalStateException e) {
+			// Can not perform this action after onSaveInstanceState
+		}
 		Session session = (Session) object;
 		Intent myIntent;
 		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
@@ -244,7 +247,11 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
-		dialog.dismiss();
+		try {
+			dialog.dismiss();
+		} catch (IllegalStateException e) {
+			// Can not perform this action after onSaveInstanceState
+		}
 		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 	}
 

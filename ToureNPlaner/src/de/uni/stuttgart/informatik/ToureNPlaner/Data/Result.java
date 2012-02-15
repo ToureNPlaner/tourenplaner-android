@@ -72,7 +72,6 @@ public class Result implements Serializable {
 					while ((curr = jp.nextToken()) != JsonToken.END_ARRAY) {
 						if (curr == JsonToken.START_ARRAY) {
 							ArrayList<GeoPoint> currentWay = new ArrayList<GeoPoint>();
-							ways.add(currentWay);
 							while (jp.nextToken() != JsonToken.END_ARRAY) {
 								while (jp.nextToken() != JsonToken.END_OBJECT) {
 									if (jp.getCurrentName().equals("lt")) {
@@ -85,12 +84,15 @@ public class Result implements Serializable {
 								}
 								currentWay.add(new GeoPoint(lt, ln));
 							}
-							// duplicate the last one
-							if (ways.size() > 1) {
-								ArrayList<GeoPoint> second_last = ways.get(ways.size() - 2);
-								ArrayList<GeoPoint> last = ways.get(ways.size() - 1);
-								second_last.add(last.get(0));
-							}
+                            if(!currentWay.isEmpty()) {
+                                ways.add(currentWay);
+                                // duplicate the last one
+                                if (ways.size() > 1) {
+                                    ArrayList<GeoPoint> second_last = ways.get(ways.size() - 2);
+                                    ArrayList<GeoPoint> last = ways.get(ways.size() - 1);
+                                    second_last.add(last.get(0));
+                                }
+                            }
 						}
 					}
 				}

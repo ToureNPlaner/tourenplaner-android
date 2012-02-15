@@ -22,11 +22,22 @@ public class ToureNPlanerApplication extends Application {
 	}
 
 	public static void setupSsl() {
+		TrustManagerFactory tmf;
 		try {
 			sslContext = SSLContext.getInstance("TLS");
 			keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			tmf = TrustManagerFactory.getInstance("X509");
+		} catch (Exception e) {
+			Log.e("TP", "SSL", e);
+			return;
+		}
+		try {
 			keyStore.load(ToureNPlanerApplication.context.openFileInput("keystore"), null);
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance("X509");
+		} catch (Exception e) {
+			Log.e("TP", "SSL", e);
+			keyStore = null;
+		}
+		try {
 			tmf.init(keyStore);
 			sslContext.init(null, tmf.getTrustManagers(), null);
 		} catch (Exception e) {
@@ -39,6 +50,7 @@ public class ToureNPlanerApplication extends Application {
 		super.onCreate();
 		context = getApplicationContext();
 		disableConnectionReuseIfNecessary();
+		setupSsl();
 		new Thread() {
 			@Override
 			public void run() {

@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -120,21 +121,21 @@ public class Session implements Serializable {
 		void onChange(int change);
 	}
 
-	private transient ArrayList<Listener> listeners = new ArrayList<Listener>();
+	private transient WeakHashMap<Object, Listener> listeners = new WeakHashMap<Object, Listener>();
 
 	private void readObject(java.io.ObjectInputStream in) throws ClassNotFoundException, IOException {
 		in.defaultReadObject();
 		if (d == null)
 			loadAll();
-		listeners = new ArrayList<Listener>();
+		listeners = new WeakHashMap<Object, Listener>();
 	}
 
 	public void registerListener(Listener listener) {
-		listeners.add(listener);
+		listeners.put(listener.getClass(), listener);
 	}
 
 	public void removeListener(Listener listener) {
-		listeners.remove(listener);
+		listeners.remove(listener.getClass());
 	}
 
 	public void notifyChangeListerners(final int change) {
@@ -145,8 +146,8 @@ public class Session implements Serializable {
 		if (nodeModel.size() == 0)
 			d.nameCounter = 0;
 
-		for (int i = 0; i < listeners.size(); i++) {
-			listeners.get(i).onChange(change);
+		for (Listener listener : listeners.values()) {
+			listener.onChange(change);
 		}
 		new Thread(new Runnable() {
 			@Override
@@ -266,8 +267,10 @@ public class Session implements Serializable {
 	}
 
 	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
-		d.nameCounter = 0;
 		if (!selectedAlgorithm.equals(d.selectedAlgorithm)) {
+			d.nameCounter = 0;
+			nodeModel.clear();
+			result = null;
 			d.selectedAlgorithm = selectedAlgorithm;
 			d.constraints = new ArrayList<Constraint>(selectedAlgorithm.getConstraintTypes().size());
 			for (int i = 0; i < selectedAlgorithm.getConstraintTypes().size(); i++) {

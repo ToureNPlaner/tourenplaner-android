@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.KeystoreAdapter;
 
 import java.io.FileOutputStream;
@@ -41,6 +42,7 @@ public class CertificateScreen extends FragmentActivity {
 		}
 		adapter.notifyDataSetChanged();
 		storeKeystore();
+		ToureNPlanerApplication.setupSsl();
 	}
 
 
