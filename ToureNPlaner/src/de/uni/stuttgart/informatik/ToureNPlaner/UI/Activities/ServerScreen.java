@@ -224,7 +224,11 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
-		dialog.dismiss();
+        try {
+        			dialog.dismiss();
+        } catch (IllegalStateException e) {
+            // Can not perform this action after onSaveInstanceState
+        }
 		ToureNPlanerApplication.setupSsl();
 		Session session = (Session) object;
 		Intent myIntent;
@@ -245,7 +249,11 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
-		dialog.dismiss();
+        try {
+            dialog.dismiss();
+        } catch (IllegalStateException e) {
+            // Can not perform this action after onSaveInstanceState
+        }
 		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 	}
 
