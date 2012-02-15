@@ -23,6 +23,13 @@
     <string name="billing">billing</string>
 
     <!-- billingscreen -->
+    <string name="requestid">request ID</string>
+    <string name="algorithmn">algorithm</string>
+    <string name="cost">cost</string>
+    <string name="requestdate">request date</string>
+    <string name="duration">duration</string>
+    <string name="status">status</string>
+    <string name="tour">Tour</string>
 
     <!-- billingscreenpreferences -->
     <string name="billingscreen_preferences">billingscreen preferences</string>

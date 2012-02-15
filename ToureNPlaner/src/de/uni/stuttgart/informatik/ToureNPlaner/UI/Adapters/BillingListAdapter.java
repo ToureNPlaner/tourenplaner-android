@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 
 import java.util.ArrayList;
@@ -23,12 +24,12 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	}
 	public int getRequestID(int itemID){
 		String id = billingItems.get(itemID)[0];
-		id = id.substring(id.indexOf(" ")+1);
+		id = id.substring(id.indexOf(":")+2);
 		return Integer.valueOf(id);
 	}
 	public String getAlgSuffix(int itemID){
 		String algSuffix = billingItems.get(itemID)[1];
-		algSuffix = algSuffix.substring(algSuffix.indexOf(" ")+1);
+		algSuffix = algSuffix.substring(algSuffix.indexOf(":")+2);
 		return  algSuffix;
 	}
 	public void addAll(ArrayList<BillingItem> items) {
@@ -39,7 +40,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	private void setupList(ArrayList<BillingItem> items) {
 		billingCaptions.ensureCapacity(billingCaptions.size() + items.size());
 		for (int i = 0; i < items.size(); i++) {
-			billingCaptions.add("Tour " + String.valueOf(items.get(i).getRequestid()));
+			billingCaptions.add(context.getResources().getString(R.string.tour)+" " + String.valueOf(items.get(i).getRequestid()));
 		}
 
 		billingItems.ensureCapacity(billingItems.size() + items.size());
@@ -53,12 +54,12 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 			cost = ((double)items.get(i).getCost())/100;
 						
 			String[] arr = new String[6];
-			arr[0] = "reqID: " + items.get(i).getRequestid();
-			arr[1] = "algorithmus: " + items.get(i).getAlgorithm();
-			arr[2] = "cost: " + cost + " Euro";
-			arr[3] = "requestDate: \n" + DateYearDayMonth +" "+DateTime;
-			arr[4] = "duration: " + items.get(i).getDuration() + " seconds";
-			arr[5] = "status: " + items.get(i).getStatus();
+			arr[0] = context.getResources().getString(R.string.requestid)+": " + items.get(i).getRequestid();
+			arr[1] = context.getResources().getString(R.string.algorithmn)+": " + items.get(i).getAlgorithm();
+			arr[2] = context.getResources().getString(R.string.cost)+": " + cost + " Euro";
+			arr[3] = context.getResources().getString(R.string.requestdate)+": \n" + DateYearDayMonth +" "+DateTime;
+			arr[4] = context.getResources().getString(R.string.duration)+": " + items.get(i).getDuration() + " seconds";
+			arr[5] = context.getResources().getString(R.string.status)+": " + items.get(i).getStatus();
 			billingItems.add(arr);
 		}
 	}
