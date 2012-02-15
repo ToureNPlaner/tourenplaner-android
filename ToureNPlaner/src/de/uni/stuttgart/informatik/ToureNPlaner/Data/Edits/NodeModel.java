@@ -1,12 +1,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
 
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 
 public class NodeModel implements Serializable {
 	private ArrayList<Node> nodeArrayList = new ArrayList<Node>();
@@ -49,7 +48,7 @@ public class NodeModel implements Serializable {
 		reverseNodes();
 	}
 
-	void clear() {
+	public void clear() {
 		nodeArrayList.clear();
 	}
 
