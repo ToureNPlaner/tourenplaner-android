@@ -49,6 +49,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 
+	private LocationManager locManager;
+
 	private boolean isInstantRequest;
 	private boolean backIsDeleteMarker;
 
@@ -103,6 +105,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+		locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 		// setting properties of the mapview
 		setContentView(R.layout.activity_mapscreen);
@@ -171,7 +175,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void setupGPS(boolean isFirstStart) {
-		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 		GeoPoint gpsGeoPoint = null;
@@ -360,7 +363,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.removeUpdates(nodeOverlay);
 	}
@@ -377,7 +379,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupMapView(preferences);
 
-		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// 5 minutes, 50 meters
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
 	}
