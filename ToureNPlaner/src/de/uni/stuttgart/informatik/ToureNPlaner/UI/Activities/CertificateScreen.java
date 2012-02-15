@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -115,7 +116,7 @@ public class CertificateScreen extends FragmentActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent("org.openintents.action.PICK_FILE");
-				intent.setData(Uri.parse("file:///sdcard/"));
+				intent.setData(Uri.parse("file://" + Environment.getExternalStorageDirectory()));
 				intent.putExtra("org.openintents.extra.TITLE", "Please select a file");
 				try {
 					startActivityForResult(intent, 1);
