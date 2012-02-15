@@ -46,7 +46,6 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		billingItems.ensureCapacity(billingItems.size() + items.size());
 		Double cost = 0.0;
 		String date;
-		// TODO localize
 		for (int i = 0; i < items.size(); i++) {
 			date =  items.get(i).getRequestdate();
 			String DateYearDayMonth = date.substring(0, date.indexOf("T"));

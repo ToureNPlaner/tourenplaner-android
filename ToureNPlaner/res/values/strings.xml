@@ -30,6 +30,7 @@
     <string name="duration">duration</string>
     <string name="status">status</string>
     <string name="tour">Tour</string>
+    <string name="load_request">load request</string>
 
     <!-- billingscreenpreferences -->
     <string name="billingscreen_preferences">billingscreen preferences</string>
@@ -75,7 +76,9 @@
     <string name="value">value</string>
     <string name="maximum">maximum</string>
     <string name="minimum">minimum</string>
-
+    
+    <!-- constraint_screens -->
+	<string name="select_a_value">select a value</string>
     <!--various-->
     <string name="connecting">connecting</string>
     <string name="new_string">new</string>

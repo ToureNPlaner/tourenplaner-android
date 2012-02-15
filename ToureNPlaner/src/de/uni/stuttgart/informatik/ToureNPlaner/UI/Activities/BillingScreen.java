@@ -99,6 +99,7 @@ public boolean onContextItemSelected(MenuItem item) {
 			ArrayList<Node> nodeArray = new ArrayList<Node>();
 			String name ="";
 			Integer id;
+			// put all resultNodes in Node ArrayList
 			for (int i = 0; i<resultArray.size();i++){
 				id = resultArray.get(i).getId();
 				name = String.valueOf(i);
@@ -110,8 +111,7 @@ public boolean onContextItemSelected(MenuItem item) {
 			nm.setNodeVector(nodeArray);
 			session.setNodeModel(nm);
 			session.setResult(result);
-			result = null;
-			nm = null;
+			// search for the algorithmn suffix that was used by this request
 			Integer PositionOfAlg=0;
 			for(int i=0; i< session.getServerInfo().getAlgorithms().size();i++){
 				if(session.getServerInfo().getAlgorithms().get(i).getUrlsuffix().equals(handler.getAlgSuffix())){

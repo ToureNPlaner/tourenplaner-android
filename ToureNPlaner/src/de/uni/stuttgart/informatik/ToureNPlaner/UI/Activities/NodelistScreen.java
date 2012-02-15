@@ -69,7 +69,7 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 				public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
 					AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
 					contextMenu.setHeaderTitle(adapter.getItem(info.position).getName());
-					String[] menuItems = {"edit", "delete"};
+					String[] menuItems = {getResources().getString(R.string.edit), getResources().getString(R.string.delete)};
 					for (int i = 0; i < menuItems.length; i++) {
 						contextMenu.add(Menu.NONE, i, i, menuItems[i]);
 					}
