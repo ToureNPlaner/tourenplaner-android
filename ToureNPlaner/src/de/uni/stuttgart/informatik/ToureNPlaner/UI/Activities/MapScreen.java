@@ -211,13 +211,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		// create the WayOverlay and add the ways
 		wayOverlay = new ArrayWayOverlay(wayDefaultPaintOutline, null);
 		mapView.getOverlays().add(wayOverlay);
-		//TODO::change workaround with static result
-		//Result result = session.getResult();
-		Result result=BillingScreen.resultstatic;
+		Result result = session.getResult();
 		if (result != null) {
 			addPathToMap(result.getWay());
 		}
-		BillingScreen.resultstatic = null;
 	}
 
 	// ----------------Menu-----------------

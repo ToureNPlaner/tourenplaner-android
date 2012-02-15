@@ -3,6 +3,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import java.util.ArrayList;
 
 import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -18,9 +19,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.SetResultEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
@@ -63,8 +62,6 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 					contextMenu.add(Menu.NONE, i, i, menuItems[i]);
 				}
 			}}
-
-		
 		}
 		);
 	}
@@ -76,8 +73,9 @@ public boolean onContextItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
 		case 0: // showBilling
 			Integer requestid = adapter.getRequestID((int) info.id);
+			String algSuffix = adapter.getAlgSuffix((int) info.id);
 			setProgressBarIndeterminateVisibility(true);
-			handler = new BillingListHandler(this, session, requestid ,1);
+			handler = new BillingListHandler(this, session, requestid,algSuffix ,1);
 			handler.execute();
 			break;
 
@@ -96,8 +94,6 @@ public boolean onContextItemSelected(MenuItem item) {
 			setProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(),"path successful loaded", Toast.LENGTH_SHORT).show();
 			Result result = (Result )object;
-			Edit edit = new SetResultEdit(session, result);
-			edit.perform();
 			ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
 			resultArray = result.getPoints();
 			ArrayList<Node> nodeArray = new ArrayList<Node>();
@@ -114,19 +110,27 @@ public boolean onContextItemSelected(MenuItem item) {
 			nm.setNodeVector(nodeArray);
 			session.setNodeModel(nm);
 			session.setResult(result);
-			//TODO:: just workaround
-			resultstatic = result;
+			result = null;
+			nm = null;
+			Integer PositionOfAlg=0;
+			for(int i=0; i< session.getServerInfo().getAlgorithms().size();i++){
+				if(session.getServerInfo().getAlgorithms().get(i).getUrlsuffix().equals(handler.getAlgSuffix())){
+					PositionOfAlg = i;
+				}
+			}
+			session.setSelectedAlgorithm(session.getServerInfo().getAlgorithms().get(PositionOfAlg));
+			Intent myIntent = new Intent(this, MapScreen.class);
+			myIntent.putExtra(Session.IDENTIFIER, session);
+			startActivity(myIntent);
 			}
 		handler = null;
 	}
-
 	@Override
 	public void onError(RawHandler caller, Object object) {
 		handler = null;
 		setProgressBarIndeterminateVisibility(false);
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
 	}
-
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore =

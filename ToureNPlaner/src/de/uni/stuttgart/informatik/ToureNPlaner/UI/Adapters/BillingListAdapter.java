@@ -25,14 +25,17 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		String id = billingItems.get(itemID)[0];
 		id = id.substring(id.indexOf(" ")+1);
 		return Integer.valueOf(id);
-	
-		
+	}
+	public String getAlgSuffix(int itemID){
+		String algSuffix = billingItems.get(itemID)[1];
+		algSuffix = algSuffix.substring(algSuffix.indexOf(" ")+1);
+		return  algSuffix;
 	}
 	public void addAll(ArrayList<BillingItem> items) {
 		setupList(items);
 	}
 
-	@SuppressWarnings("static-access")
+
 	private void setupList(ArrayList<BillingItem> items) {
 		billingCaptions.ensureCapacity(billingCaptions.size() + items.size());
 		for (int i = 0; i < items.size(); i++) {
@@ -42,21 +45,20 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		billingItems.ensureCapacity(billingItems.size() + items.size());
 		Double cost = 0.0;
 		String date;
-		Date dateparsed = new Date();
 		// TODO localize
 		for (int i = 0; i < items.size(); i++) {
 			date =  items.get(i).getRequestdate();
 			String DateYearDayMonth = date.substring(0, date.indexOf("T"));
 			String DateTime = date.substring(date.indexOf("T")+1,date.indexOf("."));
 			cost = ((double)items.get(i).getCost())/100;
-			
-			
-			String[] arr = new String[5];
-			arr[0] = "algorithmus: " + items.get(i).getAlgorithm();
-			arr[1] = "cost: " + cost + " Euro";
-			arr[2] = "requestDate: \n" + DateYearDayMonth +" "+DateTime;
-			arr[3] = "duration: " + items.get(i).getDuration() + " seconds";
-			arr[4] = "status: " + items.get(i).getStatus();
+						
+			String[] arr = new String[6];
+			arr[0] = "reqID: " + items.get(i).getRequestid();
+			arr[1] = "algorithmus: " + items.get(i).getAlgorithm();
+			arr[2] = "cost: " + cost + " Euro";
+			arr[3] = "requestDate: \n" + DateYearDayMonth +" "+DateTime;
+			arr[4] = "duration: " + items.get(i).getDuration() + " seconds";
+			arr[5] = "status: " + items.get(i).getStatus();
 			billingItems.add(arr);
 		}
 	}

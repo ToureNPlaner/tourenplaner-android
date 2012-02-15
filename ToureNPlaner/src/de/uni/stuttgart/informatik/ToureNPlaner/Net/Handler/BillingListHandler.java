@@ -16,20 +16,25 @@ public class BillingListHandler extends ConnectionHandler {
 	private int offset;
 	private int mode = 0;
 	private int id = 0;
+	private String algSuffix = "";
 
 	public BillingListHandler(Observer listener, Session session, int limit, int offset,int mode) {
 		super(listener, session);
 		this.limit = limit;
 		this.offset = offset;
 	}
-	public BillingListHandler(Observer listener, Session session, int id, int mode) {
+	public BillingListHandler(Observer listener, Session session, int id,String algSuffix, int mode) {
 		super(listener, session);
 	this.id = id;
 	this.mode = mode;
+	this.algSuffix = algSuffix;
 	}
-public int getMode(){
-	return this.mode;
-}
+	public int getMode(){
+		return this.mode;
+	}
+	public String getAlgSuffix(){
+		return this.algSuffix;
+	}
 	@Override
 	protected String getSuffix() {
 		if(mode == 0){
