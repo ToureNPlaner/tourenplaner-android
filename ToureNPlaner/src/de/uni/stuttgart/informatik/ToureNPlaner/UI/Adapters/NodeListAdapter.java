@@ -25,11 +25,6 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 		this.sourceIsTarget = sourceIsTarget;
 	}
 
-	private static Drawable setBounds(Drawable d) {
-		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-		return d;
-	}
-
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		LinearLayout itemLayout;
@@ -45,20 +40,20 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 		tvText.setText(node.getGeoPoint().toString());
 
 		ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.nodelisticon);
-		NodeDrawable icon;
+		Drawable icon;
 
 		// sets the icon depending on the index
 		if (!sourceIsTarget && position == 0) {
-			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerstart)), getContext().getResources().getDisplayMetrics());
+			icon = new NodeDrawable(NodeDrawable.MarkerType.START);
 		} else if (!sourceIsTarget && position == getCount() - 1) {
-			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerend)), getContext().getResources().getDisplayMetrics());
+			icon = new NodeDrawable(NodeDrawable.MarkerType.END);
 		} else if (sourceIsTarget) {
-			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.markerstart)), getContext().getResources().getDisplayMetrics());
+			icon = new NodeDrawable(NodeDrawable.MarkerType.START);
 		} else {
-			icon = new NodeDrawable(setBounds(getContext().getResources().getDrawable(R.drawable.marker)), getContext().getResources().getDisplayMetrics());
+			icon = new NodeDrawable(NodeDrawable.MarkerType.MIDDLE);
 		}
 
-		icon.setLabel(node.getName());
+		((NodeDrawable) icon).setLabel(node.getName());
 
 		ImageView.setImageDrawable(icon);
 		return itemLayout;

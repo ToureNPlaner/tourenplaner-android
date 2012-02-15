@@ -206,7 +206,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	public void addMarkerToMap(Node node) {
-		NodeDrawable drawable = new NodeDrawable(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart)), context.getResources().getDisplayMetrics());
+		NodeDrawable drawable = (NodeDrawable) boundCenterBottom(new NodeDrawable(NodeDrawable.MarkerType.START));
 		drawable.setLabel(node.getName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, drawable);
 		list.add(overlayitem);
@@ -215,11 +215,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	private synchronized void updateIcons() {
 		if (!session.getSelectedAlgorithm().sourceIsTarget() && !list.isEmpty()) {
 			for (int i = 1; i < list.size() - 1; i++) {
-				((NodeDrawable) list.get(i).getMarker()).setImage(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)));
+				((NodeDrawable) list.get(i).getMarker()).setType(NodeDrawable.MarkerType.MIDDLE);
 			}
 
-			((NodeDrawable) list.get(list.size() - 1).getMarker()).setImage(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerend)));
-			((NodeDrawable) list.get(0).getMarker()).setImage(boundCenterBottom(context.getResources().getDrawable(R.drawable.markerstart)));
+			((NodeDrawable) list.get(list.size() - 1).getMarker()).setType(NodeDrawable.MarkerType.END);
+			((NodeDrawable) list.get(0).getMarker()).setType(NodeDrawable.MarkerType.START);
 		}
 
 		requestRedraw();
