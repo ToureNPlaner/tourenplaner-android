@@ -214,7 +214,8 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	private void cancelConnection() {
-		handler.cancel(true);
+        if(handler != null)
+		    handler.cancel(true);
 		handler = null;
 	}
 
