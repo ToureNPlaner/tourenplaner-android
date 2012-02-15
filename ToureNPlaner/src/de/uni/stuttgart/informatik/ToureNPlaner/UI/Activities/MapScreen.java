@@ -211,7 +211,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		// create the WayOverlay and add the ways
 		wayOverlay = new ArrayWayOverlay(wayDefaultPaintOutline, null);
 		mapView.getOverlays().add(wayOverlay);
-		Result result = session.getResult();
+		//Result result = session.getResult();
+		Result result=BillingScreen.resultstatic;
 		if (result != null) {
 			addPathToMap(result.getWay());
 		}

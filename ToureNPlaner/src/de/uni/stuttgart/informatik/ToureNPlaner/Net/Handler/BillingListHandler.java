@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Response;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager.ContentType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
@@ -51,7 +52,8 @@ public int getMode(){
 		if(mode == 0){
 		return BillingItem.parse(mapper.readValue(inputStream, JsonNode.class));
 		}if(mode== 1){
-			return Response.parse(mapper.readValue(inputStream, JsonNode.class));
+			Result result = Result.parse(type, inputStream);
+			return result;
 		}
 		return true;
 	}

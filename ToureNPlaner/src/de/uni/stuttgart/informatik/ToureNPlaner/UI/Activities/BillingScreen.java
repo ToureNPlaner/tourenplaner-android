@@ -2,8 +2,6 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import java.util.ArrayList;
 
-import org.mapsforge.core.GeoPoint;
-
 import android.app.ExpandableListActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -16,8 +14,11 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.SetResultEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
@@ -28,6 +29,7 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	private BillingListAdapter adapter;
 	private BillingListHandler handler;
 	private Session session;
+	public static Result resultstatic;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
 
@@ -90,12 +92,12 @@ public boolean onContextItemSelected(MenuItem item) {
 		}
 		if(handler.getMode()==1){
 			setProgressBarIndeterminateVisibility(false);
-			Toast.makeText(getApplicationContext(),"markers successful loaded", Toast.LENGTH_SHORT).show();
-			ArrayList<Node> al = new ArrayList<Node>();
-			al = (ArrayList<Node> )object;
-			NodeModel nm = new NodeModel();
-			nm.setNodeVector(al);
-			session.setNodeModel(nm);
+			Toast.makeText(getApplicationContext(),"path successful loaded", Toast.LENGTH_SHORT).show();
+			Result result = (Result )object;
+			Edit edit = new SetResultEdit(session, result);
+			edit.perform();
+			//TODO:: just workaround
+			resultstatic = result;
 			}
 		handler = null;
 	}
