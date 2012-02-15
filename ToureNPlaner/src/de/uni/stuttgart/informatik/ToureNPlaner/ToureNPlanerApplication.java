@@ -3,12 +3,14 @@ package de.uni.stuttgart.informatik.ToureNPlaner;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 import java.io.File;
+import java.io.IOException;
 import java.security.KeyStore;
 import java.util.Date;
 
@@ -50,6 +52,8 @@ public class ToureNPlanerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Thread.setDefaultUncaughtExceptionHandler(new ProfileDumper());
+
 		context = getApplicationContext();
 		disableConnectionReuseIfNecessary();
 		new Thread() {
@@ -89,6 +93,28 @@ public class ToureNPlanerApplication extends Application {
 		if (Build.VERSION.SDK_INT < 8) {
 			System.setProperty("http.keepAlive", "false");
 			Log.i("ToureNPlaner", "HTTP keep-alive disabled");
+		}
+	}
+
+	private static class ProfileDumper implements Thread.UncaughtExceptionHandler {
+		private final Thread.UncaughtExceptionHandler defaultExceptionHandler;
+
+		private ProfileDumper() {
+			defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+		}
+
+		@Override
+		public void uncaughtException(Thread thread, Throwable ex) {
+			if (ex instanceof OutOfMemoryError) {
+				try {
+					Log.i("TP", "Dumping");
+					android.os.Debug.dumpHprofData(Environment.getExternalStorageDirectory() + "/dump.hprof");
+					Log.i("TP", "Dumping finished");
+				} catch (IOException e) {
+					Log.e("TP", "Couldn't dump", e);
+				}
+			}
+			defaultExceptionHandler.uncaughtException(thread, ex);
 		}
 	}
 }
