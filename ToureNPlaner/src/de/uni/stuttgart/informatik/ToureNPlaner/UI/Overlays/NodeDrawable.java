@@ -16,16 +16,25 @@ public class NodeDrawable extends Drawable {
 		START, MIDDLE, END
 	}
 
+	private static Drawable imageMarkerStart = null;
+	private static Drawable imageMarker = null;
+	private static Drawable imageMarkerEnd = null;
+
 	public void setType(MarkerType markerType) {
+		if (imageMarkerStart == null) {
+			imageMarkerStart = ToureNPlanerApplication.getContext().getResources().getDrawable(R.drawable.markerstart);
+			imageMarker = ToureNPlanerApplication.getContext().getResources().getDrawable(R.drawable.marker);
+			imageMarkerEnd = ToureNPlanerApplication.getContext().getResources().getDrawable(R.drawable.markerend);
+		}
 		switch (markerType) {
 			case START:
-				image = ToureNPlanerApplication.getContext().getResources().getDrawable(R.drawable.markerstart);
+				image = imageMarkerStart;
 				break;
 			case MIDDLE:
-				image = ToureNPlanerApplication.getContext().getResources().getDrawable(R.drawable.marker);
+				image = imageMarker;
 				break;
 			case END:
-				image = ToureNPlanerApplication.getContext().getResources().getDrawable(R.drawable.markerend);
+				image = imageMarkerEnd;
 				break;
 		}
 	}
