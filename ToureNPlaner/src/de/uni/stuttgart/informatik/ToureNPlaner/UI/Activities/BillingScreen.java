@@ -10,12 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+import android.widget.AbsListView.OnScrollListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.SetResultEdit;
@@ -56,7 +58,7 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 				int type =	ExpandableListView.getPackedPositionType(info.packedPosition);
 				if (type == 0){
 				contextMenu.setHeaderTitle(String.valueOf(info.id));
-				String[] menuItems = {"show"};
+				String[] menuItems = {"load in session"};
 				for (int i = 0; i < menuItems.length; i++) {
 					contextMenu.add(Menu.NONE, i, i, menuItems[i]);
 				}
@@ -96,6 +98,22 @@ public boolean onContextItemSelected(MenuItem item) {
 			Result result = (Result )object;
 			Edit edit = new SetResultEdit(session, result);
 			edit.perform();
+			ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
+			resultArray = result.getPoints();
+			ArrayList<Node> nodelist = new ArrayList<Node>();
+			String name ="";
+			Integer id;
+			
+			for (int i = 0; i<resultArray.size();i++){
+				id = resultArray.get(i).getId();
+				ArrayList<ConstraintType> cl = new ArrayList<ConstraintType>();
+				Node node = new Node(id,name,resultArray.get(i).getGeoPoint(),cl);
+				nodelist.add(node);
+			}
+			NodeModel nm = new NodeModel();
+			nm.setNodeVector(nodelist);
+			session.setNodeModel(nm);
+			session.setResult(result);
 			//TODO:: just workaround
 			resultstatic = result;
 			}
