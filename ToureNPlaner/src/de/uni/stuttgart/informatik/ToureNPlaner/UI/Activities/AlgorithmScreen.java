@@ -20,6 +20,7 @@ import java.util.Collections;
 
 public class AlgorithmScreen extends FragmentActivity {
 	private Session session;
+	ListView listView;
 
 
 	@Override
@@ -42,8 +43,14 @@ public class AlgorithmScreen extends FragmentActivity {
 		setupBillingButton();
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		listView.setEnabled(true);
+	}
+
 	private void setupListView() {
-		ListView listView = (ListView) findViewById(R.id.listViewAlgorithm);
+		listView = (ListView) findViewById(R.id.listViewAlgorithm);
 		ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
 		for (AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
 			if (!alg.isHidden())
@@ -80,6 +87,7 @@ public class AlgorithmScreen extends FragmentActivity {
 					Intent myIntent = new Intent(view.getContext(), BillingScreen.class);
 					myIntent.putExtra(Session.IDENTIFIER, session);
 					startActivity(myIntent);
+					listView.setEnabled(false);
 				}
 			});
 		}

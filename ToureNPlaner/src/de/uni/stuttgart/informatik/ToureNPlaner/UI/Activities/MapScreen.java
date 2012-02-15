@@ -110,7 +110,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.getFileSystemTileCache().setPersistent(true);
+		mapView.getFileSystemTileCache().setPersistent(false);
 
 		initializeHandler();
 
@@ -386,8 +386,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	protected void onDestroy() {
 		super.onDestroy();
 
-        mapView.getOverlays().remove(nodeOverlay);
-        mapView.getOverlays().remove(wayOverlay);
+		nodeOverlay.setContext(null);
+
+		mapView.getOverlays().remove(nodeOverlay);
+		mapView.getOverlays().remove(wayOverlay);
 
 		session.removeListener(nodeOverlay);
 		session.removeListener(this);
