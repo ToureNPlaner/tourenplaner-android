@@ -12,10 +12,11 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 public class FloatConstraintView extends ConstraintView {
 	private static final int seekBarMax = 10000;
 	private final float divisionFactor;
-
+	private Context context;
 	public FloatConstraintView(Context context, Constraint constraint) {
 		super(context, constraint);
 		FloatConstraint type = (FloatConstraint) constraint.getType();
+		this.context = context;
 		divisionFactor = (type.getMaximum() - type.getMinimum()) / (float) seekBarMax;
 	}
 
@@ -44,8 +45,7 @@ public class FloatConstraintView extends ConstraintView {
 			float val = (Float) constraint.getValue();
 			seekbar.setProgress((int) (val * divisionFactor));
 		} else {
-			// TODO localize
-			etValue.setHint("Choose a value.");
+			etValue.setHint(context.getResources().getString(R.string.select_a_value));
 		}
 		seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override

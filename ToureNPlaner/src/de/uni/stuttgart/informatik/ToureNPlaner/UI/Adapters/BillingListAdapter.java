@@ -40,7 +40,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	private void setupList(ArrayList<BillingItem> items) {
 		billingCaptions.ensureCapacity(billingCaptions.size() + items.size());
 		for (int i = 0; i < items.size(); i++) {
-			billingCaptions.add(context.getResources().getString(R.string.tour)+" " + String.valueOf(items.get(i).getRequestid()));
+			billingCaptions.add(context.getResources().getString(R.string.tour)+" " + String.valueOf(items.get(i).getRequestid()) + items.get(i).getAlgorithm());
 		}
 
 		billingItems.ensureCapacity(billingItems.size() + items.size());
