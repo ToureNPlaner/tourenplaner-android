@@ -19,7 +19,7 @@ public class SetResultEdit extends Edit {
 	public void perform() {
 		session.setResult(result);
 		// reorder nodes
-		if (result != null) {
+		/*if (result != null) {
 			ArrayList<Node> nodes = session.getNodeModel().getNodeVector();
 			ArrayList<ResultNode> resultNodes = result.getPoints();
 			if (resultNodes.size() != nodes.size()) {
@@ -37,7 +37,7 @@ public class SetResultEdit extends Edit {
 			}
 			if (copy.size() == nodes.size())
 				session.getNodeModel().setNodeVector(copy);
-		}
+		}*/
 
 		session.notifyChangeListerners(Session.RESULT_CHANGE);
 	}
