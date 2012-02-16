@@ -124,8 +124,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		mapView.getOverlays().add(nodeOverlay);
 
-		session.registerListener(nodeOverlay);
-		session.registerListener(this);
+		session.registerListener(NodeOverlay.class, nodeOverlay);
+		session.registerListener(MapScreen.class, this);
 	}
 
 	private String tileServer;
@@ -392,8 +392,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.getOverlays().remove(nodeOverlay);
 		mapView.getOverlays().remove(wayOverlay);
 
-		session.removeListener(nodeOverlay);
-		session.removeListener(this);
+		session.removeListener(NodeOverlay.class);
+		session.removeListener(MapScreen.class);
 
 		if (handler != null)
 			handler.setListener(null);
