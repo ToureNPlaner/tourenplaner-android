@@ -130,12 +130,16 @@ public class Session implements Serializable {
 		listeners = new WeakHashMap<Object, Listener>();
 	}
 
-	public void registerListener(Listener listener) {
+	/**
+	 * @param identifier must not have a reference to the listener a String constant or Class object is fine
+	 * @param listener
+	 */
+	public void registerListener(Object identifier, Listener listener) {
 		listeners.put(listener.getClass(), listener);
 	}
 
-	public void removeListener(Listener listener) {
-		listeners.remove(listener.getClass());
+	public void removeListener(Object identifier) {
+		listeners.remove(identifier);
 	}
 
 	public void notifyChangeListerners(final int change) {

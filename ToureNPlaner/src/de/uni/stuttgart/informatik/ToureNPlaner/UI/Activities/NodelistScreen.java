@@ -48,7 +48,7 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 			dirty = savedInstanceState.getBoolean("dirty");
 		}
 
-		session.registerListener(this);
+		session.registerListener(NodelistScreen.class, this);
 
 		setContentView(R.layout.dragndroplistview);
 
@@ -213,7 +213,7 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 
 	@Override
 	protected void onDestroy() {
-		session.removeListener(this);
+		session.removeListener(NodelistScreen.class);
 		super.onDestroy();
 	}
 
