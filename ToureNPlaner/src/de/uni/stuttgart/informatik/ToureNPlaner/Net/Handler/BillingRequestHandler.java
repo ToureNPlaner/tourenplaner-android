@@ -9,16 +9,10 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager.ContentType;
 
 public class BillingRequestHandler extends ConnectionHandler {
 	private int id = 0;
-	private String algSuffix = "";
-	public BillingRequestHandler(Observer listener, Session session, int id,String algSuffix) {
+	
+	public BillingRequestHandler(Observer listener, Session session, int id) {
 		super(listener, session);
 	this.id = id;
-
-	this.algSuffix = algSuffix;
-	}
-	
-	public String getAlgSuffix(){
-		return algSuffix;
 	}
 
 	@Override
@@ -28,7 +22,6 @@ public class BillingRequestHandler extends ConnectionHandler {
 
 	@Override
 	protected boolean isPost() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

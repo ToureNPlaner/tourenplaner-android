@@ -36,6 +36,7 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	private BillingListHandler billingListhandler;
 	private Session session;
 	public static Result resultstatic;
+	private String algSuffix;
 	BillingRequestHandler billingRequestHandler;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
@@ -79,9 +80,9 @@ public boolean onContextItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
 		case 0: // showBilling
 			Integer requestid = adapter.getRequestID((int) info.id);
-			String algSuffix = adapter.getAlgSuffix((int) info.id);
 			setProgressBarIndeterminateVisibility(true);
-			billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,requestid,algSuffix);
+			algSuffix = adapter.getAlgSuffix((int) info.id);
+			billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,requestid);
 			billingRequestHandler.execute();
 			break;
 
@@ -89,6 +90,7 @@ public boolean onContextItemSelected(MenuItem item) {
 	return true;
 }
 
+// ----------- BillingRequestHandler ----------------------
 private final Observer billingRequestListener = new Observer() {
 	@Override
 	public void onCompleted(RawHandler caller, Object object) {
@@ -115,7 +117,7 @@ private final Observer billingRequestListener = new Observer() {
 		// search for the algorithmn suffix that was used by this request
 		Integer PositionOfAlg=0;
 		for(int i=0; i< session.getServerInfo().getAlgorithms().size();i++){
-			if(session.getServerInfo().getAlgorithms().get(i).getUrlsuffix().equals(billingRequestHandler.getAlgSuffix())){
+			if(session.getServerInfo().getAlgorithms().get(i).getUrlsuffix().equals(algSuffix)){
 				PositionOfAlg = i;
 			}
 		}
@@ -135,6 +137,8 @@ private final Observer billingRequestListener = new Observer() {
 		setProgressBarIndeterminateVisibility(false);
 		Toast.makeText(getApplicationContext(), ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
 	}};
+	
+	//------ BillingListHandler ------
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCompleted(RawHandler caller, Object object) {
