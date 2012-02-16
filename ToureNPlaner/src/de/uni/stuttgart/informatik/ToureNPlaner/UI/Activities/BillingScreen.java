@@ -33,7 +33,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.BillingListAdapter;
 
 public class BillingScreen extends ExpandableListActivity implements Observer, OnScrollListener {
 	private BillingListAdapter adapter;
-	private BillingListHandler handler;
+	private BillingListHandler billingListhandler;
 	private Session session;
 	public static Result resultstatic;
 	BillingRequestHandler billingRequestHandler;
@@ -81,9 +81,7 @@ public boolean onContextItemSelected(MenuItem item) {
 			Integer requestid = adapter.getRequestID((int) info.id);
 			String algSuffix = adapter.getAlgSuffix((int) info.id);
 			setProgressBarIndeterminateVisibility(true);
-		//	handler = new BillingListHandler(this, session, requestid,algSuffix ,1);
-			//handler.execute();
-			billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,1000,"ag",1 );
+			billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,requestid,algSuffix);
 			billingRequestHandler.execute();
 			break;
 
@@ -143,23 +141,23 @@ private final Observer billingRequestListener = new Observer() {
 		setProgressBarIndeterminateVisibility(false);
 		adapter.addAll((ArrayList<BillingItem>) object);
 		adapter.notifyDataSetChanged();
-		handler = null;
+		billingListhandler = null;
 	}
 	@Override
 	public void onError(RawHandler caller, Object object) {
-		handler = null;
+		billingListhandler = null;
 		setProgressBarIndeterminateVisibility(false);
-		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
+		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 	}
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore =
 				firstVisible + visibleCount >= totalCount - 10;
 
-		if (loadMore && handler == null) {
+		if (loadMore && billingListhandler == null) {
 			setProgressBarIndeterminateVisibility(true);
-			handler = new BillingListHandler(this, session, 15, adapter.getGroupCount());
-			handler.execute();
+			billingListhandler = new BillingListHandler(this, session, 15, adapter.getGroupCount());
+			billingListhandler.execute();
 		}
 	}
 
