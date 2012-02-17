@@ -12,7 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -52,7 +55,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private LocationManager locManager;
 
 	private boolean isInstantRequest;
-	private boolean backIsDeleteMarker;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -293,22 +295,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			int NodeModelsize = session.getNodeModel().size();
-
-			if (NodeModelsize > 0 && backIsDeleteMarker) {
-				Edit edit = new RemoveNodeEdit(session, NodeModelsize - 1);
-				edit.perform();
-				return true;
-			} else {
-				return super.onKeyDown(keyCode, event);
-			}
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Edit edit;
 		switch (requestCode) {
@@ -379,7 +365,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		isInstantRequest = preferences.getBoolean("is_instant_request", false);
-		backIsDeleteMarker = preferences.getBoolean("back_is_delete_marker", true);
 
 		setupMapView(preferences);
 
@@ -415,8 +400,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
-
-		menu.findItem(R.id.back).setVisible(backIsDeleteMarker);
 
 		menu.findItem(R.id.gps).setVisible(nodeOverlay.getGpsPosition() != null);
 

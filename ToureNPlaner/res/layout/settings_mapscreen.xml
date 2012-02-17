@@ -23,10 +23,5 @@
                 android:title="@string/is_instant_request"
                 android:defaultValue="false"
                 />
-        <CheckBoxPreference
-                android:key="back_is_delete_marker"
-                android:title="@string/back_is_delete_marker"
-                android:defaultValue="true"
-                />
     </PreferenceCategory>
 </PreferenceScreen>
