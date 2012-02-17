@@ -17,7 +17,6 @@ import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
@@ -122,6 +121,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		setupWayOverlay();
 
 		setupGPS(isFirstStart);
+
+		if (!mapView.getMapPosition().isValid()) {
+			mapView.setCenter(new GeoPoint(51.33, 10.45));
+		}
 
 		mapView.getOverlays().add(nodeOverlay);
 
