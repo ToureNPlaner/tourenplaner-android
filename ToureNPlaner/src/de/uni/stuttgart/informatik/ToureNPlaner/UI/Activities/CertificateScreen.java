@@ -72,29 +72,7 @@ public class CertificateScreen extends FragmentActivity {
 	}
 
 	private void loadKeystore() {
-		try {
-			keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-		} catch (Exception e) {
-			Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-			return;
-		}
-		try {
-			keyStore.load(openFileInput("keystore"), null);
-			return;
-		} catch (Exception e) {
-			Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-		}
-
-		try {
-			keyStore.load(new KeyStore.LoadStoreParameter() {
-				@Override
-				public KeyStore.ProtectionParameter getProtectionParameter() {
-					return new KeyStore.PasswordProtection(null);
-				}
-			});
-		} catch (Exception e) {
-			Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-		}
+		keyStore = ToureNPlanerApplication.getKeyStore();
 	}
 
 	private void setupListView() {
