@@ -15,6 +15,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
@@ -98,10 +99,24 @@ private final Observer billingRequestListener = new Observer() {
 		
 		Result result = (Result )object;
 		ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
+		ArrayList<AlgorithmInfo> algorithmList = new ArrayList<AlgorithmInfo>();
 		resultArray = result.getPoints();
 		ArrayList<Node> nodeArray = new ArrayList<Node>();
+		NodeModel nodeModel = new NodeModel();
 		String name ="";
 		Integer id;
+	
+		
+		// search for the algorithmn suffix that was used by this request
+		Integer PositionOfAlg=0;
+		algorithmList = session.getServerInfo().getAlgorithms();
+		for(int i=0; i<algorithmList.size();i++){
+			if(algorithmList.get(i).getUrlsuffix().equals(algSuffix)){
+				PositionOfAlg = i;
+			}
+		}
+		session.setSelectedAlgorithm(algorithmList.get(PositionOfAlg));
+		
 		// put all resultNodes in Node ArrayList
 		for (int i = 0; i<resultArray.size();i++){
 			id = resultArray.get(i).getId();
@@ -110,24 +125,17 @@ private final Observer billingRequestListener = new Observer() {
 			Node node = new Node(id,name,resultArray.get(i).getGeoPoint(),cl);
 			nodeArray.add(node);
 		}
-		NodeModel nm = new NodeModel();
-		nm.setNodeVector(nodeArray);
-		session.setNodeModel(nm);
+		nodeModel.setNodeVector(nodeArray);
+		session.setNodeModel(nodeModel);
 		session.setResult(result);
-		// search for the algorithmn suffix that was used by this request
-		Integer PositionOfAlg=0;
-		for(int i=0; i< session.getServerInfo().getAlgorithms().size();i++){
-			if(session.getServerInfo().getAlgorithms().get(i).getUrlsuffix().equals(algSuffix)){
-				PositionOfAlg = i;
-			}
-		}
-		Edit edit = new SetResultEdit(session, result);
-		edit.perform();
-		session.setSelectedAlgorithm(session.getServerInfo().getAlgorithms().get(PositionOfAlg));
+		
+		//  start Mapscreen
 		Intent myIntent = new Intent(getApplicationContext(), MapScreen.class);
 		myIntent.putExtra(Session.IDENTIFIER, session);
 		startActivity(myIntent);
+		
 		Toast.makeText(getApplicationContext(),"request successful loaded", Toast.LENGTH_LONG).show();
+		
 		billingRequestHandler = null;
 	}
 
