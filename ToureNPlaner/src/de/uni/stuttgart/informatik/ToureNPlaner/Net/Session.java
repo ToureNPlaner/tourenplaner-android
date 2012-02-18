@@ -229,23 +229,23 @@ public class Session implements Serializable {
 	public HttpURLConnection openGetConnection(String path) throws IOException {
 		URL uri = new URL(getUrl() + path);
 
+		HttpURLConnection con = (HttpURLConnection) uri.openConnection();
+
 		if (d.serverInfo.getServerType() == ServerInfo.ServerType.PRIVATE) {
 			try {
-				HttpsURLConnection con = (HttpsURLConnection) uri.openConnection();
-				con.setSSLSocketFactory(ToureNPlanerApplication.getSslContext().getSocketFactory());
-
+				((HttpsURLConnection) con).setSSLSocketFactory(ToureNPlanerApplication.getSslContext().getSocketFactory());
 				String userPassword = getUsername() + ":" + getPassword();
 				String encoding = Base64.encodeString(userPassword);
 				con.setRequestProperty("Authorization", "Basic " + encoding);
-				con.setRequestProperty("Accept",
-						JacksonManager.ContentType.SMILE.identifier + ", " + JacksonManager.ContentType.JSON.identifier);
-				return con;
 			} catch (Exception e) {
 				Log.e("TP", "SSL", e);
 			}
 		}
 
-		return (HttpURLConnection) uri.openConnection();
+		con.setRequestProperty("Accept",
+				JacksonManager.ContentType.SMILE.identifier + ", " + JacksonManager.ContentType.JSON.identifier);
+
+		return con;
 	}
 
 	public HttpURLConnection openPostConnection(String path) throws IOException {
