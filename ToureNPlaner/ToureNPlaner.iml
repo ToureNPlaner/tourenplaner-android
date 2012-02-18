@@ -48,6 +48,7 @@
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs" />
           <root url="file://$MODULE_DIR$/../../mapsforge-read-only/mapsforge/src/main/java" />
+          <root url="file://$MODULE_DIR$/../../mapsforge-read-only/mapsforge-map-reader/src/main/java" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
