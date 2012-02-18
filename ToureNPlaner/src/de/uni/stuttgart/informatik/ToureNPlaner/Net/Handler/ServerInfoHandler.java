@@ -23,7 +23,6 @@ public class ServerInfoHandler extends RawHandler {
 	protected HttpURLConnection getHttpUrlConnection() throws Exception {
 		URL uri = new URL(url + "/info");
 		HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
-		urlConnection.setRequestProperty("Accept", JacksonManager.ContentType.JSON.identifier);
 		return urlConnection;
 	}
 
