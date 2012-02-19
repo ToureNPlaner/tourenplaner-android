@@ -21,6 +21,8 @@ class Way {
 	private final ArrayDeque<Level> stack = new ArrayDeque<Level>();
 	private final ArrayList<Level> draw = new ArrayList<Level>();
 
+	private byte lastZoomLevel = -1;
+
 	public Way(GeoPoint[] p) {
 		way = new float[p.length * 2];
 		cache = new float[p.length * 2];
@@ -77,10 +79,19 @@ class Way {
 		startTime = System.nanoTime();
 		while (!stack.isEmpty()) {
 			Level level = stack.pop();
+			// reject
 			if (level.rightE6 < leftE6 ||
 					level.leftE6 > rightE6 ||
 					level.topE6 < bottomE6 ||
 					level.bottomE6 > topE6) {
+				continue;
+			}
+			// accept
+			if (level.rightE6 <= rightE6 &&
+					level.leftE6 >= leftE6 &&
+					level.topE6 <= topE6 &&
+					level.bottomE6 >= bottomE6) {
+				draw.add(level);
 				continue;
 			}
 			if (level.leftChild != null) {
@@ -114,6 +125,10 @@ class Way {
 		long endTime;
 		FastWayOverlay.numPoints = draw.get(draw.size() - 1).end - draw.get(0).begin;
 		startTime = System.nanoTime();
+		if (drawZoomLevel != lastZoomLevel) {
+			invalidateCache();
+			lastZoomLevel = drawZoomLevel;
+		}
 		final float pi = (float) Math.PI;
 		final float f = (float) (Tile.TILE_SIZE << drawZoomLevel);
 		final float pi4f = (1.f / (4.f * pi)) * f;
@@ -150,5 +165,18 @@ class Way {
 		updateCache(drawZoomLevel);
 
 		updatePath(path, drawPosition, drawZoomLevel);
+	}
+
+	private void invalidateCache() {
+		stack.clear();
+		stack.push(root);
+		while (!stack.isEmpty()) {
+			Level level = stack.pop();
+			level.zoomLevelCached = -1;
+			if (level.leftChild != null) {
+				stack.push(level.rightChild);
+				stack.push(level.leftChild);
+			}
+		}
 	}
 }
