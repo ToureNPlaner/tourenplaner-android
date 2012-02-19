@@ -20,7 +20,8 @@ import java.util.Collections;
 
 public class AlgorithmScreen extends FragmentActivity {
 	private Session session;
-	ListView listView;
+	private ListView listView;
+	private boolean started;
 
 
 	@Override
@@ -83,11 +84,13 @@ public class AlgorithmScreen extends FragmentActivity {
 			btnBilling.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					if (started)
+						return;
 					// generates an intent from the class BillingScreen
 					Intent myIntent = new Intent(view.getContext(), BillingScreen.class);
 					myIntent.putExtra(Session.IDENTIFIER, session);
 					startActivity(myIntent);
-					listView.setEnabled(false);
+					started = false;
 				}
 			});
 		}
