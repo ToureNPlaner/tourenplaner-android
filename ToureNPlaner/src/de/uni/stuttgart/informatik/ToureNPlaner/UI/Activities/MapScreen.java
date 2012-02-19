@@ -209,9 +209,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		fastWayOverlayColor.setAlpha(160);
 		fastWayOverlayColor.setStrokeWidth(5.f);
 		fastWayOverlayColor.setStrokeJoin(Paint.Join.ROUND);
-		Paint wayOverlayColor = new Paint(fastWayOverlayColor);
-		wayOverlayColor.setColor(Color.RED);
-		// Too slow needs optimization
 		fastWayOverlayColor.setPathEffect(new ComposePathEffect(
 				new PathDashPathEffect(p, 12.f, 0.f, PathDashPathEffect.Style.ROTATE),
 				new CornerPathEffect(30.f)));
@@ -219,7 +216,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		// create the WayOverlay and add the ways
 		this.fastWayOverlay = new FastWayOverlay(mapView, fastWayOverlayColor);
 		mapView.getOverlays().add(this.fastWayOverlay);
-		//mapView.getOverlays().add(wayOverlay);
 		Result result = session.getResult();
 		if (result != null) {
 			addPathToMap(result.getWay());
@@ -382,7 +378,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		fastWayOverlay.setMapView(null);
 
 		mapView.getOverlays().remove(nodeOverlay);
-		//mapView.getOverlays().remove(wayOverlay);
 
 		session.removeListener(NodeOverlay.class);
 		session.removeListener(MapScreen.class);
