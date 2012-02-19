@@ -38,6 +38,7 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 	private Session session;
 	public static Result resultstatic;
 	private String algSuffix;
+	private String status;
 	BillingRequestHandler billingRequestHandler;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
@@ -81,10 +82,15 @@ public boolean onContextItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
 		case 0: // showBilling
 			Integer requestid = adapter.getRequestID((int) info.id);
-			setProgressBarIndeterminateVisibility(true);
 			algSuffix = adapter.getAlgSuffix((int) info.id);
-			billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,requestid);
-			billingRequestHandler.execute();
+			status = adapter.getStatus((int)info.id);
+			if(status.equals("ok")){			
+				setProgressBarIndeterminateVisibility(true);
+				billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,requestid);
+				billingRequestHandler.execute();
+				}else{
+					Toast.makeText(getApplicationContext(),"failed to load request", Toast.LENGTH_SHORT).show();
+				}
 			break;
 
 	}
