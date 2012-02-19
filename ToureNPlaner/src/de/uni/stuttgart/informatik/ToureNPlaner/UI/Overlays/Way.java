@@ -13,7 +13,7 @@ import java.util.ArrayList;
 class Way {
 	private static int smallestLevelSize = 16;
 	// Must be factors of smallest size
-	static final int[] steps = {16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 8, 8, 8, 2, 2, 1, 1, 1, 1, 1};
+	static final int[] steps = {16, 16, 16, 16, 16, 16, 16, 16, 16, 8, 8, 4, 4, 2, 2, 1, 1, 1, 1, 1};
 
 	private final float[] way;
 	private final float[] cache;
