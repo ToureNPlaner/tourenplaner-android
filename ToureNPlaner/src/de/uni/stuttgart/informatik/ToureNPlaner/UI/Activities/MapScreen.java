@@ -321,7 +321,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 	}
 
-	public void addPathToMap(GeoPoint[][] points) {
+	public void addPathToMap(int[][] points) {
 		fastWayOverlay.clear();
 		if (points != null && points.length > 0) {
 			fastWayOverlay.initWay(points);

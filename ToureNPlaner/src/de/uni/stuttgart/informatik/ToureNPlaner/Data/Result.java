@@ -1,10 +1,10 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
+import de.uni.stuttgart.informatik.ToureNPlaner.Util.SmartIntArray;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.mapsforge.core.GeoPoint;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Result implements Serializable {
-	private GeoPoint[][] way;
+	private int[][] way;
 	private ArrayList<ResultNode> points;
 
 	private int version = 0;
@@ -25,7 +25,7 @@ public class Result implements Serializable {
 		this.version = version;
 	}
 
-	public GeoPoint[][] getWay() {
+	public int[][] getWay() {
 		return way;
 	}
 
@@ -33,7 +33,7 @@ public class Result implements Serializable {
 		return points;
 	}
 
-	static void jacksonParse(JsonParser jp, ArrayList<ArrayList<GeoPoint>> ways, ArrayList<ResultNode> points) throws IOException {
+	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points) throws IOException {
 		int lt = 0, ln = 0;
 		int id = 0;
 		while (jp.nextToken() != JsonToken.END_OBJECT) {
@@ -71,7 +71,7 @@ public class Result implements Serializable {
 					JsonToken curr;
 					while ((curr = jp.nextToken()) != JsonToken.END_ARRAY) {
 						if (curr == JsonToken.START_ARRAY) {
-							ArrayList<GeoPoint> currentWay = new ArrayList<GeoPoint>();
+							SmartIntArray currentWay = new SmartIntArray();
 							while (jp.nextToken() != JsonToken.END_ARRAY) {
 								while (jp.nextToken() != JsonToken.END_OBJECT) {
 									if (jp.getCurrentName().equals("lt")) {
@@ -82,17 +82,18 @@ public class Result implements Serializable {
 										ln = jp.getIntValue() / 10;
 									}
 								}
-								currentWay.add(new GeoPoint(lt, ln));
+								currentWay.add(ln);
+								currentWay.add(lt);
 							}
-                            if(!currentWay.isEmpty()) {
-                                ways.add(currentWay);
-                                // duplicate the last one
-                                if (ways.size() > 1) {
-                                    ArrayList<GeoPoint> second_last = ways.get(ways.size() - 2);
-                                    ArrayList<GeoPoint> last = ways.get(ways.size() - 1);
-                                    second_last.add(last.get(0));
-                                }
-                            }
+							if (currentWay.size() > 0) {
+								ways.add(currentWay);
+								// duplicate the last one
+								if (ways.size() > 1) {
+									SmartIntArray second_last = ways.get(ways.size() - 2);
+									SmartIntArray last = ways.get(ways.size() - 1);
+									second_last.add(last.get(0));
+								}
+							}
 						}
 					}
 				}
@@ -102,7 +103,7 @@ public class Result implements Serializable {
 
 	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		Result result = new Result();
-		ArrayList<ArrayList<GeoPoint>> ways = new ArrayList<ArrayList<GeoPoint>>();
+		ArrayList<SmartIntArray> ways = new ArrayList<SmartIntArray>();
 		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
 
 		ObjectMapper mapper = JacksonManager.getMapper(type);
@@ -115,9 +116,9 @@ public class Result implements Serializable {
 		}
 
 		int size = ways.size();
-		result.way = new GeoPoint[size][];
+		result.way = new int[size][];
 		for (int i = 0; i < size; i++) {
-			result.way[i] = ways.get(i).toArray(new GeoPoint[ways.get(i).size()]);
+			result.way[i] = ways.get(i).toArray();
 		}
 		result.points = points;
 

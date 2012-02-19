@@ -13,8 +13,8 @@ import org.mapsforge.core.GeoPoint;
 import java.util.ArrayList;
 
 public class FastWayOverlay extends Overlay {
-	public void initWay(GeoPoint[][] points) {
-		for (GeoPoint[] p : points) {
+	public synchronized void initWay(int[][] points) {
+		for (int[] p : points) {
 			ways.add(new Way(p));
 		}
 		requestRedraw();

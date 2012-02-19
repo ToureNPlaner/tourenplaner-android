@@ -5,7 +5,6 @@ import android.graphics.Point;
 import android.util.FloatMath;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.ArrayDeque;
-import org.mapsforge.core.GeoPoint;
 import org.mapsforge.core.Tile;
 
 import java.util.ArrayList;
@@ -23,38 +22,38 @@ class Way {
 
 	private byte lastZoomLevel = -1;
 
-	public Way(GeoPoint[] p) {
-		way = new float[p.length * 2];
-		cache = new float[p.length * 2];
+	public Way(int[] p) {
+		way = new float[p.length];
+		cache = new float[p.length];
 		initWay(p);
 	}
 
-	private void initWay(GeoPoint[] points) {
+	private void initWay(int[] points) {
 		long startTime, endTime;
 		startTime = System.nanoTime();
 
 		int pointsLeft = points.length;
 		// round to the right size
-		ArrayList<Level> levels = new ArrayList<Level>((points.length + smallestLevelSize + 1) / smallestLevelSize);
+		ArrayList<Level> levels = new ArrayList<Level>((points.length / 2 + smallestLevelSize + 1) / smallestLevelSize);
 		int begin = 0, end;
 
 		while (pointsLeft > 0) {
-			end = Math.min(begin + smallestLevelSize, points.length);
+			end = Math.min(begin + smallestLevelSize, points.length / 2);
 			int leftMin = Integer.MAX_VALUE, topMax = Integer.MIN_VALUE, rightMax = Integer.MIN_VALUE, bottomMin = Integer.MAX_VALUE;
 			for (int i = begin; i < end; i++) {
-				leftMin = Math.min(leftMin, points[i].longitudeE6);
-				topMax = Math.max(topMax, points[i].latitudeE6);
-				rightMax = Math.max(rightMax, points[i].longitudeE6);
-				bottomMin = Math.min(bottomMin, points[i].latitudeE6);
-				way[i * 2] = (float) points[i].longitudeE6 / 1000000f;
-				way[i * 2 + 1] = (float) points[i].latitudeE6 / 1000000f;
+				leftMin = Math.min(leftMin, points[i * 2]);
+				topMax = Math.max(topMax, points[i * 2 + 1]);
+				rightMax = Math.max(rightMax, points[i * 2]);
+				bottomMin = Math.min(bottomMin, points[i * 2 + 1]);
+				way[i * 2] = (float) points[i * 2] / 1000000f;
+				way[i * 2 + 1] = (float) points[i * 2 + 1] / 1000000f;
 			}
 			// add overlap or else we could be between two points, when clipping
-			if (end != points.length) {
-				leftMin = Math.min(leftMin, points[end].longitudeE6);
-				topMax = Math.max(topMax, points[end].latitudeE6);
-				rightMax = Math.max(rightMax, points[end].longitudeE6);
-				bottomMin = Math.min(bottomMin, points[end].latitudeE6);
+			if (end != points.length / 2) {
+				leftMin = Math.min(leftMin, points[end * 2]);
+				topMax = Math.max(topMax, points[end * 2 + 1]);
+				rightMax = Math.max(rightMax, points[end * 2]);
+				bottomMin = Math.min(bottomMin, points[end * 2 + 1]);
 			}
 			levels.add(new Level(leftMin, topMax, rightMax, bottomMin, begin, end));
 			pointsLeft -= smallestLevelSize;
