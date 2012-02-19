@@ -47,7 +47,7 @@ public class FastWayOverlay extends Overlay {
 	static long clipping;
 	static long caching;
 	static long pathing;
-	private static long rendering;
+	static int pointsDrawn;
 
 	@Override
 	protected String getThreadName() {
@@ -70,9 +70,9 @@ public class FastWayOverlay extends Overlay {
 			startTime = System.nanoTime();
 			canvas.drawPath(path, paint);
 			endTime = System.nanoTime();
-			rendering = (endTime - startTime) / 1000;
+			long rendering = (endTime - startTime) / 1000;
 			long total = (endTime - totalStartTime) / 1000;
-			Log.v("STATS", drawZoomLevel + ", " + Way.steps[drawZoomLevel] + ", " + numPoints + ", " + clipping + ", " + caching + ", " + pathing + ", " + rendering + ", " + total);
+			Log.v("STATS", drawZoomLevel + ", " + Way.steps[drawZoomLevel] + ", " + numPoints + ", " + pointsDrawn + ", " + clipping + ", " + caching + ", " + pathing + ", " + rendering + ", " + total);
 		}
 	}
 }
