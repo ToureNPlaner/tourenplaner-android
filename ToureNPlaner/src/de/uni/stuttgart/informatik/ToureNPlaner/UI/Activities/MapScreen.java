@@ -3,9 +3,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
+import android.graphics.*;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -27,6 +25,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
@@ -34,8 +33,6 @@ import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.MapnikTileDownloader;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.OpenCycleMapTileDownloader;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.OsmarenderTileDownloader;
-import org.mapsforge.android.maps.overlay.ArrayWayOverlay;
-import org.mapsforge.android.maps.overlay.OverlayWay;
 import org.mapsforge.core.GeoPoint;
 
 import java.net.MalformedURLException;
@@ -44,7 +41,7 @@ import java.util.ArrayList;
 
 public class MapScreen extends MapActivity implements Session.Listener {
 	private MapView mapView;
-	private ArrayWayOverlay wayOverlay;
+	private FastWayOverlay fastWayOverlay;
 	private Session session;
 	public static final int REQUEST_NODEMODEL = 0;
 	public static final int REQUEST_NODE = 1;
@@ -206,20 +203,23 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		p.lineTo(8.f, 4.f);
 		p.lineTo(0.f, 4.f);
 
-		Paint wayDefaultPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
-		wayDefaultPaintOutline.setStyle(Paint.Style.STROKE);
-		wayDefaultPaintOutline.setColor(Color.BLUE);
-		wayDefaultPaintOutline.setAlpha(160);
-		wayDefaultPaintOutline.setStrokeWidth(5.f);
-		wayDefaultPaintOutline.setStrokeJoin(Paint.Join.ROUND);
+		Paint fastWayOverlayColor = new Paint(Paint.ANTI_ALIAS_FLAG);
+		fastWayOverlayColor.setStyle(Paint.Style.STROKE);
+		fastWayOverlayColor.setColor(Color.BLUE);
+		fastWayOverlayColor.setAlpha(160);
+		fastWayOverlayColor.setStrokeWidth(5.f);
+		fastWayOverlayColor.setStrokeJoin(Paint.Join.ROUND);
+		Paint wayOverlayColor = new Paint(fastWayOverlayColor);
+		wayOverlayColor.setColor(Color.RED);
 		// Too slow needs optimization
-		//wayDefaultPaintOutline.setPathEffect(new ComposePathEffect(
-		//				new PathDashPathEffect(p, 12.f, 0.f, PathDashPathEffect.Style.ROTATE),
-		//				new CornerPathEffect(30.f)));
+		fastWayOverlayColor.setPathEffect(new ComposePathEffect(
+				new PathDashPathEffect(p, 12.f, 0.f, PathDashPathEffect.Style.ROTATE),
+				new CornerPathEffect(30.f)));
 
 		// create the WayOverlay and add the ways
-		wayOverlay = new ArrayWayOverlay(wayDefaultPaintOutline, null);
-		mapView.getOverlays().add(wayOverlay);
+		this.fastWayOverlay = new FastWayOverlay(mapView, fastWayOverlayColor);
+		mapView.getOverlays().add(this.fastWayOverlay);
+		//mapView.getOverlays().add(wayOverlay);
 		Result result = session.getResult();
 		if (result != null) {
 			addPathToMap(result.getWay());
@@ -326,8 +326,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	public void addPathToMap(GeoPoint[][] points) {
-		wayOverlay.clear();
-		wayOverlay.addWay(new OverlayWay(points));
+		fastWayOverlay.clear();
+		if (points != null && points.length > 0) {
+			fastWayOverlay.initWay(points);
+		}
 	}
 
 	public void performNNSearch(Node node) {
@@ -377,9 +379,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		super.onDestroy();
 
 		nodeOverlay.setContext(null);
+		fastWayOverlay.setMapView(null);
 
 		mapView.getOverlays().remove(nodeOverlay);
-		mapView.getOverlays().remove(wayOverlay);
+		//mapView.getOverlays().remove(wayOverlay);
 
 		session.removeListener(NodeOverlay.class);
 		session.removeListener(MapScreen.class);
@@ -414,7 +417,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			public void run() {
 				if (0 < (change & Session.RESULT_CHANGE)) {
 					if (session.getResult() == null) {
-						wayOverlay.clear();
+						addPathToMap(null);
 					} else {
 						addPathToMap(session.getResult().getWay());
 					}
