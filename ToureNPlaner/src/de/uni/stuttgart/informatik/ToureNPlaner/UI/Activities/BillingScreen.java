@@ -65,7 +65,7 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 				// 1 - Child
 				int type =	ExpandableListView.getPackedPositionType(info.packedPosition);
 				if (type == 0){
-				contextMenu.setHeaderTitle(String.valueOf(info.id));
+					contextMenu.setHeaderTitle(adapter.getGroup((int)info.id).toString());
 				String[] menuItems = {getResources().getString(R.string.load_request)};
 				for (int i = 0; i < menuItems.length; i++) {
 					contextMenu.add(Menu.NONE, i, i, menuItems[i]);
