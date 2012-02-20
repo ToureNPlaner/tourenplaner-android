@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class Result implements Serializable {
 	private int[][] way;
 	private ArrayList<ResultNode> points;
+	private Integer distance;
+	private Double apx;
 
 	private int version = 0;
 
@@ -32,8 +34,14 @@ public class Result implements Serializable {
 	public ArrayList<ResultNode> getPoints() {
 		return points;
 	}
+	public Integer getDistance(){
+		return distance;
+	}
+	public Double getApx(){
+		return apx;
+	}
 
-	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points) throws IOException {
+	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points, Misc misc) throws IOException {
 		int lt = 0, ln = 0;
 		int id = 0;
 		while (jp.nextToken() != JsonToken.END_OBJECT) {
@@ -45,6 +53,16 @@ public class Result implements Serializable {
 			if ("misc".equals(jp.getCurrentName())) {
 				// consume
 				while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != JsonToken.VALUE_NULL) {
+					if(jp.getCurrentName().equals("distance")){
+						jp.nextToken();
+						misc.distance = jp.getIntValue();
+						
+					}
+					if(jp.getCurrentName().equals("apx")){
+						jp.nextToken();
+						misc.apx = jp.getDoubleValue();
+						
+					}
 				}
 			}
 			if ("points".equals(jp.getCurrentName())) {
@@ -105,12 +123,12 @@ public class Result implements Serializable {
 		Result result = new Result();
 		ArrayList<SmartIntArray> ways = new ArrayList<SmartIntArray>();
 		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
-
+		Misc misc = result.new Misc();
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 
 		JsonParser jp = mapper.getJsonFactory().createJsonParser(stream);
 		try {
-			jacksonParse(jp, ways, points);
+			jacksonParse(jp, ways, points,misc);
 		} finally {
 			jp.close();
 		}
@@ -121,7 +139,11 @@ public class Result implements Serializable {
 			result.way[i] = ways.get(i).toArray();
 		}
 		result.points = points;
-
+		result.distance = misc.distance;
 		return result;
 	}
+	public class Misc {
+		private Integer distance;
+		private Double apx;
+		}
 }

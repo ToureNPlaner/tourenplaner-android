@@ -32,6 +32,11 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		algSuffix = algSuffix.substring(algSuffix.indexOf(":")+2);
 		return  algSuffix;
 	}
+	public String getStatus(int itemID){
+		String status = billingItems.get(itemID)[5];
+		status = status.substring(status.indexOf(":")+2);
+		return  status;
+	}
 	public void addAll(ArrayList<BillingItem> items) {
 		setupList(items);
 	}

@@ -48,7 +48,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_CONSTRAINTS = 2;
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
-
+	private String defaultTitleBar = "";
 	private LocationManager locManager;
 
 	private boolean isInstantRequest;
@@ -114,13 +114,18 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
 		mapView.getFileSystemTileCache().setPersistent(false);
-
+		
+		defaultTitleBar = getResources().getText(R.string.app_name) + " - " + session.getSelectedAlgorithm().toString();
+		setTitleBar();
 		initializeHandler();
 
 		setupWayOverlay();
 
 		setupGPS(isFirstStart);
 
+		if(session.getResult() != null){
+			mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
+		}
 		if (!mapView.getMapPosition().isValid()) {
 			mapView.setCenter(new GeoPoint(51.33, 10.45));
 		}
@@ -404,6 +409,19 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		return true;
 	}
 
+	private void setTitleBar(){
+		if(session.getResult()!=null){
+			String distanceUnit = "meter";
+			Integer distance = session.getResult().getDistance();
+			if(distance >1000){
+				distance = distance / 1000;
+				distanceUnit = "kilometer";
+			}
+			setTitle(session.getSelectedAlgorithm().toString() + " - " + distance + " " + distanceUnit);
+		}else{
+			setTitle(defaultTitleBar);
+		}
+	}
 	@Override
 	public void onChange(final int change) {
 		runOnUiThread(new Runnable() {
@@ -411,6 +429,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			@Override
 			public void run() {
 				if (0 < (change & Session.RESULT_CHANGE)) {
+					setTitle(defaultTitleBar);
 					if (session.getResult() == null) {
 						addPathToMap(null);
 					} else {
