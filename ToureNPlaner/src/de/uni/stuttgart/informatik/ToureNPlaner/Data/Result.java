@@ -14,8 +14,7 @@ import java.util.ArrayList;
 public class Result implements Serializable {
 	private int[][] way;
 	private ArrayList<ResultNode> points;
-	private Integer distance;
-	private Double apx;
+	private Misc misc;
 
 	private int version = 0;
 
@@ -34,11 +33,13 @@ public class Result implements Serializable {
 	public ArrayList<ResultNode> getPoints() {
 		return points;
 	}
-	public Integer getDistance(){
-		return distance;
+
+	public int getDistance() {
+		return misc.distance;
 	}
-	public Double getApx(){
-		return apx;
+
+	public double getApx() {
+		return misc.apx;
 	}
 
 	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points, Misc misc) throws IOException {
@@ -53,15 +54,13 @@ public class Result implements Serializable {
 			if ("misc".equals(jp.getCurrentName())) {
 				// consume
 				while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != JsonToken.VALUE_NULL) {
-					if(jp.getCurrentName().equals("distance")){
+					if ("distance".equals(jp.getCurrentName())) {
 						jp.nextToken();
 						misc.distance = jp.getIntValue();
-						
 					}
-					if(jp.getCurrentName().equals("apx")){
+					if ("apx".equals(jp.getCurrentName())) {
 						jp.nextToken();
 						misc.apx = jp.getDoubleValue();
-						
 					}
 				}
 			}
@@ -86,9 +85,8 @@ public class Result implements Serializable {
 			}
 			if ("way".equals(jp.getCurrentName())) {
 				if (jp.nextToken() == JsonToken.START_ARRAY) {
-					JsonToken curr;
-					while ((curr = jp.nextToken()) != JsonToken.END_ARRAY) {
-						if (curr == JsonToken.START_ARRAY) {
+					while (jp.nextToken() != JsonToken.END_ARRAY) {
+						if (jp.getCurrentToken() == JsonToken.START_ARRAY) {
 							SmartIntArray currentWay = new SmartIntArray();
 							while (jp.nextToken() != JsonToken.END_ARRAY) {
 								while (jp.nextToken() != JsonToken.END_OBJECT) {
@@ -123,12 +121,12 @@ public class Result implements Serializable {
 		Result result = new Result();
 		ArrayList<SmartIntArray> ways = new ArrayList<SmartIntArray>();
 		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
-		Misc misc = result.new Misc();
+		Misc misc = new Misc();
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 
 		JsonParser jp = mapper.getJsonFactory().createJsonParser(stream);
 		try {
-			jacksonParse(jp, ways, points,misc);
+			jacksonParse(jp, ways, points, misc);
 		} finally {
 			jp.close();
 		}
@@ -139,11 +137,12 @@ public class Result implements Serializable {
 			result.way[i] = ways.get(i).toArray();
 		}
 		result.points = points;
-		result.distance = misc.distance;
+		result.misc = misc;
 		return result;
 	}
-	public class Misc {
-		private Integer distance;
-		private Double apx;
-		}
+
+	public static class Misc {
+		private int distance;
+		private double apx;
+	}
 }
