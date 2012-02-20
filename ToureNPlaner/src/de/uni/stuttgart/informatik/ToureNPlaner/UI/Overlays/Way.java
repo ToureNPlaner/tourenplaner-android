@@ -40,20 +40,16 @@ class Way {
 		while (pointsLeft > 0) {
 			end = Math.min(begin + smallestLevelSize, points.length / 2);
 			int leftMin = Integer.MAX_VALUE, topMax = Integer.MIN_VALUE, rightMax = Integer.MIN_VALUE, bottomMin = Integer.MAX_VALUE;
-			for (int i = begin; i < end; i++) {
+			// add overlap
+			int start = Math.max(0, begin - 1);
+			int finish = Math.min(end + 1, points.length / 2);
+			for (int i = start; i < finish; i++) {
 				leftMin = Math.min(leftMin, points[i * 2]);
 				topMax = Math.max(topMax, points[i * 2 + 1]);
 				rightMax = Math.max(rightMax, points[i * 2]);
 				bottomMin = Math.min(bottomMin, points[i * 2 + 1]);
 				way[i * 2] = (float) points[i * 2] / 1000000f;
 				way[i * 2 + 1] = (float) points[i * 2 + 1] / 1000000f;
-			}
-			// add overlap or else we could be between two points, when clipping
-			if (end != points.length / 2) {
-				leftMin = Math.min(leftMin, points[end * 2]);
-				topMax = Math.max(topMax, points[end * 2 + 1]);
-				rightMax = Math.max(rightMax, points[end * 2]);
-				bottomMin = Math.min(bottomMin, points[end * 2 + 1]);
 			}
 			levels.add(new Level(leftMin, topMax, rightMax, bottomMin, begin, end));
 			pointsLeft -= smallestLevelSize;
@@ -117,27 +113,16 @@ class Way {
 		startTime = System.nanoTime();
 		final int step = steps[drawZoomLevel];
 		int drawn = 0;
-		int begin = Math.max(clipped.get(0).begin - 1, 0);
+		int begin = clipped.get(0).begin;
 		path.moveTo(cache[begin * 2] - drawPosition.x, cache[begin * 2 + 1] - drawPosition.y);
-		for (int n = 0; n < clipped.size(); n++) {
-			Level lvl = clipped.get(n);
+		for (Level lvl : clipped) {
 			int i;
-			if ((n == 0 && lvl.begin != 0) || (n > 0 && lvl.begin != clipped.get(n - 1).end)) {
-				i = lvl.begin - 1;
-				path.lineTo(cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y);
-				drawn++;
-			}
 			for (i = lvl.begin; i < lvl.end; i += step) {
 				path.lineTo(cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y);
 				drawn++;
 			}
 			if (i != lvl.end - 1) {
 				i = lvl.end - 1;
-				path.lineTo(cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y);
-				drawn++;
-			}
-			if ((n == (clipped.size() - 1) && lvl.end != root.end) || (n < clipped.size() - 1 && lvl.end != clipped.get(n + 1).begin)) {
-				i = lvl.end;
 				path.lineTo(cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y);
 				drawn++;
 			}
@@ -169,18 +154,12 @@ class Way {
 		for (Level lvl : clipped) {
 			if (lvl.zoomLevelCached != drawZoomLevel) {
 				lvl.zoomLevelCached = drawZoomLevel;
-				if (lvl.begin != 0) {
-					updatePoint(lvl.begin - 1, pi4f, f360, f05);
-				}
 				int i;
 				for (i = lvl.begin; i < lvl.end; i += step) {
 					updatePoint(i, pi4f, f360, f05);
 				}
 				if (i != lvl.end - 1) {
 					updatePoint(lvl.end - 1, pi4f, f360, f05);
-				}
-				if (lvl.end != root.end) {
-					updatePoint(lvl.end, pi4f, f360, f05);
 				}
 			}
 		}
