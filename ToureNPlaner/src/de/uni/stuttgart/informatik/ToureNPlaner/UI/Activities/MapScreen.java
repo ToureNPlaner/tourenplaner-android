@@ -123,6 +123,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupGPS(isFirstStart);
 
+		if(session.getResult() != null){
+			mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
+		}
 		if (!mapView.getMapPosition().isValid()) {
 			mapView.setCenter(new GeoPoint(51.33, 10.45));
 		}

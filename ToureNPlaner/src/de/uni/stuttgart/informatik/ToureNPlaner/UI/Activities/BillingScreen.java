@@ -140,7 +140,7 @@ private final Observer billingRequestListener = new Observer() {
 		myIntent.putExtra(Session.IDENTIFIER, session);
 		startActivity(myIntent);
 		
-		Toast.makeText(getApplicationContext(),"request successful loaded" + result.getDistance(), Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(),"request successful loaded", Toast.LENGTH_LONG).show();
 		
 		billingRequestHandler = null;
 	}
