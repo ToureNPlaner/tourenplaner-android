@@ -141,7 +141,7 @@ public class Result implements Serializable {
 		return result;
 	}
 
-	public static class Misc {
+	public static class Misc implements Serializable {
 		private int distance;
 		private double apx;
 	}
