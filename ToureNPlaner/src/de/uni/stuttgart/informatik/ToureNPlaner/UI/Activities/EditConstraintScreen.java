@@ -51,8 +51,8 @@ public class EditConstraintScreen extends Activity {
 		final TextView etName = (TextView) findViewById(R.id.txtconstName);
 		final TextView etType = (TextView) findViewById(R.id.txtconstType);
 
-		etName.setText(" " +constraint.getType().getName());
-		etType.setText(" " +constraint.getType().getTypename());
+		etName.setText(constraint.getType().getName());
+		etType.setText(constraint.getType().getTypename());
 
 		Button btnReturn = (Button) findViewById(R.id.btnconstReturn);
 		btnReturn.setOnClickListener(new OnClickListener() {

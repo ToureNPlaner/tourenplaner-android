@@ -7,6 +7,12 @@
               android:weightSum="1"
               android:padding="10px">
 
+    <Button
+        android:id="@+id/btnconstReturn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save" />
+
     <TableLayout
             android:id="@+id/tableLayout1"
             android:layout_width="fill_parent"
@@ -46,12 +52,11 @@
                 android:baselineAligned="false">
 
             <TextView
-                    android:id="@+id/lblconstType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/type"
-                    >
+                android:id="@+id/lblconstType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/type" >
 
             </TextView>
 
@@ -70,11 +75,12 @@
     <FrameLayout android:id="@+id/EditConstraintPlaceHolder" android:layout_height="wrap_content"
                  android:layout_width="fill_parent"/>
 
-    <Button
-            android:id="@+id/btnconstReturn"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/back"/>
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:enabled="false" />
 
 </LinearLayout>
  

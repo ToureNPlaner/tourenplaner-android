@@ -2,33 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="6dip"
-    android:orientation="horizontal"
->
+    android:orientation="vertical"
+    android:padding="6dip" >
 
     <TextView
         android:id="@+id/constName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
         android:layout_marginRight="15dip"
         android:text="TextView"
         android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/constValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dip"
-            android:layout_gravity="top"
-            android:text="Value" />
+    <TextView
+        android:id="@+id/constValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dip"
+        android:text="Value" />
 
-        <TextView
-            android:id="@+id/constType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:text="Type" />
+    <TextView
+        android:id="@+id/constType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type" />
 
 </LinearLayout>
  
