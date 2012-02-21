@@ -14,14 +14,12 @@ public class BillingListHandler extends ConnectionHandler {
 	private int limit;
 	private int offset;
 
-
-
 	public BillingListHandler(Observer listener, Session session, int limit, int offset) {
 		super(listener, session);
 		this.limit = limit;
 		this.offset = offset;
 	}
-	
+
 
 	@Override
 	protected String getSuffix() {
@@ -37,6 +35,5 @@ public class BillingListHandler extends ConnectionHandler {
 	protected Object handleInput(ContentType type, InputStream inputStream) throws Exception {
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 		return BillingItem.parse(mapper.readValue(inputStream, JsonNode.class));
-		
 	}
 }

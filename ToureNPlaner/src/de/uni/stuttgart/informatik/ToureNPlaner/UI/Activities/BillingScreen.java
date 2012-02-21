@@ -1,47 +1,40 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import java.util.ArrayList;
-
 import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
+import android.view.*;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
-import android.widget.AbsListView.OnScrollListener;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.SetResultEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingRequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.BillingListAdapter;
+
+import java.util.ArrayList;
 
 public class BillingScreen extends ExpandableListActivity implements Observer, OnScrollListener {
 	private BillingListAdapter adapter;
 	private BillingListHandler billingListhandler;
 	private Session session;
-	public static Result resultstatic;
 	private String algSuffix;
-	private String status;
 	BillingRequestHandler billingRequestHandler;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(Session.IDENTIFIER, session);
+		super.onSaveInstanceState(outState);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,95 +56,97 @@ public class BillingScreen extends ExpandableListActivity implements Observer, O
 						(ExpandableListView.ExpandableListContextMenuInfo) contextMenuInfo;
 				// 0 - Group
 				// 1 - Child
-				int type =	ExpandableListView.getPackedPositionType(info.packedPosition);
-				if (type == 0){
-					contextMenu.setHeaderTitle(adapter.getGroup((int)info.id).toString());
-				String[] menuItems = {getResources().getString(R.string.load_request)};
-				for (int i = 0; i < menuItems.length; i++) {
-					contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+				int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+				if (type == 0) {
+					contextMenu.setHeaderTitle(adapter.getGroup((int) info.id).toString());
+					String[] menuItems = {getResources().getString(R.string.load_request)};
+					for (int i = 0; i < menuItems.length; i++) {
+						contextMenu.add(Menu.NONE, i, i, menuItems[i]);
+					}
 				}
-			}}
+			}
 		}
 		);
 	}
-	
-@Override
-public boolean onContextItemSelected(MenuItem item) {
-	final ExpandableListView.ExpandableListContextMenuInfo info =
-	(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
-	switch (item.getItemId()) {
-		case 0: // showBilling
-			Integer requestid = adapter.getRequestID((int) info.id);
-			algSuffix = adapter.getAlgSuffix((int) info.id);
-			status = adapter.getStatus((int)info.id);
-			if(status.equals("ok")){			
-				setProgressBarIndeterminateVisibility(true);
-				billingRequestHandler =new BillingRequestHandler(billingRequestListener, session,requestid);
-				billingRequestHandler.execute();
-				}else{
-					Toast.makeText(getApplicationContext(),"failed to load request", Toast.LENGTH_SHORT).show();
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		final ExpandableListView.ExpandableListContextMenuInfo info =
+				(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+			case 0: // showBilling
+				int requestid = adapter.getRequestID((int) info.id);
+				algSuffix = adapter.getAlgSuffix((int) info.id);
+				String status = adapter.getStatus((int) info.id);
+				if (status.equals("ok")) {
+					setProgressBarIndeterminateVisibility(true);
+					billingRequestHandler = new BillingRequestHandler(billingRequestListener, session, requestid);
+					billingRequestHandler.execute();
+				} else {
+					Toast.makeText(getApplicationContext(), "failed to load request", Toast.LENGTH_SHORT).show();
 				}
-			break;
+				break;
 
+		}
+		return true;
 	}
-	return true;
-}
 
-// ----------- BillingRequestHandler ----------------------
-private final Observer billingRequestListener = new Observer() {
-	@Override
-	public void onCompleted(RawHandler caller, Object object) {
-		setProgressBarIndeterminateVisibility(false);
-		
-		Result result = (Result )object;
-		ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
-		ArrayList<AlgorithmInfo> algorithmList = new ArrayList<AlgorithmInfo>();
-		resultArray = result.getPoints();
-		ArrayList<Node> nodeArray = new ArrayList<Node>();
-		NodeModel nodeModel = new NodeModel();
-		String name ="";
-		Integer id;
-	
-		
-		// search for the algorithmn suffix that was used by this request
-		Integer PositionOfAlg=0;
-		algorithmList = session.getServerInfo().getAlgorithms();
-		for(int i=0; i<algorithmList.size();i++){
-			if(algorithmList.get(i).getUrlsuffix().equals(algSuffix)){
-				PositionOfAlg = i;
+	// ----------- BillingRequestHandler ----------------------
+	private final Observer billingRequestListener = new Observer() {
+		@Override
+		public void onCompleted(RawHandler caller, Object object) {
+			setProgressBarIndeterminateVisibility(false);
+
+			Result result = (Result) object;
+			ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
+			ArrayList<AlgorithmInfo> algorithmList = new ArrayList<AlgorithmInfo>();
+			resultArray = result.getPoints();
+			ArrayList<Node> nodeArray = new ArrayList<Node>();
+			NodeModel nodeModel = new NodeModel();
+			String name = "";
+			int id;
+
+
+			// search for the algorithmn suffix that was used by this request
+			int PositionOfAlg = 0;
+			algorithmList = session.getServerInfo().getAlgorithms();
+			for (int i = 0; i < algorithmList.size(); i++) {
+				if (algorithmList.get(i).getUrlsuffix().equals(algSuffix)) {
+					PositionOfAlg = i;
+				}
 			}
-		}
-		session.setSelectedAlgorithm(algorithmList.get(PositionOfAlg));
-		
-		// put all resultNodes in Node ArrayList
-		for (int i = 0; i<resultArray.size();i++){
-			id = resultArray.get(i).getId();
-			name = String.valueOf(i);
-			ArrayList<ConstraintType> cl = new ArrayList<ConstraintType>();
-			Node node = new Node(id,name,resultArray.get(i).getGeoPoint(),cl);
-			nodeArray.add(node);
-		}
-		nodeModel.setNodeVector(nodeArray);
-		session.setNodeModel(nodeModel);
-		session.setResult(result);
-		
-		//  start Mapscreen
-		Intent myIntent = new Intent(getApplicationContext(), MapScreen.class);
-		myIntent.putExtra(Session.IDENTIFIER, session);
-		startActivity(myIntent);
-		
-		Toast.makeText(getApplicationContext(),"request successful loaded", Toast.LENGTH_LONG).show();
-		
-		billingRequestHandler = null;
-	}
+			session.setSelectedAlgorithm(algorithmList.get(PositionOfAlg));
 
-	@Override
-	public void onError(RawHandler caller, Object object) {
-		billingRequestHandler = null;
-		setProgressBarIndeterminateVisibility(false);
-		Toast.makeText(getApplicationContext(), ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
-	}};
-	
+			// put all resultNodes in Node ArrayList
+			for (int i = 0; i < resultArray.size(); i++) {
+				id = resultArray.get(i).getId();
+				name = String.valueOf(i);
+				ArrayList<ConstraintType> cl = new ArrayList<ConstraintType>();
+				Node node = new Node(id, name, resultArray.get(i).getGeoPoint(), cl);
+				nodeArray.add(node);
+			}
+			nodeModel.setNodeVector(nodeArray);
+			session.setNodeModel(nodeModel);
+			session.setResult(result);
+
+			//  start Mapscreen
+			Intent myIntent = new Intent(getApplicationContext(), MapScreen.class);
+			myIntent.putExtra(Session.IDENTIFIER, session);
+			startActivity(myIntent);
+
+			Toast.makeText(getApplicationContext(), "request successful loaded", Toast.LENGTH_LONG).show();
+
+			billingRequestHandler = null;
+		}
+
+		@Override
+		public void onError(RawHandler caller, Object object) {
+			billingRequestHandler = null;
+			setProgressBarIndeterminateVisibility(false);
+			Toast.makeText(getApplicationContext(), ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
+		}
+	};
+
 	//------ BillingListHandler ------
 	@SuppressWarnings("unchecked")
 	@Override
@@ -161,12 +156,14 @@ private final Observer billingRequestListener = new Observer() {
 		adapter.notifyDataSetChanged();
 		billingListhandler = null;
 	}
+
 	@Override
 	public void onError(RawHandler caller, Object object) {
 		billingListhandler = null;
 		setProgressBarIndeterminateVisibility(false);
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 	}
+
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore =
