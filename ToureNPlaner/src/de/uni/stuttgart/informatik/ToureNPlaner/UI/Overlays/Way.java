@@ -204,4 +204,50 @@ class Way {
 			}
 		}
 	}
+
+	private static float calcDistance(float x1, float y1, float x2, float y2, int x3, int y3) {
+		final float px = x2 - x1;
+		final float py = y2 - y1;
+
+		final float dist = px * px + py * py;
+
+		float u = ((x3 - x1) * px + (y3 - y1) * py) / dist;
+
+		if (u > 1.f)
+			u = 1.f;
+		else if (u < 0.f)
+			u = 0.f;
+
+		final float x = x1 + u * px;
+		final float y = y1 + u * py;
+
+		final float dx = x - x3;
+		final float dy = y - y3;
+
+		return dx * dx + dy * dy;
+	}
+
+	public float getDistance(Point p, Point drawPosition, byte zoomLevel) {
+		;
+		int step = steps[zoomLevel];
+		float minDistance = Float.MAX_VALUE;
+
+		for (Level lvl : clipped) {
+			int i;
+			for (i = lvl.begin; i < lvl.end - step; i += step) {
+				minDistance = Math.min(minDistance,
+						calcDistance(
+								cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y,
+								cache[(i + step) * 2] - drawPosition.x, cache[(i + step) * 2 + 1] - drawPosition.y,
+								p.x, p.y));
+			}
+			i -= step;
+			minDistance = Math.min(minDistance,
+					calcDistance(
+							cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y,
+							cache[(lvl.end - 1) * 2] - drawPosition.x, cache[(lvl.end - 1) * 2 + 1] - drawPosition.y,
+							p.x, p.y));
+		}
+		return minDistance;
+	}
 }
