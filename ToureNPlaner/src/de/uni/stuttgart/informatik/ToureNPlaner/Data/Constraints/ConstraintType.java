@@ -38,6 +38,8 @@ public abstract class ConstraintType implements Serializable {
 			return FloatConstraint.parse(constraint);
 		} else if (MeterConstraint.typename.equals(typename)) {
 			return MeterConstraint.parse(constraint);
+		} else if (PriceConstraint.typename.equals(typename)){
+			return PriceConstraint.parse(constraint);
 		}
 		throw new IllegalArgumentException("No constraing with that type!");
 	}

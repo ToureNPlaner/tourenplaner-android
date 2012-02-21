@@ -1,17 +1,18 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.FloatConstraintView;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
-public class FloatConstraint extends ConstraintType {
-	public static String typename = "float";
+import android.content.Context;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.PriceConstraintView;
+
+public class PriceConstraint extends ConstraintType{
+	public static String typename = "price";
 	private final float minimum;
 	private final float maximum;
 
-	public FloatConstraint(String name, String description, String id, float minimum, float maximum) {
+	public PriceConstraint(String name, String description, String id, float minimum, float maximum) {
 		super(name, description, id);
 		this.minimum = minimum;
 		this.maximum = maximum;
@@ -32,7 +33,7 @@ public class FloatConstraint extends ConstraintType {
 		float max;
 		JsonNode n = constraint.get("max");
 		if (n == null)
-			max = 1000.f;
+			max = 999999.f;
 		else
 			max = (float) n.getDoubleValue();
 
@@ -44,7 +45,7 @@ public class FloatConstraint extends ConstraintType {
 
 	@Override
 	public ConstraintView createView(Context context, Constraint constraint) {
-		return new FloatConstraintView(context, constraint, 100);
+		return new PriceConstraintView(context, constraint);
 	}
 
 	public float getMinimum() {

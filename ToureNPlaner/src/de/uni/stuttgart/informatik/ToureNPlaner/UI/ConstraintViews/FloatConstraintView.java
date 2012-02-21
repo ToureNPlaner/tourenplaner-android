@@ -10,14 +10,13 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class FloatConstraintView extends ConstraintView {
-	private static final int seekBarMax = 10000;
-	private final float divisionFactor;
 	private Context context;
-	public FloatConstraintView(Context context, Constraint constraint) {
+	private Integer divisionFactor;
+	public FloatConstraintView(Context context, Constraint constraint,Integer divisionFactor) {
 		super(context, constraint);
 		FloatConstraint type = (FloatConstraint) constraint.getType();
 		this.context = context;
-		divisionFactor = (type.getMaximum() - type.getMinimum()) / (float) seekBarMax;
+		this.divisionFactor = divisionFactor;
 	}
 
 	@Override
@@ -34,13 +33,14 @@ public class FloatConstraintView extends ConstraintView {
 		final FloatConstraint type = (FloatConstraint) constraint.getType();
 
 		lblMin.setText(String.valueOf(type.getMinimum()));
-		lblMax.setText(String.valueOf(type.getMaximum()));
+		lblMax.setText(String.valueOf(type.getMaximum()/divisionFactor));
+		
 
 		etValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
 		//------------------get seekBar -------------------
 		final SeekBar seekbar = (SeekBar) view.findViewById(R.id.editconstraintseekBar);
-		seekbar.setMax(seekBarMax);
+		seekbar.setMax((int)type.getMaximum());
 		if (constraint.getValue() != null) {
 			float val = (Float) constraint.getValue();
 			seekbar.setProgress((int) (val * divisionFactor));

@@ -76,6 +76,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		} else {
 			info.constraintTypes = new ArrayList<ConstraintType>(constraints.size());
 			for (JsonNode constraint : constraints) {
+				
 				info.constraintTypes.add(ConstraintType.parse(constraint));
 			}
 		}
