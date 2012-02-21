@@ -8,8 +8,8 @@ import org.codehaus.jackson.JsonNode;
 public class MeterConstraint extends FloatConstraint {
 	public static String typename = "meter";
 
-	public MeterConstraint(String name, float minimum, float maximum) {
-		super(name, minimum, maximum);
+	public MeterConstraint(String name, String description, String id, float minimum, float maximum) {
+		super(name, description, id, minimum, maximum);
 	}
 
 	@Override
@@ -26,7 +26,10 @@ public class MeterConstraint extends FloatConstraint {
 		else
 			max = (float) n.getDoubleValue();
 
-		return new MeterConstraint(constraint.path("name").asText(), min, max);
+		return new MeterConstraint(constraint.path("name").asText(),
+				constraint.path("description").asText(),
+				constraint.path("id").asText(),
+				min, max);
 	}
 
 	@Override

@@ -11,8 +11,8 @@ public class FloatConstraint extends ConstraintType {
 	private final float minimum;
 	private final float maximum;
 
-	public FloatConstraint(String name, float minimum, float maximum) {
-		super(name);
+	public FloatConstraint(String name, String description, String id, float minimum, float maximum) {
+		super(name, description, id);
 		this.minimum = minimum;
 		this.maximum = maximum;
 	}
@@ -24,7 +24,7 @@ public class FloatConstraint extends ConstraintType {
 
 	@Override
 	public void generate(ObjectNode node, Object value) {
-		node.put(getName(), (Float) value);
+		node.put(getId(), (Float) value);
 	}
 
 	public static ConstraintType parse(JsonNode constraint) {
@@ -36,7 +36,10 @@ public class FloatConstraint extends ConstraintType {
 		else
 			max = (float) n.getDoubleValue();
 
-		return new FloatConstraint(constraint.path("name").asText(), min, max);
+		return new FloatConstraint(constraint.path("name").asText(),
+				constraint.path("description").asText(),
+				constraint.path("id").asText(),
+				min, max);
 	}
 
 	@Override
