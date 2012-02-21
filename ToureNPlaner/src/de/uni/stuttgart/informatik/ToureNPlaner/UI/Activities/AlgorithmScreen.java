@@ -20,7 +20,6 @@ import java.util.Collections;
 
 public class AlgorithmScreen extends FragmentActivity {
 	private Session session;
-	private ListView listView;
 	private boolean started;
 
 
@@ -40,18 +39,14 @@ public class AlgorithmScreen extends FragmentActivity {
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
+		started = false;
+
 		setupListView();
 		setupBillingButton();
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		listView.setEnabled(true);
-	}
-
 	private void setupListView() {
-		listView = (ListView) findViewById(R.id.listViewAlgorithm);
+		ListView listView = (ListView) findViewById(R.id.listViewAlgorithm);
 		ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
 		for (AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
 			if (!alg.isHidden())
@@ -67,6 +62,9 @@ public class AlgorithmScreen extends FragmentActivity {
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				if (started)
+					return;
+				started = true;
 				AlgorithmInfo alg = (AlgorithmInfo) adapterView.getItemAtPosition(i);
 				session.setSelectedAlgorithm(alg);
 				Intent myIntent = new Intent(view.getContext(), MapScreen.class);
@@ -84,13 +82,10 @@ public class AlgorithmScreen extends FragmentActivity {
 			btnBilling.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (started)
-						return;
 					// generates an intent from the class BillingScreen
 					Intent myIntent = new Intent(view.getContext(), BillingScreen.class);
 					myIntent.putExtra(Session.IDENTIFIER, session);
 					startActivity(myIntent);
-					started = false;
 				}
 			});
 		}
