@@ -32,13 +32,15 @@ class Way {
 		long startTime, endTime;
 		startTime = System.nanoTime();
 
-		int pointsLeft = points.length;
+		int length = points.length / 2;
+
+		int pointsLeft = length;
 		// round to the right size
-		ArrayList<Level> levels = new ArrayList<Level>((points.length / 2 + smallestLevelSize + 1) / smallestLevelSize);
+		ArrayList<Level> levels = new ArrayList<Level>((length + smallestLevelSize + 1) / smallestLevelSize);
 		int begin = 0, end;
 
 		while (pointsLeft > 0) {
-			end = Math.min(begin + smallestLevelSize, points.length / 2);
+			end = Math.min(begin + smallestLevelSize, length);
 			int leftMin = Integer.MAX_VALUE, topMax = Integer.MIN_VALUE, rightMax = Integer.MIN_VALUE, bottomMin = Integer.MAX_VALUE;
 			// add overlap
 			int start = Math.max(0, begin - 1);
