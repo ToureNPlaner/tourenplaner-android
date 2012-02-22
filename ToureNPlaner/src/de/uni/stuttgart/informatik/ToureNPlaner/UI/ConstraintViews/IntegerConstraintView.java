@@ -19,7 +19,7 @@ public class IntegerConstraintView extends ConstraintView{
 
 	@Override
 	public int getLayout() {
-		// 
+		// can be changed if needed
 		return R.layout.float_constraint_layout;
 	}
 

@@ -32,7 +32,7 @@ public class FloatConstraint extends ConstraintType {
 		float max;
 		JsonNode n = constraint.get("max");
 		if (n == null)
-			max = 1000.f;
+			max = 100000.f;
 		else
 			max = (float) n.getDoubleValue();
 

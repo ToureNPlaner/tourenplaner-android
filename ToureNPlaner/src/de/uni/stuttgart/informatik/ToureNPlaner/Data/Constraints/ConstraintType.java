@@ -34,7 +34,6 @@ public abstract class ConstraintType implements Serializable {
 
 	public static ConstraintType parse(JsonNode constraint) {
 		String typename = constraint.path("type").asText();
-		typename = "price";
 		if (FloatConstraint.typename.equals(typename)) {
 			return FloatConstraint.parse(constraint);
 		} else if (MeterConstraint.typename.equals(typename)) {

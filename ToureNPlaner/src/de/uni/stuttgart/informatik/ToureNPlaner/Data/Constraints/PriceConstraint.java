@@ -7,15 +7,11 @@ import android.content.Context;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.PriceConstraintView;
 
-public class PriceConstraint extends ConstraintType{
+public class PriceConstraint extends FloatConstraint{
 	public static String typename = "price";
-	private final float minimum;
-	private final float maximum;
 
 	public PriceConstraint(String name, String description, String id, float minimum, float maximum) {
-		super(name, description, id);
-		this.minimum = minimum;
-		this.maximum = maximum;
+		super(name, description, id,minimum,maximum);
 	}
 
 	@Override
@@ -48,11 +44,4 @@ public class PriceConstraint extends ConstraintType{
 		return new PriceConstraintView(context, constraint);
 	}
 
-	public float getMinimum() {
-		return minimum;
-	}
-
-	public float getMaximum() {
-		return maximum;
-	}
 }
