@@ -34,7 +34,7 @@ public class IntegerConstraint extends ConstraintType{
 		int max;
 		JsonNode n = constraint.get("max");
 		if (n == null)
-			max = 4321;
+			max = 10000;
 		else
 			max = (int) n.getIntValue();
 
