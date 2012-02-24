@@ -48,6 +48,11 @@
     <string name="change_order">change order</string>
     <string name="map_file_error">Mapfile is not valid. Falling back.</string>
     <string name="details">details</string>
+    <string name="distance">distance</string>
+    <string name="apx">apx</string>
+    <string name="meter">meter</string>
+    <string name="kilometer">kilometer</string>
+    <string name="amount_of_points">amount of points</string>
 
     <!--mapscreen_preferences-->
     <string name="mapscreen_preferences">mapscreen preferences</string>
