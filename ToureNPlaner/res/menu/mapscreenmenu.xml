@@ -20,6 +20,6 @@
           android:icon="@drawable/back"
           android:title="@string/back"/>
     <item android:id="@+id/settings"
-          android:icon="@drawable/back"
+          android:icon="@drawable/preferences"
           android:title="@string/settings"/>
 </menu>
