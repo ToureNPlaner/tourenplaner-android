@@ -60,9 +60,9 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 			String[] arr = new String[6];
 			arr[0] = context.getResources().getString(R.string.requestid)+": " + items.get(i).getRequestid();
 			arr[1] = context.getResources().getString(R.string.algorithmn)+": " + items.get(i).getAlgorithm();
-			arr[2] = context.getResources().getString(R.string.cost)+": " + cost + " Euro";
+			arr[2] = context.getResources().getString(R.string.cost)+": " + cost + " " + context.getResources().getString(R.string.euro);
 			arr[3] = context.getResources().getString(R.string.requestdate)+": \n" + DateYearDayMonth +" "+DateTime;
-			arr[4] = context.getResources().getString(R.string.duration)+": " + items.get(i).getDuration() + " seconds";
+			arr[4] = context.getResources().getString(R.string.duration)+": " + items.get(i).getDuration() + " "+context.getResources().getString(R.string.milliseconds);
 			arr[5] = context.getResources().getString(R.string.status)+": " + items.get(i).getStatus();
 			billingItems.add(arr);
 		}

@@ -31,6 +31,8 @@
     <string name="status">status</string>
     <string name="tour">Tour</string>
     <string name="load_request">load request</string>
+    <string name="milliseconds">milliseconds</string>
+    <string name="euro">euro</string>
 
     <!-- billingscreenpreferences -->
     <string name="billingscreen_preferences">billingscreen preferences</string>
