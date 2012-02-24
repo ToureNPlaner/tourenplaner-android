@@ -3,6 +3,8 @@
  <item android:id="@+id/revertNodes"
           android:icon="@drawable/list"
           android:title="@string/change_order" />
-    
+    <item android:id="@+id/details"
+    	  android:icon="@drawable/list"
+    	  android:title="@string/details"/>
 
 </menu>

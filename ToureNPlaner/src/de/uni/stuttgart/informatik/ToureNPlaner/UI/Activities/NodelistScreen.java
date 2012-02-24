@@ -179,6 +179,11 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 			case R.id.revertNodes:
 				Edit edit = new ReverseNodesEdit(session);
 				edit.perform();
+			case R.id.details:
+				Intent myIntent = new Intent(NodelistScreen.this,
+						RouteDetails.class);
+				myIntent.putExtra(Session.IDENTIFIER, session);
+				startActivity(myIntent);
 			default:
 				return super.onOptionsItemSelected(item);
 		}
