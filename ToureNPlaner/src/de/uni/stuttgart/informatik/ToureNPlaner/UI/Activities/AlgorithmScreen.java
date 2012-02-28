@@ -39,10 +39,14 @@ public class AlgorithmScreen extends FragmentActivity {
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
-		started = false;
-
 		setupListView();
 		setupBillingButton();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		started = false;
 	}
 
 	private void setupListView() {
