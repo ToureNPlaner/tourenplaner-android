@@ -34,6 +34,7 @@ import org.mapsforge.android.maps.mapgenerator.tiledownloader.MapnikTileDownload
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.OpenCycleMapTileDownloader;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.OsmarenderTileDownloader;
 import org.mapsforge.core.GeoPoint;
+import org.mapsforge.map.reader.header.FileOpenResult;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -169,7 +170,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			if (mapGenerator != newMapGenerator) {
 				mapView.setMapGenerator(new DatabaseRenderer());
 			}
-			if (!mapView.setMapFile(offlineMapLocation)) {
+			if (mapView.setMapFile(offlineMapLocation) != FileOpenResult.SUCCESS) {
 				mapView.setMapGenerator(new MapnikTileDownloader());
 				Toast.makeText(this, getResources().getString(R.string.map_file_error), Toast.LENGTH_LONG).show();
 			}
@@ -406,7 +407,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		return true;
 	}
-
 
 
 	@Override
