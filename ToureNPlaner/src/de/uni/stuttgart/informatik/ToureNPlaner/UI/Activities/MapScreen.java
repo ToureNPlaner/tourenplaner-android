@@ -1,32 +1,9 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.*;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.Window;
-import android.widget.Toast;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
 import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
@@ -36,9 +13,51 @@ import org.mapsforge.android.maps.mapgenerator.tiledownloader.OsmarenderTileDown
 import org.mapsforge.core.GeoPoint;
 import org.mapsforge.map.reader.header.FileOpenResult;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.ComposePathEffect;
+import android.graphics.CornerPathEffect;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathDashPathEffect;
+import android.graphics.Rect;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.ChangeNodeModelEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.ClearEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.RemoveNodeEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.SetResultEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNNSEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNodeEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 
 public class MapScreen extends MapActivity implements Session.Listener {
 	private MapView mapView;
@@ -50,7 +69,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 	private LocationManager locManager;
-
+	private PopupWindow distancePopup = null;
+	private TextView textViewDistance;
 	private boolean isInstantRequest;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
@@ -61,8 +81,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			handler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
+			updateDistancePopup();
 			setProgressBarIndeterminateVisibility(false);
-		}
+					}
 
 		@Override
 		public void onError(RawHandler caller, Object object) {
@@ -124,7 +145,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		if (session.getResult() != null) {
 			mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
-		}
+			}
 		if (!mapView.getMapPosition().isValid()) {
 			mapView.setCenter(new GeoPoint(51.33, 10.45));
 		}
@@ -133,6 +154,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		session.registerListener(NodeOverlay.class, nodeOverlay);
 		session.registerListener(MapScreen.class, this);
+		
+		
 	}
 
 	private String tileServer;
@@ -436,5 +459,34 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				}
 			}
 		});
+	}
+	private int getTitleBarHeight(){
+		Rect rectgle= new Rect();
+		Window window= getWindow();
+		window.getDecorView().getWindowVisibleDisplayFrame(rectgle);
+		int StatusBarHeight= rectgle.top;
+		int contentViewTop= 
+		    window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+		int TitleBarHeight= contentViewTop - StatusBarHeight;
+		return TitleBarHeight;
+	}
+	private void updateDistancePopup(){
+		
+		if(distancePopup == null){
+			LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View layout = inflater.inflate(R.layout.popup_distance, null, false);
+		distancePopup = new PopupWindow(layout,150,50,false);
+	    distancePopup.showAtLocation(findViewById(R.id.mapView), Gravity.TOP  | Gravity.RIGHT, 0, getTitleBarHeight()+5);
+	    textViewDistance = (TextView) layout.findViewById(R.id.distancePopupTextView);
+		}
+		String distanceUnit = getResources().getString(R.string.meter_short);
+		int distance = session.getResult().getDistance();
+		if (distance > 1000) {
+			distance = distance / 1000;
+			distanceUnit = getResources().getString(R.string.kilometer_short);
+		}
+		String pretext = getResources().getString(R.string.distance) +" :" + distance +" "+ distanceUnit;
+		textViewDistance.setText(pretext );
+		
 	}
 }

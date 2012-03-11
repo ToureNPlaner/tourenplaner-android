@@ -52,6 +52,8 @@
     <string name="apx">apx</string>
     <string name="meter">meter</string>
     <string name="kilometer">kilometer</string>
+    <string name="meter_short">m</string>
+    <string name="kilometer_short">km</string>
     <string name="amount_of_points">amount of points</string>
 
     <!--mapscreen_preferences-->
