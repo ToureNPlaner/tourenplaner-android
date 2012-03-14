@@ -290,9 +290,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				myIntent.putExtra(Session.IDENTIFIER, session);
 				startActivityForResult(myIntent, REQUEST_CONSTRAINTS);
 				return true;
-			case R.id.back:
-				finish();
-				return true;
 			case R.id.settings:
 				startActivity(new Intent(this, MapScreenPreferences.class));
 				return true;
