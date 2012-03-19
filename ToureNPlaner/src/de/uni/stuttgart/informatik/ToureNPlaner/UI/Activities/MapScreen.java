@@ -29,16 +29,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.View.OnFocusChangeListener;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
@@ -472,8 +476,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if(distancePopup == null){
 			LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View layout = inflater.inflate(R.layout.popup_distance, null, false);
-		distancePopup = new PopupWindow(layout,150,50,false);
-	    distancePopup.showAtLocation(findViewById(R.id.mapView), Gravity.TOP  | Gravity.RIGHT, 0, getTitleBarHeight()+5);
+		distancePopup = new PopupWindow(layout,200,50,false);
+	    distancePopup.showAtLocation(findViewById(R.id.mapView), Gravity.TOP  | Gravity.LEFT, 0, getTitleBarHeight()+5);
 	    textViewDistance = (TextView) layout.findViewById(R.id.distancePopupTextView);
 		}
 		String distanceUnit = getResources().getString(R.string.meter_short);
@@ -482,8 +486,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			distance = distance / 1000;
 			distanceUnit = getResources().getString(R.string.kilometer_short);
 		}
-		String pretext = getResources().getString(R.string.distance) +" :" + distance +" "+ distanceUnit;
-		textViewDistance.setText(pretext );
-		
+		String text = getResources().getString(R.string.distance) +" :" + distance +" "+ distanceUnit;
+		textViewDistance.setText(text);
 	}
 }
