@@ -131,6 +131,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
 		final ArrayList<ConstraintType> tempcl = session.getSelectedAlgorithm().getPointConstraintTypes();
 
+		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMaxPoints()) {
+			return false;
+		}
+
 		final Node node = session.createNode(geoPoint);
 
 		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -144,17 +148,17 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 			}
 		});
 
-		mapScreen.runOnUiThread(new Runnable() {
+		/*mapScreen.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for (int i = 0; i < tempcl.size(); i++) {
-					//ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
+					ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
 				}
 				if (session.getNodeModel().size() > 0) {
 					session.getNodeModel().getNodeVector().set(session.getNodeModel().size() - 1, session.getNodeModel().getNodeVector().get(session.getNodeModel().size() - 1));
 				}
 			}
-		});
+		});*/
 
 		Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
 		edit.perform();
