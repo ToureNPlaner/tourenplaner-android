@@ -207,8 +207,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				String url = "http://" + adapterView.getItemAtPosition(i);
-				serverSelected(url);
+				serverSelected((String) adapterView.getItemAtPosition(i));
 			}
 		});
 	}
@@ -290,6 +289,11 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		// prevent double clicks
 		if (handler != null)
 			return;
+
+		// fix urls without http prefix
+		if (!url.startsWith("http")) {
+			url = "http://" + url;
+		}
 
 		ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
 				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);

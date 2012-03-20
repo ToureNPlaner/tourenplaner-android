@@ -4,9 +4,11 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,8 +23,11 @@ public class ServerInfoHandler extends RawHandler {
 
 	@Override
 	protected HttpURLConnection getHttpUrlConnection() throws Exception {
-		URL uri = new URL(url + "/info");
-		HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
+		URL info_url = new URL(url + "/info");
+		HttpURLConnection urlConnection = (HttpURLConnection) info_url.openConnection();
+		if (urlConnection instanceof HttpsURLConnection) {
+			((HttpsURLConnection) urlConnection).setSSLSocketFactory(ToureNPlanerApplication.getSslContext().getSocketFactory());
+		}
 		return urlConnection;
 	}
 
