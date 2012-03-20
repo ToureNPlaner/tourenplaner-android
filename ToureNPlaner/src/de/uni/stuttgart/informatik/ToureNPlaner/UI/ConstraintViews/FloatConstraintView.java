@@ -15,6 +15,7 @@ public class FloatConstraintView extends ConstraintView {
 	private Context context;
 
 	protected final int SEEKBAR_MAX = 10000;
+	private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
 
 	public FloatConstraintView(Context context, Constraint constraint) {
 		super(context, constraint);
@@ -32,12 +33,28 @@ public class FloatConstraintView extends ConstraintView {
 		return R.layout.float_constraint_layout;
 	}
 
+	/**
+	 * Range 0.0 - 1.0
+	 */
+	protected float barToValueNormalized(float bar) {
+		return bar;
+	}
+
+	/**
+	 * Range 0.0 - 1.0
+	 *
+	 * @return
+	 */
+	protected float valueToBarNormalized(float value) {
+		return value;
+	}
+
 	protected float barToValue(int bar) {
-		return (float) bar * (max - min) / SEEKBAR_MAX + min;
+		return barToValueNormalized((float) bar / SEEKBAR_MAX) * (max - min) + min;
 	}
 
 	protected int valueToBar(float value) {
-		return (int) ((value - min) * SEEKBAR_MAX / (max - min));
+		return (int) (valueToBarNormalized((value - min) / (max - min)) * SEEKBAR_MAX);
 	}
 
 	@Override
@@ -87,14 +104,17 @@ public class FloatConstraintView extends ConstraintView {
 							valfloat = type.getMinimum();
 						}
 						constraint.setValue(valfloat);
+						// prevent infinite loop
+						seekbar.setOnSeekBarChangeListener(null);
 						seekbar.setProgress(valueToBar(valfloat));
+						seekbar.setOnSeekBarChangeListener(onSeekBarChangeListener);
 					} catch (NumberFormatException e) {
 						// ignore
 					}
 				}
 			}
 		});
-		seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+		onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar arg0, int arg1,
 			                              boolean arg2) {
@@ -110,7 +130,7 @@ public class FloatConstraintView extends ConstraintView {
 			public void onStopTrackingTouch(SeekBar arg0) {
 
 			}
-		});
-
+		};
+		seekbar.setOnSeekBarChangeListener(onSeekBarChangeListener);
 	}
 }
