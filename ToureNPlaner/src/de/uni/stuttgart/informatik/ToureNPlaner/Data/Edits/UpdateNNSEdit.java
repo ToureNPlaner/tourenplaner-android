@@ -17,6 +17,6 @@ public class UpdateNNSEdit extends Edit {
 	@Override
 	public void perform() {
 		node.setGeoPoint(geoPoint);
-		session.notifyChangeListerners(Session.NNS_CHANGE);
+		session.notifyChangeListerners(new Session.Change(Session.NNS_CHANGE));
 	}
 }

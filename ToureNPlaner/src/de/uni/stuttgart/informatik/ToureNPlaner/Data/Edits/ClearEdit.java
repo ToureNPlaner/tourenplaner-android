@@ -10,6 +10,6 @@ public class ClearEdit extends Edit {
 	@Override
 	public void perform() {
 		session.getNodeModel().clear();
-		session.notifyChangeListerners(Session.MODEL_CHANGE);
+		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
 	}
 }

@@ -17,6 +17,6 @@ public class UpdateDndEdit extends Edit {
 	@Override
 	public void perform() {
 		node.setGeoPoint(geoPoint);
-		session.notifyChangeListerners(Session.DND_CHANGE);
+		session.notifyChangeListerners(new Session.Change(Session.DND_CHANGE));
 	}
 }

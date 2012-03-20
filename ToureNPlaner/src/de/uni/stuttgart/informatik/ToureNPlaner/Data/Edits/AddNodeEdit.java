@@ -27,6 +27,6 @@ public class AddNodeEdit extends Edit {
 				session.getNodeModel().add(node);
 				break;
 		}
-		session.notifyChangeListerners(Session.MODEL_CHANGE | Session.ADD_CHANGE);
+		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE | Session.ADD_CHANGE));
 	}
 }

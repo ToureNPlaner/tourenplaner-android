@@ -268,8 +268,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 
 	@Override
-	public void onChange(int change) {
-		if (0 < ((Session.MODEL_CHANGE | Session.NNS_CHANGE) & change))
+	public void onChange(Session.Change change) {
+		if (change.isModelChange() || change.isNnsChange())
 			loadFromModel();
 	}
 

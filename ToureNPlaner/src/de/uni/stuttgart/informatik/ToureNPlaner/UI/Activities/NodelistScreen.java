@@ -1,37 +1,24 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import java.io.Serializable;
-
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.RemoveNodeEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.ReverseNodesEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.NodeListAdapter;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.DragDrop.DragNDropListView;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DragListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DropListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.RemoveListener;
+
+import java.io.Serializable;
 
 public class NodelistScreen extends ListActivity implements Session.Listener {
 	private NodeListAdapter adapter;
@@ -179,11 +166,12 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 	// ----------------Menu-----------------
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.details).setEnabled(session.getResult()!=null);
-		menu.findItem(R.id.revertNodes).setEnabled(session.getNodeModel().size()>=2);
+		menu.findItem(R.id.details).setEnabled(session.getResult() != null);
+		menu.findItem(R.id.revertNodes).setEnabled(session.getNodeModel().size() >= 2);
 		return true;
-		
+
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -207,34 +195,36 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 		}
 		return true;
 	}
+
 	protected Dialog onCreateDialog(int id) {
-	    Dialog dialog;
-	    switch(id) {
-	    case 0:
-	    	String distanceUnit = getResources().getString(R.string.meter);
-			int distance = session.getResult().getDistance();
-			if (distance > 1000) {
-				distance = distance / 1000;
-				distanceUnit = getResources().getString(R.string.kilometer);
-			}
-	    	Context mContext = this;
-	    	dialog = new Dialog(mContext);
-			dialog.setContentView(R.layout.route_details);
-			dialog.setTitle(getResources().getString(R.string.details));
-			
-			TextView txtmarkercount = (TextView) dialog.findViewById(R.id.details_markercount);
-			TextView txtdistance = (TextView) dialog.findViewById(R.id.details_distance);
-			TextView txtapx = (TextView) dialog.findViewById(R.id.details_apx);
-			
-			txtmarkercount.setText(getResources().getString(R.string.amount_of_points)+": "+session.getResult().getPoints().size());
-			txtdistance.setText(getResources().getString(R.string.distance)+": "+distance+" "+distanceUnit);
-			txtapx.setText(getResources().getString(R.string.apx)+": "+ session.getResult().getApx());
-			break;
-	    default:
-	        dialog = null;
-	    }
-	    return dialog;
+		Dialog dialog;
+		switch (id) {
+			case 0:
+				String distanceUnit = getResources().getString(R.string.meter);
+				int distance = session.getResult().getDistance();
+				if (distance > 1000) {
+					distance = distance / 1000;
+					distanceUnit = getResources().getString(R.string.kilometer);
+				}
+				Context mContext = this;
+				dialog = new Dialog(mContext);
+				dialog.setContentView(R.layout.route_details);
+				dialog.setTitle(getResources().getString(R.string.details));
+
+				TextView txtmarkercount = (TextView) dialog.findViewById(R.id.details_markercount);
+				TextView txtdistance = (TextView) dialog.findViewById(R.id.details_distance);
+				TextView txtapx = (TextView) dialog.findViewById(R.id.details_apx);
+
+				txtmarkercount.setText(getResources().getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size());
+				txtdistance.setText(getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit);
+				txtapx.setText(getResources().getString(R.string.apx) + ": " + session.getResult().getApx());
+				break;
+			default:
+				dialog = null;
+		}
+		return dialog;
 	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Edit edit;
@@ -269,7 +259,7 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 	}
 
 	@Override
-	public void onChange(int change) {
+	public void onChange(Session.Change change) {
 		adapter.notifyDataSetChanged();
 	}
 }

@@ -413,26 +413,26 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 
 	@Override
-	public void onChange(final int change) {
+	public void onChange(final Session.Change change) {
 		runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
-				if (0 < (change & Session.RESULT_CHANGE)) {
+				if (change.isResultChange()) {
 					if (session.getResult() == null) {
 						addPathToMap(null);
 					} else {
 						addPathToMap(session.getResult().getWay());
 					}
 				}
-				if (0 < (change & Session.DND_CHANGE) && isInstantRequest) {
+				if (change.isDndChange() && isInstantRequest) {
 					performRequest(false);
 				}
-				if (0 < (change & Session.MODEL_CHANGE)) {
+				if (change.isModelChange()) {
 					if (isInstantRequest) {
 						performRequest(true);
 					}
-					if (0 == (change & Session.ADD_CHANGE)) {
+					if (!change.isAddChange()) {
 						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
 					}

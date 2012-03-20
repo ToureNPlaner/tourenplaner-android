@@ -10,6 +10,6 @@ public class ReverseNodesEdit extends Edit {
 	@Override
 	public void perform() {
 		session.getNodeModel().reverseNodes();
-		session.notifyChangeListerners(Session.MODEL_CHANGE);
+		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
 	}
 }

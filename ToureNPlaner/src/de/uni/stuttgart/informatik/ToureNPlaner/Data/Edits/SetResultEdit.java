@@ -1,11 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-
-import java.util.ArrayList;
 
 public class SetResultEdit extends Edit {
 	private final Result result;
@@ -39,6 +35,6 @@ public class SetResultEdit extends Edit {
 				session.getNodeModel().setNodeVector(copy);
 		}*/
 
-		session.notifyChangeListerners(Session.RESULT_CHANGE);
+		session.notifyChangeListerners(new Session.Change(Session.RESULT_CHANGE));
 	}
 }

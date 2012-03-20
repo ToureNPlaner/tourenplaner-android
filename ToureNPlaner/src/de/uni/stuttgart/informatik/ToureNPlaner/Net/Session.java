@@ -117,8 +117,36 @@ public class Session implements Serializable {
 	public static final int ADD_CHANGE = 8;
 	public static final int DND_CHANGE = 16;
 
+	public static class Change {
+		final int val;
+
+		public Change(int val) {
+			this.val = val;
+		}
+
+		public boolean isModelChange() {
+			return 0 < (val & MODEL_CHANGE);
+		}
+
+		public boolean isResultChange() {
+			return 0 < (val & RESULT_CHANGE);
+		}
+
+		public boolean isNnsChange() {
+			return 0 < (val & NNS_CHANGE);
+		}
+
+		public boolean isAddChange() {
+			return 0 < (val & ADD_CHANGE);
+		}
+
+		public boolean isDndChange() {
+			return 0 < (val & DND_CHANGE);
+		}
+	}
+
 	public interface Listener {
-		void onChange(int change);
+		void onChange(Change change);
 	}
 
 	private transient WeakHashMap<Object, Listener> listeners = new WeakHashMap<Object, Listener>();
@@ -142,8 +170,8 @@ public class Session implements Serializable {
 		listeners.remove(identifier);
 	}
 
-	public void notifyChangeListerners(final int change) {
-		if (0 < (change & MODEL_CHANGE) || 0 < (change & DND_CHANGE)) {
+	public void notifyChangeListerners(final Change change) {
+		if (change.isModelChange() || change.isDndChange()) {
 			nodeModel.incVersion();
 		}
 
@@ -157,10 +185,10 @@ public class Session implements Serializable {
 			@Override
 			public void run() {
 				synchronized (Session.class) {
-					if (0 < (change & MODEL_CHANGE)) {
+					if (change.isModelChange()) {
 						safeNodeModel();
 					}
-					if (0 < (change & RESULT_CHANGE)) {
+					if (change.isResultChange()) {
 						safeResult();
 					}
 				}
