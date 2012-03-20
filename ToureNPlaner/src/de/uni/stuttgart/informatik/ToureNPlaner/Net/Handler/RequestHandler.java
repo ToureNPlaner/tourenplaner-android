@@ -55,7 +55,7 @@ public class RequestHandler extends ConnectionHandler {
 
 	@Override
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
-		Result result = Result.parse(type, inputStream);
+		Result result = Result.parse(type, inputStream, session.getSelectedAlgorithm().sourceIsTarget());
 		result.setVersion(version);
 		return result;
 	}

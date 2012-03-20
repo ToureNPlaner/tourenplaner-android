@@ -28,6 +28,6 @@ public class BillingRequestHandler extends ConnectionHandler {
 	@Override
 	protected Object handleInput(ContentType type, InputStream inputStream)
 			throws Exception {
-		return Result.parse(type, inputStream);
+		return Result.parse(type, inputStream, session.getSelectedAlgorithm().sourceIsTarget());
 	}
 }

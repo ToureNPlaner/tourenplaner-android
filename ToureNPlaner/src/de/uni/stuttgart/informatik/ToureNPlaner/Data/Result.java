@@ -118,7 +118,7 @@ public class Result implements Serializable {
 		}
 	}
 
-	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
+	public static Result parse(JacksonManager.ContentType type, InputStream stream, boolean roundTrip) throws IOException {
 		Result result = new Result();
 		ArrayList<SmartIntArray> ways = new ArrayList<SmartIntArray>();
 		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
@@ -130,6 +130,13 @@ public class Result implements Serializable {
 			jacksonParse(jp, ways, points, misc);
 		} finally {
 			jp.close();
+		}
+
+		if (roundTrip && ways.size() > 1) {
+			SmartIntArray last = ways.get(ways.size() - 1);
+			SmartIntArray first = ways.get(0);
+			last.add(first.get(0));
+			last.add(first.get(1));
 		}
 
 		int size = ways.size();
