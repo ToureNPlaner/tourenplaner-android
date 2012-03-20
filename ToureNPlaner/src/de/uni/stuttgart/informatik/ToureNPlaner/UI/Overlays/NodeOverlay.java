@@ -1,8 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
 public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements LocationListener, Session.Listener {
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
 
-	private Context context;
+	private MapScreen mapScreen;
 	private final Session session;
 
 	private static final int GPS_RADIUS = 10;
@@ -40,11 +38,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 	private GpsDrawable gpsDrawable;
 
-	public NodeOverlay(Context context, Session session, GeoPoint gpsPoint) {
+	public NodeOverlay(MapScreen mapScreen, Session session, GeoPoint gpsPoint) {
 		// Just a workaround until the icons are loaded
-		super(boundCenterBottom(context.getResources().getDrawable(R.drawable.marker)));
+		super(boundCenterBottom(mapScreen.getResources().getDrawable(R.drawable.marker)));
 		this.session = session;
-		this.context = context;
+		this.mapScreen = mapScreen;
 
 		setupGpsDrawable();
 
@@ -52,8 +50,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		updateGpsMarker(gpsPoint);
 	}
 
-	public void setContext(Context context) {
-		this.context = context;
+	public void setMapScreen(MapScreen mapScreen) {
+		this.mapScreen = mapScreen;
 	}
 
 	private void setupGpsDrawable() {
@@ -100,10 +98,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		if (index != -1) {
 			final Node node = dragging;
 			node.setGeoPoint(geoPoint);
-			((MapScreen) context).runOnUiThread(new Runnable() {
+			mapScreen.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					((MapScreen) context).performNNSearch(node);
+					mapScreen.performNNSearch(node);
 					Edit edit = new UpdateNodeEdit(session, index, node);
 					edit.perform();
 				}
@@ -139,14 +137,14 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 		// Important! Try to perform the NNS Search before, notifying any one else about the change.
 		// else through HTTP pipelining the NNS might be performed after the request!
-		((MapScreen) context).runOnUiThread(new Runnable() {
+		mapScreen.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				((MapScreen) context).performNNSearch(node);
+				mapScreen.performNNSearch(node);
 			}
 		});
 
-		((MapScreen) context).runOnUiThread(new Runnable() {
+		mapScreen.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for (int i = 0; i < tempcl.size(); i++) {
@@ -181,7 +179,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	public boolean onTap(int i) {
 		if (i == list.size()) {
 			final GeoPoint gpsPoint = this.gpsMarker.getPoint();
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			AlertDialog.Builder builder = new AlertDialog.Builder(mapScreen);
 			builder.setMessage("Wollen Sie ihren aktuellen Standort als Startpunkt setzen?")
 					.setCancelable(true)
 					.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
@@ -199,11 +197,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 						}
 					}).create().show();
 		} else {
-			Intent intent = new Intent(context, EditNodeScreen.class);
+			Intent intent = new Intent(mapScreen, EditNodeScreen.class);
 			intent.putExtra("node", session.getNodeModel().get(i));
 			intent.putExtra(Session.IDENTIFIER, session);
 			intent.putExtra("index", i);
-			((Activity) context).startActivityForResult(intent, MapScreen.REQUEST_NODE);
+			mapScreen.startActivityForResult(intent, MapScreen.REQUEST_NODE);
 		}
 
 		return true;
@@ -276,12 +274,12 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 	}
 
 	public void ConstraintDialog(String title, final Object min, final Object max, final int constraintid, final String constraintType) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new AlertDialog.Builder(mapScreen);
 		builder.setMessage("enter a value: ");
 		builder.setCancelable(true);
 		builder.setTitle(title);
 		// Set an EditText view to get user input
-		final EditText input = new EditText(context);
+		final EditText input = new EditText(mapScreen);
 		String hintmessage = String.valueOf(min) + " .. " + String.valueOf(max);
 		input.setHint(hintmessage);
 		if (constraintType.equals("integer") || constraintType.equals("boolean")) {

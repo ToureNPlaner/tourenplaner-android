@@ -381,7 +381,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	protected void onDestroy() {
 		super.onDestroy();
 
-		nodeOverlay.setContext(null);
+		nodeOverlay.setMapScreen(null);
 		fastWayOverlay.setMapView(null);
 
 		mapView.getOverlays().remove(nodeOverlay);
