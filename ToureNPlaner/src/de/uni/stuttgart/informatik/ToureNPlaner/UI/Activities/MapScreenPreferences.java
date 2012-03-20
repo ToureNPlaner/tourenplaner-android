@@ -31,7 +31,7 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.layout.settings_mapscreen);
+		addPreferencesFromResource(R.xml.settings_mapscreen);
 
 		tileServer = (EditTextPreference) getPreferenceScreen().findPreference("tile_server");
 		offlineMapLoc = (EditTextPreference) getPreferenceScreen().findPreference("offline_map_location");
