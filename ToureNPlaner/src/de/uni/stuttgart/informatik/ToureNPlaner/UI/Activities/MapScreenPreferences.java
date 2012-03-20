@@ -10,7 +10,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class MapScreenPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
-		MAPNIK, OSMANDER, OPENCYCLE, FILE, CUSTOM
+		MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
 
 	CharSequence[] map_generators = new CharSequence[MapGenerator.values().length];

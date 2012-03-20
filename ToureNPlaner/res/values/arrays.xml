@@ -3,7 +3,6 @@
     <string-array name="map_generators">
         <item>Mapnik</item>
         <item>OpenCycle</item>
-        <item>Osmander</item>
         <item>Map file</item>
         <item>Custom</item>
     </string-array>
