@@ -108,6 +108,7 @@ public class Result implements Serializable {
 									SmartIntArray second_last = ways.get(ways.size() - 2);
 									SmartIntArray last = ways.get(ways.size() - 1);
 									second_last.add(last.get(0));
+									second_last.add(last.get(1));
 								}
 							}
 						}
