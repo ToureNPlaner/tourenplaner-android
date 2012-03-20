@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.util.Log;
 import android.widget.Toast;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
@@ -46,12 +45,6 @@ public class FastWayOverlay extends Overlay {
 		path.reset();
 		requestRedraw();
 	}
-
-	static int numPoints;
-	static long clipping;
-	static long caching;
-	static long pathing;
-	static int pointsDrawn;
 
 	@Override
 	protected String getThreadName() {
@@ -100,19 +93,12 @@ public class FastWayOverlay extends Overlay {
 			// stop working
 			return;
 		}
-		long totalStartTime;
-		long startTime, endTime;
+
 		GeoPoint topLeft = projection.fromPixels(0, 0);
 		GeoPoint bottomRight = projection.fromPixels(this.mapView.getWidth(), this.mapView.getHeight());
 		for (Way way : ways) {
-			totalStartTime = System.nanoTime();
 			way.setupPath(path, drawPosition, drawZoomLevel, topLeft.longitudeE6, topLeft.latitudeE6, bottomRight.longitudeE6, bottomRight.latitudeE6);
-			startTime = System.nanoTime();
 			canvas.drawPath(path, paint);
-			endTime = System.nanoTime();
-			long rendering = (endTime - startTime) / 1000;
-			long total = (endTime - totalStartTime) / 1000;
-			Log.v("STATS", drawZoomLevel + ", " + Way.steps[drawZoomLevel] + ", " + numPoints + ", " + pointsDrawn + ", " + clipping + ", " + caching + ", " + pathing + ", " + rendering + ", " + total);
 		}
 	}
 }

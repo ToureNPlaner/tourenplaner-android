@@ -3,7 +3,6 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.util.FloatMath;
-import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.ArrayDeque;
 import org.mapsforge.core.Tile;
 
@@ -29,9 +28,6 @@ class Way {
 	}
 
 	private void initWay(int[] points) {
-		long startTime, endTime;
-		startTime = System.nanoTime();
-
 		int length = points.length / 2;
 
 		int pointsLeft = length;
@@ -71,16 +67,11 @@ class Way {
 			levels = upper;
 		} while (upper.size() != 1);
 		root = upper.get(0);
-		endTime = System.nanoTime();
-		Log.v("TP", "Initialization took: " + (endTime - startTime) / 1000 + "µs");
 	}
 
 	private void clip(int leftE6, int topE6, int rightE6, int bottomE6) {
-		long startTime;
-		long endTime;
 		stack.clear();
 		stack.push(root);
-		startTime = System.nanoTime();
 		while (!stack.isEmpty()) {
 			Level level = stack.pop();
 			// reject
@@ -105,43 +96,28 @@ class Way {
 			}
 			clipped.add(level);
 		}
-		endTime = System.nanoTime();
-		FastWayOverlay.clipping = (endTime - startTime) / 1000;
 	}
 
 	private void updatePath(Path path, Point drawPosition, byte drawZoomLevel) {
-		long startTime;
-		long endTime;
-		startTime = System.nanoTime();
 		final int step = steps[drawZoomLevel];
-		int drawn = 0;
 		int begin = clipped.get(0).begin;
 		path.moveTo(cache[begin * 2] - drawPosition.x, cache[begin * 2 + 1] - drawPosition.y);
 		for (Level lvl : clipped) {
 			int i;
 			for (i = lvl.begin; i < lvl.end; i += step) {
 				path.lineTo(cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y);
-				drawn++;
 			}
 			if (i != lvl.end - 1) {
 				i = lvl.end - 1;
 				path.lineTo(cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y);
-				drawn++;
 			}
 		}
-		endTime = System.nanoTime();
-		FastWayOverlay.pathing = (endTime - startTime) / 1000;
-		FastWayOverlay.pointsDrawn = drawn;
 	}
 
 	static final float pi = (float) Math.PI;
 	static final float pi180 = (pi / 180.0F);
 
 	private void updateCache(byte drawZoomLevel) {
-		long startTime;
-		long endTime;
-		FastWayOverlay.numPoints = clipped.get(clipped.size() - 1).end - clipped.get(0).begin;
-		startTime = System.nanoTime();
 		if (drawZoomLevel != lastZoomLevel) {
 			invalidateCache();
 			lastZoomLevel = drawZoomLevel;
@@ -165,8 +141,6 @@ class Way {
 				}
 			}
 		}
-		endTime = System.nanoTime();
-		FastWayOverlay.caching = (endTime - startTime) / 1000;
 	}
 
 	private void updatePoint(int i, float pi4f, float f360, float f05) {
@@ -228,7 +202,6 @@ class Way {
 	}
 
 	public float getDistance(Point p, Point drawPosition, byte zoomLevel) {
-		;
 		int step = steps[zoomLevel];
 		float minDistance = Float.MAX_VALUE;
 
