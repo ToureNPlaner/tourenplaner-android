@@ -17,7 +17,7 @@
         <activity android:name=".UI.Activities.CertificateScreen"></activity>
         <activity android:name=".UI.Activities.NodelistScreen"></activity>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"></activity>
-        <activity android:name=".UI.Activities.MapScreenPreferences"></activity>
+        <activity android:name=".UI.Activities.MapScreenPreferences" android:theme="@style/Theme.Sherlock"></activity>
         <activity android:name=".UI.Activities.EditConstraintScreen"></activity>
         <activity android:name=".UI.Activities.ServerScreen">
             <intent-filter>

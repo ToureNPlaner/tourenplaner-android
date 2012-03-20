@@ -5,10 +5,10 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
-public class MapScreenPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
 		MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
