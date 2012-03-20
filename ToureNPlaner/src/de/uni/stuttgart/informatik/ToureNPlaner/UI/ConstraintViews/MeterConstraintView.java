@@ -5,6 +5,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 
 public class MeterConstraintView extends FloatConstraintView {
 	public MeterConstraintView(Context context, Constraint constraint) {
-		super(context, constraint,1);
+		super(context, constraint);
 	}
 }

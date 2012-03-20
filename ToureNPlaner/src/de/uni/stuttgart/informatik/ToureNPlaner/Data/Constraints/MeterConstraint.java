@@ -22,7 +22,7 @@ public class MeterConstraint extends FloatConstraint {
 		float max;
 		JsonNode n = constraint.get("max");
 		if (n == null)
-			max = 18000.f;
+			max = 10000.f;
 		else
 			max = (float) n.getDoubleValue();
 

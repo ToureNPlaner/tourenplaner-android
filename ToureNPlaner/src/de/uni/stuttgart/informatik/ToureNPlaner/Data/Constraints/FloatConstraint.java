@@ -44,7 +44,7 @@ public class FloatConstraint extends ConstraintType {
 
 	@Override
 	public ConstraintView createView(Context context, Constraint constraint) {
-		return new FloatConstraintView(context, constraint, 100);
+		return new FloatConstraintView(context, constraint);
 	}
 
 	public float getMinimum() {
