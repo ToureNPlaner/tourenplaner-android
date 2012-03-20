@@ -215,11 +215,13 @@ class Way {
 								p.x, p.y));
 			}
 			i -= step;
-			minDistance = Math.min(minDistance,
-					calcDistance(
-							cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y,
-							cache[(lvl.end - 1) * 2] - drawPosition.x, cache[(lvl.end - 1) * 2 + 1] - drawPosition.y,
-							p.x, p.y));
+			if (i >= 0 && i < lvl.end - 1) {
+				minDistance = Math.min(minDistance,
+						calcDistance(
+								cache[i * 2] - drawPosition.x, cache[i * 2 + 1] - drawPosition.y,
+								cache[(lvl.end - 1) * 2] - drawPosition.x, cache[(lvl.end - 1) * 2 + 1] - drawPosition.y,
+								p.x, p.y));
+			}
 		}
 		return minDistance;
 	}
