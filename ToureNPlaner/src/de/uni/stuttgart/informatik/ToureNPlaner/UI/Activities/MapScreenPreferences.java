@@ -1,14 +1,21 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
 
-public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
+public class MapScreenPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
 		MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
@@ -26,7 +33,7 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 	private EditTextPreference offlineMapLoc;
 
 	public static final String defaultTileServer = "http://gerbera.informatik.uni-stuttgart.de/osm/tiles/%1$d/%2$d/%3$d.png";
-	public static final String defaultMapLocation = "/sdcard/...";
+	public static final String defaultMapLocation = Environment.getExternalStorageDirectory().toString();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,27 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 
 		tileServer = (EditTextPreference) getPreferenceScreen().findPreference("tile_server");
 		offlineMapLoc = (EditTextPreference) getPreferenceScreen().findPreference("offline_map_location");
+		offlineMapLoc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				getWindow().getDecorView().getRootView().post(
+						new Runnable() {
+							@Override
+							public void run() {
+								Intent intent = new Intent("org.openintents.action.PICK_FILE");
+								intent.setData(Uri.parse("file://" + Environment.getExternalStorageDirectory()));
+								intent.putExtra("org.openintents.extra.TITLE", "Please select a file");
+								try {
+									startActivityForResult(intent, 1);
+								} catch (ActivityNotFoundException e) {
+									Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+								}
+							}
+						});
+				// Doesn't Work
+				return Intents.isIntentAvailable(MapScreenPreferences.this, "org.openintents.action.PICK_FILE");
+			}
+		});
 
 		mapGenerator = (ListPreference) getPreferenceScreen().findPreference("map_generator");
 		mapGenerator.setEntries(R.array.map_generators);
@@ -62,6 +90,14 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		mapGenerator.setSummary(mapGenerator.getEntry());
 		tileServer.setSummary(sp.getString("tile_server", defaultTileServer));
 		offlineMapLoc.setSummary(sp.getString("offline_map_location", defaultMapLocation));
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			offlineMapLoc.setText(data.getData().getPath());
+			offlineMapLoc.getEditText().setText(offlineMapLoc.getText());
+		}
 	}
 
 	@Override
