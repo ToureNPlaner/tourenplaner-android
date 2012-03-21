@@ -4,14 +4,10 @@ gen
 lint.xml
 
 #Eclipse
-.project
-.classpath
 .settings
 .checkstyle
 
 #IntelliJ IDEA
-.idea
-*.iml
 *.ipr
 *.iws
 classes
