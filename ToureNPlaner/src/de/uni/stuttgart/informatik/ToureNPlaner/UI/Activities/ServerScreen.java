@@ -3,11 +3,15 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.*;
+import android.view.ContextMenu;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
@@ -25,7 +29,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ServerScreen extends FragmentActivity implements Observer {
+public class ServerScreen extends SherlockFragmentActivity implements Observer {
 	private static final String SERVERLIST_FILENAME = "serverlist";
 	private ArrayAdapter<String> adapter;
 	private ServerInfoHandler handler;
@@ -213,7 +217,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(android.view.MenuItem item) {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 			case 0: // edit
@@ -303,7 +307,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	//------------menu---------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.serverscreenmenu, menu);
 		return true;
 	}

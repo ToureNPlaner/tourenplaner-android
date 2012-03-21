@@ -1,6 +1,5 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -8,6 +7,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
@@ -21,7 +21,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.BillingListAdapter;
 
 import java.util.ArrayList;
 
-public class BillingScreen extends ExpandableListActivity implements Observer, OnScrollListener {
+public class BillingScreen extends SherlockExpandableListActivity implements Observer, OnScrollListener {
 	private BillingListAdapter adapter;
 	private BillingListHandler billingListhandler;
 	private Session session;

@@ -10,10 +10,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
@@ -26,7 +32,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
-import org.mapsforge.android.maps.MapActivity;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.MapnikTileDownloader;
@@ -116,7 +121,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setBuiltInZoomControls(true);
 		mapView.getFileSystemTileCache().setPersistent(true);
 
-		setTitle(getResources().getText(R.string.app_name) + " - " + session.getSelectedAlgorithm().toString());
+		getSupportActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
 		initializeHandler();
 
 		setupWayOverlay();
@@ -134,8 +139,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		session.registerListener(NodeOverlay.class, nodeOverlay);
 		session.registerListener(MapScreen.class, this);
-
-
 	}
 
 	private String tileServer;
@@ -235,9 +238,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	// ----------------Menu-----------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.mapscreenmenu, menu);
-		MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItemCompat.SHOW_AS_ACTION_IF_ROOM | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+		menu.findItem(R.id.calculate).setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
 
@@ -357,9 +360,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	protected void onPause() {
-		super.onPause();
 		// 5 minutes, 50 meters
 		locManager.removeUpdates(nodeOverlay);
+		super.onPause();
 	}
 
 	@Override
@@ -379,8 +382,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
-
 		nodeOverlay.setMapScreen(null);
 		fastWayOverlay.setMapView(null);
 
@@ -395,6 +396,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		for (RequestNN request : requestList) {
 			request.setListener(null);
 		}
+		super.onDestroy();
 	}
 
 	@Override
@@ -443,7 +445,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private int getTitleBarHeight() {
 		Rect rectgle = new Rect();
-		Window window = getWindow();
+		android.view.Window window = getWindow();
 		window.getDecorView().getWindowVisibleDisplayFrame(rectgle);
 		int StatusBarHeight = rectgle.top;
 		int contentViewTop =
@@ -453,7 +455,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void updateDistancePopup() {
-
 		if (distancePopup == null) {
 			LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View layout = inflater.inflate(R.layout.popup_distance, null, false);

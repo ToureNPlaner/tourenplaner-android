@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.KeystoreAdapter;
@@ -23,7 +23,7 @@ import java.security.cert.CertificateFactory;
 import java.util.Collection;
 import java.util.List;
 
-public class CertificateScreen extends FragmentActivity {
+public class CertificateScreen extends SherlockFragmentActivity {
 	private KeyStore keyStore;
 	private KeystoreAdapter adapter;
 

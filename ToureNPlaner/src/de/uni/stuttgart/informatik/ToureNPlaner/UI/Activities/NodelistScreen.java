@@ -1,13 +1,18 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -20,7 +25,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.RemoveListener;
 
 import java.io.Serializable;
 
-public class NodelistScreen extends ListActivity implements Session.Listener {
+public class NodelistScreen extends SherlockListActivity implements Session.Listener {
 	private NodeListAdapter adapter;
 	private Session session;
 	private boolean dirty;
@@ -141,9 +146,8 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 
 			};
 
-
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(android.view.MenuItem item) {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 			case 0: // edit
@@ -174,7 +178,7 @@ public class NodelistScreen extends ListActivity implements Session.Listener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.nodelistmenu, menu);
 		return true;
 	}

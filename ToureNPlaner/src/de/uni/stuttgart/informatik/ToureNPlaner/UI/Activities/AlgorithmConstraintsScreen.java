@@ -1,16 +1,16 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import com.actionbarsherlock.app.SherlockListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapter;
 
 import java.io.Serializable;
 
-public class AlgorithmConstraintsScreen extends ListActivity {
+public class AlgorithmConstraintsScreen extends SherlockListActivity {
 
 	private Session session;
 

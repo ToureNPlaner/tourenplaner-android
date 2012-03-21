@@ -10,12 +10,12 @@ import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
 
-public class MapScreenPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
 		MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
