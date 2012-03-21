@@ -67,13 +67,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
 			updateDistancePopup();
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 		}
 
 		@Override
 		public void onError(RawHandler caller, Object object) {
 			handler = null;
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
 	};
@@ -257,7 +257,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.reset:
 				if (handler != null) {
 					handler.cancel(true);
-					setProgressBarIndeterminateVisibility(false);
+					setSupportProgressBarIndeterminateVisibility(false);
 					handler = null;
 				}
 				Edit edit = new ClearEdit(session);
@@ -296,7 +296,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		RequestHandler h = session.performRequest(requestListener, force);
 		if (h != null) {
 			handler = h;
-			setProgressBarIndeterminateVisibility(true);
+			setSupportProgressBarIndeterminateVisibility(true);
 		}
 	}
 
@@ -347,9 +347,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		if (handler != null) {
 			handler.setListener(requestListener);
-			setProgressBarIndeterminateVisibility(true);
+			setSupportProgressBarIndeterminateVisibility(true);
 		} else {
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 		}
 	}
 
