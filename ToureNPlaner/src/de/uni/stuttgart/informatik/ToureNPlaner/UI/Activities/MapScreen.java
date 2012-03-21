@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.*;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
@@ -401,10 +400,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// Only disable the button, if we don't have an action bar. Version < HONEYCOMB
-		if (Build.VERSION.SDK_INT < 11) {
-			menu.findItem(R.id.calculate).setEnabled(session.canPerformRequest());
-		}
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 
