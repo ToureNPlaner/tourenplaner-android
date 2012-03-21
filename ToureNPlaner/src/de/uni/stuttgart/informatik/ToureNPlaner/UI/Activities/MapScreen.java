@@ -123,7 +123,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupGPS(isFirstStart);
 
-		if (session.getResult() != null && !session.getResult().getPoints().isEmpty()) {
+		if (session.getResult() != null && session.getResult().getPoints() != null) {
 			mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
 		}
 		if (!mapView.getMapPosition().isValid()) {
@@ -172,7 +172,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			}
 			FileOpenResult result;
 			try {
-				result = mapView.setMapFile(new File(offlineMapLocation));
+				result = mapView.setMapFile(new File(newOfflineMapLocation));
 			} catch (Exception e) {
 				result = new FileOpenResult(getResources().getString(R.string.map_file_error));
 			}
