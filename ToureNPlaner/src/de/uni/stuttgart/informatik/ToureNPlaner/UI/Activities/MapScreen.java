@@ -8,7 +8,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
@@ -237,9 +235,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	// ----------------Menu-----------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.mapscreenmenu, menu);
-		menu.findItem(R.id.calculate).setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
 		return true;
 	}
 

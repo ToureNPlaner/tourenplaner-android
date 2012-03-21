@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
- <item android:id="@+id/revertNodes"
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/revertNodes"
           android:icon="@drawable/change_order"
-          android:title="@string/change_order" />
+          android:showAsAction="ifRoom|withText"
+          android:title="@string/change_order"/>
     <item android:id="@+id/details"
-    	  android:icon="@drawable/details"
-    	  android:title="@string/details"/>
+          android:icon="@drawable/details"
+          android:showAsAction="ifRoom|withText"
+          android:title="@string/details"/>
 
 </menu>

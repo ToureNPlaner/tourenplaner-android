@@ -6,6 +6,7 @@
           android:title="@string/nodelist"/>
     <item android:id="@+id/calculate"
           android:icon="@drawable/calculate"
+          android:showAsAction="ifRoom|withText"
           android:title="@string/calculate"/>
     <item android:id="@+id/reset"
           android:icon="@drawable/trash"
