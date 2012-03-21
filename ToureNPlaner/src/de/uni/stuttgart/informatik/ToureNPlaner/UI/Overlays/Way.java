@@ -10,8 +10,16 @@ import java.util.ArrayList;
 
 class Way {
 	private static int smallestLevelSize = 4;
-	// Must be factors of smallest size
-	static final int[] steps = {128, 128, 64, 64, 64, 64, 64, 32, 16, 8, 8, 4, 4, 2, 2, 1, 1, 1, 1, 1};
+
+	private static final int[] steps = {128, 128, 64, 64, 64, 64, 64, 32, 16, 8, 8, 4, 4, 2, 2};
+
+	private static int getSteps(byte zoomLevel) {
+		if (zoomLevel < steps.length) {
+			return steps[zoomLevel];
+		} else {
+			return 1;
+		}
+	}
 
 	private final float[] way;
 	private final float[] cache;
@@ -99,7 +107,7 @@ class Way {
 	}
 
 	private void updatePath(Path path, Point drawPosition, byte drawZoomLevel) {
-		final int step = steps[drawZoomLevel];
+		final int step = getSteps(drawZoomLevel);
 		int begin = clipped.get(0).begin;
 		path.moveTo(cache[begin * 2] - drawPosition.x, cache[begin * 2 + 1] - drawPosition.y);
 		for (Level lvl : clipped) {
@@ -126,7 +134,7 @@ class Way {
 		float pi4f = (1.f / (4.f * pi)) * f;
 		float f360 = 1.f / 360.f * f;
 		float f05 = 0.5f * f;
-		final int step = steps[drawZoomLevel];
+		final int step = getSteps(drawZoomLevel);
 
 		// update the first before
 		for (Level lvl : clipped) {
@@ -202,7 +210,7 @@ class Way {
 	}
 
 	public float getDistance(Point p, Point drawPosition, byte zoomLevel) {
-		int step = steps[zoomLevel];
+		int step = getSteps(zoomLevel);
 		float minDistance = Float.MAX_VALUE;
 
 		for (Level lvl : clipped) {
