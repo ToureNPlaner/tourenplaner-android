@@ -50,7 +50,7 @@ public class MapScreenPreferences extends PreferenceActivity implements OnShared
 							@Override
 							public void run() {
 								Intent intent = new Intent("org.openintents.action.PICK_FILE");
-								intent.setData(Uri.parse("file://" + Environment.getExternalStorageDirectory()));
+								intent.setData(Uri.parse("file://" + offlineMapLoc));
 								intent.putExtra("org.openintents.extra.TITLE", "Please select a file");
 								try {
 									startActivityForResult(intent, 1);
