@@ -14,7 +14,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 public class FloatConstraintView extends ConstraintView {
 	private Context context;
 
-	protected final int SEEKBAR_MAX = 10000;
+    // shouldn't be about the pixel width
+	protected final int SEEKBAR_MAX = 1000;
 	private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
 
 	public FloatConstraintView(Context context, Constraint constraint) {
