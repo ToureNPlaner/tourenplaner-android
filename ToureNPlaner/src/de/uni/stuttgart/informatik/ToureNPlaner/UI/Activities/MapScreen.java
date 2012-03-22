@@ -436,23 +436,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		});
 	}
 
-	private int getTitleBarHeight() {
-		Rect rectgle = new Rect();
-		android.view.Window window = getWindow();
-		window.getDecorView().getWindowVisibleDisplayFrame(rectgle);
-		int StatusBarHeight = rectgle.top;
-		int contentViewTop =
-				window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-		int TitleBarHeight = contentViewTop - StatusBarHeight;
-		return TitleBarHeight;
-	}
-
 	private void updateDistancePopup() {
 		if (distancePopup == null) {
 			LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View layout = inflater.inflate(R.layout.popup_distance, null, false);
 			distancePopup = new PopupWindow(layout, 200, 50, false);
-			distancePopup.showAtLocation(findViewById(R.id.mapView), Gravity.TOP | Gravity.LEFT, 0, getTitleBarHeight() + 5);
+			distancePopup.showAtLocation(findViewById(R.id.mapView), Gravity.TOP | Gravity.LEFT, 0, getSupportActionBar().getHeight() + 5);
 			textViewDistance = (TextView) layout.findViewById(R.id.distancePopupTextView);
 		}
 		String distanceUnit = getResources().getString(R.string.meter_short);
