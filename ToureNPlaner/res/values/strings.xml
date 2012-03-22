@@ -6,7 +6,7 @@
     <!--serverscreen-->
     <string name="choose_server_screen">Choose a server</string>
     <string name="add_server">Add server</string>
-    
+
     <!-- certificatescreen -->
     <string name="add_certificate">add certificate</string>
     <string name="certificates">certificates</string>
@@ -43,6 +43,7 @@
 
     <!--mapscreen-->
     <string name="map_screen">mapscreen</string>
+    <string name="search">search</string>
 
     <!--nodelist_menu-->
     <string name="change_order">change order</string>
@@ -86,9 +87,9 @@
     <string name="value">value</string>
     <string name="maximum">maximum</string>
     <string name="minimum">minimum</string>
-    
+
     <!-- constraint_screens -->
-	<string name="select_a_value">select a value</string>
+    <string name="select_a_value">select a value</string>
     <!--various-->
     <string name="connecting">connecting</string>
     <string name="new_string">new</string>
