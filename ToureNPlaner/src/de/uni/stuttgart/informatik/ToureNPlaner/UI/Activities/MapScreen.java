@@ -22,6 +22,7 @@ import com.actionbarsherlock.view.Window;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.GeoCodingHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
@@ -32,6 +33,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import org.mapsforge.android.maps.MapView;
+import org.mapsforge.android.maps.Projection;
 import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.MapnikTileDownloader;
 import org.mapsforge.android.maps.mapgenerator.tiledownloader.OpenCycleMapTileDownloader;
@@ -90,6 +92,18 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			Toast.makeText(getApplicationContext(), object.toString(),
 					Toast.LENGTH_LONG).show();
 			requestList.remove((RequestNN) caller);
+		}
+	};
+
+	private final Observer geoCodingListener = new Observer() {
+		@Override
+		public void onCompleted(RawHandler caller, Object object) {
+			mapView.setCenter(((GeoCodingHandler.GeoCodingResult) object).location);
+		}
+
+		@Override
+		public void onError(RawHandler caller, Object object) {
+			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
 	};
 
@@ -250,7 +264,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			@Override
 			public void onClick(View v) {
 				search.collapseActionView();
-				Toast.makeText(MapScreen.this, ((EditText) search.getActionView().findViewById(R.id.search_field)).getText(), Toast.LENGTH_LONG).show();
+				Projection projection = mapView.getProjection();
+				GeoPoint topLeft = projection.fromPixels(0, 0);
+				GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
+				GeoCodingHandler.createDefaultHandler(geoCodingListener, ((EditText) search.getActionView().findViewById(R.id.search_field)).getText().toString(),
+						new RectF(topLeft.longitudeE6, topLeft.latitudeE6,
+								bottomRight.longitudeE6, bottomRight.latitudeE6)
+				).execute();
 			}
 		});
 	}
