@@ -337,6 +337,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		requestList.add((RequestNN) new RequestNN(nnsListener, session, node).execute());
 	}
 
+	@SuppressWarnings("deprecation")
 	private void initializeHandler() {
 		handler = (RequestHandler) getLastNonConfigurationInstance();
 
@@ -349,6 +350,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public Object onRetainNonConfigurationInstance() {
 		return handler;
 	}
