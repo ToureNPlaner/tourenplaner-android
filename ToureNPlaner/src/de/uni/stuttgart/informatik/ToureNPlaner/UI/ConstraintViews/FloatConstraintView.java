@@ -12,15 +12,12 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 public class FloatConstraintView extends ConstraintView {
-	private Context context;
-
-    // shouldn't be about the pixel width
+	// shouldn't be about the pixel width
 	protected final int SEEKBAR_MAX = 1000;
 	private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
 
 	public FloatConstraintView(Context context, Constraint constraint) {
 		super(context, constraint);
-		this.context = context;
 		FloatConstraint type = (FloatConstraint) constraint.getType();
 		this.min = type.getMinimum();
 		this.max = type.getMaximum();

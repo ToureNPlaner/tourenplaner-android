@@ -8,9 +8,11 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 
 public abstract class ConstraintView {
 	protected final Constraint constraint;
+	protected final Context context;
 	protected View view;
 
 	public ConstraintView(Context context, Constraint constraint) {
+		this.context = context;
 		this.constraint = constraint;
 	}
 

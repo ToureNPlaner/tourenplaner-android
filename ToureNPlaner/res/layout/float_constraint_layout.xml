@@ -5,23 +5,13 @@
              android:layout_height="wrap_content">
 
     <LinearLayout>
-        <EditText
-                android:id="@+id/txtconstValue"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                >
-
-        </EditText>
-    </LinearLayout>
-
-    <LinearLayout>
         <TextView
                 android:id="@+id/lblconstMin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/minimum"/>
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
 
         <SeekBar
                 android:id="@+id/editconstraintseekBar"
@@ -34,6 +24,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/maximum"/>
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
     </LinearLayout>
+
+    <EditText
+            android:id="@+id/txtconstValue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"/>
 </TableLayout>
