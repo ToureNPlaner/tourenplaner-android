@@ -260,14 +260,30 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void setupSearch(Menu menu) {
 		search = menu.findItem(R.id.search);
+		search.getActionView().findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_ENTER) {
+					v.post(new Runnable() {
+						@Override
+						public void run() {
+							search.getActionView().findViewById(R.id.search_button).performClick();
+						}
+					});
+				}
+				return false;
+			}
+		});
 		search.getActionView().findViewById(R.id.search_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
+				field.clearFocus();
 				search.collapseActionView();
 				Projection projection = mapView.getProjection();
 				GeoPoint topLeft = projection.fromPixels(0, 0);
 				GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
-				GeoCodingHandler.createDefaultHandler(geoCodingListener, ((EditText) search.getActionView().findViewById(R.id.search_field)).getText().toString(),
+				GeoCodingHandler.createDefaultHandler(geoCodingListener, field.getText().toString(),
 						new RectF(topLeft.longitudeE6, topLeft.latitudeE6,
 								bottomRight.longitudeE6, bottomRight.latitudeE6)
 				).execute();
