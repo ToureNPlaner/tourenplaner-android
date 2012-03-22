@@ -9,8 +9,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -236,7 +238,32 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
+		setupSearch(menu);
 		return true;
+	}
+
+	private MenuItem search = null;
+
+	private void setupSearch(Menu menu) {
+		search = menu.findItem(R.id.search);
+		search.getActionView().findViewById(R.id.search_button).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				search.collapseActionView();
+				Toast.makeText(MapScreen.this, ((EditText) search.getActionView().findViewById(R.id.search_field)).getText(), Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+			if (search != null) {
+				search.expandActionView();
+			}
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override
