@@ -10,13 +10,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
 
         <SeekBar
                 android:id="@+id/editconstraintseekBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
                 android:layout_weight="1"/>
 
         <TextView
@@ -24,8 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
     </LinearLayout>
 
     <EditText
