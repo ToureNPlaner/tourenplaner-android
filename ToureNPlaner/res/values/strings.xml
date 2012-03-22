@@ -100,5 +100,6 @@
     <string name="back">back</string>
     <string name="delete">delete</string>
     <string name="edit">edit</string>
+    <string name="search_go">go</string>
 
 </resources>
