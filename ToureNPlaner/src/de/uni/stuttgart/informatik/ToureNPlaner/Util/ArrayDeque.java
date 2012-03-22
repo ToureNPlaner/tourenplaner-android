@@ -53,6 +53,7 @@ import java.util.*;
  * @author Josh Bloch and Doug Lea
  * @since 1.6
  */
+@SuppressWarnings("unchecked")
 public class ArrayDeque<E> extends AbstractCollection<E>
 		implements Deque<E>, Cloneable, Serializable {
 	/**
