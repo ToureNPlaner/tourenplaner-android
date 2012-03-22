@@ -183,6 +183,7 @@ public class NodelistScreen extends SherlockListActivity implements Session.List
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -200,6 +201,7 @@ public class NodelistScreen extends SherlockListActivity implements Session.List
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
 		switch (id) {

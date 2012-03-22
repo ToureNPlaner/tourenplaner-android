@@ -15,6 +15,7 @@ import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
 
+@SuppressWarnings("deprecation")
 public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
 		MAPNIK, OPENCYCLE, FILE, CUSTOM
