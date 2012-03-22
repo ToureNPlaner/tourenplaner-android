@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.widget.EditText;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -129,8 +128,6 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-		final ArrayList<ConstraintType> tempcl = session.getSelectedAlgorithm().getPointConstraintTypes();
-
 		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMaxPoints()) {
 			return false;
 		}
@@ -148,7 +145,8 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 			}
 		});
 
-		/*mapScreen.runOnUiThread(new Runnable() {
+		/*final ArrayList<ConstraintType> tempcl = session.getSelectedAlgorithm().getPointConstraintTypes();
+		mapScreen.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for (int i = 0; i < tempcl.size(); i++) {

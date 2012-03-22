@@ -14,14 +14,38 @@ public class User implements Serializable {
 	private String firstname;
 	private String lastname;
 
+	public String getEmail() {
+		return email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public String getAdmin() {
+		return admin;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
 	public static User parse(JsonNode object) {
 		User user = new User();
-		user.address = object.get("email").asText();
+		user.email = object.get("email").asText();
 		user.address = object.get("address").asText();
-		user.address = object.get("status").asText();
-		user.address = object.get("admin").asText();
-		user.address = object.get("firstname").asText();
-		user.address = object.get("lastname").asText();
+		user.status = object.get("status").asText();
+		user.admin = object.get("admin").asText();
+		user.firstname = object.get("firstname").asText();
+		user.lastname = object.get("lastname").asText();
 
 		return new User();
 	}
