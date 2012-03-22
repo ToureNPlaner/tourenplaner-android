@@ -46,7 +46,7 @@ public class KeystoreAdapter extends BaseAdapter {
 	public TextView getGenericView() {
 		// Layout parameters for the ExpandableListView
 		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		TextView textView = new TextView(context);
 		textView.setLayoutParams(lp);

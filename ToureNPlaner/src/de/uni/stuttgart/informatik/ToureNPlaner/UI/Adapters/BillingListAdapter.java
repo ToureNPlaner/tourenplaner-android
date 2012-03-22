@@ -7,11 +7,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class BillingListAdapter extends BaseExpandableListAdapter {
 	private ArrayList<String> billingCaptions = new ArrayList<String>();
@@ -22,21 +21,25 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		this.context = context;
 		addAll(billinglist);
 	}
-	public int getRequestID(int itemID){
+
+	public int getRequestID(int itemID) {
 		String id = billingItems.get(itemID)[0];
-		id = id.substring(id.indexOf(":")+2);
+		id = id.substring(id.indexOf(":") + 2);
 		return Integer.valueOf(id);
 	}
-	public String getAlgSuffix(int itemID){
+
+	public String getAlgSuffix(int itemID) {
 		String algSuffix = billingItems.get(itemID)[1];
-		algSuffix = algSuffix.substring(algSuffix.indexOf(":")+2);
-		return  algSuffix;
+		algSuffix = algSuffix.substring(algSuffix.indexOf(":") + 2);
+		return algSuffix;
 	}
-	public String getStatus(int itemID){
+
+	public String getStatus(int itemID) {
 		String status = billingItems.get(itemID)[5];
-		status = status.substring(status.indexOf(":")+2);
-		return  status;
+		status = status.substring(status.indexOf(":") + 2);
+		return status;
 	}
+
 	public void addAll(ArrayList<BillingItem> items) {
 		setupList(items);
 	}
@@ -45,25 +48,25 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	private void setupList(ArrayList<BillingItem> items) {
 		billingCaptions.ensureCapacity(billingCaptions.size() + items.size());
 		for (int i = 0; i < items.size(); i++) {
-			billingCaptions.add(context.getResources().getString(R.string.tour)+" " + String.valueOf(items.get(i).getRequestid()) +" "+ items.get(i).getAlgorithm());
+			billingCaptions.add(context.getResources().getString(R.string.tour) + " " + String.valueOf(items.get(i).getRequestid()) + " " + items.get(i).getAlgorithm());
 		}
 
 		billingItems.ensureCapacity(billingItems.size() + items.size());
 		Double cost = 0.0;
 		String date;
 		for (int i = 0; i < items.size(); i++) {
-			date =  items.get(i).getRequestdate();
+			date = items.get(i).getRequestdate();
 			String DateYearDayMonth = date.substring(0, date.indexOf("T"));
-			String DateTime = date.substring(date.indexOf("T")+1,date.indexOf("."));
-			cost = ((double)items.get(i).getCost())/100;
-						
+			String DateTime = date.substring(date.indexOf("T") + 1, date.indexOf("."));
+			cost = ((double) items.get(i).getCost()) / 100;
+
 			String[] arr = new String[6];
-			arr[0] = context.getResources().getString(R.string.requestid)+": " + items.get(i).getRequestid();
-			arr[1] = context.getResources().getString(R.string.algorithmn)+": " + items.get(i).getAlgorithm();
-			arr[2] = context.getResources().getString(R.string.cost)+": " + cost + " " + context.getResources().getString(R.string.euro);
-			arr[3] = context.getResources().getString(R.string.requestdate)+": \n" + DateYearDayMonth +" "+DateTime;
-			arr[4] = context.getResources().getString(R.string.duration)+": " + items.get(i).getDuration() + " "+context.getResources().getString(R.string.milliseconds);
-			arr[5] = context.getResources().getString(R.string.status)+": " + items.get(i).getStatus();
+			arr[0] = context.getResources().getString(R.string.requestid) + ": " + items.get(i).getRequestid();
+			arr[1] = context.getResources().getString(R.string.algorithmn) + ": " + items.get(i).getAlgorithm();
+			arr[2] = context.getResources().getString(R.string.cost) + ": " + cost + " " + context.getResources().getString(R.string.euro);
+			arr[3] = context.getResources().getString(R.string.requestdate) + ": \n" + DateYearDayMonth + " " + DateTime;
+			arr[4] = context.getResources().getString(R.string.duration) + ": " + items.get(i).getDuration() + " " + context.getResources().getString(R.string.milliseconds);
+			arr[5] = context.getResources().getString(R.string.status) + ": " + items.get(i).getStatus();
 			billingItems.add(arr);
 		}
 	}
@@ -83,7 +86,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	public TextView getGenericView() {
 		// Layout parameters for the ExpandableListView
 		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		TextView textView = new TextView(context);
 		textView.setLayoutParams(lp);

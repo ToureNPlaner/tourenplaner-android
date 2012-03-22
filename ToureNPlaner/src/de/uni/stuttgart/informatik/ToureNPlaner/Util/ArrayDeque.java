@@ -9,9 +9,6 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Util;
 // removed link to collections framework docs
 // END android-note
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -738,54 +735,6 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 		return copyElements(new Object[size()]);
 	}
 
-	/**
-	 * Returns an array containing all of the elements in this deque in
-	 * proper sequence (from first to last element); the runtime type of the
-	 * returned array is that of the specified array.  If the deque fits in
-	 * the specified array, it is returned therein.  Otherwise, a new array
-	 * is allocated with the runtime type of the specified array and the
-	 * size of this deque.
-	 * <p/>
-	 * <p>If this deque fits in the specified array with room to spare
-	 * (i.e., the array has more elements than this deque), the element in
-	 * the array immediately following the end of the deque is set to
-	 * <tt>null</tt>.
-	 * <p/>
-	 * <p>Like the {@link #toArray()} method, this method acts as bridge between
-	 * array-based and collection-based APIs.  Further, this method allows
-	 * precise control over the runtime type of the output array, and may,
-	 * under certain circumstances, be used to save allocation costs.
-	 * <p/>
-	 * <p>Suppose <tt>x</tt> is a deque known to contain only strings.
-	 * The following code can be used to dump the deque into a newly
-	 * allocated array of <tt>String</tt>:
-	 * <p/>
-	 * <pre>
-	 *     String[] y = x.toArray(new String[0]);</pre>
-	 *
-	 * Note that <tt>toArray(new Object[0])</tt> is identical in function to
-	 * <tt>toArray()</tt>.
-	 *
-	 * @param a the array into which the elements of the deque are to
-	 *          be stored, if it is big enough; otherwise, a new array of the
-	 *          same runtime type is allocated for this purpose
-	 * @return an array containing all of the elements in this deque
-	 * @throws ArrayStoreException  if the runtime type of the specified array
-	 *                              is not a supertype of the runtime type of every element in
-	 *                              this deque
-	 * @throws NullPointerException if the specified array is null
-	 */
-	public <T> T[] toArray(T[] a) {
-		int size = size();
-		if (a.length < size)
-			a = (T[]) java.lang.reflect.Array.newInstance(
-					a.getClass().getComponentType(), size);
-		copyElements(a);
-		if (a.length > size)
-			a[size] = null;
-		return a;
-	}
-
 	// *** Object methods ***
 
 	/**
@@ -795,47 +744,5 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 	 */
 	public ArrayDeque<E> clone() {
 		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Appease the serialization gods.
-	 */
-	private static final long serialVersionUID = 2340985798034038923L;
-
-	/**
-	 * Serialize this deque.
-	 *
-	 * @serialData The current size (<tt>int</tt>) of the deque,
-	 * followed by all of its elements (each an object reference) in
-	 * first-to-last order.
-	 */
-	private void writeObject(ObjectOutputStream s) throws IOException {
-		s.defaultWriteObject();
-
-		// Write out size
-		s.writeInt(size());
-
-		// Write out elements in order.
-		int mask = elements.length - 1;
-		for (int i = head; i != tail; i = (i + 1) & mask)
-			s.writeObject(elements[i]);
-	}
-
-	/**
-	 * Deserialize this deque.
-	 */
-	private void readObject(ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		// Read in size and allocate array
-		int size = s.readInt();
-		allocateElements(size);
-		head = 0;
-		tail = size;
-
-		// Read in all elements in the proper order.
-		for (int i = 0; i < size; i++)
-			elements[i] = (E) s.readObject();
 	}
 }
