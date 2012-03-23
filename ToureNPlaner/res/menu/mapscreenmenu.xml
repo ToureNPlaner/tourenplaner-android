@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
         xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nodelist"
-          android:icon="@drawable/list"
-          android:title="@string/nodelist"/>
     <item android:id="@+id/calculate"
           android:icon="@drawable/calculate"
           android:showAsAction="ifRoom|withText"
           android:title="@string/calculate"/>
+    <item android:id="@+id/search"
+          android:icon="@drawable/action_search"
+          android:actionLayout="@layout/collapsible_searchfield"
+          android:showAsAction="always|collapseActionView"
+          android:title="@string/search"/>
+    <item android:id="@+id/nodelist"
+          android:icon="@drawable/list"
+          android:title="@string/nodelist"/>
     <item android:id="@+id/reset"
           android:icon="@drawable/trash"
           android:title="@string/delete"/>
@@ -16,13 +21,9 @@
           android:title="@string/constraints"/>
     <item android:id="@+id/gps"
           android:icon="@drawable/myplace"
+          android:checkable="true"
           android:title="@string/your_location"/>
     <item android:id="@+id/settings"
           android:icon="@drawable/preferences"
           android:title="@string/settings"/>
-    <item android:id="@+id/search"
-          android:icon="@drawable/action_search"
-          android:actionLayout="@layout/collapsible_searchfield"
-          android:showAsAction="always|collapseActionView"
-          android:title="@string/search"/>
 </menu>

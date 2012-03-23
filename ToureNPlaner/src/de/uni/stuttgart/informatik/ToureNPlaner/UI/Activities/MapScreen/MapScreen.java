@@ -48,7 +48,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MapScreen extends MapActivity implements Session.Listener {
-	private MapView mapView;
+	MapView mapView;
 	private FastWayOverlay fastWayOverlay;
 	private Session session;
 	public static final int REQUEST_NODEMODEL = 0;
@@ -61,7 +61,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private TextView textViewDistance;
 	private boolean isInstantRequest;
 
-	private GpsListener gpsListener = new GpsListener(this);
+	private GpsListener gpsListener;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -221,6 +221,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
+		gpsListener = new GpsListener(this, gpsGeoPoint);
 		nodeOverlay = new NodeOverlay(this, session, gpsGeoPoint);
 	}
 
@@ -256,8 +257,20 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
 		setupSearchMenu(menu.findItem(R.id.search));
-		//setupGpsMenu(Menu menu);
+		setupGpsMenu(menu.findItem(R.id.gps));
 		return true;
+	}
+
+	private void setupGpsMenu(MenuItem item) {
+		item.setChecked(gpsListener.isFollowing());
+		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				item.setChecked(!item.isChecked());
+				gpsListener.setFollowing(item.isChecked());
+				return true;
+			}
+		});
 	}
 
 	private MenuItem search = null;
