@@ -53,7 +53,7 @@ public class AlgorithmScreen extends SherlockListActivity {
 		Collections.sort(algorithms);
 
 		ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this,
-				android.R.layout.simple_list_item_1, algorithms);
+				R.layout.list_item, algorithms);
 		setListAdapter(adapter);
 
 		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {

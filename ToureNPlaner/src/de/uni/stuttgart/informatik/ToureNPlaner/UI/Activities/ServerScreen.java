@@ -175,7 +175,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 
 	private void setupListView() {
 		ListView listView = (ListView) findViewById(R.id.serverListView);
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, servers);
+		adapter = new ArrayAdapter<String>(this, R.layout.list_item, servers);
 		listView.setAdapter(adapter);
 
 		listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {

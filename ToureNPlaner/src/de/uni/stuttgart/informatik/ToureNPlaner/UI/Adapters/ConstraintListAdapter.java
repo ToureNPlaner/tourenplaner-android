@@ -16,7 +16,7 @@ public class ConstraintListAdapter extends ArrayAdapter<Constraint> {
 	private ArrayList<Constraint> constraintList;
 
 	public ConstraintListAdapter(ArrayList<Constraint> constraintList, Context context) {
-		super(context, android.R.layout.simple_list_item_1, constraintList);
+		super(context, R.layout.list_item, constraintList);
 		this.constraintList = constraintList;
 	}
 

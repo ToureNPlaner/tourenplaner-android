@@ -20,7 +20,7 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 	private final boolean sourceIsTarget;
 
 	public NodeListAdapter(ArrayList<Node> nodeList, Context context, boolean sourceIsTarget) {
-		super(context, android.R.layout.simple_list_item_1, nodeList);
+		super(context, R.layout.list_item, nodeList);
 		this.nodeList = nodeList;
 		this.sourceIsTarget = sourceIsTarget;
 	}
