@@ -9,7 +9,7 @@
 
     <!-- certificatescreen -->
     <string name="add_certificate">add certificate</string>
-    <string name="certificates">certificates</string>
+    <string name="add_certificates">certificates</string>
 
     <!--loginscreen-->
     <string name="login_screen">enter your credentials</string>

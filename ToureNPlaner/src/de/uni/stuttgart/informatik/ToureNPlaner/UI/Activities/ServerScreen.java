@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -110,7 +112,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 		loadServerList();
 
 		setupListView();
-		setupButtons();
 
 		initializeHandler();
 	}
@@ -125,7 +126,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)) {
 				Log.w("TP", "Main Activity is not the root.  Finishing Main Activity instead of launching.");
 				finish();
-				return;
 			}
 		}
 	}
@@ -161,10 +161,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 		}
 	}
 
-	private void setupButtons() {
-		setupAddButton();
-	}
-
 	private void initializeHandler() {
 		handler = (ServerInfoHandler) getLastCustomNonConfigurationInstance();
 
@@ -176,17 +172,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			if (dialog != null)
 				dialog.dismiss();
 		}
-	}
-
-	private void setupAddButton() {
-		Button btnAdd = (Button) findViewById(R.id.btnAdd);
-		btnAdd.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				NewDialog.newInstance(getResources().getString(R.string.new_string), "")
-						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
-			}
-		});
 	}
 
 	private void setupListView() {
@@ -319,7 +304,10 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			case R.id.servercertificates:
 				startActivity(new Intent(this, CertificateScreen.class));
 				return true;
-
+			case R.id.add_server:
+				NewDialog.newInstance(getResources().getString(R.string.new_string), "")
+						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
+				return true;
 		}
 		return false;
 	}
