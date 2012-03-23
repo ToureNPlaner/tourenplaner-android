@@ -3,12 +3,12 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -17,18 +17,15 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class AlgorithmScreen extends SherlockFragmentActivity {
 	private Session session;
 	private boolean started;
-
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
 		super.onSaveInstanceState(outState);
 	}
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +37,6 @@ public class AlgorithmScreen extends SherlockFragmentActivity {
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		setupListView();
-		setupBillingButton();
 	}
 
 	@Override
@@ -78,22 +74,29 @@ public class AlgorithmScreen extends SherlockFragmentActivity {
 		});
 	}
 
-	private void setupBillingButton() {
-		Button btnBilling = (Button) findViewById(R.id.btnBilling);
-		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
-			btnBilling.setVisibility(View.GONE);
-		} else {
-			btnBilling.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					// generates an intent from the class BillingScreen
-					Intent myIntent = new Intent(view.getContext(), BillingScreen.class);
-					myIntent.putExtra(Session.IDENTIFIER, session);
-					startActivity(myIntent);
-				}
-			});
-		}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.algorithmscreenmenu, menu);
+		return true;
 	}
 
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
+			menu.findItem(R.id.billing).setEnabled(false);
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.billing:
+				Intent myIntent = new Intent(this, BillingScreen.class);
+				myIntent.putExtra(Session.IDENTIFIER, session);
+				startActivity(myIntent);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

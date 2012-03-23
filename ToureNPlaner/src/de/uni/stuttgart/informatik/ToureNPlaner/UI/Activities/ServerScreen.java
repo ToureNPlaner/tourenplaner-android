@@ -299,7 +299,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.servercertificates:
 				startActivity(new Intent(this, CertificateScreen.class));
@@ -309,6 +308,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
 				return true;
 		}
-		return false;
+		return super.onOptionsItemSelected(item);
 	}
 }

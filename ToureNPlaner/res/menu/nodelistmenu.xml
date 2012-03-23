@@ -8,5 +8,4 @@
           android:icon="@drawable/details"
           android:showAsAction="ifRoom|withText"
           android:title="@string/details"/>
-
 </menu>

@@ -34,13 +34,6 @@
     <string name="milliseconds">milliseconds</string>
     <string name="euro">euro</string>
 
-    <!-- billingscreenpreferences -->
-    <string name="billingscreen_preferences">billingscreen preferences</string>
-    <string name="offset">offset</string>
-    <string name="limit">limit</string>
-    <string name="set_offset">enter offset</string>
-    <string name="set_limit">enter limit</string>
-
     <!--mapscreen-->
     <string name="map_screen">mapscreen</string>
     <string name="search">search</string>
