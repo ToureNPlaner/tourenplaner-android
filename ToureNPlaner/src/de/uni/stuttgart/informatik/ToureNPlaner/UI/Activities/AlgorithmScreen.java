@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
@@ -17,7 +16,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AlgorithmScreen extends SherlockFragmentActivity {
+public class AlgorithmScreen extends SherlockListActivity {
 	private Session session;
 	private boolean started;
 
@@ -30,7 +29,6 @@ public class AlgorithmScreen extends SherlockFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.algorithmscreen);
 
 		// If we get created for the first time we get our data from the intent
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
@@ -46,7 +44,6 @@ public class AlgorithmScreen extends SherlockFragmentActivity {
 	}
 
 	private void setupListView() {
-		ListView listView = (ListView) findViewById(R.id.listViewAlgorithm);
 		ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
 		for (AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
 			if (!alg.isHidden())
@@ -57,9 +54,9 @@ public class AlgorithmScreen extends SherlockFragmentActivity {
 
 		ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this,
 				android.R.layout.simple_list_item_1, algorithms);
-		listView.setAdapter(adapter);
+		setListAdapter(adapter);
 
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 				if (started)

@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.ListView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -22,7 +21,7 @@ import java.security.cert.CertificateFactory;
 import java.util.Collection;
 import java.util.List;
 
-public class CertificateScreen extends SherlockFragmentActivity {
+public class CertificateScreen extends SherlockListActivity {
 	private KeyStore keyStore;
 	private KeystoreAdapter adapter;
 
@@ -49,7 +48,6 @@ public class CertificateScreen extends SherlockFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.certificatescreen);
 
 		loadKeystore();
 
@@ -74,9 +72,8 @@ public class CertificateScreen extends SherlockFragmentActivity {
 	}
 
 	private void setupListView() {
-		ListView listView = (ListView) findViewById(R.id.certificateListView);
 		adapter = new KeystoreAdapter(getApplicationContext(), keyStore);
-		listView.setAdapter(adapter);
+		setListAdapter(adapter);
 	}
 
 	@Override

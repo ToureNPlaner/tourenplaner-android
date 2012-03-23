@@ -11,7 +11,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapte
 import java.io.Serializable;
 
 public class AlgorithmConstraintsScreen extends SherlockListActivity {
-
 	private Session session;
 
 	@Override
