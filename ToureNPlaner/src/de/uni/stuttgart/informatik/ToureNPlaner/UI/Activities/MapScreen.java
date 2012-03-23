@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -260,6 +261,24 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void setupSearch(Menu menu) {
 		search = menu.findItem(R.id.search);
+		search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item) {
+				final EditText field = (EditText) search.getActionView().findViewById(R.id.search_field);
+				field.requestFocus();
+				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				keyboard.toggleSoftInput(0, 0);
+				return true;
+			}
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item) {
+				EditText field = (EditText) search.getActionView().findViewById(R.id.search_field);
+				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				keyboard.hideSoftInputFromWindow(field.getWindowToken(), 0);
+				return true;
+			}
+		});
 		search.getActionView().findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -268,7 +287,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						@Override
 						public void run() {
 							EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
-							field.clearFocus();
 							search.collapseActionView();
 							Projection projection = mapView.getProjection();
 							GeoPoint topLeft = projection.fromPixels(0, 0);
