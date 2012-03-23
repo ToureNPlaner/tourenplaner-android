@@ -17,7 +17,7 @@ public class NominatimHandler extends GeoCodingHandler {
 	private final String query;
 	private final RectF viewbox;
 
-	private static final String HOST = "http://nominatim.openstreetmap.org/search?format=json";
+	private static final String HOST = "http://nominatim.openstreetmap.org/search?format=json&limit=1";
 
 	public NominatimHandler(Observer listener, String query, RectF viewbox) {
 		super(listener);

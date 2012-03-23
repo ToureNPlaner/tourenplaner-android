@@ -284,8 +284,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				GeoPoint topLeft = projection.fromPixels(0, 0);
 				GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
 				GeoCodingHandler.createDefaultHandler(geoCodingListener, field.getText().toString(),
-						new RectF(topLeft.longitudeE6, topLeft.latitudeE6,
-								bottomRight.longitudeE6, bottomRight.latitudeE6)
+						new RectF((float) topLeft.getLongitude(), (float) topLeft.getLatitude(),
+								(float) bottomRight.getLongitude(), (float) bottomRight.getLatitude())
 				).execute();
 			}
 		});
