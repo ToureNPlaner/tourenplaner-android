@@ -252,22 +252,22 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 	}
 
-	// ----------------Menu-----------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
-		setupSearch(menu);
+		setupSearchMenu(menu.findItem(R.id.search));
+		//setupGpsMenu(Menu menu);
 		return true;
 	}
 
 	private MenuItem search = null;
 
-	private void setupSearch(Menu menu) {
-		search = menu.findItem(R.id.search);
-		search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+	private void setupSearchMenu(MenuItem searchMenu) {
+		search = searchMenu;
+		searchMenu.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
-				final EditText field = (EditText) search.getActionView().findViewById(R.id.search_field);
+				final EditText field = (EditText) item.getActionView().findViewById(R.id.search_field);
 				field.requestFocus();
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.toggleSoftInput(0, 0);
@@ -276,30 +276,25 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 			@Override
 			public boolean onMenuItemActionCollapse(MenuItem item) {
-				EditText field = (EditText) search.getActionView().findViewById(R.id.search_field);
+				EditText field = (EditText) item.getActionView().findViewById(R.id.search_field);
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.hideSoftInputFromWindow(field.getWindowToken(), 0);
 				return true;
 			}
 		});
-		search.getActionView().findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
+		searchMenu.getActionView().findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_ENTER) {
-					v.post(new Runnable() {
-						@Override
-						public void run() {
-							EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
-							search.collapseActionView();
-							Projection projection = mapView.getProjection();
-							GeoPoint topLeft = projection.fromPixels(0, 0);
-							GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
-							GeoCodingHandler.createDefaultHandler(geoCodingListener, field.getText().toString(),
-									new RectF((float) topLeft.getLongitude(), (float) topLeft.getLatitude(),
-											(float) bottomRight.getLongitude(), (float) bottomRight.getLatitude())
-							).execute();
-						}
-					});
+					EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
+					search.collapseActionView();
+					Projection projection = mapView.getProjection();
+					GeoPoint topLeft = projection.fromPixels(0, 0);
+					GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
+					GeoCodingHandler.createDefaultHandler(geoCodingListener, field.getText().toString(),
+							new RectF((float) topLeft.getLongitude(), (float) topLeft.getLatitude(),
+									(float) bottomRight.getLongitude(), (float) bottomRight.getLatitude())
+					).execute();
 				}
 				return false;
 			}
