@@ -5,9 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.widget.EditText;
@@ -24,7 +21,7 @@ import org.mapsforge.core.GeoPoint;
 
 import java.util.ArrayList;
 
-public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements LocationListener, Session.Listener {
+public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session.Listener {
 	private ArrayList<OverlayItem> list = new ArrayList<OverlayItem>();
 
 	private MapScreen mapScreen;
@@ -229,7 +226,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		requestRedraw();
 	}
 
-	private void updateGpsMarker(GeoPoint geoPoint) {
+	public void updateGpsMarker(GeoPoint geoPoint) {
 		// If we have a valid point
 		if (geoPoint != null) {
 			// Then create a new Overlayitem or update the old one
@@ -241,33 +238,12 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Locatio
 		} else {
 			gpsMarker = null;
 		}
-		requestRedraw();
-	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-		updateGpsMarker(geoPoint);
 		if (useGps && !list.isEmpty()) {
 			Edit edit = new UpdateNNSEdit(session, session.getNodeModel().get(0), geoPoint);
 			edit.perform();
 		}
-	}
-
-	@Override
-	public void onStatusChanged(String s, int i, Bundle bundle) {
-	}
-
-	@Override
-	public void onProviderEnabled(String s) {
-	}
-
-	@Override
-	public void onProviderDisabled(String s) {
-		gpsMarker = null;
 		requestRedraw();
 	}
-
 
 	@Override
 	public void onChange(Session.Change change) {

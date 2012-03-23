@@ -53,12 +53,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODEMODEL = 0;
 	public static final int REQUEST_NODE = 1;
 	public static final int REQUEST_CONSTRAINTS = 2;
-	private NodeOverlay nodeOverlay;
+	NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 	private LocationManager locManager;
 	private PopupWindow distancePopup = null;
 	private TextView textViewDistance;
 	private boolean isInstantRequest;
+
+	private GpsListener gpsListener = new GpsListener(this);
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -431,7 +433,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onPause() {
 		// 5 minutes, 50 meters
-		locManager.removeUpdates(nodeOverlay);
+		locManager.removeUpdates(gpsListener);
 		super.onPause();
 	}
 
@@ -447,7 +449,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		setupMapView(preferences);
 
 		// 5 minutes, 50 meters
-		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, nodeOverlay);
+		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, gpsListener);
 	}
 
 	@Override
@@ -473,9 +475,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
-
 		menu.findItem(R.id.gps).setVisible(nodeOverlay.getGpsPosition() != null);
-
 		return true;
 	}
 
@@ -528,5 +528,34 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 		String text = getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit;
 		textViewDistance.setText(text);
+	}
+
+	static class GpsListener implements android.location.LocationListener {
+		private MapScreen mapScreen;
+
+		public GpsListener(MapScreen mapScreen) {
+			this.mapScreen = mapScreen;
+		}
+
+		@Override
+		public void onLocationChanged(Location location) {
+			GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+			mapScreen.nodeOverlay.updateGpsMarker(geoPoint);
+		}
+
+		@Override
+		public void onStatusChanged(String s, int i, Bundle bundle) {
+		}
+
+		@Override
+		public void onProviderEnabled(String s) {
+			mapScreen.invalidateOptionsMenu();
+		}
+
+		@Override
+		public void onProviderDisabled(String s) {
+			mapScreen.nodeOverlay.updateGpsMarker(null);
+			mapScreen.invalidateOptionsMenu();
+		}
 	}
 }
