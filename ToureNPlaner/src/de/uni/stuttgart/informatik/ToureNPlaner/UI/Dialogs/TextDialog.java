@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs;
 
+import android.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -51,11 +52,11 @@ public abstract class TextDialog extends SherlockDialogFragment {
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(message)
 				.setView(input)
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				.setPositiveButton(getResources().getText(R.string.ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						doPositiveClick();
 					}
-				}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				}).setNegativeButton(getResources().getText(R.string.cancel), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						doNegativeClick();
 					}

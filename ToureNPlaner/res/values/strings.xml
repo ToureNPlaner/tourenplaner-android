@@ -86,13 +86,9 @@
     <!--various-->
     <string name="connecting">connecting</string>
     <string name="new_string">new</string>
-    <string name="ok">ok</string>
-    <string name="yes">yes</string>
-    <string name="no">no</string>
     <string name="cancel">cancel</string>
     <string name="back">back</string>
     <string name="delete">delete</string>
     <string name="edit">edit</string>
-    <string name="search_go">go</string>
 
 </resources>
