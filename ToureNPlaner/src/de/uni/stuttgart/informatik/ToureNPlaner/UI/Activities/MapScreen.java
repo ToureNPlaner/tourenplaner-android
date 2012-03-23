@@ -267,26 +267,20 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					v.post(new Runnable() {
 						@Override
 						public void run() {
-							search.getActionView().findViewById(R.id.search_button).performClick();
+							EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
+							field.clearFocus();
+							search.collapseActionView();
+							Projection projection = mapView.getProjection();
+							GeoPoint topLeft = projection.fromPixels(0, 0);
+							GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
+							GeoCodingHandler.createDefaultHandler(geoCodingListener, field.getText().toString(),
+									new RectF((float) topLeft.getLongitude(), (float) topLeft.getLatitude(),
+											(float) bottomRight.getLongitude(), (float) bottomRight.getLatitude())
+							).execute();
 						}
 					});
 				}
 				return false;
-			}
-		});
-		search.getActionView().findViewById(R.id.search_button).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
-				field.clearFocus();
-				search.collapseActionView();
-				Projection projection = mapView.getProjection();
-				GeoPoint topLeft = projection.fromPixels(0, 0);
-				GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
-				GeoCodingHandler.createDefaultHandler(geoCodingListener, field.getText().toString(),
-						new RectF((float) topLeft.getLongitude(), (float) topLeft.getLatitude(),
-								(float) bottomRight.getLongitude(), (float) bottomRight.getLatitude())
-				).execute();
 			}
 		});
 	}
