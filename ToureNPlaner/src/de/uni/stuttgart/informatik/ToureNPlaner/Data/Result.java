@@ -34,12 +34,8 @@ public class Result implements Serializable {
 		return points;
 	}
 
-	public int getDistance() {
-		return misc.distance;
-	}
-
-	public double getApx() {
-		return misc.apx;
+	public Misc getMisc() {
+		return misc;
 	}
 
 	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points, Misc misc) throws IOException {
@@ -58,9 +54,9 @@ public class Result implements Serializable {
 						jp.nextToken();
 						misc.distance = jp.getIntValue();
 					}
-					if ("apx".equals(jp.getCurrentName())) {
+					if ("message".equals(jp.getCurrentName())) {
 						jp.nextToken();
-						misc.apx = jp.getDoubleValue();
+						misc.message = jp.getText();
 					}
 				}
 			}
@@ -150,7 +146,7 @@ public class Result implements Serializable {
 	}
 
 	public static class Misc implements Serializable {
-		private int distance;
-		private double apx;
+		public int distance;
+		public String message;
 	}
 }

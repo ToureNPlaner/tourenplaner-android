@@ -50,7 +50,7 @@
     <string name="map_file_error">Mapfile is not valid. Falling back.</string>
     <string name="details">details</string>
     <string name="distance">distance</string>
-    <string name="apx">apx</string>
+    <string name="message">Message</string>
     <string name="meter">meter</string>
     <string name="kilometer">kilometer</string>
     <string name="meter_short">m</string>

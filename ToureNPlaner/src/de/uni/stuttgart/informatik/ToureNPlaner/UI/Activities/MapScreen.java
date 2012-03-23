@@ -481,6 +481,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						addPathToMap(null);
 					} else {
 						addPathToMap(session.getResult().getWay());
+						String msg = session.getResult().getMisc().message;
+						if (msg != null)
+							Toast.makeText(MapScreen.this, msg, Toast.LENGTH_LONG).show();
 					}
 				}
 				if (change.isDndChange() && isInstantRequest) {
@@ -508,12 +511,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			textViewDistance = (TextView) layout.findViewById(R.id.distancePopupTextView);
 		}
 		String distanceUnit = getResources().getString(R.string.meter_short);
-		int distance = session.getResult().getDistance();
+		int distance = session.getResult().getMisc().distance;
 		if (distance > 1000) {
 			distance = distance / 1000;
 			distanceUnit = getResources().getString(R.string.kilometer_short);
 		}
-		String text = getResources().getString(R.string.distance) + " :" + distance + " " + distanceUnit;
+		String text = getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit;
 		textViewDistance.setText(text);
 	}
 }

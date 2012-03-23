@@ -207,7 +207,7 @@ public class NodelistScreen extends SherlockListActivity implements Session.List
 		switch (id) {
 			case 0:
 				String distanceUnit = getResources().getString(R.string.meter);
-				int distance = session.getResult().getDistance();
+				int distance = session.getResult().getMisc().distance;
 				if (distance > 1000) {
 					distance = distance / 1000;
 					distanceUnit = getResources().getString(R.string.kilometer);
@@ -219,11 +219,13 @@ public class NodelistScreen extends SherlockListActivity implements Session.List
 
 				TextView txtmarkercount = (TextView) dialog.findViewById(R.id.details_markercount);
 				TextView txtdistance = (TextView) dialog.findViewById(R.id.details_distance);
-				TextView txtapx = (TextView) dialog.findViewById(R.id.details_apx);
+				TextView txtmsg = (TextView) dialog.findViewById(R.id.details_message);
 
 				txtmarkercount.setText(getResources().getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size());
 				txtdistance.setText(getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit);
-				txtapx.setText(getResources().getString(R.string.apx) + ": " + session.getResult().getApx());
+				String msg = session.getResult().getMisc().message;
+				if (msg != null)
+					txtmsg.setText(getResources().getString(R.string.message) + ": " + msg);
 				break;
 			default:
 				dialog = null;
