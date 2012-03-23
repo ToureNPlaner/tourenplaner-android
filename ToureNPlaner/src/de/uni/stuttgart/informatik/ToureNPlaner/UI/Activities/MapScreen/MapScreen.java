@@ -114,6 +114,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
+		gpsListener.onSaveInstanceState(outState);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -143,7 +144,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupWayOverlay();
 
-		setupGPS(isFirstStart);
+		setupGPS(savedInstanceState, isFirstStart);
 
 		if (session.getResult() != null && session.getResult().getPoints() != null) {
 			mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
@@ -207,7 +208,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		offlineMapLocation = newOfflineMapLocation;
 	}
 
-	private void setupGPS(boolean isFirstStart) {
+	private void setupGPS(Bundle savedInstanceState, boolean isFirstStart) {
 		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 		GeoPoint gpsGeoPoint = null;
@@ -221,7 +222,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
-		gpsListener = new GpsListener(this, gpsGeoPoint);
+		gpsListener = new GpsListener(this, savedInstanceState, gpsGeoPoint);
 		nodeOverlay = new NodeOverlay(this, session, gpsGeoPoint);
 	}
 

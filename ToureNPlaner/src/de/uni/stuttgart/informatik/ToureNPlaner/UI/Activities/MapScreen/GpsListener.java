@@ -10,10 +10,18 @@ class GpsListener implements android.location.LocationListener {
 	private boolean following;
 	private GeoPoint lastKnownLocation = null;
 
-	public GpsListener(MapScreen mapScreen, GeoPoint geoPoint) {
+	private static final String IDENTIFIER = "GpsListenerFollowing";
+
+	public GpsListener(MapScreen mapScreen, Bundle savedInstanceState, GeoPoint geoPoint) {
 		this.mapScreen = mapScreen;
 		lastKnownLocation = geoPoint;
 		enabled = lastKnownLocation != null;
+		if (savedInstanceState != null)
+			following = savedInstanceState.getBoolean(IDENTIFIER, false);
+	}
+
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(IDENTIFIER, following);
 	}
 
 	@Override
