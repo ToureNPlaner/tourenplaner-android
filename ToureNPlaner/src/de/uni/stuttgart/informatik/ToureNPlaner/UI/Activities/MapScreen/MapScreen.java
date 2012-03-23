@@ -476,7 +476,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
-		menu.findItem(R.id.gps).setVisible(nodeOverlay.getGpsPosition() != null);
+		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());
 		return true;
 	}
 
