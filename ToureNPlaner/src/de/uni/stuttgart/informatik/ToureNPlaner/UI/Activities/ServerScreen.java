@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
@@ -289,11 +288,9 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 		handler = Session.createSession(url, this);
 	}
 
-	//------------menu---------------
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.serverscreenmenu, menu);
+		getSupportMenuInflater().inflate(R.menu.serverscreenmenu, menu);
 		return true;
 	}
 

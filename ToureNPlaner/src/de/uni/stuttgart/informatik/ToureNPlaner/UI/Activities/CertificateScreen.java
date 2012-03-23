@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.KeystoreAdapter;
@@ -55,7 +54,6 @@ public class CertificateScreen extends SherlockFragmentActivity {
 		loadKeystore();
 
 		setupListView();
-		setupAddButton();
 	}
 
 	private void storeKeystore() {
@@ -88,11 +86,16 @@ public class CertificateScreen extends SherlockFragmentActivity {
 		}
 	}
 
-	private void setupAddButton() {
-		Button btnAdd = (Button) findViewById(R.id.btnAdd);
-		btnAdd.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.certificatescreenmenu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.add_certificate:
 				Intent intent = new Intent("org.openintents.action.PICK_FILE");
 				intent.setData(Uri.parse("file://" + Environment.getExternalStorageDirectory()));
 				intent.putExtra("org.openintents.extra.TITLE", "Please select a file");
@@ -101,8 +104,9 @@ public class CertificateScreen extends SherlockFragmentActivity {
 				} catch (ActivityNotFoundException e) {
 					Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 				}
-			}
-		});
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }
 
