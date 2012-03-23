@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
+package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +30,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;

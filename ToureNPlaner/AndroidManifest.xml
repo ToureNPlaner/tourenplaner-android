@@ -13,7 +13,7 @@
                  android:theme="@style/Theme.Sherlock.ForceOverflow">
         <activity android:name=".UI.Activities.LoginScreen"></activity>
         <activity android:name=".UI.Activities.AlgorithmScreen"></activity>
-        <activity android:name=".UI.Activities.MapScreen" android:configChanges="orientation"></activity>
+        <activity android:name=".UI.Activities.MapScreen.MapScreen" android:configChanges="orientation"></activity>
         <activity android:name=".UI.Activities.BillingScreen" android:configChanges="orientation"></activity>
         <activity android:name=".UI.Activities.CertificateScreen"></activity>
         <activity android:name=".UI.Activities.NodelistScreen"></activity>
