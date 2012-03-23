@@ -132,7 +132,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.getFileSystemTileCache().setPersistent(true);
+		mapView.getFileSystemTileCache().setPersistent(false);
 
 		getSupportActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
 		initializeHandler();
@@ -340,8 +340,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
-
-
 	}
 
 	private void performRequest(boolean force) {
