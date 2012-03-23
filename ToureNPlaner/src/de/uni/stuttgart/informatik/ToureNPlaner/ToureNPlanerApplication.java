@@ -2,6 +2,8 @@ package de.uni.stuttgart.informatik.ToureNPlaner;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -94,6 +96,17 @@ public class ToureNPlanerApplication extends Application {
 
 	public static Context getContext() {
 		return context;
+	}
+
+	public static String getApplicationIdentifier() {
+		String id = "";
+		try {
+			PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			id = info.packageName + " " + info.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			// should never happen
+		}
+		return id;
 	}
 
 	/**

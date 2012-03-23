@@ -3,6 +3,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 import android.graphics.RectF;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.mapsforge.core.GeoPoint;
@@ -29,7 +30,9 @@ public class NominatimHandler extends GeoCodingHandler {
 		URL url = new URL(HOST +
 				"&q=" + URLEncoder.encode(query, "UTF-8") +
 				"&viewbox=" + viewbox.left + "," + viewbox.top + "," + viewbox.right + "," + viewbox.bottom);
-		return (HttpURLConnection) url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestProperty("User-Agent", "Android " + ToureNPlanerApplication.getApplicationIdentifier());
+		return connection;
 	}
 
 	@Override
