@@ -80,7 +80,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 				algSuffix = adapter.getAlgSuffix((int) info.id);
 				String status = adapter.getStatus((int) info.id);
 				if (status.equals("ok")) {
-					setProgressBarIndeterminateVisibility(true);
+					setSupportProgressBarIndeterminateVisibility(true);
 					billingRequestHandler = new BillingRequestHandler(billingRequestListener, session, requestid);
 					billingRequestHandler.execute();
 				} else {
@@ -96,7 +96,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	private final Observer billingRequestListener = new Observer() {
 		@Override
 		public void onCompleted(RawHandler caller, Object object) {
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 
 			Result result = (Result) object;
 			ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
@@ -143,7 +143,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		@Override
 		public void onError(RawHandler caller, Object object) {
 			billingRequestHandler = null;
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
 		}
 	};
@@ -152,7 +152,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCompleted(RawHandler caller, Object object) {
-		setProgressBarIndeterminateVisibility(false);
+		setSupportProgressBarIndeterminateVisibility(false);
 		adapter.addAll((ArrayList<BillingItem>) object);
 		adapter.notifyDataSetChanged();
 		billingListhandler = null;
@@ -161,7 +161,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	@Override
 	public void onError(RawHandler caller, Object object) {
 		billingListhandler = null;
-		setProgressBarIndeterminateVisibility(false);
+		setSupportProgressBarIndeterminateVisibility(false);
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 	}
 
@@ -171,7 +171,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 				firstVisible + visibleCount >= totalCount - 10;
 
 		if (loadMore && billingListhandler == null) {
-			setProgressBarIndeterminateVisibility(true);
+			setSupportProgressBarIndeterminateVisibility(true);
 			billingListhandler = new BillingListHandler(this, session, 15, adapter.getGroupCount());
 			billingListhandler.execute();
 		}
