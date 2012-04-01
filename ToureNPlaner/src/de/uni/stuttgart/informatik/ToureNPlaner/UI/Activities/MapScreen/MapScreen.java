@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
@@ -348,7 +349,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			case R.id.algorithm_constraints:
 				myIntent = new Intent(this, AlgorithmConstraintsScreen.class);
-				myIntent.putExtra(Session.IDENTIFIER, session);
+				myIntent.putExtra(AlgorithmConstraintsScreen.IDENTIFIER, session.getConstraints());
 				startActivityForResult(myIntent, REQUEST_CONSTRAINTS);
 				return true;
 			case R.id.settings:
@@ -376,6 +377,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Edit edit;
 		switch (requestCode) {
@@ -401,7 +403,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case REQUEST_CONSTRAINTS:
 				switch (resultCode) {
 					case RESULT_OK:
-						edit = new ModelChangedEdit(session);
+						ArrayList<Constraint> constraints = (ArrayList<Constraint>) data.getExtras().get(AlgorithmConstraintsScreen.IDENTIFIER);
+						edit = new ChangeConstraintsEdit(session, constraints);
 						edit.perform();
 				}
 		}

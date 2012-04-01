@@ -330,6 +330,10 @@ public class Session implements Serializable {
 		return d.constraints;
 	}
 
+	public void setConstraints(ArrayList<Constraint> constraints) {
+		d.constraints = constraints;
+	}
+
 	public void setServerInfo(ServerInfo serverInfo) {
 		d.serverInfo = serverInfo;
 		safeData();
