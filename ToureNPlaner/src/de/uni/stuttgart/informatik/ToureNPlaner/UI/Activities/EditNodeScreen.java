@@ -2,25 +2,22 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.widget.Button;
+import android.widget.EditText;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapter;
 
-import java.io.Serializable;
-
-public class EditNodeScreen extends SherlockActivity {
+public class EditNodeScreen extends SherlockFragmentActivity {
 	public static final int RESULT_DELETE = RESULT_FIRST_USER;
 
 	private Session session;
 	private Node node;
 	private int index;
-
-	private ConstraintListAdapter adapter;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -56,16 +53,6 @@ public class EditNodeScreen extends SherlockActivity {
 		setupButtons();
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (resultCode) {
-			case RESULT_OK:
-				node.getConstraintList().get(data.getExtras().getInt("index")).setValue(data.getSerializableExtra("value"));
-				adapter.notifyDataSetChanged();
-				break;
-		}
-	}
-
 	private void setupButtons() {
 		// -------------- get EditTexts --------------
 		final EditText etName = (EditText) findViewById(R.id.etName);
@@ -77,6 +64,9 @@ public class EditNodeScreen extends SherlockActivity {
 		// -----------------btnSave-----------------------
 		btnSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				ConstraintListFragment fragment = (ConstraintListFragment) getSupportFragmentManager().findFragmentByTag("list");
+				if (fragment.isDirty())
+					node.setConstraintList(fragment.getConstraints());
 				node.setName(etName.getText().toString());
 				finishActivity();
 			}
@@ -94,28 +84,11 @@ public class EditNodeScreen extends SherlockActivity {
 				finish();
 			}
 		});
-
-
 	}
 
 	private void setupListView() {
-
-		ListView listView = (ListView) findViewById(R.id.listViewNodePreferences);
-		TextView constraintLabel = (TextView) this.findViewById(R.id.lblNodePreferencesConstraintText);
-		// set title visible
-		constraintLabel.setVisibility(0);
-		adapter = new ConstraintListAdapter(node.getConstraintList(), this);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				Intent myIntent = new Intent(EditNodeScreen.this,
-						EditConstraintScreen.class);
-				myIntent.putExtra("constraint", (Serializable) adapterView.getItemAtPosition(i));
-				myIntent.putExtra("index", i);
-				myIntent.putExtra(Session.IDENTIFIER, session);
-				startActivityForResult(myIntent, 0);
-			}
-		});
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.add(android.R.id.list, ConstraintListFragment.newInstance(node.getConstraintList()), "list");
+		ft.commit();
 	}
 }

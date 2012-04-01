@@ -13,7 +13,7 @@ public class Node implements Serializable {
 
 	private final int id;
 
-	private final ArrayList<Constraint> constraintList;
+	private ArrayList<Constraint> constraintList;
 
 	public Node(int id, String name, GeoPoint point, ArrayList<ConstraintType> constraintTypes) {
 		this.id = id;
@@ -29,7 +29,7 @@ public class Node implements Serializable {
 		this(id, name, new GeoPoint(laE7 / 10, loE7 / 10), constraintTypes);
 	}
 
-	
+
 	public void setGeoPoint(GeoPoint geoPoint) {
 		this.geoPoint = geoPoint;
 	}
@@ -60,6 +60,10 @@ public class Node implements Serializable {
 
 	public int getId() {
 		return id;
+	}
+
+	public void setConstraintList(ArrayList<Constraint> constraintList) {
+		this.constraintList = constraintList;
 	}
 }
 
