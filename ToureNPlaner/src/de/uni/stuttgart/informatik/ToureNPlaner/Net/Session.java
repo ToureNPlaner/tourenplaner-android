@@ -234,22 +234,6 @@ public class Session implements Serializable {
 		}
 	}
 
-	public boolean canPerformRequest() {
-		// Check if every algorithm constrain is set
-		for (int i = 0; i < d.constraints.size(); i++) {
-			if (d.constraints.get(i).getValue() == null)
-				return false;
-		}
-
-		// Check if every point constraint is set
-		if (d.selectedAlgorithm.getPointConstraintTypes().isEmpty())
-			if (!nodeModel.allSet())
-				return false;
-
-		return nodeModel.size() >= d.selectedAlgorithm.getMinPoints() &&
-				nodeModel.size() <= d.selectedAlgorithm.getMaxPoints();
-	}
-
 	public String getUrl() {
 		return d.serverInfo.getURL();
 	}
@@ -364,11 +348,43 @@ public class Session implements Serializable {
 		return handler;
 	}
 
-	public RequestHandler performRequest(Observer requestListener, boolean force) {
+	public class RequestInvalidException extends Exception {
+		public RequestInvalidException(String detailMessage) {
+			super(detailMessage);
+		}
+	}
+
+	private String canPerformReason() {
+		String msg = "";
+
+		// Check if every algorithm constraint is set
+		for (int i = 0; i < d.constraints.size(); i++) {
+			if (d.constraints.get(i).getValue() == null)
+				msg += "Not every algorithm constraint is set.";
+		}
+
+		// Check if every point constraint is set
+		if (d.selectedAlgorithm.getPointConstraintTypes().isEmpty())
+			if (!nodeModel.allSet())
+				msg += "Not all constraints for all nodes are set.";
+
+		if (nodeModel.size() < d.selectedAlgorithm.getMinPoints() ||
+				nodeModel.size() > d.selectedAlgorithm.getMaxPoints()) {
+			msg += "Not enough or too many points set.";
+		}
+
+		return msg;
+	}
+
+	public boolean canPerformRequest() {
+		return canPerformReason().equals("");
+	}
+
+	public RequestHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
 		if (canPerformRequest() && (force || result == null || nodeModel.getVersion() != result.getVersion())) {
 			return (RequestHandler) new RequestHandler(requestListener, this).execute();
 		} else {
-			return null;
+			throw new RequestInvalidException(canPerformReason());
 		}
 	}
 }

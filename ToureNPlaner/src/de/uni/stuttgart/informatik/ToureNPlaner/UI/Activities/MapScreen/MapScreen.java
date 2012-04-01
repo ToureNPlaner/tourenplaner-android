@@ -374,10 +374,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (handler != null)
 			handler.cancel(true);
 
-		RequestHandler h = session.performRequest(requestListener, force);
-		if (h != null) {
-			handler = h;
+		try {
+			handler = session.performRequest(requestListener, force);
 			setSupportProgressBarIndeterminateVisibility(true);
+		} catch (Session.RequestInvalidException e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+			handler = null;
 		}
 	}
 
