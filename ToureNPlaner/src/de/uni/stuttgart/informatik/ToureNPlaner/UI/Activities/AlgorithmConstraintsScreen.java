@@ -2,9 +2,11 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import com.actionbarsherlock.app.SherlockListActivity;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapter;
 
@@ -12,10 +14,12 @@ import java.io.Serializable;
 
 public class AlgorithmConstraintsScreen extends SherlockListActivity {
 	private Session session;
+	private boolean dirty = false;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
+		outState.putBoolean("dirty", dirty);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -26,6 +30,10 @@ public class AlgorithmConstraintsScreen extends SherlockListActivity {
 		// If we get created for the first time we get our data from the intent
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
+
+		if (savedInstanceState != null) {
+			dirty = savedInstanceState.getBoolean("dirty");
+		}
 
 		setupListView();
 	}
@@ -53,8 +61,19 @@ public class AlgorithmConstraintsScreen extends SherlockListActivity {
 				session.getConstraints().get(
 						data.getExtras().getInt("index")).setValue(data.getSerializableExtra("value"));
 				((ConstraintListAdapter) getListAdapter()).notifyDataSetChanged();
+				dirty = true;
 				break;
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			Intent data = new Intent();
+			data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel());
+			setResult(dirty ? RESULT_OK : RESULT_CANCELED, data);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }
 

@@ -60,6 +60,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private PopupWindow distancePopup = null;
 	private TextView textViewDistance;
 	private boolean isInstantRequest;
+	private Toast messageToast;
 
 	private GpsListener gpsListener;
 
@@ -406,7 +407,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case REQUEST_CONSTRAINTS:
 				switch (resultCode) {
 					case RESULT_OK:
-						// TODO
+						edit = new ModelChangedEdit(session);
+						edit.perform();
 				}
 		}
 	}
@@ -502,8 +504,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					} else {
 						addPathToMap(session.getResult().getWay());
 						String msg = session.getResult().getMisc().message;
-						if (msg != null)
-							Toast.makeText(MapScreen.this, msg, Toast.LENGTH_LONG).show();
+						if (msg != null) {
+							if (messageToast != null)
+								messageToast.cancel();
+							messageToast = Toast.makeText(MapScreen.this, msg, Toast.LENGTH_LONG);
+							messageToast.show();
+						}
 					}
 				}
 				if (change.isDndChange() && isInstantRequest) {
