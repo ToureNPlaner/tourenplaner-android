@@ -60,6 +60,7 @@
     <string name="back_is_delete_marker">use back to delete markers</string>
     <string name="map_generator">Map Generator</string>
     <string name="input_map_generator">Choose Map Generator</string>
+    <string name="input_instant">Choose Instant</string>
 
 
     <!--menu-->

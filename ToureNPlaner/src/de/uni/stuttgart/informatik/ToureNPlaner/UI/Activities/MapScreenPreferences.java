@@ -21,6 +21,10 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
 
+	public static enum Instant {
+		NEVER, SOMETIMES, ALWAYS
+	}
+
 	CharSequence[] map_generators = new CharSequence[MapGenerator.values().length];
 
 	{
@@ -29,7 +33,17 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		}
 	}
 
+	CharSequence[] instant_options = new CharSequence[Instant.values().length];
+
+	{
+		for (Instant o : Instant.values()) {
+			instant_options[o.ordinal()] = o.name();
+		}
+	}
+
+
 	private ListPreference mapGenerator;
+	private ListPreference instant;
 	private EditTextPreference tileServer;
 	private EditTextPreference offlineMapLoc;
 
@@ -68,6 +82,10 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		mapGenerator = (ListPreference) getPreferenceScreen().findPreference("map_generator");
 		mapGenerator.setEntries(R.array.map_generators);
 		mapGenerator.setEntryValues(map_generators);
+
+		instant = (ListPreference) getPreferenceScreen().findPreference("instant_request");
+		instant.setEntries(R.array.instant_options);
+		instant.setEntryValues(instant_options);
 
 		// Initialize components
 		String tileServerText = tileServer.getSharedPreferences().getString("tile_server", defaultTileServer);

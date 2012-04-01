@@ -18,10 +18,10 @@
 
     <PreferenceCategory
             android:title="Others">
-        <CheckBoxPreference
-                android:key="is_instant_request"
+        <ListPreference
+                android:key="instant_request"
                 android:title="@string/is_instant_request"
-                android:defaultValue="false"
-                />
+                android:dialogTitle="@string/input_instant"/>
+        />
     </PreferenceCategory>
 </PreferenceScreen>

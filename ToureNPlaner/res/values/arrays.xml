@@ -6,4 +6,9 @@
         <item>Map file</item>
         <item>Custom</item>
     </string-array>
+    <string-array name="instant_options">
+        <item>Never</item>
+        <item>Sometimes</item>
+        <item>Always</item>
+    </string-array>
 </resources>

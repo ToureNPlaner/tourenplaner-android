@@ -59,7 +59,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private LocationManager locManager;
 	private PopupWindow distancePopup = null;
 	private TextView textViewDistance;
-	private boolean isInstantRequest;
+	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
 
 	private GpsListener gpsListener;
@@ -458,7 +458,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		//-----get mapScreen_Preferences
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		isInstantRequest = preferences.getBoolean("is_instant_request", false);
+		instantRequest = MapScreenPreferences.Instant.valueOf(preferences.getString("instant_request", MapScreenPreferences.Instant.ALWAYS.name()));
 
 		setupMapView(preferences);
 
@@ -514,11 +514,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						}
 					}
 				}
-				if (change.isDndChange() && isInstantRequest) {
+				if (change.isDndChange() && instantRequest == MapScreenPreferences.Instant.ALWAYS) {
 					performRequest(false);
 				}
 				if (change.isModelChange()) {
-					if (isInstantRequest) {
+					if (instantRequest != MapScreenPreferences.Instant.NEVER) {
 						performRequest(true);
 					}
 					if (!change.isAddChange()) {
