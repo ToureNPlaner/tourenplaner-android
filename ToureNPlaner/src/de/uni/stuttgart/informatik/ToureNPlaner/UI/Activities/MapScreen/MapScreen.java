@@ -332,7 +332,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.nodelist:
-				myIntent = new Intent(this, NodelistScreen.class);
+				myIntent = new Intent(this, InfoScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
 				startActivityForResult(myIntent, REQUEST_NODEMODEL);
 				return true;
@@ -458,8 +458,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupMapView(preferences);
 
-		// 5 minutes, 50 meters
-		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5 * 60 * 1000, 50, gpsListener);
+		// 1 minutes, 10 meters
+		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1 * 60 * 1000, 10, gpsListener);
 	}
 
 	@Override

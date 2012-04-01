@@ -16,7 +16,7 @@
         <activity android:name=".UI.Activities.MapScreen.MapScreen" android:configChanges="orientation"></activity>
         <activity android:name=".UI.Activities.BillingScreen" android:configChanges="orientation"></activity>
         <activity android:name=".UI.Activities.CertificateScreen"></activity>
-        <activity android:name=".UI.Activities.NodelistScreen"></activity>
+        <activity android:name=".UI.Activities.InfoScreen"></activity>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"></activity>
         <activity android:name=".UI.Activities.MapScreenPreferences"></activity>
         <activity android:name=".UI.Activities.EditConstraintScreen"></activity>
@@ -27,7 +27,5 @@
             </intent-filter>
         </activity>
         <activity android:name=".UI.Activities.EditNodeScreen"></activity>
-
-
     </application>
 </manifest>
