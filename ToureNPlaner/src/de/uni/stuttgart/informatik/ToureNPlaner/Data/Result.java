@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Result implements Serializable {
 	private int[][] way;
@@ -49,7 +52,12 @@ public class Result implements Serializable {
 				}
 			}
 			if ("misc".equals(jp.getCurrentName())) {
-				misc.node = jp.readValueAs(JsonNode.class).get("misc");
+				JsonNode node = jp.readValueAs(JsonNode.class).get("misc");
+				Iterator<Map.Entry<String, JsonNode>> ns = node.getFields();
+				while (ns.hasNext()) {
+					Map.Entry<String, JsonNode> n = ns.next();
+					misc.info.put(n.getKey(), n.getValue().asText());
+				}
 			}
 			if ("points".equals(jp.getCurrentName())) {
 				if (jp.nextToken() == JsonToken.START_ARRAY) {
@@ -123,19 +131,24 @@ public class Result implements Serializable {
 	}
 
 	public static class Misc implements Serializable {
-		// TODO
-		public JsonNode node;
+		public HashMap<String, String> info = new HashMap<String, String>();
 
 		public String getMessage() {
-			return node.path("message").asText();
+			return info.get("message");
 		}
 
 		public double getDistance() {
-			return node.path("distance").asInt();
+			if (info.containsKey("distance"))
+				return Integer.parseInt(info.get("distance"));
+			else
+				return 0;
 		}
 
 		public double getTime() {
-			return node.path("time").asDouble();
+			if (info.containsKey("time"))
+				return Double.parseDouble(info.get("time"));
+			else
+				return 0;
 		}
 	}
 }

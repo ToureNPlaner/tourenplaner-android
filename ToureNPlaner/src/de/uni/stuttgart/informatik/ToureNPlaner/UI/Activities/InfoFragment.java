@@ -47,7 +47,7 @@ public class InfoFragment extends SherlockFragment {
 		if (msg != null)
 			txtmsg.setText(getResources().getString(R.string.message) + ": " + msg);
 
-		txtmsg.setText(session.getResult().getMisc().node.toString());
+		txtmsg.setText(session.getResult().getMisc().info.toString());
 
 		return view;
 	}
