@@ -59,6 +59,8 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 		}
 
 		session.registerListener(NodeListFragment.class, this);
+
+		setHasOptionsMenu(true);
 	}
 
 	@Override
