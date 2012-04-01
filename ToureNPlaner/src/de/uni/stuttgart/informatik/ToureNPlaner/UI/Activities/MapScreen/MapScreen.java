@@ -501,8 +501,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						addPathToMap(null);
 					} else {
 						addPathToMap(session.getResult().getWay());
-						String msg = session.getResult().getMisc().message;
-						if (msg != null) {
+						String msg = session.getResult().getMisc().getMessage();
+						if (msg != null && !msg.equals("")) {
 							if (messageToast != null)
 								messageToast.cancel();
 							messageToast = Toast.makeText(MapScreen.this, msg, Toast.LENGTH_LONG);
@@ -540,7 +540,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			textViewDistance = (TextView) layout.findViewById(R.id.distancePopupTextView);
 		}
 		String distanceUnit = getResources().getString(R.string.meter_short);
-		int distance = session.getResult().getMisc().distance;
+		double distance = session.getResult().getMisc().getDistance();
 		if (distance > 1000) {
 			distance = distance / 1000;
 			distanceUnit = getResources().getString(R.string.kilometer_short);

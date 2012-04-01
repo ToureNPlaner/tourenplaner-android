@@ -2,6 +2,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.SmartIntArray;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -41,24 +42,14 @@ public class Result implements Serializable {
 	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points, Misc misc) throws IOException {
 		int lt = 0, ln = 0;
 		int id = 0;
-		while (jp.nextToken() != JsonToken.END_OBJECT) {
+		while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != null) {
 			if ("constraints".equals(jp.getCurrentName())) {
 				// consume
 				while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != JsonToken.VALUE_NULL) {
 				}
 			}
 			if ("misc".equals(jp.getCurrentName())) {
-				// consume
-				while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != JsonToken.VALUE_NULL) {
-					if ("distance".equals(jp.getCurrentName())) {
-						jp.nextToken();
-						misc.distance = jp.getIntValue();
-					}
-					if ("message".equals(jp.getCurrentName())) {
-						jp.nextToken();
-						misc.message = jp.getText();
-					}
-				}
+				misc.node = jp.readValueAs(JsonNode.class).get("misc");
 			}
 			if ("points".equals(jp.getCurrentName())) {
 				if (jp.nextToken() == JsonToken.START_ARRAY) {
@@ -132,7 +123,18 @@ public class Result implements Serializable {
 	}
 
 	public static class Misc implements Serializable {
-		public int distance;
-		public String message;
+		public JsonNode node;
+
+		public String getMessage() {
+			return node.path("message").asText();
+		}
+
+		public double getDistance() {
+			return node.path("distance").asInt();
+		}
+
+		public double getTime() {
+			return node.path("time").asDouble();
+		}
 	}
 }

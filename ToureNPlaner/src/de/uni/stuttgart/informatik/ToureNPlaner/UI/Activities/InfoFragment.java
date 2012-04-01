@@ -29,7 +29,7 @@ public class InfoFragment extends SherlockFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		String distanceUnit = getResources().getString(R.string.meter);
-		int distance = session.getResult().getMisc().distance;
+		double distance = session.getResult().getMisc().getDistance();
 		if (distance > 1000) {
 			distance = distance / 1000;
 			distanceUnit = getResources().getString(R.string.kilometer);
@@ -43,9 +43,11 @@ public class InfoFragment extends SherlockFragment {
 
 		txtmarkercount.setText(getResources().getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size());
 		txtdistance.setText(getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit);
-		String msg = session.getResult().getMisc().message;
+		String msg = session.getResult().getMisc().getMessage();
 		if (msg != null)
 			txtmsg.setText(getResources().getString(R.string.message) + ": " + msg);
+
+		txtmsg.setText(session.getResult().getMisc().node.toString());
 
 		return view;
 	}
