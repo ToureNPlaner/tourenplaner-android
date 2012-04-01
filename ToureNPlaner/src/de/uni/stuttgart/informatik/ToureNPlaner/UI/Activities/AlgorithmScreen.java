@@ -81,7 +81,7 @@ public class AlgorithmScreen extends SherlockListActivity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
-			menu.findItem(R.id.billing).setEnabled(false);
+			menu.findItem(R.id.billing).setVisible(false);
 		}
 		return super.onPrepareOptionsMenu(menu);
 	}

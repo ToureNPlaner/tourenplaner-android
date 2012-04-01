@@ -2,24 +2,24 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import com.actionbarsherlock.app.SherlockListActivity;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ConstraintListAdapter;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 
-public class AlgorithmConstraintsScreen extends SherlockListActivity {
+public class AlgorithmConstraintsScreen extends SherlockFragmentActivity {
 	private Session session;
-	private boolean dirty = false;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
-		outState.putBoolean("dirty", dirty);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -31,38 +31,32 @@ public class AlgorithmConstraintsScreen extends SherlockListActivity {
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
-		if (savedInstanceState != null) {
-			dirty = savedInstanceState.getBoolean("dirty");
+		setContentView(R.layout.algorithmconstrainsscreen);
+
+		setupList();
+
+		if (savedInstanceState == null)
+			setupFragments();
+	}
+
+	private void setupFragments() {
+		ArrayList<Constraint> constraints = session.getConstraints();
+
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		for (int i = 0; i < constraints.size(); i++) {
+			ft.add(i + 1, constraints.get(i).createFragment(i));
 		}
-
-		setupListView();
+		ft.commit();
 	}
 
-	private void setupListView() {
-		ConstraintListAdapter adapter = new ConstraintListAdapter(session.getConstraints(), this);
-		setListAdapter(adapter);
-		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				Intent myIntent = new Intent(AlgorithmConstraintsScreen.this,
-						EditConstraintScreen.class);
-				myIntent.putExtra("constraint", (Serializable) adapterView.getItemAtPosition(i));
-				myIntent.putExtra("index", i);
-				myIntent.putExtra(Session.IDENTIFIER, session);
-				startActivityForResult(myIntent, 0);
-			}
-		});
-	}
+	private void setupList() {
+		LinearLayout list = (LinearLayout) findViewById(android.R.id.list);
+		ArrayList<Constraint> constraints = session.getConstraints();
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (resultCode) {
-			case RESULT_OK:
-				session.getConstraints().get(
-						data.getExtras().getInt("index")).setValue(data.getSerializableExtra("value"));
-				((ConstraintListAdapter) getListAdapter()).notifyDataSetChanged();
-				dirty = true;
-				break;
+		for (int i = 0; i < constraints.size(); i++) {
+			FrameLayout frameLayout = new FrameLayout(this);
+			frameLayout.setId(i + 1);
+			list.addView(frameLayout);
 		}
 	}
 
@@ -70,7 +64,12 @@ public class AlgorithmConstraintsScreen extends SherlockListActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 			Intent data = new Intent();
-			data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel());
+			boolean dirty = false;
+			for (int i = 0; i < session.getConstraints().size(); i++) {
+				if (((ConstraintFragment) getSupportFragmentManager().findFragmentById(i + 1)).isDirty()) {
+					dirty = true;
+				}
+			}
 			setResult(dirty ? RESULT_OK : RESULT_CANCELED, data);
 		}
 		return super.onKeyDown(keyCode, event);
