@@ -99,13 +99,6 @@ public class Result implements Serializable {
 							}
 							if (currentWay.size() > 0) {
 								ways.add(currentWay);
-								// duplicate the last one
-								if (ways.size() > 1) {
-									SmartIntArray second_last = ways.get(ways.size() - 2);
-									SmartIntArray last = ways.get(ways.size() - 1);
-									second_last.add(last.get(0));
-									second_last.add(last.get(1));
-								}
 							}
 						}
 					}
@@ -126,13 +119,6 @@ public class Result implements Serializable {
 			jacksonParse(jp, ways, points, misc);
 		} finally {
 			jp.close();
-		}
-
-		if (roundTrip && ways.size() > 1) {
-			SmartIntArray last = ways.get(ways.size() - 1);
-			SmartIntArray first = ways.get(0);
-			last.add(first.get(0));
-			last.add(first.get(1));
 		}
 
 		int size = ways.size();
