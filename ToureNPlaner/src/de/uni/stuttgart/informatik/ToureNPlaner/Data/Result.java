@@ -107,7 +107,7 @@ public class Result implements Serializable {
 		}
 	}
 
-	public static Result parse(JacksonManager.ContentType type, InputStream stream, boolean roundTrip) throws IOException {
+	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		Result result = new Result();
 		ArrayList<SmartIntArray> ways = new ArrayList<SmartIntArray>();
 		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
