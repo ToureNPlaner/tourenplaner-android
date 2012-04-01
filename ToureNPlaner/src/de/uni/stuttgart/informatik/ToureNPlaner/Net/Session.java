@@ -118,10 +118,19 @@ public class Session implements Serializable {
 	public static final int DND_CHANGE = 16;
 
 	public static class Change {
-		final int val;
+		private final int val;
+		private Node node;
 
 		public Change(int val) {
 			this.val = val;
+		}
+
+		public void setNode(Node node) {
+			this.node = node;
+		}
+
+		public Node getNode() {
+			return node;
 		}
 
 		public boolean isModelChange() {
@@ -311,6 +320,9 @@ public class Session implements Serializable {
 	}
 
 	public Node createNode(GeoPoint geoPoint) {
+		if (nodeModel.size() >= getSelectedAlgorithm().getMaxPoints()) {
+			return null;
+		}
 		return new Node(nodeModel.getVersion(), createName(d.nameCounter++), geoPoint, d.selectedAlgorithm.getPointConstraintTypes());
 	}
 

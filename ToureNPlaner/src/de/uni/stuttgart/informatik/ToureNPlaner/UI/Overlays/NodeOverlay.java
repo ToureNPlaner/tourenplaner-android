@@ -5,9 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.text.InputType;
-import android.view.HapticFeedbackConstants;
-import android.widget.EditText;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -29,7 +26,6 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 
 	private static final int GPS_RADIUS = 10;
 	private OverlayItem gpsMarker;
-	private String constraintValue;
 	private boolean useGps = false;
 
 	private GpsDrawable gpsDrawable;
@@ -125,38 +121,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 
 	@Override
 	public boolean onLongPress(GeoPoint geoPoint, MapView mapView) {
-		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMaxPoints()) {
-			return false;
-		}
-
 		final Node node = session.createNode(geoPoint);
-
-		mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
-		// Important! Try to perform the NNS Search before, notifying any one else about the change.
-		// else through HTTP pipelining the NNS might be performed after the request!
-		mapScreen.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				mapScreen.performNNSearch(node);
-			}
-		});
-
-		/*final ArrayList<ConstraintType> tempcl = session.getSelectedAlgorithm().getPointConstraintTypes();
-		mapScreen.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < tempcl.size(); i++) {
-					ConstraintDialog(cl.get(i).getName(), cl.get(i).getMinimumValue(), cl.get(i).getMaximumValue(), i, cl.get(i).getType());
-				}
-				if (session.getNodeModel().size() > 0) {
-					session.getNodeModel().getNodeVector().set(session.getNodeModel().size() - 1, session.getNodeModel().getNodeVector().get(session.getNodeModel().size() - 1));
-				}
-			}
-		});*/
-
-		Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
-		edit.perform();
+		if (node != null) {
+			Edit edit = new AddNodeEdit(session, node, AddNodeEdit.Position.END);
+			edit.perform();
+		}
 		return true;
 	}
 
@@ -249,43 +218,6 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	public void onChange(Session.Change change) {
 		if (change.isModelChange() || change.isNnsChange())
 			loadFromModel();
-	}
-
-	public void ConstraintDialog(String title, final Object min, final Object max, final int constraintid, final String constraintType) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(mapScreen);
-		builder.setMessage("enter a value: ");
-		builder.setCancelable(true);
-		builder.setTitle(title);
-		// Set an EditText view to get user input
-		final EditText input = new EditText(mapScreen);
-		String hintmessage = String.valueOf(min) + " .. " + String.valueOf(max);
-		input.setHint(hintmessage);
-		if (constraintType.equals("integer") || constraintType.equals("boolean")) {
-			input.setInputType(InputType.TYPE_CLASS_NUMBER);
-		}
-		if (constraintType.equals("float") || constraintType.equals("meter") || constraintType.equals("price")) {
-			input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-		}
-		builder.setView(input);
-		builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				constraintValue = input.getEditableText().toString();
-				Boolean isNumeric = checkForDigits(constraintValue);
-				if (constraintValue.equals("") || constraintValue == null) {
-					constraintValue = String.valueOf(min);
-				}
-
-				if (isNumeric) {
-					session.getNodeModel().get(session.getNodeModel().size() - 1).getConstraintList().get(constraintid).setValue(constraintValue);
-				}
-			}
-		});
-		builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		}).create().show();
 	}
 
 	public boolean checkForDigits(String str) {

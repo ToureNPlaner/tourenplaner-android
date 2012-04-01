@@ -8,10 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -247,7 +244,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				new CornerPathEffect(30.f)));
 
 		// create the WayOverlay and add the ways
-		this.fastWayOverlay = new FastWayOverlay(mapView, fastWayOverlayColor);
+		this.fastWayOverlay = new FastWayOverlay(session, fastWayOverlayColor);
 		mapView.getOverlays().add(this.fastWayOverlay);
 		Result result = session.getResult();
 		if (result != null) {
@@ -469,7 +466,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onDestroy() {
 		nodeOverlay.setMapScreen(null);
-		fastWayOverlay.setMapView(null);
 
 		mapView.getOverlays().remove(nodeOverlay);
 
@@ -518,12 +514,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					performRequest(false);
 				}
 				if (change.isModelChange()) {
-					if (instantRequest != MapScreenPreferences.Instant.NEVER) {
-						performRequest(true);
-					}
 					if (!change.isAddChange()) {
 						Edit edit = new SetResultEdit(session, null);
 						edit.perform();
+					} else {
+						// Important! Try to perform the NNS Search before, notifying any one else about the change.
+						// else through HTTP pipelining the NNS might be performed after the request!
+						performNNSearch(change.getNode());
+						mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+					}
+					if (instantRequest != MapScreenPreferences.Instant.NEVER) {
+						performRequest(true);
 					}
 				}
 			}

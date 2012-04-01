@@ -4,7 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.AddNodeEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
 import org.mapsforge.android.maps.overlay.Overlay;
@@ -13,6 +17,8 @@ import org.mapsforge.core.GeoPoint;
 import java.util.ArrayList;
 
 public class FastWayOverlay extends Overlay {
+	private final Session session;
+
 	public synchronized void initWay(int[][] points) {
 		for (int[] p : points) {
 			ways.add(new Way(p));
@@ -20,23 +26,18 @@ public class FastWayOverlay extends Overlay {
 		requestRedraw();
 	}
 
-	private MapView mapView;
 	private final Paint paint;
 	private final Path path = new Path();
 	private final float thickness;
 
 	private final ArrayList<Way> ways = new ArrayList<Way>();
 
-	public FastWayOverlay(MapView mapView, Paint paint) {
-		this.mapView = mapView;
+	public FastWayOverlay(Session session, Paint paint) {
+		this.session = session;
 		this.paint = paint;
 		this.path.setFillType(Path.FillType.EVEN_ODD);
 		// About 3.1 mm: 20/160 inch
-		this.thickness = 20.f * mapView.getResources().getDisplayMetrics().density;
-	}
-
-	public void setMapView(MapView mapView) {
-		this.mapView = mapView;
+		this.thickness = 20.f * ToureNPlanerApplication.getContext().getResources().getDisplayMetrics().density;
 	}
 
 	public synchronized void clear() {
@@ -51,23 +52,25 @@ public class FastWayOverlay extends Overlay {
 		return "FastWayOverlay";
 	}
 
-	private Toast toast = null;
-
 	@Override
 	public boolean onTap(GeoPoint geoPoint, MapView mapView) {
-		if (toast == null)
-			toast = Toast.makeText(mapView.getContext(), "", Toast.LENGTH_SHORT);
-		float dist = getNearestWaySegment(geoPoint, mapView);
-		if (dist < thickness) {
-			toast.cancel();
-			toast.setText("Dist: " + dist);
-			toast.show();
+		if (session.getNodeModel().size() >= session.getSelectedAlgorithm().getMaxPoints()) {
+			return false;
 		}
 
-		return false;
+		int index = getNearestWaySegment(geoPoint, mapView);
+		if (index == -1)
+			return false;
+
+		final Node node = session.createNode(geoPoint);
+		if (node != null) {
+			Edit edit = new AddNodeEdit(session, node, index + 1);
+			edit.perform();
+		}
+		return true;
 	}
 
-	private synchronized float getNearestWaySegment(GeoPoint geoPoint, MapView mapView) {
+	private synchronized int getNearestWaySegment(GeoPoint geoPoint, MapView mapView) {
 		float min = Float.MAX_VALUE;
 		int index = 0;
 
@@ -84,7 +87,11 @@ public class FastWayOverlay extends Overlay {
 				min = result;
 			}
 		}
-		return (float) Math.sqrt(min);
+
+		if (Math.sqrt(min) < thickness)
+			return index;
+		else
+			return -1;
 	}
 
 	@Override
@@ -95,7 +102,7 @@ public class FastWayOverlay extends Overlay {
 		}
 
 		GeoPoint topLeft = projection.fromPixels(0, 0);
-		GeoPoint bottomRight = projection.fromPixels(this.mapView.getWidth(), this.mapView.getHeight());
+		GeoPoint bottomRight = projection.fromPixels(this.internalMapView.getWidth(), this.internalMapView.getHeight());
 		for (Way way : ways) {
 			way.setupPath(path, drawPosition, drawZoomLevel, topLeft.longitudeE6, topLeft.latitudeE6, bottomRight.longitudeE6, bottomRight.latitudeE6);
 			canvas.drawPath(path, paint);
