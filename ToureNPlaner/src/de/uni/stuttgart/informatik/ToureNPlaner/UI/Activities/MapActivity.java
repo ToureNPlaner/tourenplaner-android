@@ -3,6 +3,8 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.Context;
 import android.os.Bundle;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Window;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import org.mapsforge.android.maps.IMapActivity;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.core.GeoPoint;
@@ -21,11 +23,17 @@ public class MapActivity extends SherlockActivity implements IMapActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+		setContentView(R.layout.activity_mapscreen);
+
 		if (savedInstanceState != null) {
 			mapView.setCenter((GeoPoint) savedInstanceState.get("Center"));
 			// TODO restore zoom
 		}
 	}
+
 
 	@Override
 	protected void onDestroy() {

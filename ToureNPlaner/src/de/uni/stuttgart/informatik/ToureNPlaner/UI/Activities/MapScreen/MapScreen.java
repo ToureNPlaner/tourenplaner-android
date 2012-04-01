@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Window;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
@@ -125,12 +124,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 		locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-		// setting properties of the mapview
-		setContentView(R.layout.activity_mapscreen);
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.setClickable(true);
 		mapView.setLongClickable(true);
