@@ -1,5 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments;
 
+import android.os.Bundle;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 
 public class MeterConstraintFragment extends NumberConstraintFragment {
@@ -7,7 +8,10 @@ public class MeterConstraintFragment extends NumberConstraintFragment {
 
 	public static MeterConstraintFragment newInstance(Constraint constraint, int index) {
 		MeterConstraintFragment fragment = new MeterConstraintFragment();
-		fragment.constraint = constraint;
+		Bundle args = new Bundle();
+		args.putSerializable("constraint", constraint);
+		args.putInt("index", index);
+		fragment.setArguments(args);
 		return fragment;
 	}
 

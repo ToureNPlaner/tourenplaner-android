@@ -24,7 +24,10 @@ public class NumberConstraintFragment extends ConstraintFragment {
 
 	public static NumberConstraintFragment newInstance(Constraint constraint, int index) {
 		NumberConstraintFragment fragment = new NumberConstraintFragment();
-		fragment.constraint = constraint;
+		Bundle args = new Bundle();
+		args.putSerializable("constraint", constraint);
+		args.putInt("index", index);
+		fragment.setArguments(args);
 		return fragment;
 	}
 
