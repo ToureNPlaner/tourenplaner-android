@@ -1,7 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -38,9 +37,9 @@ public abstract class ConstraintType implements Serializable {
 			return FloatConstraint.parse(constraint);
 		} else if (MeterConstraint.typename.equals(typename)) {
 			return MeterConstraint.parse(constraint);
-		} else if (PriceConstraint.typename.equals(typename)){
+		} else if (PriceConstraint.typename.equals(typename)) {
 			return PriceConstraint.parse(constraint);
-		} else if(IntegerConstraint.typename.equals(typename)){
+		} else if (IntegerConstraint.typename.equals(typename)) {
 			return IntegerConstraint.parse(constraint);
 		}
 		throw new IllegalArgumentException("No constraing with that type!");
@@ -48,5 +47,5 @@ public abstract class ConstraintType implements Serializable {
 
 	public abstract void generate(ObjectNode node, Object value);
 
-	public abstract ConstraintView createView(Context context, Constraint constraint);
+	public abstract ConstraintFragment createFragment(Constraint constraint, int index);
 }

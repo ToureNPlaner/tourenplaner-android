@@ -1,7 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import org.codehaus.jackson.node.ObjectNode;
 
 import java.io.Serializable;
@@ -39,7 +38,7 @@ public class Constraint implements Serializable {
 		type.generate(node, value);
 	}
 
-	public ConstraintView createView(Context context) {
-		return type.createView(context, this);
+	public ConstraintFragment createFragment(int index) {
+		return type.createFragment(this, index);
 	}
 }

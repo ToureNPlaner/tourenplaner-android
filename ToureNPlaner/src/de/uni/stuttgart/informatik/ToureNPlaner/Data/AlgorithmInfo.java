@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
 import org.codehaus.jackson.JsonNode;
 
 import java.io.Serializable;
@@ -76,7 +77,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		} else {
 			info.constraintTypes = new ArrayList<ConstraintType>(constraints.size());
 			for (JsonNode constraint : constraints) {
-				
+
 				info.constraintTypes.add(ConstraintType.parse(constraint));
 			}
 		}
@@ -109,7 +110,9 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.urlsuffix = "";
 		info.pointConstraintTypes = new ArrayList<ConstraintType>();
 		info.constraintTypes = new ArrayList<ConstraintType>();
-		//info.pointConstraintTypes.add(new Constraint("Price", "price", 0.0, 2000.0));
+		info.minPoints = 0;
+		info.maxPoints = 100;
+		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		return info;
 	}
 

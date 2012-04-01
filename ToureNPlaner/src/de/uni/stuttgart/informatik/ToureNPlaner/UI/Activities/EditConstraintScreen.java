@@ -2,36 +2,13 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
-import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 
-public class EditConstraintScreen extends SherlockActivity {
-	private Constraint constraint;
-	private int index;
-
-	private ConstraintView constraintView;
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt("index", index);
-		outState.putSerializable("constraint", constraint);
-		super.onSaveInstanceState(outState);
-	}
-
-	void finishActivity() {
-		Intent data = new Intent();
-		data.putExtra("value", constraint.getValue());
-		data.putExtra("index", index);
-		setResult(RESULT_OK, data);
-		finish();
-	}
+public class EditConstraintScreen extends SherlockFragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,31 +16,33 @@ public class EditConstraintScreen extends SherlockActivity {
 		// If we get created for the first time we get our data from the intent
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 
-		constraint = (Constraint) data.getSerializable("constraint");
-		index = data.getInt("index", 0);
+		Constraint constraint = (Constraint) data.getSerializable("constraint");
+		int index = data.getInt("index", 0);
 
-		setupView();
+		if (savedInstanceState == null) {
+			// First-time init; create fragment to embed in activity.
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			ConstraintFragment newFragment = constraint.createFragment(index);
+			ft.add(android.R.id.content, newFragment, "frag");
+			ft.commit();
+		}
 	}
 
-	private void setupView() {
-		setContentView(R.layout.editconstraints);
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			finishActivity();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
-		final TextView etName = (TextView) findViewById(R.id.txtconstName);
-		final TextView etType = (TextView) findViewById(R.id.txtconstType);
+	void finishActivity() {
+		Intent data = new Intent();
 
-		etName.setText(constraint.getType().getName());
-		etType.setText(constraint.getType().getTypename());
+		ConstraintFragment fragment = (ConstraintFragment) getSupportFragmentManager().findFragmentByTag("frag");
 
-		Button btnReturn = (Button) findViewById(R.id.btnconstReturn);
-		btnReturn.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				finishActivity();
-			}
-		});
-
-		final ViewGroup placeholder = (ViewGroup) findViewById(R.id.EditConstraintPlaceHolder);
-
-		constraintView = constraint.createView(this);
-		constraintView.attach(getLayoutInflater(), placeholder);
+		data.putExtra("value", fragment.getValue());
+		data.putExtra("index", fragment.getIndex());
+		setResult(RESULT_OK, data);
 	}
 }

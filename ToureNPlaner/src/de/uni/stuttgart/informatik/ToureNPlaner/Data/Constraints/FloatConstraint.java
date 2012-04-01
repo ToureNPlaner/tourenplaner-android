@@ -1,8 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.FloatConstraintView;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.NumberConstraintFragment;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -43,8 +42,8 @@ public class FloatConstraint extends ConstraintType {
 	}
 
 	@Override
-	public ConstraintView createView(Context context, Constraint constraint) {
-		return new FloatConstraintView(context, constraint);
+	public ConstraintFragment createFragment(Constraint constraint, int index) {
+		return NumberConstraintFragment.newInstance(constraint, index);
 	}
 
 	public float getMinimum() {

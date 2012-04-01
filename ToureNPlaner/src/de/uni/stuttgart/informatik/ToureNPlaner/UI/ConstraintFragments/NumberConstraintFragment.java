@@ -1,9 +1,12 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews;
+package de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -11,24 +14,33 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
-public class FloatConstraintView extends ConstraintView {
+public class NumberConstraintFragment extends ConstraintFragment {
 	// shouldn't be about the pixel width
-	protected final int SEEKBAR_MAX = 1000;
+	protected static final int SEEKBAR_MAX = 1000;
 	private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
 
-	public FloatConstraintView(Context context, Constraint constraint) {
-		super(context, constraint);
-		FloatConstraint type = (FloatConstraint) constraint.getType();
-		this.min = type.getMinimum();
-		this.max = type.getMaximum();
+	protected float min;
+	protected float max;
+
+	public static NumberConstraintFragment newInstance(Constraint constraint, int index) {
+		NumberConstraintFragment fragment = new NumberConstraintFragment();
+		fragment.constraint = constraint;
+		return fragment;
 	}
 
-	protected final float min;
-	protected final float max;
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		FloatConstraint type = (FloatConstraint) constraint.getType();
+		min = type.getMinimum();
+		max = type.getMaximum();
+
+		setup();
+	}
 
 	@Override
-	public int getLayout() {
-		return R.layout.float_constraint_layout;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.float_constraint_layout, null);
 	}
 
 	/**
@@ -55,22 +67,19 @@ public class FloatConstraintView extends ConstraintView {
 		return (int) (valueToBarNormalized((value - min) / (max - min)) * SEEKBAR_MAX);
 	}
 
-	@Override
 	protected void setup() {
-		TextView lblMin = (TextView) view.findViewById(R.id.lblconstMin);
-		TextView lblMax = (TextView) view.findViewById(R.id.lblconstMax);
-		final EditText etValue = (EditText) view.findViewById(R.id.txtconstValue);
+		TextView lblMin = (TextView) getView().findViewById(R.id.lblconstMin);
+		TextView lblMax = (TextView) getView().findViewById(R.id.lblconstMax);
+		final EditText etValue = (EditText) getView().findViewById(R.id.txtconstValue);
 
-		final FloatConstraint type = (FloatConstraint) constraint.getType();
-
-		lblMin.setText(String.valueOf(type.getMinimum()));
-		lblMax.setText(String.valueOf(type.getMaximum()));
+		lblMin.setText(String.valueOf(min));
+		lblMax.setText(String.valueOf(max));
 
 
 		etValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
 		//------------------get seekBar -------------------
-		final SeekBar seekbar = (SeekBar) view.findViewById(R.id.editconstraintseekBar);
+		final SeekBar seekbar = (SeekBar) getView().findViewById(R.id.editconstraintseekBar);
 		seekbar.setMax(SEEKBAR_MAX);
 
 		if (constraint.getValue() != null) {
@@ -78,7 +87,7 @@ public class FloatConstraintView extends ConstraintView {
 			seekbar.setProgress(valueToBar(val));
 			etValue.setText(Float.toString(val));
 		} else {
-			etValue.setHint(context.getResources().getString(R.string.select_a_value));
+			etValue.setHint(getResources().getString(R.string.select_a_value));
 		}
 		etValue.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -95,11 +104,11 @@ public class FloatConstraintView extends ConstraintView {
 				if (val != null && !val.equals("")) {
 					try {
 						float valfloat = Float.valueOf(val);
-						if (valfloat > type.getMaximum()) {
-							valfloat = type.getMaximum();
+						if (valfloat > max) {
+							valfloat = max;
 						}
-						if (valfloat < type.getMinimum()) {
-							valfloat = type.getMinimum();
+						if (valfloat < min) {
+							valfloat = min;
 						}
 						constraint.setValue(valfloat);
 						// prevent infinite loop

@@ -1,17 +1,15 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.PriceConstraintFragment;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.PriceConstraintView;
-
-public class PriceConstraint extends FloatConstraint{
+public class PriceConstraint extends FloatConstraint {
 	public static String typename = "price";
 
 	public PriceConstraint(String name, String description, String id, float minimum, float maximum) {
-		super(name, description, id,minimum,maximum);
+		super(name, description, id, minimum, maximum);
 	}
 
 	@Override
@@ -40,8 +38,7 @@ public class PriceConstraint extends FloatConstraint{
 	}
 
 	@Override
-	public ConstraintView createView(Context context, Constraint constraint) {
-		return new PriceConstraintView(context, constraint);
+	public ConstraintFragment createFragment(Constraint constraint, int index) {
+		return PriceConstraintFragment.newInstance(constraint, index);
 	}
-
 }

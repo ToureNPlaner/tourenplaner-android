@@ -1,13 +1,10 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.IntegerConstraintView;
-
-public class IntegerConstraint extends ConstraintType{
+public class IntegerConstraint extends ConstraintType {
 
 	public static String typename = "integer";
 	private final int minimum;
@@ -45,9 +42,10 @@ public class IntegerConstraint extends ConstraintType{
 	}
 
 	@Override
-	public ConstraintView createView(Context context, Constraint constraint) {
-		return new IntegerConstraintView(context, constraint);
+	public ConstraintFragment createFragment(Constraint constraint, int index) {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
+
 
 	public int getMinimum() {
 		return minimum;

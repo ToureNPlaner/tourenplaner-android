@@ -1,8 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
-import android.content.Context;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.ConstraintView;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintViews.MeterConstraintView;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.MeterConstraintFragment;
 import org.codehaus.jackson.JsonNode;
 
 public class MeterConstraint extends FloatConstraint {
@@ -33,7 +32,7 @@ public class MeterConstraint extends FloatConstraint {
 	}
 
 	@Override
-	public ConstraintView createView(Context context, Constraint constraint) {
-		return new MeterConstraintView(context, constraint);
+	public ConstraintFragment createFragment(Constraint constraint, int index) {
+		return MeterConstraintFragment.newInstance(constraint, index);
 	}
 }
