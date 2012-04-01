@@ -113,6 +113,7 @@ public class NumberConstraintFragment extends ConstraintFragment {
 						if (valfloat < min) {
 							valfloat = min;
 						}
+						dirty = true;
 						constraint.setValue(valfloat);
 						// prevent infinite loop
 						seekbar.setOnSeekBarChangeListener(null);
