@@ -113,6 +113,16 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.minPoints = 0;
 		info.maxPoints = 100;
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+
+		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		return info;
 	}
 
