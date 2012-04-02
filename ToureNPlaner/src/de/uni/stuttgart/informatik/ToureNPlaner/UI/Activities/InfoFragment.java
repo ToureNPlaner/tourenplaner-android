@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
@@ -48,6 +51,11 @@ public class InfoFragment extends SherlockFragment {
 			txtmsg.setText(getResources().getString(R.string.message) + ": " + msg);
 
 		txtmsg.setText(session.getResult().getMisc().info.toString());
+
+		ListView listView = (ListView) view.findViewById(android.R.id.list);
+		ArrayAdapter<ResultNode> adapter = new ArrayAdapter<ResultNode>(getActivity(), R.layout.list_item, session.getResult().getPoints());
+		listView.setAdapter(adapter);
+
 
 		return view;
 	}
