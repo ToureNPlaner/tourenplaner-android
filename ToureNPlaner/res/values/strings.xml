@@ -39,7 +39,7 @@
     <string name="search">search</string>
 
     <!--nodelist_menu-->
-    <string name="change_order">change order</string>
+    <string name="reverse_order">reverse order</string>
     <string name="map_file_error">Mapfile is not valid. Falling back.</string>
     <string name="details">details</string>
     <string name="distance">distance</string>

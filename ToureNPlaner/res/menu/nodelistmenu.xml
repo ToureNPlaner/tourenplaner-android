@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/revertNodes"
           android:showAsAction="ifRoom|withText"
-          android:title="@string/change_order"/>
+          android:title="@string/reverse_order"/>
 </menu>
