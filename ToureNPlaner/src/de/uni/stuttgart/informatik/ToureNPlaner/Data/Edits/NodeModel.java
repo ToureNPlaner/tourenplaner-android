@@ -22,42 +22,42 @@ public class NodeModel implements Serializable {
 
 	public static final String IDENTIFIER = "nodemodel";
 
-	public ArrayList<Node> getNodeVector() {
+	public synchronized ArrayList<Node> getNodeVector() {
 		return nodeArrayList;
 	}
 
-	public void setNodeVector(ArrayList<Node> nodeArrayList) {
+	public synchronized void setNodeVector(ArrayList<Node> nodeArrayList) {
 		incVersion();
 		this.nodeArrayList = nodeArrayList;
 	}
 
-	public Node get(int i) {
+	public synchronized Node get(int i) {
 		return nodeArrayList.get(i);
 	}
 
-	public Integer size() {
+	public synchronized Integer size() {
 		return nodeArrayList.size();
 	}
 
-	void add(Node node) {
+	synchronized void add(Node node) {
 		nodeArrayList.add(node);
 	}
 
-	void addBeginning(Node node) {
+	synchronized void addBeginning(Node node) {
 		reverseNodes();
 		nodeArrayList.add(node);
 		reverseNodes();
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		nodeArrayList.clear();
 	}
 
-	void remove(int pos) {
+	synchronized void remove(int pos) {
 		nodeArrayList.remove(pos);
 	}
 
-	void reverseNodes() {
+	synchronized void reverseNodes() {
 		int first = 0;
 		int last = nodeArrayList.size();
 		while ((first != last) && (first != --last)) {
@@ -66,7 +66,7 @@ public class NodeModel implements Serializable {
 		}
 	}
 
-	public boolean allSet() {
+	public synchronized boolean allSet() {
 		for (int i = 0; i < nodeArrayList.size(); i++) {
 			ArrayList<Constraint> list = nodeArrayList.get(i).getConstraintList();
 			for (int n = 0; n < list.size(); n++) {
