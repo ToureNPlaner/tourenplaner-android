@@ -13,10 +13,6 @@ public class Constraint implements Serializable {
 		this.type = type;
 	}
 
-	public Constraint(Constraint constraint) {
-		this.type = constraint.type;
-	}
-
 	public ConstraintType getType() {
 		return type;
 	}

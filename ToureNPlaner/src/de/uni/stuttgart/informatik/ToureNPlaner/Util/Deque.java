@@ -11,7 +11,6 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Util;
 // changed {@link #offer(Object)} to {@link #offer} to satisfy DroidDoc
 // END android-note
 
-import java.util.Iterator;
 import java.util.Queue;
 
 /**
@@ -536,23 +535,4 @@ public interface Deque<E> extends Queue<E> {
 	 * @return the number of elements in this deque
 	 */
 	public int size();
-
-	/**
-	 * Returns an iterator over the elements in this deque in proper sequence.
-	 * The elements will be returned in order from first (head) to last (tail).
-	 *
-	 * @return an iterator over the elements in this deque in proper sequence
-	 */
-	Iterator<E> iterator();
-
-	/**
-	 * Returns an iterator over the elements in this deque in reverse
-	 * sequential order.  The elements will be returned in order from
-	 * last (tail) to first (head).
-	 *
-	 * @return an iterator over the elements in this deque in reverse
-	 *         sequence
-	 */
-	Iterator<E> descendingIterator();
-
 }

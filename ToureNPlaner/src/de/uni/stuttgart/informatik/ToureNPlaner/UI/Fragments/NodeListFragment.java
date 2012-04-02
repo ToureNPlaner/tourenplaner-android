@@ -28,7 +28,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.NodeListAdapter;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.DragDrop.DragNDropListView;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DragListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DropListener;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.RemoveListener;
 
 import java.io.Serializable;
 
@@ -76,7 +75,6 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 
 		if (listView instanceof DragNDropListView) {
 			((DragNDropListView) listView).setDropListener(mDropListener);
-			((DragNDropListView) listView).setRemoveListener(mRemoveListener);
 			((DragNDropListView) listView).setDragListener(mDragListener);
 
 			//---------ContextMenu-----------------
@@ -120,18 +118,6 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 					if (adapter instanceof NodeListAdapter) {
 						dirty = true;
 						((NodeListAdapter) adapter).onDrop(from, to);
-						getListView().invalidateViews();
-					}
-				}
-			};
-
-	private RemoveListener mRemoveListener =
-			new RemoveListener() {
-				public void onRemove(int which) {
-					ListAdapter adapter = getListAdapter();
-					if (adapter instanceof NodeListAdapter) {
-						dirty = true;
-						((NodeListAdapter) adapter).onRemove(which);
 						getListView().invalidateViews();
 					}
 				}

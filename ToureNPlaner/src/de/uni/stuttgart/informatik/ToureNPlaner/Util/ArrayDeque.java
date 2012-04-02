@@ -10,7 +10,10 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Util;
 // END android-note
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Resizable-array implementation of the {@link Deque} interface.  Array
@@ -90,30 +93,6 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 	// ******  Array allocation and resizing utilities ******
 
 	/**
-	 * Allocate empty array to hold the given number of elements.
-	 *
-	 * @param numElements the number of elements to hold
-	 */
-	private void allocateElements(int numElements) {
-		int initialCapacity = MIN_INITIAL_CAPACITY;
-		// Find the best power of two to hold elements.
-		// Tests "<=" because arrays aren't kept full.
-		if (numElements >= initialCapacity) {
-			initialCapacity = numElements;
-			initialCapacity |= (initialCapacity >>> 1);
-			initialCapacity |= (initialCapacity >>> 2);
-			initialCapacity |= (initialCapacity >>> 4);
-			initialCapacity |= (initialCapacity >>> 8);
-			initialCapacity |= (initialCapacity >>> 16);
-			initialCapacity++;
-
-			if (initialCapacity < 0)   // Too many elements, must back off
-				initialCapacity >>>= 1;// Good luck allocating 2 ^ 30 elements
-		}
-		elements = (E[]) new Object[initialCapacity];
-	}
-
-	/**
 	 * Double the capacity of this deque.  Call only when full, i.e.,
 	 * when head and tail have wrapped around to become equal.
 	 */
@@ -157,31 +136,6 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 	 */
 	public ArrayDeque() {
 		elements = (E[]) new Object[16];
-	}
-
-	/**
-	 * Constructs an empty array deque with an initial capacity
-	 * sufficient to hold the specified number of elements.
-	 *
-	 * @param numElements lower bound on initial capacity of the deque
-	 */
-	public ArrayDeque(int numElements) {
-		allocateElements(numElements);
-	}
-
-	/**
-	 * Constructs a deque containing the elements of the specified
-	 * collection, in the order they are returned by the collection's
-	 * iterator.  (The first element returned by the collection's
-	 * iterator becomes the first element, or <i>front</i> of the
-	 * deque.)
-	 *
-	 * @param c the collection whose elements are to be placed into the deque
-	 * @throws NullPointerException if the specified collection is null
-	 */
-	public ArrayDeque(Collection<? extends E> c) {
-		allocateElements(c.size());
-		addAll(c);
 	}
 
 	// The main insertion and extraction methods are addFirst,
@@ -576,10 +530,6 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 		return new DeqIterator();
 	}
 
-	public Iterator<E> descendingIterator() {
-		return new DescendingIterator();
-	}
-
 	private class DeqIterator implements Iterator<E> {
 		/**
 		 * Index of element to be returned by subsequent call to next.
@@ -621,42 +571,6 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 			if (delete(lastRet)) { // if left-shifted, undo increment in next()
 				cursor = (cursor - 1) & (elements.length - 1);
 				fence = tail;
-			}
-			lastRet = -1;
-		}
-	}
-
-	private class DescendingIterator implements Iterator<E> {
-		/*
-				 * This class is nearly a mirror-image of DeqIterator, using
-				 * tail instead of head for initial cursor, and head instead of
-				 * tail for fence.
-				 */
-		private int cursor = tail;
-		private int fence = head;
-		private int lastRet = -1;
-
-		public boolean hasNext() {
-			return cursor != fence;
-		}
-
-		public E next() {
-			if (cursor == fence)
-				throw new NoSuchElementException();
-			cursor = (cursor - 1) & (elements.length - 1);
-			E result = elements[cursor];
-			if (head != fence || result == null)
-				throw new ConcurrentModificationException();
-			lastRet = cursor;
-			return result;
-		}
-
-		public void remove() {
-			if (lastRet < 0)
-				throw new IllegalStateException();
-			if (!delete(lastRet)) {
-				cursor = (cursor + 1) & (elements.length - 1);
-				fence = head;
 			}
 			lastRet = -1;
 		}

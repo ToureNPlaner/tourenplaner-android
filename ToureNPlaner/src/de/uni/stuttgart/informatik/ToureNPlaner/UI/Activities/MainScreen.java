@@ -83,7 +83,7 @@ public class MainScreen extends SherlockFragmentActivity implements Observer {
 			handler.setListener(this);
 		else {
 			handler = Session.createSession(url, this);
-			LoginScreen.ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
+			ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
 					.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		}
 	}

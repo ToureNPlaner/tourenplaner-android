@@ -11,7 +11,6 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String version;
 	private String name;
 	private String urlsuffix;
-	private String sslport;
 	private int minPoints;
 	private int maxPoints;
 	private boolean sourceIsTarget;
@@ -49,10 +48,6 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 	public int getMaxPoints() {
 		return maxPoints;
-	}
-
-	public String getSSLPort() {
-		return sslport;
 	}
 
 	public static AlgorithmInfo parse(JsonNode object) {
