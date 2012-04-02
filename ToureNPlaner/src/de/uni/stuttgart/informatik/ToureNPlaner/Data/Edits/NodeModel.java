@@ -27,6 +27,7 @@ public class NodeModel implements Serializable {
 	}
 
 	public void setNodeVector(ArrayList<Node> nodeArrayList) {
+		incVersion();
 		this.nodeArrayList = nodeArrayList;
 	}
 

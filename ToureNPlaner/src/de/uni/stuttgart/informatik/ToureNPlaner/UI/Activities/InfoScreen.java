@@ -49,7 +49,7 @@ public class InfoScreen extends SherlockFragmentActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 			Intent data = new Intent();
-			data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel());
+			data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel().getNodeVector());
 			boolean dirty = ((NodeListFragment) getSupportFragmentManager().findFragmentByTag("NodeList")).isDirty();
 			setResult(dirty ? RESULT_OK : RESULT_CANCELED, data);
 		}

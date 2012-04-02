@@ -117,8 +117,8 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 				public void onDrop(int from, int to) {
 					ListAdapter adapter = getListAdapter();
 					if (adapter instanceof NodeListAdapter) {
-						((NodeListAdapter) adapter).onDrop(from, to);
 						dirty = true;
+						((NodeListAdapter) adapter).onDrop(from, to);
 						getListView().invalidateViews();
 					}
 				}
@@ -129,6 +129,7 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 				public void onRemove(int which) {
 					ListAdapter adapter = getListAdapter();
 					if (adapter instanceof NodeListAdapter) {
+						dirty = true;
 						((NodeListAdapter) adapter).onRemove(which);
 						getListView().invalidateViews();
 					}
@@ -231,6 +232,7 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 
 	@Override
 	public void onChange(Session.Change change) {
+		dirty = true;
 		adapter.notifyDataSetChanged();
 	}
 }

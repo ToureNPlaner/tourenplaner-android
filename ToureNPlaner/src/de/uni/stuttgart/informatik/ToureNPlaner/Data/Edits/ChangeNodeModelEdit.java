@@ -1,18 +1,21 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
-public class ChangeNodeModelEdit extends Edit {
-	private final NodeModel nodeModel;
+import java.util.ArrayList;
 
-	public ChangeNodeModelEdit(Session session, NodeModel nodeModel) {
+public class ChangeNodeModelEdit extends Edit {
+	private final ArrayList<Node> nodeVector;
+
+	public ChangeNodeModelEdit(Session session, ArrayList<Node> nodeVector) {
 		super(session);
-		this.nodeModel = nodeModel;
+		this.nodeVector = nodeVector;
 	}
 
 	@Override
 	public void perform() {
-		session.setNodeModel(nodeModel);
+		session.getNodeModel().setNodeVector(nodeVector);
 		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
 	}
 }

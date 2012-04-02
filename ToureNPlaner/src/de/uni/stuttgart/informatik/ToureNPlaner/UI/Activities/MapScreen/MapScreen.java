@@ -384,7 +384,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case REQUEST_NODEMODEL:
 				switch (resultCode) {
 					case RESULT_OK:
-						edit = new ChangeNodeModelEdit(session, (NodeModel) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
+						edit = new ChangeNodeModelEdit(session, (ArrayList<Node>) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
 						edit.perform();
 						break;
 				}

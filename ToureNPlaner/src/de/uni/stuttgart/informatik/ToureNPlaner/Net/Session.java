@@ -222,10 +222,6 @@ public class Session implements Serializable {
 		return d.user;
 	}
 
-	public void setNodeModel(NodeModel nodeModel) {
-		Session.nodeModel = nodeModel;
-	}
-
 	public NodeModel getNodeModel() {
 		return nodeModel;
 	}

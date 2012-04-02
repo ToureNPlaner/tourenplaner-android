@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingRequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
@@ -99,11 +98,10 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 			setSupportProgressBarIndeterminateVisibility(false);
 
 			Result result = (Result) object;
-			ArrayList<ResultNode> resultArray = new ArrayList<ResultNode>();
-			ArrayList<AlgorithmInfo> algorithmList = new ArrayList<AlgorithmInfo>();
+			ArrayList<ResultNode> resultArray;
+			ArrayList<AlgorithmInfo> algorithmList;
 			resultArray = result.getPoints();
 			ArrayList<Node> nodeArray = new ArrayList<Node>();
-			NodeModel nodeModel = new NodeModel();
 			String name = "";
 			int id;
 
@@ -126,16 +124,13 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 				Node node = new Node(id, name, resultArray.get(i).getGeoPoint(), cl);
 				nodeArray.add(node);
 			}
-			nodeModel.setNodeVector(nodeArray);
-			session.setNodeModel(nodeModel);
+			session.getNodeModel().setNodeVector(nodeArray);
 			session.setResult(result);
 
 			//  start Mapscreen
 			Intent myIntent = new Intent(getApplicationContext(), MapScreen.class);
 			myIntent.putExtra(Session.IDENTIFIER, session);
 			startActivity(myIntent);
-
-			Toast.makeText(getApplicationContext(), "request successful loaded", Toast.LENGTH_LONG).show();
 
 			billingRequestHandler = null;
 		}
