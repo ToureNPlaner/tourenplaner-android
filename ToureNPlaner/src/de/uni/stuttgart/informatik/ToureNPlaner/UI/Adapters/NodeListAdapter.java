@@ -37,7 +37,7 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 		tvUser.setText(node.getName());
 
 		TextView tvText = (TextView) itemLayout.findViewById(R.id.bottomtext);
-		tvText.setText(node.getGeoPoint().toString());
+		tvText.setText("lat:" + node.getGeoPoint().getLatitude() + " lon:" + node.getGeoPoint().getLongitude());
 
 		ImageView ImageView = (ImageView) itemLayout.findViewById(R.id.nodelisticon);
 		Drawable icon;
