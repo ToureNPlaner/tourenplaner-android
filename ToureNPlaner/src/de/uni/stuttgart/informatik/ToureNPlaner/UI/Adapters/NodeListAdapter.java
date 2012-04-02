@@ -25,11 +25,9 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		LinearLayout itemLayout;
-
 		Node node = getItem(position);
 
-		itemLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.nodelistadapteritem, parent, false);
+		LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.nodelistadapteritem, parent, false);
 
 		TextView tvUser = (TextView) itemLayout.findViewById(R.id.toptext);
 		tvUser.setText(node.getName());

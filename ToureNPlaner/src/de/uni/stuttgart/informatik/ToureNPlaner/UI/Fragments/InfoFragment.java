@@ -11,6 +11,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ResultNodeAdapter;
 
 public class InfoFragment extends SherlockFragment {
 	private Session session;
@@ -53,7 +54,7 @@ public class InfoFragment extends SherlockFragment {
 		txtmsg.setText(session.getResult().getMisc().info.toString());
 
 		ListView listView = (ListView) view.findViewById(android.R.id.list);
-		ArrayAdapter<ResultNode> adapter = new ArrayAdapter<ResultNode>(getActivity(), R.layout.list_item, session.getResult().getPoints());
+		ArrayAdapter<ResultNode> adapter = new ResultNodeAdapter(getActivity(), session.getResult().getPoints());
 		listView.setAdapter(adapter);
 
 
