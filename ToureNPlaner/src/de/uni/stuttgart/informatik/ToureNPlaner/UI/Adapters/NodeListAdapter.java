@@ -16,12 +16,10 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeDrawable;
 import java.util.ArrayList;
 
 public class NodeListAdapter extends ArrayAdapter<Node> {
-	private ArrayList<Node> nodeList;
 	private final boolean sourceIsTarget;
 
-	public NodeListAdapter(ArrayList<Node> nodeList, Context context, boolean sourceIsTarget) {
+	public NodeListAdapter(Context context, ArrayList<Node> nodeList, boolean sourceIsTarget) {
 		super(context, R.layout.list_item, nodeList);
-		this.nodeList = nodeList;
 		this.sourceIsTarget = sourceIsTarget;
 	}
 
@@ -57,31 +55,5 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 
 		ImageView.setImageDrawable(icon);
 		return itemLayout;
-	}
-
-
-	public int getCount() {
-		return nodeList.size();
-	}
-
-
-	public Node getItem(int position) {
-		return nodeList.get(position);
-	}
-
-
-	public long getItemId(int position) {
-		return position;
-	}
-
-	public void onRemove(int index) {
-		if (index < 0 || index > nodeList.size()) return;
-		nodeList.remove(index);
-	}
-
-	public void onDrop(int from, int to) {
-		Node temp = nodeList.get(from);
-		nodeList.remove(from);
-		nodeList.add(to, temp);
 	}
 }

@@ -10,16 +10,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.RemoveNodeEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.ReverseNodesEdit;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNodeEdit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -67,7 +63,7 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		adapter = new NodeListAdapter(session.getNodeModel().getNodeVector(), getActivity(), session.getSelectedAlgorithm().sourceIsTarget());
+		adapter = new NodeListAdapter(getActivity(), session.getNodeModel().getNodeVector(), session.getSelectedAlgorithm().sourceIsTarget());
 		setListAdapter(adapter);
 		ListView listView = getListView();
 		registerForContextMenu(listView);
@@ -114,12 +110,8 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 	private DropListener mDropListener =
 			new DropListener() {
 				public void onDrop(int from, int to) {
-					ListAdapter adapter = getListAdapter();
-					if (adapter instanceof NodeListAdapter) {
-						dirty = true;
-						((NodeListAdapter) adapter).onDrop(from, to);
-						getListView().invalidateViews();
-					}
+					Edit edit = new SwapNodesEdit(session, from, to);
+					edit.perform();
 				}
 			};
 
@@ -200,12 +192,10 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 			case Activity.RESULT_OK:
 				edit = new UpdateNodeEdit(session, data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
 				edit.perform();
-				dirty = true;
 				break;
 			case EditNodeScreen.RESULT_DELETE:
 				edit = new RemoveNodeEdit(session, data.getExtras().getInt("index"));
 				edit.perform();
-				dirty = true;
 				break;
 		}
 	}
