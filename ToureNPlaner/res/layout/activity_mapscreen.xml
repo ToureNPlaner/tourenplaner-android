@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<org.mapsforge.android.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/mapView"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <org.mapsforge.android.maps.MapView android:id="@+id/mapView"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"/>
+    <TextView android:id="@+id/overlay" android:layout_height="wrap_content" android:layout_width="match_parent"
+              android:textColor="#000000"
+              android:paddingLeft="5dp"
+              android:paddingTop="1dp"
+              android:shadowRadius="1"
+              android:shadowColor="#ffffff"
+            />
+</RelativeLayout>

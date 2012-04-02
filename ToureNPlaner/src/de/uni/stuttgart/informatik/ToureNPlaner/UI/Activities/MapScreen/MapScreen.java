@@ -8,7 +8,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.*;
+import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -55,7 +57,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private RequestHandler handler = null;
 	private LocationManager locManager;
 	private PopupWindow distancePopup = null;
-	private TextView textViewDistance;
 	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
 
@@ -532,13 +533,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void updateDistancePopup() {
-		if (distancePopup == null) {
-			LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View layout = inflater.inflate(R.layout.popup_distance, null, false);
-			distancePopup = new PopupWindow(layout, 200, 50, false);
-			distancePopup.showAtLocation(findViewById(R.id.mapView), Gravity.TOP | Gravity.LEFT, 0, getSupportActionBar().getHeight() + 5);
-			textViewDistance = (TextView) layout.findViewById(R.id.distancePopupTextView);
-		}
 		String distanceUnit = getResources().getString(R.string.meter_short);
 		double distance = session.getResult().getMisc().getDistance();
 		if (distance > 1000) {
@@ -546,6 +540,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			distanceUnit = getResources().getString(R.string.kilometer_short);
 		}
 		String text = getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit;
-		textViewDistance.setText(text);
+		((TextView) findViewById(R.id.overlay)).setText(text);
 	}
 }
