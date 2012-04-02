@@ -65,7 +65,7 @@ public class EditNodeScreen extends SherlockFragmentActivity {
 		btnSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				ConstraintListFragment fragment = (ConstraintListFragment) getSupportFragmentManager().findFragmentByTag("list");
-				if (fragment.isDirty())
+				if (fragment != null && fragment.isDirty())
 					node.setConstraintList(fragment.getConstraints());
 				node.setName(etName.getText().toString());
 				finishActivity();
