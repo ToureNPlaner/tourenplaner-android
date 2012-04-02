@@ -4,13 +4,15 @@
               android:layout_height="fill_parent"
               android:orientation="vertical">
 
-    <TableRow android:layout_width="wrap_content" android:baselineAligned="false"
-              android:layout_height="wrap_content">
+
+    <LinearLayout android:id="@+id/tableRow2" android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:paddingRight="5dp"
                 android:text="@string/name">
         </TextView>
 
@@ -18,7 +20,7 @@
         <EditText android:inputType="text" android:id="@+id/etName"
                   android:layout_width="fill_parent" android:layout_height="wrap_content"/>
 
-    </TableRow>
+    </LinearLayout>
     <Button android:text="@android:string/ok" android:id="@+id/btnSave" android:layout_height="wrap_content"
             android:layout_width="fill_parent"></Button>
     <Button android:text="@string/delete" android:id="@+id/btnDelete" android:layout_height="wrap_content"
