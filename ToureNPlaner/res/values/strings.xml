@@ -12,14 +12,12 @@
     <string name="add_certificates">certificates</string>
 
     <!--loginscreen-->
-    <string name="login_screen">enter your credentials</string>
     <string name="email">e-mail</string>
     <string name="password">password</string>
     <string name="login">login</string>
     <string name="save_credentials">save credentials</string>
 
     <!--algorithmscreen-->
-    <string name="choose_algorithmn_screen">Choose an algorithmn</string>
     <string name="billing">billing</string>
 
     <!-- billingscreen -->
@@ -35,7 +33,6 @@
     <string name="euro">euro</string>
 
     <!--mapscreen-->
-    <string name="map_screen">mapscreen</string>
     <string name="search">search</string>
 
     <!--nodelist_menu-->
@@ -57,7 +54,6 @@
     <string name="offline_map_location">offline map location</string>
     <string name="input_offline_map_location">enter offline map location</string>
     <string name="is_instant_request">instant request</string>
-    <string name="back_is_delete_marker">use back to delete markers</string>
     <string name="map_generator">Map Generator</string>
     <string name="input_map_generator">Choose Map Generator</string>
     <string name="input_instant">Choose Instant</string>
@@ -65,7 +61,6 @@
 
     <!--menu-->
     <string name="nodelist">nodelist</string>
-    <string name="resultlist">resultlist</string>
     <string name="calculate">calculate</string>
     <string name="your_location">your location</string>
     <string name="settings">settings</string>
@@ -78,18 +73,15 @@
 
     <!--constraints-->
     <string name="type">type</string>
-    <string name="value">value</string>
-    <string name="maximum">maximum</string>
-    <string name="minimum">minimum</string>
 
     <!-- constraint_screens -->
     <string name="select_a_value">select a value</string>
     <!--various-->
     <string name="connecting">connecting</string>
     <string name="new_string">new</string>
-    <string name="cancel">cancel</string>
     <string name="back">back</string>
     <string name="delete">delete</string>
     <string name="edit">edit</string>
+    <string name="search_hint">Search</string>
 
 </resources>

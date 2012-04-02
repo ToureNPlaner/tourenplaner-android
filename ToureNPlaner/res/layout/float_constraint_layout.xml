@@ -15,7 +15,7 @@
 
         <SeekBar
                 android:id="@+id/editconstraintseekBar"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"

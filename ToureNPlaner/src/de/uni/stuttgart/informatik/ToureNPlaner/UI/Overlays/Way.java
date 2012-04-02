@@ -9,7 +9,7 @@ import org.mapsforge.core.Tile;
 import java.util.ArrayList;
 
 class Way {
-	private static int smallestLevelSize = 4;
+	private static final int smallestLevelSize = 4;
 
 	private static final int[] steps = {128, 128, 64, 64, 64, 64, 64, 32, 16, 8, 8, 4, 4, 2, 2};
 

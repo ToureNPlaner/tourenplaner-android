@@ -59,7 +59,6 @@ public class EditNodeScreen extends SherlockFragmentActivity {
 		// -------------- get Buttons --------------
 		Button btnDelete = (Button) findViewById(R.id.btnDelete);
 		Button btnSave = (Button) findViewById(R.id.btnSave);
-		Button btnReturn = (Button) findViewById(R.id.btnReturn);
 		etName.setText(node.getName());
 		// -----------------btnSave-----------------------
 		btnSave.setOnClickListener(new OnClickListener() {
@@ -69,12 +68,6 @@ public class EditNodeScreen extends SherlockFragmentActivity {
 					node.setConstraintList(fragment.getConstraints());
 				node.setName(etName.getText().toString());
 				finishActivity();
-			}
-		});
-		btnReturn.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				setResult(RESULT_CANCELED, null);
-				finish();
 			}
 		});
 		// -----------------btnDelete-----------------------
