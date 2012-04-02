@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
@@ -56,7 +55,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	NodeOverlay nodeOverlay;
 	private RequestHandler handler = null;
 	private LocationManager locManager;
-	private PopupWindow distancePopup = null;
 	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
 

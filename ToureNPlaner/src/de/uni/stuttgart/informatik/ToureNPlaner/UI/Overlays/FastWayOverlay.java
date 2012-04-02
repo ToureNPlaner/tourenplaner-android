@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.util.FloatMath;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.AddNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -88,7 +89,7 @@ public class FastWayOverlay extends Overlay {
 			}
 		}
 
-		if (Math.sqrt(min) < thickness)
+		if (FloatMath.sqrt(min) < thickness)
 			return index;
 		else
 			return -1;
