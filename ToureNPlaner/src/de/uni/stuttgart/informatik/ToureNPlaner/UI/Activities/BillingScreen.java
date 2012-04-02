@@ -9,7 +9,6 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingRequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
@@ -118,10 +117,8 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 
 			// put all resultNodes in Node ArrayList
 			for (int i = 0; i < resultArray.size(); i++) {
-				id = resultArray.get(i).getId();
-				name = String.valueOf(i);
-				ArrayList<ConstraintType> cl = new ArrayList<ConstraintType>();
-				Node node = new Node(id, name, resultArray.get(i).getGeoPoint(), cl);
+				ResultNode n = resultArray.get(i);
+				Node node = new Node(n.getId(), n.getName(), n.getShortName(), resultArray.get(i).getGeoPoint(), session.getSelectedAlgorithm().getPointConstraintTypes());
 				nodeArray.add(node);
 			}
 			session.getNodeModel().setNodeVector(nodeArray);

@@ -177,7 +177,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 
 	public void addMarkerToMap(Node node) {
 		NodeDrawable drawable = (NodeDrawable) boundCenterBottom(new NodeDrawable(NodeDrawable.MarkerType.START));
-		drawable.setLabel(node.getName());
+		drawable.setLabel(node.getShortName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, drawable);
 		list.add(overlayitem);
 	}

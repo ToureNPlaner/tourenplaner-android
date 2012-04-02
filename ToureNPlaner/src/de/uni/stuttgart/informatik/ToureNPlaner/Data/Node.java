@@ -9,15 +9,17 @@ import java.util.ArrayList;
 
 public class Node implements Serializable {
 	private String name;
+	private String shortName;
 	private GeoPoint geoPoint;
 
 	private final int id;
 
 	private ArrayList<Constraint> constraintList;
 
-	public Node(int id, String name, GeoPoint point, ArrayList<ConstraintType> constraintTypes) {
+	public Node(int id, String name, String shortName, GeoPoint point, ArrayList<ConstraintType> constraintTypes) {
 		this.id = id;
 		this.name = name;
+		this.shortName = shortName;
 		this.geoPoint = point;
 		constraintList = new ArrayList<Constraint>(constraintTypes.size());
 		for (int i = 0; i < constraintTypes.size(); i++) {
@@ -25,8 +27,8 @@ public class Node implements Serializable {
 		}
 	}
 
-	public Node(int id, String name, int laE7, int loE7, ArrayList<ConstraintType> constraintTypes) {
-		this(id, name, new GeoPoint(laE7 / 10, loE7 / 10), constraintTypes);
+	public Node(int id, String name, String shortName, int laE7, int loE7, ArrayList<ConstraintType> constraintTypes) {
+		this(id, name, shortName, new GeoPoint(laE7 / 10, loE7 / 10), constraintTypes);
 	}
 
 
@@ -40,6 +42,14 @@ public class Node implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 	public int getLaE7() {

@@ -44,7 +44,6 @@ public class Result implements Serializable {
 
 	static void jacksonParse(JsonParser jp, ArrayList<SmartIntArray> ways, ArrayList<ResultNode> points, Misc misc) throws IOException {
 		int lt = 0, ln = 0;
-		int id = 0;
 		while (jp.nextToken() != JsonToken.END_OBJECT && jp.getCurrentToken() != null) {
 			if ("constraints".equals(jp.getCurrentName())) {
 				// consume
@@ -52,7 +51,8 @@ public class Result implements Serializable {
 				}
 			}
 			if ("misc".equals(jp.getCurrentName())) {
-				JsonNode node = jp.readValueAs(JsonNode.class).get("misc");
+				jp.nextToken();
+				JsonNode node = jp.readValueAsTree();
 				Iterator<Map.Entry<String, JsonNode>> ns = node.getFields();
 				while (ns.hasNext()) {
 					Map.Entry<String, JsonNode> n = ns.next();
@@ -60,22 +60,10 @@ public class Result implements Serializable {
 				}
 			}
 			if ("points".equals(jp.getCurrentName())) {
-				if (jp.nextToken() == JsonToken.START_ARRAY) {
-					while (jp.nextToken() != JsonToken.END_ARRAY) {
-						while (jp.nextToken() != JsonToken.END_OBJECT) {
-							if (jp.getCurrentName().equals("lt")) {
-								jp.nextToken();
-								lt = jp.getIntValue();
-							} else if (jp.getCurrentName().equals("ln")) {
-								jp.nextToken();
-								ln = jp.getIntValue();
-							} else if (jp.getCurrentName().equals("id")) {
-								jp.nextToken();
-								id = jp.getIntValue();
-							}
-						}
-						points.add(new ResultNode(id, lt, ln));
-					}
+				jp.nextToken();
+				JsonNode nodes = jp.readValueAsTree();
+				for (JsonNode node : nodes) {
+					points.add(ResultNode.parse(node));
 				}
 			}
 			if ("way".equals(jp.getCurrentName())) {

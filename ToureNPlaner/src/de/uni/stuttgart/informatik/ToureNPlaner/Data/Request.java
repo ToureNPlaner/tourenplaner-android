@@ -15,6 +15,8 @@ public class Request {
 		o.put("lt", node.getLaE7());
 		o.put("ln", node.getLoE7());
 		o.put("id", node.getId());
+		o.put("name", node.getName());
+		o.put("shortname", node.getShortName());
 		return o;
 	}
 

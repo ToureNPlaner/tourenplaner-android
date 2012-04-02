@@ -53,7 +53,7 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
 			icon = new NodeDrawable(NodeDrawable.MarkerType.MIDDLE);
 		}
 
-		((NodeDrawable) icon).setLabel(node.getName());
+		((NodeDrawable) icon).setLabel(node.getShortName());
 
 		ImageView.setImageDrawable(icon);
 		return itemLayout;

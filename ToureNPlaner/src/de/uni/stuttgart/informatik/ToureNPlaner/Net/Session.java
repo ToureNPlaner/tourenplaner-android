@@ -319,7 +319,8 @@ public class Session implements Serializable {
 		if (nodeModel.size() >= getSelectedAlgorithm().getMaxPoints()) {
 			return null;
 		}
-		return new Node(nodeModel.getVersion(), createName(d.nameCounter++), geoPoint, d.selectedAlgorithm.getPointConstraintTypes());
+		String name = createName(d.nameCounter++);
+		return new Node(nodeModel.getVersion(), name, name, geoPoint, d.selectedAlgorithm.getPointConstraintTypes());
 	}
 
 	public ArrayList<Constraint> getConstraints() {
