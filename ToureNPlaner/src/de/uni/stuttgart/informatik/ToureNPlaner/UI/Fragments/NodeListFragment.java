@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
+package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.UpdateNodeEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.EditNodeScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.NodeListAdapter;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.DragDrop.DragNDropListView;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DragListener;

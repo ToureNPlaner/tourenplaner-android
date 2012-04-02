@@ -1,4 +1,4 @@
-package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
+package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

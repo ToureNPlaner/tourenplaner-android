@@ -8,6 +8,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.InfoFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.NodeListFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TabListener;
 
 public class InfoScreen extends SherlockFragmentActivity {

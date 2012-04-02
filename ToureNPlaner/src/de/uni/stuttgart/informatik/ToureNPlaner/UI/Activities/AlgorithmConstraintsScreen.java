@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
 import java.util.ArrayList;
 
