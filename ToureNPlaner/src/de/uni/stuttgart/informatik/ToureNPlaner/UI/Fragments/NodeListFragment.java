@@ -193,7 +193,6 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 		inflater.inflate(R.menu.nodelistmenu, menu);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
