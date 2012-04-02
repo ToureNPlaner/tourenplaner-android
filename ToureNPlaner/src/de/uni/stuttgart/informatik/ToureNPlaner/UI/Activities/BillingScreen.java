@@ -68,6 +68,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		final ExpandableListView.ExpandableListContextMenuInfo info =
@@ -101,9 +102,6 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 			ArrayList<AlgorithmInfo> algorithmList;
 			resultArray = result.getPoints();
 			ArrayList<Node> nodeArray = new ArrayList<Node>();
-			String name = "";
-			int id;
-
 
 			// search for the algorithmn suffix that was used by this request
 			int PositionOfAlg = 0;
@@ -157,6 +155,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore =

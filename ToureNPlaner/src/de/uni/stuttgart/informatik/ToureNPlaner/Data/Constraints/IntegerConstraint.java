@@ -27,13 +27,13 @@ public class IntegerConstraint extends ConstraintType {
 	}
 
 	public static ConstraintType parse(JsonNode constraint) {
-		int min = (int) constraint.path("min").asInt(0);
+		int min = constraint.path("min").asInt(0);
 		int max;
 		JsonNode n = constraint.get("max");
 		if (n == null)
 			max = 10000;
 		else
-			max = (int) n.getIntValue();
+			max = n.getIntValue();
 
 		return new IntegerConstraint(constraint.path("name").asText(),
 				constraint.path("description").asText(),

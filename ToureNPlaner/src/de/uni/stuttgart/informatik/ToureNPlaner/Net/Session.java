@@ -355,6 +355,7 @@ public class Session implements Serializable {
 	 * @param listener the Callback listener
 	 * @return Use this to cancel the task with cancel(true)
 	 */
+	@SuppressWarnings("unchecked")
 	public static ServerInfoHandler createSession(String url, Observer listener) {
 		ServerInfoHandler handler = new ServerInfoHandler(listener, url);
 		handler.execute();
@@ -393,6 +394,7 @@ public class Session implements Serializable {
 		return canPerformReason().equals("");
 	}
 
+	@SuppressWarnings("unchecked")
 	public RequestHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
 		if (canPerformRequest() && (force || result == null || nodeModel.getVersion() != result.getVersion())) {
 			return (RequestHandler) new RequestHandler(requestListener, this).execute();

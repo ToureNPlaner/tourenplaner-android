@@ -52,7 +52,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		}
 
 		billingItems.ensureCapacity(billingItems.size() + items.size());
-		Double cost = 0.0;
+		double cost;
 		String date;
 		for (int i = 0; i < items.size(); i++) {
 			date = items.get(i).getRequestdate();

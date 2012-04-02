@@ -219,16 +219,4 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 		if (change.isModelChange() || change.isNnsChange())
 			loadFromModel();
 	}
-
-	public boolean checkForDigits(String str) {
-		char c;
-		for (int i = 0; i < str.length(); i++) {
-			c = str.charAt(i);
-
-			if (!Character.isDigit(c) && '.' != c)
-				return false;
-		}
-
-		return true;
-	}
 }

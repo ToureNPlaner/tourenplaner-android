@@ -87,14 +87,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		public void onCompleted(RawHandler caller, Object object) {
 			Edit edit = new UpdateNNSEdit(session, ((RequestNN) caller).getNode(), ((Result) object).getPoints().get(0).getGeoPoint());
 			edit.perform();
-			requestList.remove((RequestNN) caller);
+			requestList.remove(caller);
 		}
 
 		@Override
 		public void onError(RawHandler caller, Object object) {
 			Toast.makeText(getApplicationContext(), object.toString(),
 					Toast.LENGTH_LONG).show();
-			requestList.remove((RequestNN) caller);
+			requestList.remove(caller);
 		}
 	};
 
@@ -292,6 +292,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			}
 		});
 		searchMenu.getActionView().findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -420,6 +421,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void performNNSearch(Node node) {
 		requestList.add((RequestNN) new RequestNN(nnsListener, session, node).execute());
 	}
