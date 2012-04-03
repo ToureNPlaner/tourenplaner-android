@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-02-08 19:43+0100\n"
+"POT-Creation-Date: 2012-04-03 16:16+0200\n"
 "PO-Revision-Date: 2012-02-08 19:43+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -22,215 +22,224 @@ msgctxt "app_name"
 msgid "ToureNPlaner"
 msgstr "ToureNPlaner"
 
-msgctxt "choose_server_screen"
-msgid "Choose a server"
-msgstr "Wählen sie einen Server"
+msgctxt "enter_server"
+msgid "Enter a server address"
+msgstr ""
 
 msgctxt "add_server"
 msgid "Add server"
 msgstr "Server hinzufügen"
 
-msgctxt "login_screen"
-msgid "enter your credentials"
+msgctxt "add_certificate"
+msgid "Add certificate"
+msgstr ""
+
+msgctxt "add_certificates"
+msgid "Manage certificates"
 msgstr ""
 
 msgctxt "email"
-msgid "e-mail"
+msgid "Email"
 msgstr ""
 
 msgctxt "password"
-msgid "password"
+msgid "Password"
 msgstr ""
 
 msgctxt "login"
-msgid "login"
+msgid "Login"
 msgstr ""
 
 msgctxt "save_credentials"
-msgid "save credentials"
-msgstr ""
-
-msgctxt "choose_algorithmn_screen"
-msgid "Choose an algorithmn"
+msgid "Save credentials"
 msgstr ""
 
 msgctxt "billing"
-msgid "billing"
+msgid "History"
 msgstr ""
 
-msgctxt "billingscreen_preferences"
-msgid "billingscreen preferences"
+msgctxt "requestid"
+msgid "request ID"
 msgstr ""
 
-msgctxt "offset"
-msgid "offset"
+msgctxt "algorithmn"
+msgid "Algorithm"
 msgstr ""
 
-msgctxt "limit"
-msgid "limit"
+msgctxt "cost"
+msgid "Cost"
 msgstr ""
 
-msgctxt "set_offset"
-msgid "enter offset"
+msgctxt "requestdate"
+msgid "Request date"
 msgstr ""
 
-msgctxt "set_limit"
-msgid "enter limit"
+msgctxt "duration"
+msgid "Duration"
 msgstr ""
 
-msgctxt "map_screen"
-msgid "mapscreen"
+msgctxt "status"
+msgid "Status"
 msgstr ""
 
-msgctxt "change_order"
-msgid "change order"
+msgctxt "tour"
+msgid "Tour"
+msgstr ""
+
+msgctxt "load_request"
+msgid "Load request"
+msgstr ""
+
+msgctxt "milliseconds"
+msgid "milliseconds"
+msgstr ""
+
+msgctxt "euro"
+msgid "Euro"
+msgstr ""
+
+msgctxt "search"
+msgid "Search"
+msgstr ""
+
+msgctxt "reverse_order"
+msgid "Reverse order"
 msgstr ""
 
 msgctxt "map_file_error"
 msgid "Mapfile is not valid. Falling back."
 msgstr ""
 
-msgctxt "mapscreen_preferences"
-msgid "mapscreen preferences"
+msgctxt "Result"
+msgid "Result"
+msgstr ""
+
+msgctxt "distance"
+msgid "Distance"
+msgstr ""
+
+msgctxt "message"
+msgid "Message"
+msgstr ""
+
+msgctxt "meter"
+msgid "meter"
+msgstr ""
+
+msgctxt "kilometer"
+msgid "kilometer"
+msgstr ""
+
+msgctxt "meter_short"
+msgid "m"
+msgstr ""
+
+msgctxt "kilometer_short"
+msgid "km"
+msgstr ""
+
+msgctxt "minute_short"
+msgid "min"
+msgstr ""
+
+msgctxt "amount_of_points"
+msgid "amount of points"
+msgstr ""
+
+msgctxt "map_preferences"
+msgid "Map"
 msgstr ""
 
 msgctxt "input_tile_server"
-msgid "enter tile-server"
+msgid "Enter tile server"
 msgstr ""
 
+#, fuzzy
 msgctxt "tile_server"
-msgid "tile-server"
-msgstr ""
-
-msgctxt "is_offline_map"
-msgid "use offline map"
-msgstr ""
+msgid "Tile server"
+msgstr "Server hinzufügen"
 
 msgctxt "offline_map_location"
-msgid "offline map location"
+msgid "Offline map location"
 msgstr ""
 
 msgctxt "input_offline_map_location"
-msgid "enter offline map location"
+msgid "Enter offline map location"
 msgstr ""
 
 msgctxt "is_instant_request"
-msgid "instant request"
-msgstr ""
-
-msgctxt "back_is_delete_marker"
-msgid "use back to delete markers"
+msgid "Instant Request"
 msgstr ""
 
 msgctxt "map_generator"
-msgid "Map Generator"
+msgid "Map"
 msgstr ""
 
 msgctxt "input_map_generator"
-msgid "Choose Map Generator"
+msgid "Choose a Map"
 msgstr ""
 
-msgctxt "mapnik"
-msgid "Mapnik"
+msgctxt "input_instant"
+msgid "Instant Request"
 msgstr ""
 
-msgctxt "opencycle"
-msgid "OpenCycle"
-msgstr ""
-
-msgctxt "osmander"
-msgid "Osmander"
-msgstr ""
-
-msgctxt "map_file"
-msgid "Map file"
-msgstr ""
-
-msgctxt "custom_tile_downloader"
-msgid "Custom"
-msgstr ""
-
-msgctxt "nodelist"
-msgid "nodelist"
-msgstr ""
-
-msgctxt "resultlist"
-msgid "resultlist"
+msgctxt "info"
+msgid "Info"
 msgstr ""
 
 msgctxt "calculate"
-msgid "calculate"
+msgid "Calculate"
 msgstr ""
 
 msgctxt "your_location"
-msgid "your location"
+msgid "Your location"
 msgstr ""
 
 msgctxt "settings"
-msgid "settings"
-msgstr ""
-
-msgctxt "save"
-msgid "save"
+msgid "Settings"
 msgstr ""
 
 msgctxt "constraints"
-msgid "constraints"
+msgid "Constraints"
 msgstr ""
 
 msgctxt "name"
-msgid "name"
+msgid "Name"
 msgstr ""
 
-msgctxt "type"
-msgid "type"
-msgstr ""
-
-msgctxt "value"
-msgid "value"
-msgstr ""
-
-msgctxt "maximum"
-msgid "maximum"
-msgstr ""
-
-msgctxt "minimum"
-msgid "minimum"
+msgctxt "select_a_value"
+msgid "Select a value"
 msgstr ""
 
 msgctxt "connecting"
-msgid "connecting"
+msgid "Connecting"
 msgstr ""
 
 msgctxt "new_string"
-msgid "new"
-msgstr ""
-
-msgctxt "ok"
-msgid "ok"
-msgstr ""
-
-msgctxt "yes"
-msgid "yes"
-msgstr ""
-
-msgctxt "no"
-msgid "no"
-msgstr ""
-
-msgctxt "cancel"
-msgid "cancel"
-msgstr ""
-
-msgctxt "back"
-msgid "back"
+msgid "New"
 msgstr ""
 
 msgctxt "delete"
-msgid "delete"
+msgid "Delete"
 msgstr ""
 
 msgctxt "edit"
-msgid "edit"
+msgid "Edit"
+msgstr ""
+
+msgctxt "search_hint"
+msgid "Search address"
+msgstr ""
+
+msgctxt "mapscreen_hint"
+msgid "Put your finger on the screen to place a marker"
+msgstr ""
+
+msgctxt "login_dialog_title"
+msgid "Logging in"
+msgstr ""
+
+msgctxt "clear"
+msgid "Clear"
 msgstr ""
 
