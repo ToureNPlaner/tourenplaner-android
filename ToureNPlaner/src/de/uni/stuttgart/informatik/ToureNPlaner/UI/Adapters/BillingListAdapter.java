@@ -1,6 +1,7 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,6 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		setupList(items);
 	}
 
-
 	private void setupList(ArrayList<BillingItem> items) {
 		billingCaptions.ensureCapacity(billingCaptions.size() + items.size());
 		for (int i = 0; i < items.size(); i++) {
@@ -61,32 +61,38 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 			cost = ((double) items.get(i).getCost()) / 100;
 
 			String[] arr = new String[6];
-			arr[0] = context.getResources().getString(R.string.requestid) + ": " + items.get(i).getRequestid();
-			arr[1] = context.getResources().getString(R.string.algorithmn) + ": " + items.get(i).getAlgorithm();
-			arr[2] = context.getResources().getString(R.string.cost) + ": " + cost + " " + context.getResources().getString(R.string.euro);
-			arr[3] = context.getResources().getString(R.string.requestdate) + ": \n" + DateYearDayMonth + " " + DateTime;
-			arr[4] = context.getResources().getString(R.string.duration) + ": " + items.get(i).getDuration() + " " + context.getResources().getString(R.string.milliseconds);
-			arr[5] = context.getResources().getString(R.string.status) + ": " + items.get(i).getStatus();
+			arr[0] = context.getString(R.string.requestid) + ": " + items.get(i).getRequestid();
+			arr[1] = context.getString(R.string.algorithmn) + ": " + items.get(i).getAlgorithm();
+			arr[2] = context.getString(R.string.cost) + ": " + cost + " " + context.getResources().getString(R.string.euro);
+			arr[3] = context.getString(R.string.requestdate) + ": \n" + DateYearDayMonth + " " + DateTime;
+			arr[4] = context.getString(R.string.duration) + ": " + items.get(i).getDuration() + " " + context.getResources().getString(R.string.milliseconds);
+			arr[5] = context.getString(R.string.status) + ": " + items.get(i).getStatus();
 			billingItems.add(arr);
 		}
 	}
 
+	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		return billingItems.get(groupPosition)[childPosition];
 	}
 
+	@Override
 	public long getChildId(int groupPosition, int childPosition) {
 		return childPosition;
 	}
 
+	@Override
 	public int getChildrenCount(int groupPosition) {
 		return billingItems.get(groupPosition).length;
 	}
 
-	public TextView getGenericView() {
+	private TextView createView() {
+		TypedValue value = new TypedValue();
+		context.getTheme().resolveAttribute(android.R.attr.listPreferredItemHeightSmall, value, true);
+		int height = (int) value.getDimension(context.getResources().getDisplayMetrics());
+
 		// Layout parameters for the ExpandableListView
-		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
 
 		TextView textView = new TextView(context);
 		textView.setLayoutParams(lp);
@@ -98,39 +104,46 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 		return textView;
 	}
 
+	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
 	                         View convertView, ViewGroup parent) {
-		TextView textView = getGenericView();
+		TextView textView = convertView == null ? createView() : (TextView) convertView;
+		textView.requestLayout();
 		textView.setText(getChild(groupPosition, childPosition).toString());
 		return textView;
 	}
 
+	@Override
 	public Object getGroup(int groupPosition) {
 		return billingCaptions.get(groupPosition);
 	}
 
+	@Override
 	public int getGroupCount() {
 		return billingCaptions.size();
 	}
 
+	@Override
 	public long getGroupId(int groupPosition) {
 		return groupPosition;
 	}
 
+	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
 	                         ViewGroup parent) {
-		TextView textView = getGenericView();
+		TextView textView = convertView == null ? createView() : (TextView) convertView;
 		textView.setText(getGroup(groupPosition).toString());
 		return textView;
 	}
 
+	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
 
+	@Override
 	public boolean hasStableIds() {
-		return true;
+		return false;
 	}
-
 }
 

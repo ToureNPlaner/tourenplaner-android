@@ -19,7 +19,7 @@ public class ResultNodeAdapter extends ArrayAdapter<ResultNode> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView item = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
+		TextView item = convertView == null ? (TextView) LayoutInflater.from(getContext()).inflate(R.layout.list_item, null) : (TextView) convertView;
 		ResultNode node = getItem(position);
 
 		String txt = "";

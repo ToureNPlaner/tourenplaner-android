@@ -43,7 +43,7 @@ public class KeystoreAdapter extends BaseAdapter {
 		}
 	}
 
-	public TextView getGenericView() {
+	public TextView createView() {
 		// Layout parameters for the ExpandableListView
 		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -65,7 +65,7 @@ public class KeystoreAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
-		TextView textView = getGenericView();
+		TextView textView = view == null ? createView() : (TextView) view;
 		textView.setText(getItem(i).toString());
 		return textView;
 	}
