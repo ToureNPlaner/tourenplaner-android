@@ -7,6 +7,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
@@ -25,6 +26,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	private BillingListHandler billingListhandler;
 	private Session session;
 	private String algSuffix;
+	private OnClickListener buttonClicklistener;
 	BillingRequestHandler billingRequestHandler;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
@@ -43,8 +45,8 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-		adapter = new BillingListAdapter(this, billinglist);
+		setupListener();
+		adapter = new BillingListAdapter(this, billinglist,buttonClicklistener);
 		setListAdapter(adapter);
 		getExpandableListView().setOnScrollListener(this);
 		registerForContextMenu(getExpandableListView());
@@ -67,6 +69,30 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		}
 		);
 	}
+	private void setupListener(){
+		buttonClicklistener = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+
+				int id = view.getId();
+				loadRequest(id);
+			}
+		};
+	}
+
+	private void loadRequest(int id){
+		int requestid = adapter.getRequestID(id);
+		algSuffix = adapter.getAlgSuffix(id);
+		String status = adapter.getStatus(id);
+		if (status.equals("ok")) {
+			setSupportProgressBarIndeterminateVisibility(true);
+			billingRequestHandler = new BillingRequestHandler(billingRequestListener, session, requestid);
+			billingRequestHandler.execute();
+		} else {
+			Toast.makeText(getApplicationContext(), "failed to load request", Toast.LENGTH_SHORT).show();
+		}
+
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -75,19 +101,11 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 				(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 			case 0: // showBilling
-				int requestid = adapter.getRequestID((int) info.id);
-				algSuffix = adapter.getAlgSuffix((int) info.id);
-				String status = adapter.getStatus((int) info.id);
-				if (status.equals("ok")) {
-					setSupportProgressBarIndeterminateVisibility(true);
-					billingRequestHandler = new BillingRequestHandler(billingRequestListener, session, requestid);
-					billingRequestHandler.execute();
-				} else {
-					Toast.makeText(getApplicationContext(), "failed to load request", Toast.LENGTH_SHORT).show();
-				}
+				int id = (int) info.id;
+					loadRequest(id);
 				break;
-
 		}
+
 		return true;
 	}
 
