@@ -205,7 +205,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 			case 0: // edit
-				EditDialog.newInstance(getResources().getString(R.string.choose_server_screen),
+				EditDialog.newInstance(getResources().getString(R.string.enter_server),
 						servers.get(info.position), info.position)
 						.show(getSupportFragmentManager(), EditDialog.IDENTIFIER);
 				break;
@@ -301,7 +301,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 				startActivity(new Intent(this, CertificateScreen.class));
 				return true;
 			case R.id.add_server:
-				NewDialog.newInstance(getResources().getString(R.string.new_string), "")
+				NewDialog.newInstance(getResources().getString(R.string.enter_server), "")
 						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
 				return true;
 		}

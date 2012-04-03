@@ -9,13 +9,13 @@
           android:icon="@drawable/action_search"
           android:actionLayout="@layout/collapsible_searchfield"
           android:showAsAction="always|collapseActionView"
-          android:title="@string/search"/>
+          android:title="@string/search_hint"/>
     <item android:id="@+id/nodelist"
           android:icon="@drawable/list"
-          android:title="@string/nodelist"/>
+          android:title="@string/info"/>
     <item android:id="@+id/reset"
           android:icon="@drawable/trash"
-          android:title="@string/delete"/>
+          android:title="@string/clear"/>
     <item android:id="@+id/algorithm_constraints"
           android:icon="@drawable/list"
           android:title="@string/constraints"/>

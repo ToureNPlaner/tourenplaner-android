@@ -33,14 +33,14 @@ public class InfoScreen extends SherlockFragmentActivity {
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		ActionBar.Tab tab = getSupportActionBar().newTab()
-				.setText(R.string.nodelist)
+				.setText(R.string.info)
 				.setTabListener(new TabListener<NodeListFragment>(
 						this, "NodeList", NodeListFragment.class));
 		actionBar.addTab(tab);
 
 		if (session.getResult() != null) {
 			tab = getSupportActionBar().newTab()
-					.setText(R.string.details)
+					.setText(R.string.Result)
 					.setTabListener(new TabListener<InfoFragment>(
 							this, "Info", InfoFragment.class));
 			actionBar.addTab(tab);

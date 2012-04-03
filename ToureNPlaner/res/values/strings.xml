@@ -4,42 +4,42 @@
     <string name="app_name">ToureNPlaner</string>
 
     <!--serverscreen-->
-    <string name="choose_server_screen">Choose a server</string>
+    <string name="enter_server">Enter a server address</string>
     <string name="add_server">Add server</string>
 
     <!-- certificatescreen -->
-    <string name="add_certificate">add certificate</string>
-    <string name="add_certificates">certificates</string>
+    <string name="add_certificate">Add certificate</string>
+    <string name="add_certificates">Manage certificates</string>
 
     <!--loginscreen-->
-    <string name="email">e-mail</string>
-    <string name="password">password</string>
-    <string name="login">login</string>
-    <string name="save_credentials">save credentials</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="save_credentials">Save credentials</string>
 
     <!--algorithmscreen-->
-    <string name="billing">billing</string>
+    <string name="billing">History</string>
 
     <!-- billingscreen -->
     <string name="requestid">request ID</string>
-    <string name="algorithmn">algorithm</string>
-    <string name="cost">cost</string>
-    <string name="requestdate">request date</string>
-    <string name="duration">duration</string>
-    <string name="status">status</string>
+    <string name="algorithmn">Algorithm</string>
+    <string name="cost">Cost</string>
+    <string name="requestdate">Request date</string>
+    <string name="duration">Duration</string>
+    <string name="status">Status</string>
     <string name="tour">Tour</string>
-    <string name="load_request">load request</string>
+    <string name="load_request">Load request</string>
     <string name="milliseconds">milliseconds</string>
-    <string name="euro">euro</string>
+    <string name="euro">Euro</string>
 
     <!--mapscreen-->
-    <string name="search">search</string>
+    <string name="search_hint">Search address</string>
 
     <!--nodelist_menu-->
-    <string name="reverse_order">reverse order</string>
+    <string name="reverse_order">Reverse order</string>
     <string name="map_file_error">Mapfile is not valid. Falling back.</string>
-    <string name="details">details</string>
-    <string name="distance">distance</string>
+    <string name="Result">Result</string>
+    <string name="distance">Distance</string>
     <string name="message">Message</string>
     <string name="meter">meter</string>
     <string name="kilometer">kilometer</string>
@@ -49,35 +49,37 @@
     <string name="amount_of_points">amount of points</string>
 
     <!--mapscreen_preferences-->
-    <string name="mapscreen_preferences">mapscreen preferences</string>
-    <string name="input_tile_server">enter tile-server</string>
-    <string name="tile_server">tile-server</string>
-    <string name="offline_map_location">offline map location</string>
-    <string name="input_offline_map_location">enter offline map location</string>
-    <string name="is_instant_request">instant request</string>
-    <string name="map_generator">Map Generator</string>
-    <string name="input_map_generator">Choose Map Generator</string>
-    <string name="input_instant">Choose Instant</string>
+    <string name="map_preferences">Map</string>
+    <string name="input_tile_server">Enter tile server</string>
+    <string name="tile_server">Tile server</string>
+    <string name="offline_map_location">Offline map location</string>
+    <string name="input_offline_map_location">Enter offline map location</string>
+    <string name="is_instant_request">Instant Request</string>
+    <string name="map_generator">Map</string>
+    <string name="input_map_generator">Choose a Map</string>
+    <string name="input_instant">Instant Request</string>
 
 
     <!--menu-->
-    <string name="nodelist">nodelist</string>
-    <string name="calculate">calculate</string>
-    <string name="your_location">your location</string>
-    <string name="settings">settings</string>
+    <string name="info">Info</string>
+    <string name="calculate">Calculate</string>
+    <string name="your_location">Your location</string>
+    <string name="settings">Settings</string>
 
     <!-- editnodescreen -->
-    <string name="constraints">constraints</string>
-    <string name="name">name</string>
+    <string name="constraints">Constraints</string>
+    <string name="name">Name</string>
 
     <!-- constraint_screens -->
-    <string name="select_a_value">select a value</string>
+    <string name="select_a_value">Select a value</string>
     <!--various-->
-    <string name="connecting">connecting</string>
-    <string name="new_string">new</string>
-    <string name="delete">delete</string>
-    <string name="edit">edit</string>
+    <string name="connecting">Connecting</string>
+    <string name="new_string">New</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
     <string name="search_hint">Search</string>
     <string name="mapscreen_hint">Put your finger on the screen to place a marker</string>
+    <string name="login_dialog_title">Logging in</string>
+    <string name="clear">Clear</string>
 
 </resources>

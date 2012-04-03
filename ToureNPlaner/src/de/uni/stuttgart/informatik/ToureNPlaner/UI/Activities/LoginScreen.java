@@ -98,7 +98,7 @@ public class LoginScreen extends SherlockFragmentActivity implements Observer {
 					preferencesEditor.clear();
 					preferencesEditor.commit();
 				}
-				ConnectionProgressDialog.newInstance("Login", session.getUsername()).show(getSupportFragmentManager(), "login");
+				ConnectionProgressDialog.newInstance(getString(R.string.login_dialog_title), session.getUsername()).show(getSupportFragmentManager(), "login");
 				handler = new AuthRequestHandler(LoginScreen.this, session);
 				handler.execute();
 			}
