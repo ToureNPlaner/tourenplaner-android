@@ -56,7 +56,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 				// 0 - Group
 				// 1 - Child
 				int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-				if (type == 0) {
+				if (type == 0 || type == 1) {
 					contextMenu.setHeaderTitle(adapter.getGroup((int) info.id).toString());
 					String[] menuItems = {getResources().getString(R.string.load_request)};
 					for (int i = 0; i < menuItems.length; i++) {
@@ -163,7 +163,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 
 		if (loadMore && billingListhandler == null) {
 			setSupportProgressBarIndeterminateVisibility(true);
-			billingListhandler = new BillingListHandler(this, session, 15, adapter.getGroupCount());
+			billingListhandler = new BillingListHandler(this, session, 20, adapter.getGroupCount());
 			billingListhandler.execute();
 		}
 	}
