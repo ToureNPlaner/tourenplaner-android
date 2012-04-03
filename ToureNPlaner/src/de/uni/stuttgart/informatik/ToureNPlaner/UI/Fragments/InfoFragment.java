@@ -8,10 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ResultNodeAdapter;
+
+import java.util.Map;
 
 public class InfoFragment extends SherlockFragment {
 	private Session session;
@@ -32,31 +35,38 @@ public class InfoFragment extends SherlockFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		String distanceUnit = getResources().getString(R.string.meter);
-		double distance = session.getResult().getMisc().getDistance();
+		View view = inflater.inflate(R.layout.route_details, null);
+		TextView txtView = (TextView) view.findViewById(R.id.text);
+
+		Result.Misc misc = session.getResult().getMisc();
+
+		String distanceUnit = getString(R.string.meter);
+		double distance = misc.getDistance();
 		if (distance > 1000) {
 			distance = distance / 1000;
-			distanceUnit = getResources().getString(R.string.kilometer);
+			distanceUnit = getString(R.string.kilometer);
 		}
 
-		View view = inflater.inflate(R.layout.route_details, null);
-
-		TextView txtmarkercount = (TextView) view.findViewById(R.id.details_markercount);
-		TextView txtdistance = (TextView) view.findViewById(R.id.details_distance);
-		TextView txtmsg = (TextView) view.findViewById(R.id.details_message);
-
-		txtmarkercount.setText(getResources().getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size());
-		txtdistance.setText(getResources().getString(R.string.distance) + ": " + distance + " " + distanceUnit);
-		String msg = session.getResult().getMisc().getMessage();
+		String txt = "";
+		txt += getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size() + "\n";
+		txt += getString(R.string.distance) + ": " + distance + " " + distanceUnit + "\n";
+		txt += getString(R.string.time) + ": " + misc.getTime() + " " + getString(R.string.minute_short) + "\n";
+		String msg = misc.getMessage();
 		if (msg != null)
-			txtmsg.setText(getResources().getString(R.string.message) + ": " + msg);
+			txt += getString(R.string.message) + ": " + msg + "\n";
 
-		txtmsg.setText(session.getResult().getMisc().info.toString());
+		for (Map.Entry<String, String> e : misc.info.entrySet()) {
+			msg += e.getKey() + ": " + e.getValue() + "\n";
+		}
+
+		// cut of last \n
+		txt = txt.substring(0, txt.length() - 1);
+
+		txtView.setText(txt);
 
 		ListView listView = (ListView) view.findViewById(android.R.id.list);
 		ArrayAdapter<ResultNode> adapter = new ResultNodeAdapter(getActivity(), session.getResult().getPoints());
 		listView.setAdapter(adapter);
-
 
 		return view;
 	}

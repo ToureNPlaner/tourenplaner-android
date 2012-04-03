@@ -535,17 +535,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void updateDistancePopup() {
-		String distanceUnit = getResources().getString(R.string.meter_short);
+		String distanceUnit = getString(R.string.meter_short);
 		double distance = session.getResult().getMisc().getDistance();
 		double time = session.getResult().getMisc().getTime() / 60;
 		if (distance > 1000) {
 			distance = distance / 1000;
-			distanceUnit = getResources().getString(R.string.kilometer_short);
+			distanceUnit = getString(R.string.kilometer_short);
 		}
 
 		DecimalFormat f = new DecimalFormat("#0.00");
 
-		String timeUnit = getResources().getString(R.string.minute_short);
+		String timeUnit = getString(R.string.minute_short);
 		String text = f.format(distance) + " " + distanceUnit + ", " + f.format(time) + " " + timeUnit;
 		((TextView) findViewById(R.id.overlay)).setText(text);
 	}

@@ -19,13 +19,20 @@ public class ResultNodeAdapter extends ArrayAdapter<ResultNode> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		TextView item = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
 		ResultNode node = getItem(position);
 
-		TextView item = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
+		String txt = "";
 
 		for (Map.Entry<String, String> e : node.getMisc().entrySet()) {
-			item.append(e.getKey() + ": " + e.getValue() + "\n");
+			txt += e.getKey() + ": " + e.getValue() + "\n";
 		}
+
+		// cut of last \n
+		if (!txt.isEmpty())
+			txt = txt.substring(0, txt.length() - 1);
+
+		item.setText(txt);
 
 		return item;
 	}

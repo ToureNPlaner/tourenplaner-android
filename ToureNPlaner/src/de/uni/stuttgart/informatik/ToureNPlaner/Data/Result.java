@@ -52,12 +52,7 @@ public class Result implements Serializable {
 			}
 			if ("misc".equals(jp.getCurrentName())) {
 				jp.nextToken();
-				JsonNode node = jp.readValueAsTree();
-				Iterator<Map.Entry<String, JsonNode>> ns = node.getFields();
-				while (ns.hasNext()) {
-					Map.Entry<String, JsonNode> n = ns.next();
-					misc.info.put(n.getKey(), n.getValue().asText());
-				}
+				Misc.parse(misc, jp.readValueAsTree());
 			}
 			if ("points".equals(jp.getCurrentName())) {
 				jp.nextToken();
@@ -118,25 +113,34 @@ public class Result implements Serializable {
 		return result;
 	}
 
-	public static class Misc implements Serializable {
+	public static class Misc implements Serializable, Cloneable {
 		public HashMap<String, String> info = new HashMap<String, String>();
+
+		float distance;
+		float time;
 
 		public String getMessage() {
 			return info.get("message");
 		}
 
 		public double getDistance() {
-			if (info.containsKey("distance"))
-				return Integer.parseInt(info.get("distance"));
-			else
-				return 0;
+			return distance;
 		}
 
 		public double getTime() {
-			if (info.containsKey("time"))
-				return Double.parseDouble(info.get("time"));
-			else
-				return 0;
+			return time;
+		}
+
+		public static void parse(Misc misc, JsonNode node) {
+			misc.time = (float) node.path("time").asDouble();
+			misc.distance = node.path("distance").asInt();
+
+			Iterator<Map.Entry<String, JsonNode>> ns = node.getFields();
+			while (ns.hasNext()) {
+				Map.Entry<String, JsonNode> n = ns.next();
+				if (!n.getKey().equals("time") && !n.getKey().equals("distance"))
+					misc.info.put(n.getKey(), n.getValue().asText());
+			}
 		}
 	}
 }
