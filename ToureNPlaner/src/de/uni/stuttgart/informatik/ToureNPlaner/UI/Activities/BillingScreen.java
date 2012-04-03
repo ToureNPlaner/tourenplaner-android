@@ -159,7 +159,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	@Override
 	public void onScroll(AbsListView arg0, int firstVisible, int visibleCount, int totalCount) {
 		boolean loadMore =
-				firstVisible + visibleCount >= totalCount - 10;
+				firstVisible + visibleCount >= totalCount - 20;
 
 		if (loadMore && billingListhandler == null) {
 			setSupportProgressBarIndeterminateVisibility(true);
