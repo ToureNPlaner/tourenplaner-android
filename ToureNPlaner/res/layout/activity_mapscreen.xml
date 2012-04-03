@@ -11,5 +11,6 @@
               android:paddingTop="1dp"
               android:shadowRadius="1"
               android:shadowColor="#ffffff"
+              android:text="@string/mapscreen_hint"
             />
 </RelativeLayout>

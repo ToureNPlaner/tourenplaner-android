@@ -77,5 +77,6 @@
     <string name="delete">delete</string>
     <string name="edit">edit</string>
     <string name="search_hint">Search</string>
+    <string name="mapscreen_hint">Put your finger on the screen to place a marker</string>
 
 </resources>
