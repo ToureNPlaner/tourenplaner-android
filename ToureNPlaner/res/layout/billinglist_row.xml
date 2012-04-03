@@ -3,13 +3,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
+
+
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
     <TextView
             android:id="@+id/t1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name">
-    </TextView>
-    <Button android:text="load" android:id="@+id/b1" android:layout_height="wrap_content"
-         android:layout_width="wrap_content" ></Button>
+            android:text="@string/name"
+            android:layout_alignParentLeft="true"
+            android:textSize="20px"
+            android:layout_marginTop="5dip"
+            >
 
+    </TextView>
+
+
+    <Button android:text="load" android:id="@+id/b1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" ></Button>
+    </RelativeLayout>
 </LinearLayout>
