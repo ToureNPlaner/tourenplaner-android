@@ -3,5 +3,6 @@
           android:id="@+id/search_field"
           android:layout_height="match_parent"
           android:layout_width="match_parent"
+          android:imeOptions="actionSearch"
           android:inputType="textPostalAddress"
           android:hint="@string/search_hint"/>
