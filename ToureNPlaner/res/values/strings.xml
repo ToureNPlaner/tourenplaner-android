@@ -29,7 +29,7 @@
     <string name="status">Status</string>
     <string name="tour">Tour</string>
     <string name="load_request">Load request</string>
-    <string name="milliseconds">milliseconds</string>
+    <string name="milliseconds">Milliseconds</string>
     <string name="euro">Euro</string>
 
     <!--mapscreen-->
@@ -39,7 +39,8 @@
     <string name="reverse_order">Reverse order</string>
     <string name="map_file_error">Mapfile is not valid. Falling back.</string>
     <string name="Result">Result</string>
-    <string name="distance">Distance</string>
+    <string name="traveldistance">Distance</string>
+    <string name="travel_time">Travel time</string>
     <string name="message">Message</string>
     <string name="meter">meter</string>
     <string name="kilometer">kilometer</string>

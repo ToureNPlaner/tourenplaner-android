@@ -6,11 +6,12 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"/>
     <TextView android:id="@+id/overlay" android:layout_height="wrap_content" android:layout_width="match_parent"
-              android:textColor="#000000"
+              android:textColor="#ffffff"
               android:paddingLeft="5dp"
               android:paddingTop="1dp"
               android:shadowRadius="1"
-              android:shadowColor="#ffffff"
+              android:shadowColor="#000000"
+              android:background="#000000"
               android:text="@string/mapscreen_hint"
             />
 </RelativeLayout>

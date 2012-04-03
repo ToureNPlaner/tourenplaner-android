@@ -546,7 +546,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		DecimalFormat f = new DecimalFormat("#0.00");
 
 		String timeUnit = getString(R.string.minute_short);
-		String text = f.format(distance) + " " + distanceUnit + ", " + f.format(time) + " " + timeUnit;
+		String text = getString(R.string.traveldistance) +" : " + f.format(distance) + " " + distanceUnit + ", "  + getString(R.string.travel_time)+ " : "+ f.format(time) + " " + timeUnit;
 		((TextView) findViewById(R.id.overlay)).setText(text);
 	}
 }
