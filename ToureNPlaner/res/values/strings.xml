@@ -33,7 +33,7 @@
     <string name="euro">Euro</string>
 
     <!--mapscreen-->
-    <string name="search_hint">Search address</string>
+    <string name="search">Search</string>
 
     <!--nodelist_menu-->
     <string name="reverse_order">Reverse order</string>
@@ -77,7 +77,7 @@
     <string name="new_string">New</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
-    <string name="search_hint">Search</string>
+    <string name="search_hint">Search address</string>
     <string name="mapscreen_hint">Put your finger on the screen to place a marker</string>
     <string name="login_dialog_title">Logging in</string>
     <string name="clear">Clear</string>
