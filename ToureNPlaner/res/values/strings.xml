@@ -45,6 +45,7 @@
     <string name="kilometer">kilometer</string>
     <string name="meter_short">m</string>
     <string name="kilometer_short">km</string>
+    <string name="minute_short">min</string>
     <string name="amount_of_points">amount of points</string>
 
     <!--mapscreen_preferences-->
