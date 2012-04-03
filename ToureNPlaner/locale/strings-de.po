@@ -12,11 +12,13 @@ msgstr ""
 "PO-Revision-Date: 2012-02-08 19:43+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
+"X-Language: de_DE\n"
+"X-Source-Language: C\n"
 
 msgctxt "app_name"
 msgid "ToureNPlaner"
@@ -24,7 +26,7 @@ msgstr "ToureNPlaner"
 
 msgctxt "enter_server"
 msgid "Enter a server address"
-msgstr ""
+msgstr "Geben Sie die Aresse ein"
 
 msgctxt "add_server"
 msgid "Add server"
@@ -32,214 +34,219 @@ msgstr "Server hinzufügen"
 
 msgctxt "add_certificate"
 msgid "Add certificate"
-msgstr ""
+msgstr "Zertifikat hinzufügen"
 
 msgctxt "add_certificates"
 msgid "Manage certificates"
-msgstr ""
+msgstr "Zertifikate verwalten"
 
 msgctxt "email"
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 msgctxt "password"
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
 msgctxt "login"
 msgid "Login"
-msgstr ""
+msgstr "Anmelden"
 
 msgctxt "save_credentials"
 msgid "Save credentials"
-msgstr ""
+msgstr "Anmeldedaten speichern"
 
 msgctxt "billing"
 msgid "History"
-msgstr ""
+msgstr "Verlauf"
 
 msgctxt "requestid"
 msgid "request ID"
-msgstr ""
+msgstr "Abfrage ID"
 
 msgctxt "algorithmn"
 msgid "Algorithm"
-msgstr ""
+msgstr "Algorithmus"
 
 msgctxt "cost"
 msgid "Cost"
-msgstr ""
+msgstr "Kosten"
 
 msgctxt "requestdate"
 msgid "Request date"
-msgstr ""
+msgstr "Datum"
 
 msgctxt "duration"
 msgid "Duration"
-msgstr ""
+msgstr "Dauer"
 
 msgctxt "status"
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 msgctxt "tour"
 msgid "Tour"
-msgstr ""
+msgstr "Tour"
 
 msgctxt "load_request"
 msgid "Load request"
-msgstr ""
+msgstr "Abfrage laden"
 
 msgctxt "milliseconds"
 msgid "milliseconds"
-msgstr ""
+msgstr "Millisekunden"
 
 msgctxt "euro"
 msgid "Euro"
-msgstr ""
+msgstr "Euro"
 
 msgctxt "search"
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 msgctxt "reverse_order"
 msgid "Reverse order"
-msgstr ""
+msgstr "Reihenfolge umkehren"
 
+#, fuzzy
 msgctxt "map_file_error"
 msgid "Mapfile is not valid. Falling back."
-msgstr ""
+msgstr "Kartendatei nicht gültig. Weiche aus."
 
 msgctxt "Result"
 msgid "Result"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "distance"
 msgid "Distance"
-msgstr ""
+msgstr "Entfernung"
 
 msgctxt "message"
 msgid "Message"
-msgstr ""
+msgstr "Nachricht"
 
 msgctxt "meter"
 msgid "meter"
-msgstr ""
+msgstr "Meter"
 
 msgctxt "kilometer"
 msgid "kilometer"
-msgstr ""
+msgstr "Kilometer"
 
 msgctxt "meter_short"
 msgid "m"
-msgstr ""
+msgstr "m"
 
 msgctxt "kilometer_short"
 msgid "km"
-msgstr ""
+msgstr "km"
 
 msgctxt "minute_short"
 msgid "min"
-msgstr ""
+msgstr "min"
 
 msgctxt "amount_of_points"
 msgid "amount of points"
-msgstr ""
+msgstr "Anzahl an Punkten"
 
 msgctxt "map_preferences"
 msgid "Map"
-msgstr ""
+msgstr "Karte"
 
+#, fuzzy
 msgctxt "input_tile_server"
 msgid "Enter tile server"
-msgstr ""
+msgstr "Kachelserver eingeben"
 
 #, fuzzy
 msgctxt "tile_server"
 msgid "Tile server"
-msgstr "Server hinzufügen"
+msgstr "Kachelserver"
 
 msgctxt "offline_map_location"
 msgid "Offline map location"
-msgstr ""
+msgstr "Offline-Kartendatei"
 
 msgctxt "input_offline_map_location"
 msgid "Enter offline map location"
-msgstr ""
+msgstr "Offline-Kartendatei auswählen"
 
+#, fuzzy
 msgctxt "is_instant_request"
 msgid "Instant Request"
-msgstr ""
+msgstr "Instant Abfrage"
 
 msgctxt "map_generator"
 msgid "Map"
-msgstr ""
+msgstr "Karte"
 
 msgctxt "input_map_generator"
 msgid "Choose a Map"
-msgstr ""
+msgstr "Wählen sie eine Karte"
 
 msgctxt "input_instant"
 msgid "Instant Request"
-msgstr ""
+msgstr "Instant Abfrage"
 
 msgctxt "info"
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 msgctxt "calculate"
 msgid "Calculate"
-msgstr ""
+msgstr "Berechnen"
 
 msgctxt "your_location"
 msgid "Your location"
-msgstr ""
+msgstr "Ihre Position"
 
 msgctxt "settings"
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
+#, fuzzy
 msgctxt "constraints"
 msgid "Constraints"
-msgstr ""
+msgstr "Constraints"
 
 msgctxt "name"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "select_a_value"
 msgid "Select a value"
-msgstr ""
+msgstr "Wählen sie einen Wert"
 
 msgctxt "connecting"
 msgid "Connecting"
-msgstr ""
+msgstr "Verbinde"
 
 msgctxt "new_string"
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 msgctxt "delete"
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 msgctxt "edit"
 msgid "Edit"
-msgstr ""
+msgstr "Ändern"
 
+#, fuzzy
 msgctxt "search_hint"
 msgid "Search address"
-msgstr ""
+msgstr "Adresse"
 
+#, fuzzy
 msgctxt "mapscreen_hint"
 msgid "Put your finger on the screen to place a marker"
-msgstr ""
+msgstr "Drücken sie mit dem Finger auf die Karte"
 
 msgctxt "login_dialog_title"
 msgid "Logging in"
-msgstr ""
+msgstr "Anmelden"
 
 msgctxt "clear"
 msgid "Clear"
-msgstr ""
-
+msgstr "Löschen"
