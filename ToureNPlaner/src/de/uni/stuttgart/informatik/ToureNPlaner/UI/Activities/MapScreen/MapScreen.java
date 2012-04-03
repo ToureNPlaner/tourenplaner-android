@@ -444,7 +444,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	protected void onPause() {
-		// 5 minutes, 50 meters
 		locManager.removeUpdates(gpsListener);
 		super.onPause();
 	}
@@ -546,7 +545,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		DecimalFormat f = new DecimalFormat("#0.00");
 
 		String timeUnit = getString(R.string.minute_short);
-		String text = getString(R.string.traveldistance) +" : " + f.format(distance) + " " + distanceUnit + ", "  + getString(R.string.travel_time)+ " : "+ f.format(time) + " " + timeUnit;
+		String text = getString(R.string.traveldistance) + " : " + f.format(distance) + " " + distanceUnit + ", " + getString(R.string.travel_time) + " : " + f.format(time) + " " + timeUnit;
 		((TextView) findViewById(R.id.overlay)).setText(text);
 	}
 }
