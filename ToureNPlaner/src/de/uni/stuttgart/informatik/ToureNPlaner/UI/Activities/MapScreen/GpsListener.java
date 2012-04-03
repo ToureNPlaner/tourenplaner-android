@@ -4,8 +4,10 @@ import android.location.Location;
 import android.os.Bundle;
 import org.mapsforge.core.GeoPoint;
 
+import java.lang.ref.WeakReference;
+
 class GpsListener implements android.location.LocationListener {
-	private MapScreen mapScreen;
+	private final WeakReference<MapScreen> mapScreen;
 	private boolean enabled;
 	private boolean following;
 	private GeoPoint lastKnownLocation = null;
@@ -13,7 +15,7 @@ class GpsListener implements android.location.LocationListener {
 	private static final String IDENTIFIER = "GpsListenerFollowing";
 
 	public GpsListener(MapScreen mapScreen, Bundle savedInstanceState, GeoPoint geoPoint) {
-		this.mapScreen = mapScreen;
+		this.mapScreen = new WeakReference<MapScreen>(mapScreen);
 		lastKnownLocation = geoPoint;
 		enabled = lastKnownLocation != null;
 		if (savedInstanceState != null)
@@ -28,9 +30,12 @@ class GpsListener implements android.location.LocationListener {
 	public void onLocationChanged(Location location) {
 		GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
 		lastKnownLocation = geoPoint;
-		mapScreen.nodeOverlay.updateGpsMarker(geoPoint);
-		if (following) {
-			mapScreen.mapView.setCenter(geoPoint);
+		MapScreen ms = mapScreen.get();
+		if (ms != null) {
+			ms.nodeOverlay.updateGpsMarker(geoPoint);
+			if (following) {
+				ms.mapView.setCenter(geoPoint);
+			}
 		}
 	}
 
@@ -41,15 +46,20 @@ class GpsListener implements android.location.LocationListener {
 	@Override
 	public void onProviderEnabled(String s) {
 		enabled = true;
-		mapScreen.invalidateOptionsMenu();
+		MapScreen ms = mapScreen.get();
+		if (ms != null)
+			ms.invalidateOptionsMenu();
 	}
 
 	@Override
 	public void onProviderDisabled(String s) {
 		enabled = false;
 		lastKnownLocation = null;
-		mapScreen.nodeOverlay.updateGpsMarker(null);
-		mapScreen.invalidateOptionsMenu();
+		MapScreen ms = mapScreen.get();
+		if (ms != null) {
+			ms.nodeOverlay.updateGpsMarker(null);
+			ms.invalidateOptionsMenu();
+		}
 	}
 
 	public boolean isEnabled() {
@@ -63,7 +73,10 @@ class GpsListener implements android.location.LocationListener {
 	public void setFollowing(boolean following) {
 		this.following = following;
 		if (following && lastKnownLocation != null) {
-			mapScreen.mapView.setCenter(lastKnownLocation);
+			MapScreen ms = mapScreen.get();
+			if (ms != null) {
+				ms.mapView.setCenter(lastKnownLocation);
+			}
 		}
 	}
 }
