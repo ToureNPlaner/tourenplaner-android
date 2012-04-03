@@ -29,7 +29,7 @@ public class ResultNodeAdapter extends ArrayAdapter<ResultNode> {
 		}
 
 		// cut of last \n
-		if (!txt.isEmpty())
+		if (txt.length() > 0)
 			txt = txt.substring(0, txt.length() - 1);
 
 		item.setText(txt);
