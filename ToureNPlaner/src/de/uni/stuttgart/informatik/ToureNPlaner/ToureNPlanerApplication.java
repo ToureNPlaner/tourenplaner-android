@@ -147,12 +147,14 @@ public class ToureNPlanerApplication extends Application {
 		@Override
 		public void uncaughtException(Thread thread, Throwable ex) {
 			if (ex instanceof OutOfMemoryError) {
-				try {
-					Log.i("TP", "Dumping");
-					android.os.Debug.dumpHprofData(Environment.getExternalStorageDirectory() + "/dump.hprof");
-					Log.i("TP", "Dumping finished");
-				} catch (IOException e) {
-					Log.e("TP", "Couldn't dump", e);
+				synchronized (context) {
+					try {
+						Log.i("TP", "Dumping");
+						android.os.Debug.dumpHprofData(Environment.getExternalStorageDirectory() + "/dump.hprof");
+						Log.i("TP", "Dumping finished");
+					} catch (IOException e) {
+						Log.e("TP", "Couldn't dump", e);
+					}
 				}
 			}
 			defaultExceptionHandler.uncaughtException(thread, ex);
