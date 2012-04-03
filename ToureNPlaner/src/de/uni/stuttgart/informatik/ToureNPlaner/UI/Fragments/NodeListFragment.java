@@ -104,7 +104,7 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.dragndroplistview, null);
+		return inflater.inflate(R.layout.nodelist, null);
 	}
 
 	private DropListener mDropListener =

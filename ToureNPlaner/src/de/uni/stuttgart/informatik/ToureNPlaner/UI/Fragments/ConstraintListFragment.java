@@ -56,7 +56,7 @@ public class ConstraintListFragment extends SherlockFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.algorithmconstrainsscreen, null);
+		return inflater.inflate(R.layout.constraint_list, null);
 	}
 
 	private void setupFragments() {

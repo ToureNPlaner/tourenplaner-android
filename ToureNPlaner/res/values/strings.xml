@@ -81,5 +81,7 @@
     <string name="mapscreen_hint">Put your finger on the screen to place a marker</string>
     <string name="login_dialog_title">Logging in</string>
     <string name="clear">Clear</string>
+    <string name="empty_node_list">No nodes</string>
+    <string name="empty_server_list">No servers</string>
 
 </resources>

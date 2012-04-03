@@ -26,7 +26,7 @@ public class MapActivity extends SherlockActivity implements IMapActivity {
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-		setContentView(R.layout.activity_mapscreen);
+		setContentView(R.layout.mapscreen);
 
 		if (savedInstanceState != null) {
 			mapView.setCenter((GeoPoint) savedInstanceState.get("Center"));

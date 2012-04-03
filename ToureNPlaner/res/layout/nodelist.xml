@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@android:id/list"/>
+    <de.uni.stuttgart.informatik.ToureNPlaner.UI.DragDrop.DragNDropListView
+            android:id="@id/android:list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
     <TextView android:id="@android:id/empty"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="center"
               android:textAppearance="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"
-              android:text="@string/empty_server_list"/>
+              android:text="@string/empty_node_list"/>
 </LinearLayout>

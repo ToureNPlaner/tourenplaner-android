@@ -174,20 +174,18 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	private void setupListView() {
-		ListView listView = (ListView) findViewById(R.id.serverListView);
+		ListView listView = (ListView) findViewById(android.R.id.list);
 		adapter = new ArrayAdapter<String>(this, R.layout.list_item, servers);
 		listView.setAdapter(adapter);
 
 		listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 			@Override
 			public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-				if (view.getId() == R.id.serverListView) {
-					AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
-					contextMenu.setHeaderTitle(servers.get(info.position));
-					String[] menuItems = {getResources().getString(R.string.edit), getResources().getString(R.string.delete)};
-					for (int i = 0; i < menuItems.length; i++) {
-						contextMenu.add(Menu.NONE, i, i, menuItems[i]);
-					}
+				AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
+				contextMenu.setHeaderTitle(servers.get(info.position));
+				String[] menuItems = {getResources().getString(R.string.edit), getResources().getString(R.string.delete)};
+				for (int i = 0; i < menuItems.length; i++) {
+					contextMenu.add(Menu.NONE, i, i, menuItems[i]);
 				}
 			}
 		});
