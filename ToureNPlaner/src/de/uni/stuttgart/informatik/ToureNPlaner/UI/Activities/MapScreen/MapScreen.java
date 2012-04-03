@@ -69,7 +69,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			handler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
-			updateDistancePopup();
 			setSupportProgressBarIndeterminateVisibility(false);
 		}
 
@@ -501,7 +500,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				if (change.isResultChange()) {
 					if (session.getResult() == null) {
 						addPathToMap(null);
+						((TextView) findViewById(R.id.overlay)).setText("");
 					} else {
+						updateDistancePopup();
 						addPathToMap(session.getResult().getWay());
 						String msg = session.getResult().getMisc().getMessage();
 						if (msg != null && !msg.equals("")) {
