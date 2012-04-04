@@ -21,7 +21,6 @@
         <activity android:name=".UI.Activities.InfoScreen"></activity>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"></activity>
         <activity android:name=".UI.Activities.MapScreenPreferences"></activity>
-        <activity android:name=".UI.Activities.EditConstraintScreen"></activity>
         <activity android:name=".UI.Activities.ServerScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
