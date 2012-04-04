@@ -148,9 +148,9 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 		if (i == list.size()) {
 			final GeoPoint gpsPoint = this.gpsMarker.getPoint();
 			AlertDialog.Builder builder = new AlertDialog.Builder(mapScreen);
-			builder.setMessage("Wollen Sie ihren aktuellen Standort als Startpunkt setzen?")
+			builder.setMessage(mapScreen.getResources().getString(R.string.gps_to_start))
 					.setCancelable(true)
-					.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+					.setPositiveButton(mapScreen.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							// transform the GpsMarker into a regular mapMarker on Position 0
 							Node gpsStartnode = session.createNode(gpsPoint);
@@ -159,7 +159,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 							edit.perform();
 						}
 					})
-					.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+					.setNegativeButton(mapScreen.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
 						}
