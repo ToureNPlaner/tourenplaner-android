@@ -1,8 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 public class IntegerConstraint extends ConstraintType {
 
@@ -28,12 +28,7 @@ public class IntegerConstraint extends ConstraintType {
 
 	public static ConstraintType parse(JsonNode constraint) {
 		int min = constraint.path("min").asInt(0);
-		int max;
-		JsonNode n = constraint.get("max");
-		if (n == null)
-			max = 10000;
-		else
-			max = n.getIntValue();
+		int max = constraint.path("max").asInt(10000);
 
 		return new IntegerConstraint(constraint.path("name").asText(),
 				constraint.path("description").asText(),

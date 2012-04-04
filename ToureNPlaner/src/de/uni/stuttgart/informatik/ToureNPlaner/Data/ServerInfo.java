@@ -1,6 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;

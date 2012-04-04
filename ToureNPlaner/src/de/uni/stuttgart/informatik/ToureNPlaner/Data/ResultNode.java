@@ -1,6 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.mapsforge.core.GeoPoint;
 
 import java.io.Serializable;
@@ -56,7 +56,7 @@ public class ResultNode implements Serializable {
 
 		HashMap<String, String> misc = new HashMap<String, String>();
 
-		Iterator<Map.Entry<String, JsonNode>> ns = node.getFields();
+		Iterator<Map.Entry<String, JsonNode>> ns = node.fields();
 		while (ns.hasNext()) {
 			Map.Entry<String, JsonNode> n = ns.next();
 			if (!n.getKey().equals("ln") &&

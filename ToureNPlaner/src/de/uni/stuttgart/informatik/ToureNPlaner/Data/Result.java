@@ -1,11 +1,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.SmartIntArray;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +52,8 @@ public class Result implements Serializable {
 			}
 			if ("misc".equals(jp.getCurrentName())) {
 				jp.nextToken();
-				Misc.parse(misc, jp.readValueAsTree());
+				JsonNode node = jp.readValueAsTree();
+				Misc.parse(misc, node);
 			}
 			if ("points".equals(jp.getCurrentName())) {
 				jp.nextToken();
@@ -135,7 +136,7 @@ public class Result implements Serializable {
 			misc.time = (float) node.path("time").asDouble();
 			misc.distance = node.path("distance").asInt();
 
-			Iterator<Map.Entry<String, JsonNode>> ns = node.getFields();
+			Iterator<Map.Entry<String, JsonNode>> ns = node.fields();
 			while (ns.hasNext()) {
 				Map.Entry<String, JsonNode> n = ns.next();
 				if (!n.getKey().equals("time") && !n.getKey().equals("distance"))

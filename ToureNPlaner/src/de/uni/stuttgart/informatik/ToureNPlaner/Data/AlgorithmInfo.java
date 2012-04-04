@@ -1,8 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
-import org.codehaus.jackson.JsonNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;

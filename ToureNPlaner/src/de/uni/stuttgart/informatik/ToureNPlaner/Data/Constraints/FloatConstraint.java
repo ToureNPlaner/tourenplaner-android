@@ -1,9 +1,9 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.NumberConstraintFragment;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 public class FloatConstraint extends ConstraintType {
 	public static String typename = "float";
@@ -28,12 +28,7 @@ public class FloatConstraint extends ConstraintType {
 
 	public static ConstraintType parse(JsonNode constraint) {
 		float min = (float) constraint.path("min").asDouble(0.0);
-		float max;
-		JsonNode n = constraint.get("max");
-		if (n == null)
-			max = 100000.f;
-		else
-			max = (float) n.getDoubleValue();
+		float max = (float) constraint.path("max").asDouble(10000.0);
 
 		return new FloatConstraint(constraint.path("name").asText(),
 				constraint.path("description").asText(),
