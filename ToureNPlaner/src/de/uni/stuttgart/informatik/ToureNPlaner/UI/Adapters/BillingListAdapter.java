@@ -117,7 +117,7 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	                         ViewGroup parent) {
 		View view = convertView == null ? View.inflate(context, R.layout.billinglist_grouprow, null) : convertView;
 
-		Button buttonGroup = (Button) view.findViewById(R.id.b1);
+		Button buttonGroup = (Button) view.findViewById(R.id.button);
 		buttonGroup.setTag(groupPosition);
 		buttonGroup.setOnClickListener(buttonClicklistener);
 

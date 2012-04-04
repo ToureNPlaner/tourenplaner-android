@@ -17,14 +17,13 @@
     <string name="duration">Dauer</string>
     <string name="status">Status</string>
     <string name="tour">Tour</string>
-    <string name="load_request">Abfrage laden</string>
+    <string name="load_request">Laden</string>
     <string name="milliseconds">Millisekunden</string>
     <string name="euro">Euro</string>
     <string name="search">Suche</string>
     <string name="reverse_order">Reihenfolge umkehren</string>
     <string name="map_file_error">Kartendatei nicht gültig. Weiche aus.</string>
     <string name="Result">Ergebnis</string>
-    <string name="distance">Entfernung</string>
     <string name="message">Nachricht</string>
     <string name="meter">Meter</string>
     <string name="kilometer">Kilometer</string>

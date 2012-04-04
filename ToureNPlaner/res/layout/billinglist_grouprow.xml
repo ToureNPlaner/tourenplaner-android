@@ -3,22 +3,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+    <Button android:text="@string/load_request" android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_alignParentRight="true"/>
     <TextView
             android:id="@+id/t1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"
             android:layout_alignParentLeft="true"
-            android:textSize="@dimen/abs__action_bar_title_text_size"
+            android:textAppearance="@style/TextAppearance.List_Item"
             android:layout_centerVertical="true"
-            android:gravity="center_vertical"
             android:focusable="false"
-            android:paddingLeft="36dp"
+            android:paddingLeft="38dp"
             />
-
-    <Button android:text="@string/load_request" android:id="@+id/b1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:layout_alignParentRight="true"/>
 </RelativeLayout>

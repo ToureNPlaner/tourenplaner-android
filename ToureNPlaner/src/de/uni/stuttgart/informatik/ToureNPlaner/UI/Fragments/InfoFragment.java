@@ -49,7 +49,7 @@ public class InfoFragment extends SherlockFragment {
 
 		String txt = "";
 		txt += getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size() + "\n";
-		txt += getString(R.string.distance) + ": " + distance + " " + distanceUnit + "\n";
+		txt += getString(R.string.traveldistance) + ": " + distance + " " + distanceUnit + "\n";
 		txt += getString(R.string.time) + ": " + misc.getTime() + " " + getString(R.string.minute_short) + "\n";
 		String msg = misc.getMessage();
 		if (msg != null)
