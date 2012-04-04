@@ -155,8 +155,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 							// transform the GpsMarker into a regular mapMarker on Position 0
 							Node gpsStartnode = session.createNode(gpsPoint);
 							useGps = true;
+							if(gpsStartnode!=null){
 							Edit edit = new AddNodeEdit(session, gpsStartnode, AddNodeEdit.Position.BEGINNING);
 							edit.perform();
+							}
 						}
 					})
 					.setNegativeButton(mapScreen.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
