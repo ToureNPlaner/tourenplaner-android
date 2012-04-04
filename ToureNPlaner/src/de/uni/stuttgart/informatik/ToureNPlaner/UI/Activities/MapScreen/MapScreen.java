@@ -460,7 +460,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		setupMapView(preferences);
 
 		// 1 minutes, 10 meters
-		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1 * 60 * 1000, 10, gpsListener);
+		try {
+			locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1 * 60 * 1000, 10, gpsListener);
+		} catch (IllegalArgumentException e) {
+			// happens on emulator
+		}
 	}
 
 	@Override
