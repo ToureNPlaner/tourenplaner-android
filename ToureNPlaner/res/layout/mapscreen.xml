@@ -7,6 +7,7 @@
                                         android:layout_height="match_parent"/>
     <TextView android:id="@+id/overlay" android:layout_height="wrap_content" android:layout_width="match_parent"
               android:textColor="#ffffff"
+              android:textSize="@dimen/abs__action_bar_subtitle_text_size"
               android:paddingLeft="5dp"
               android:paddingTop="1dp"
               android:paddingBottom="2dp"
@@ -14,5 +15,14 @@
               android:shadowColor="#000000"
               android:background="#88000000"
               android:text="@string/mapscreen_hint"
+            />
+    <TextView android:layout_height="wrap_content" android:layout_width="match_parent"
+              android:textColor="#000"
+              android:textSize="8dp"
+              android:paddingLeft="5dp"
+              android:paddingTop="1dp"
+              android:paddingBottom="2dp"
+              android:layout_alignParentBottom="true"
+              android:text="@string/osm_copyright"
             />
 </RelativeLayout>

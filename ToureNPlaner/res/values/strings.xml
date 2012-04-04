@@ -88,5 +88,6 @@
     <string name="empty_node_list">No nodes</string>
     <string name="empty_server_list">No servers</string>
     <string name="time">Time</string>
+    <string name="osm_copyright">© OpenStreetMap contributors, CC BY-SA</string>
 
 </resources>
