@@ -1,13 +1,32 @@
+/*
+ * Copyright 2012 ToureNPlaner
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+
 package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	private Fragment mFragment;
-	private final Activity mActivity;
+	private final SherlockFragmentActivity mActivity;
 	private final String mTag;
 	private final Class<T> mClass;
 
@@ -18,7 +37,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	 * @param tag      The identifier tag for the fragment
 	 * @param clz      The fragment's Class, used to instantiate the fragment
 	 */
-	public TabListener(Activity activity, String tag, Class<T> clz) {
+	public TabListener(SherlockFragmentActivity activity, String tag, Class<T> clz) {
 		mActivity = activity;
 		mTag = tag;
 		mClass = clz;
@@ -26,7 +45,9 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 
 	/* The following are each of the ActionBar.TabListener callbacks */
 
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ignored) {
+		FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
 			// If not, instantiate and add it to the activity
@@ -36,6 +57,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 			// If it exists, simply attach it in order to show it
 			ft.attach(mFragment);
 		}
+		ft.commit();
 	}
 
 	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
