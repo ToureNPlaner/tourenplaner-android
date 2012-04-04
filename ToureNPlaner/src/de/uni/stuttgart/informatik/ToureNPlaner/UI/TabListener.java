@@ -17,11 +17,9 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
@@ -45,8 +43,12 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 
 	/* The following are each of the ActionBar.TabListener callbacks */
 
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ignored) {
-		FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+		boolean shouldCommit = false;
+		if (ft == null) {
+			ft = mActivity.getSupportFragmentManager().beginTransaction();
+			shouldCommit = true;
+		}
 
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
@@ -57,7 +59,8 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 			// If it exists, simply attach it in order to show it
 			ft.attach(mFragment);
 		}
-		ft.commit();
+		if (shouldCommit)
+			ft.commit();
 	}
 
 	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
