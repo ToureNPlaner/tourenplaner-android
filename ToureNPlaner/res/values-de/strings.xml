@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">ToureNPlaner</string>
-    <string name="enter_server">Geben Sie die Aresse ein</string>
+    <string name="enter_server">Geben Sie die Adresse ein</string>
     <string name="add_server">Server hinzufügen</string>
     <string name="add_certificate">Zertifikat hinzufügen</string>
     <string name="add_certificates">Zertifikate verwalten</string>
