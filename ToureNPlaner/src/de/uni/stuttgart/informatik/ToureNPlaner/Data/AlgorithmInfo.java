@@ -3,6 +3,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.StringConstraint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -107,12 +108,13 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.constraintTypes = new ArrayList<ConstraintType>();
 		info.minPoints = 0;
 		info.maxPoints = 100;
-		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.pointConstraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 
+		info.constraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));

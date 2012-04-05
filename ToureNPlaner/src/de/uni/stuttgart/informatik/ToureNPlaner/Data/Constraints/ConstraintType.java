@@ -41,8 +41,10 @@ public abstract class ConstraintType implements Serializable {
 			return PriceConstraint.parse(constraint);
 		} else if (IntegerConstraint.typename.equals(typename)) {
 			return IntegerConstraint.parse(constraint);
+		} else if (StringConstraint.typename.equals(typename)) {
+			return StringConstraint.parse(constraint);
 		}
-		throw new IllegalArgumentException("No constraing with that type!");
+		throw new IllegalArgumentException("No constraint with that type!");
 	}
 
 	public abstract void generate(ObjectNode node, Object value);
