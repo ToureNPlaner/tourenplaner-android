@@ -91,12 +91,7 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 				@Override
 				public void onItemClick(AdapterView<?> adapter, View view,
 				                        final int pos, long arg3) {
-
-					Intent myIntent = new Intent(getActivity(), EditNodeScreen.class);
-					myIntent.putExtra(Session.IDENTIFIER, session);
-					myIntent.putExtra("node", (Serializable) adapter.getItemAtPosition(pos));
-					startActivityForResult(myIntent, pos);
-
+					editNode((Node) adapter.getItemAtPosition(pos), pos);
 				}
 			});
 		}
@@ -141,16 +136,20 @@ public class NodeListFragment extends SherlockListFragment implements Session.Li
 
 			};
 
+	private void editNode(Node node, int index) {
+		Intent myIntent = new Intent(getActivity(), EditNodeScreen.class);
+		myIntent.putExtra("node", node);
+		myIntent.putExtra(Session.IDENTIFIER, session);
+		myIntent.putExtra("index", index);
+		startActivityForResult(myIntent, 0);
+	}
+
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem item) {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 			case 0: // edit
-				Intent myIntent = new Intent(getActivity(), EditNodeScreen.class);
-				myIntent.putExtra("node", adapter.getItem(info.position));
-				myIntent.putExtra(Session.IDENTIFIER, session);
-				myIntent.putExtra("index", info.position);
-				startActivityForResult(myIntent, 0);
+				editNode(adapter.getItem(info.position), info.position);
 				break;
 			case 1: // delete
 				Edit edit = new RemoveNodeEdit(session, info.position);
