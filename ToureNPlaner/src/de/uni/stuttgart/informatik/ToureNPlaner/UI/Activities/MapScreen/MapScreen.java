@@ -272,6 +272,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			public boolean onMenuItemClick(MenuItem item) {
 				item.setChecked(!item.isChecked());
 				gpsListener.setFollowing(item.isChecked());
+				MapScreen.this.supportInvalidateOptionsMenu();
 				return true;
 			}
 		});
@@ -467,6 +468,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		instantRequest = MapScreenPreferences.Instant.valueOf(preferences.getString("instant_request", MapScreenPreferences.Instant.ALWAYS.name()));
 
+		this.supportInvalidateOptionsMenu();
+
 		setupMapView(preferences);
 
 		// 1 minutes, 10 meters
@@ -499,7 +502,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
+		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
+			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		} else {
+			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		}
+
 		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());
+		menu.findItem(R.id.gps).setIcon(gpsListener.isFollowing() ? R.drawable.location_enabled : R.drawable.location_disabled);
 		return true;
 	}
 
