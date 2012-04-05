@@ -2,11 +2,13 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.EnumConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.StringConstraint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String version;
@@ -109,12 +111,14 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.minPoints = 0;
 		info.maxPoints = 100;
 		info.pointConstraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
+		info.pointConstraintTypes.add(new EnumConstraint("asdasd", "asdasd,", "asd", new ArrayList<String>(Arrays.asList(new String[]{"asd", "basd", "shfdj"}))));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 
 		info.constraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
+		info.constraintTypes.add(new EnumConstraint("asdasd", "asdasd,", "asd", new ArrayList<String>(Arrays.asList(new String[]{"asd", "basd", "shfdj"}))));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
