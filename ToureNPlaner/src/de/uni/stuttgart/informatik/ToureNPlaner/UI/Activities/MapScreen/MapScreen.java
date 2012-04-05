@@ -503,7 +503,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
-			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		} else {
 			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
