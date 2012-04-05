@@ -40,4 +40,8 @@ public class ConstraintFragment extends SherlockFragment {
 	public int getIndex() {
 		return index;
 	}
+
+	public Constraint getConstraint() {
+		return constraint;
+	}
 }
