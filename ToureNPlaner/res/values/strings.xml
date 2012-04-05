@@ -89,5 +89,6 @@
     <string name="time">Time</string>
     <string name="osm_copyright">© OpenStreetMap contributors, CC BY-SA</string>
     <string name="mapquest_copyright">Tiles Courtesy of MapQuest\n© OpenStreetMap contributors, CC BY-SA</string>
+    <string name="seconds_short">s</string>
 
 </resources>
