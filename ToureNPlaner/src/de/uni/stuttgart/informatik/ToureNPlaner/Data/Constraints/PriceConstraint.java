@@ -6,7 +6,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.Constrain
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.PriceConstraintFragment;
 
 public class PriceConstraint extends FloatConstraint {
-	public static String typename = "price";
+	public static final String typename = "price";
 
 	public PriceConstraint(String name, String description, String id, float minimum, float maximum) {
 		super(name, description, id, minimum, maximum);

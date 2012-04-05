@@ -6,7 +6,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.Constrain
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.NumberConstraintFragment;
 
 public class FloatConstraint extends ConstraintType {
-	public static String typename = "float";
+	public static final String typename = "float";
 	private final float minimum;
 	private final float maximum;
 

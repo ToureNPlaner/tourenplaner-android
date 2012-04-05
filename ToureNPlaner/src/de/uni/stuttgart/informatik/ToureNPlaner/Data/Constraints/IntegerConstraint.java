@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 
 public class IntegerConstraint extends ConstraintType {
-
-	public static String typename = "integer";
+	public static final String typename = "integer";
 	private final int minimum;
 	private final int maximum;
 

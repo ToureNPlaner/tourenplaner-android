@@ -5,7 +5,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.Constrain
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.MeterConstraintFragment;
 
 public class MeterConstraint extends FloatConstraint {
-	public static String typename = "meter";
+	public static final String typename = "meter";
 
 	public MeterConstraint(String name, String description, String id, float minimum, float maximum) {
 		super(name, description, id, minimum, maximum);
