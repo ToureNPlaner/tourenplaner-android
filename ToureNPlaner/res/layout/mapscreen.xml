@@ -16,7 +16,7 @@
               android:background="#88000000"
               android:text="@string/mapscreen_hint"
             />
-    <TextView android:layout_height="wrap_content" android:layout_width="match_parent"
+    <TextView android:id="@+id/copyright" android:layout_height="wrap_content" android:layout_width="match_parent"
               android:textColor="#000"
               android:textSize="8dp"
               android:paddingLeft="5dp"

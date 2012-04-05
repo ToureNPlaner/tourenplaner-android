@@ -18,7 +18,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
 @SuppressWarnings("deprecation")
 public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
-		MAPNIK, OPENCYCLE, FILE, CUSTOM
+		MAPQUEST, MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
 
 	public static enum Instant {
@@ -101,7 +101,7 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 	}
 
 	private void updateUI(SharedPreferences sp) {
-		MapGenerator m = MapGenerator.valueOf(sp.getString("map_generator", MapGenerator.MAPNIK.name()));
+		MapGenerator m = MapGenerator.valueOf(sp.getString("map_generator", MapGenerator.MAPQUEST.name()));
 
 		tileServer.setEnabled(m == MapGenerator.CUSTOM);
 		offlineMapLoc.setEnabled(m == MapGenerator.FILE);

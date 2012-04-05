@@ -159,10 +159,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private void setupMapView(SharedPreferences preferences) {
 		String newTileServer = preferences.getString("tile_server", MapScreenPreferences.defaultTileServer);
 		String newOfflineMapLocation = preferences.getString("offline_map_location", MapScreenPreferences.defaultMapLocation);
-		MapScreenPreferences.MapGenerator newMapGenerator = MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPNIK.name()));
+		MapScreenPreferences.MapGenerator newMapGenerator = MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPQUEST.name()));
 
 		if (mapGenerator != newMapGenerator) {
 			switch (newMapGenerator) {
+				case MAPQUEST:
+					try {
+						mapView.setMapGenerator(new CustomTileDownloader(new URL("http://otile1.mqcdn.com/tiles/1.0.0/osm/%1$d/%2$d/%3$d.jpg"), (byte) 18));
+					} catch (MalformedURLException e) {
+						// shouldn't happen
+					}
+					break;
 				case MAPNIK:
 					mapView.setMapGenerator(new MapnikTileDownloader());
 					break;
@@ -195,6 +202,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				Toast.makeText(this, result.getErrorMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
+
+		((TextView) findViewById(R.id.copyright)).setText(
+				newMapGenerator == MapScreenPreferences.MapGenerator.MAPQUEST ? R.string.mapquest_copyright : R.string.osm_copyright);
 
 		tileServer = newTileServer;
 		mapGenerator = newMapGenerator;
