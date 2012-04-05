@@ -11,19 +11,16 @@
           android:showAsAction="always|collapseActionView"
           android:title="@string/search"/>
     <item android:id="@+id/nodelist"
-          android:icon="@drawable/list"
           android:title="@string/info"/>
     <item android:id="@+id/reset"
-          android:icon="@drawable/trash"
+          android:showAsAction="ifRoom"
+          android:icon="@drawable/content_discard"
           android:title="@string/clear"/>
     <item android:id="@+id/algorithm_constraints"
-          android:icon="@drawable/list"
           android:title="@string/constraints"/>
     <item android:id="@+id/gps"
-          android:icon="@drawable/myplace"
           android:checkable="true"
           android:title="@string/your_location"/>
     <item android:id="@+id/settings"
-          android:icon="@drawable/preferences"
           android:title="@string/settings"/>
 </menu>
