@@ -50,6 +50,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 			shouldCommit = true;
 		}
 
+		mFragment = mActivity.getSupportFragmentManager().findFragmentByTag(mTag);
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
 			// If not, instantiate and add it to the activity
