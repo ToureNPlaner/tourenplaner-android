@@ -76,7 +76,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 			info.constraintTypes = new ArrayList<ConstraintType>(constraints.size());
 			for (JsonNode constraint : constraints) {
 
-				info.constraintTypes.add(ConstraintType.parse(constraint));
+				info.constraintTypes.add(ConstraintType.parseType(constraint));
 			}
 		}
 
@@ -86,7 +86,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		} else {
 			info.pointConstraintTypes = new ArrayList<ConstraintType>(pointconstraints.size());
 			for (JsonNode constraint : pointconstraints) {
-				info.pointConstraintTypes.add(ConstraintType.parse(constraint));
+				info.pointConstraintTypes.add(ConstraintType.parseType(constraint));
 			}
 		}
 

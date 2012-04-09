@@ -31,7 +31,7 @@ public abstract class ConstraintType implements Serializable {
 
 	public abstract String getTypename();
 
-	public static ConstraintType parse(JsonNode constraint) {
+	public static ConstraintType parseType(JsonNode constraint) {
 		String typename = constraint.path("type").asText();
 		if (FloatConstraint.typename.equals(typename)) {
 			return FloatConstraint.parse(constraint);
@@ -43,6 +43,8 @@ public abstract class ConstraintType implements Serializable {
 			return IntegerConstraint.parse(constraint);
 		} else if (StringConstraint.typename.equals(typename)) {
 			return StringConstraint.parse(constraint);
+		} else if (EnumConstraint.typename.equals(typename)) {
+			return EnumConstraint.parse(constraint);
 		}
 		throw new IllegalArgumentException("No constraint with that type!");
 	}

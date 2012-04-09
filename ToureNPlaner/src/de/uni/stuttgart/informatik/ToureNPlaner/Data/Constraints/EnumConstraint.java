@@ -16,11 +16,14 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.EnumConstraintFragment;
 
 import java.util.ArrayList;
+
+import static de.uni.stuttgart.informatik.ToureNPlaner.Util.MakeIterable.in;
 
 public class EnumConstraint extends ConstraintType {
 	public static final String typename = "enum";
@@ -48,5 +51,18 @@ public class EnumConstraint extends ConstraintType {
 
 	public ArrayList<String> getValues() {
 		return values;
+	}
+
+	public static ConstraintType parse(JsonNode constraint) {
+		ArrayList<String> values = new ArrayList<String>();
+
+		for (JsonNode in : in(constraint.path("values").elements())) {
+			values.add(in.asText());
+		}
+
+		return new EnumConstraint(constraint.path("name").asText(),
+				constraint.path("description").asText(),
+				constraint.path("id").asText(),
+				values);
 	}
 }

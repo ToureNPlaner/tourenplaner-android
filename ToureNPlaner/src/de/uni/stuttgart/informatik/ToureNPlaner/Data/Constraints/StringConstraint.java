@@ -16,6 +16,7 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.StringConstraintFragment;
@@ -40,5 +41,11 @@ public class StringConstraint extends ConstraintType {
 	@Override
 	public ConstraintFragment createFragment(Constraint constraint, int index) {
 		return StringConstraintFragment.newInstance(constraint, index);
+	}
+
+	public static ConstraintType parse(JsonNode constraint) {
+		return new StringConstraint(constraint.path("name").asText(),
+				constraint.path("description").asText(),
+				constraint.path("id").asText());
 	}
 }
