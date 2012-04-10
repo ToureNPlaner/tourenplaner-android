@@ -43,7 +43,7 @@ public class StringConstraintFragment extends ConstraintFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onActivityCreated(savedInstanceState);
 		TextView value = ((TextView) getView().findViewById(R.id.value));
 		value.setText((String) constraint.getValue());
 		value.addTextChangedListener(new TextWatcher() {

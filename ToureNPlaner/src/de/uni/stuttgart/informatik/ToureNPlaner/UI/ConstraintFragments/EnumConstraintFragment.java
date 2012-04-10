@@ -44,7 +44,7 @@ public class EnumConstraintFragment extends ConstraintFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onActivityCreated(savedInstanceState);
 		Spinner value = ((Spinner) getView().findViewById(R.id.value));
 		EnumConstraint c = (EnumConstraint) constraint.getType();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, c.getValues());
