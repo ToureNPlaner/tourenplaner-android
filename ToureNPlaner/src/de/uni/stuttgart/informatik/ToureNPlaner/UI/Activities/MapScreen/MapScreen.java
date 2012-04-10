@@ -159,10 +159,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private void setupMapView(SharedPreferences preferences) {
 		String newTileServer = preferences.getString("tile_server", MapScreenPreferences.defaultTileServer);
 		String newOfflineMapLocation = preferences.getString("offline_map_location", MapScreenPreferences.defaultMapLocation);
-		MapScreenPreferences.MapGenerator newMapGenerator = MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPNIK.name()));
+		MapScreenPreferences.MapGenerator newMapGenerator = MapScreenPreferences.MapGenerator.valueOf(preferences.getString("map_generator", MapScreenPreferences.MapGenerator.MAPQUEST.name()));
 
 		if (mapGenerator != newMapGenerator) {
 			switch (newMapGenerator) {
+				case MAPQUEST:
+					try {
+						mapView.setMapGenerator(new CustomTileDownloader(new URL("http://otile1.mqcdn.com/tiles/1.0.0/osm/%1$d/%2$d/%3$d.jpg"), (byte) 18));
+					} catch (MalformedURLException e) {
+						// shouldn't happen
+					}
+					break;
 				case MAPNIK:
 					mapView.setMapGenerator(new MapnikTileDownloader());
 					break;
@@ -195,6 +202,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				Toast.makeText(this, result.getErrorMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
+
+		((TextView) findViewById(R.id.copyright)).setText(
+				newMapGenerator == MapScreenPreferences.MapGenerator.MAPQUEST ? R.string.mapquest_copyright : R.string.osm_copyright);
 
 		tileServer = newTileServer;
 		mapGenerator = newMapGenerator;
@@ -262,6 +272,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			public boolean onMenuItemClick(MenuItem item) {
 				item.setChecked(!item.isChecked());
 				gpsListener.setFollowing(item.isChecked());
+				MapScreen.this.supportInvalidateOptionsMenu();
 				return true;
 			}
 		});
@@ -457,10 +468,16 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		instantRequest = MapScreenPreferences.Instant.valueOf(preferences.getString("instant_request", MapScreenPreferences.Instant.ALWAYS.name()));
 
+		this.supportInvalidateOptionsMenu();
+
 		setupMapView(preferences);
 
 		// 1 minutes, 10 meters
-		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1 * 60 * 1000, 10, gpsListener);
+		try {
+			locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1 * 60 * 1000, 10, gpsListener);
+		} catch (IllegalArgumentException e) {
+			// happens on emulator
+		}
 	}
 
 	@Override
@@ -485,7 +502,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
+		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
+			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		} else {
+			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		}
+
 		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());
+		menu.findItem(R.id.gps).setIcon(gpsListener.isFollowing() ? R.drawable.location_enabled : R.drawable.location_disabled);
 		return true;
 	}
 

@@ -28,7 +28,7 @@
     <string name="duration">Duration</string>
     <string name="status">Status</string>
     <string name="tour">Tour</string>
-    <string name="load_request">Load request</string>
+    <string name="load_request">Load</string>
     <string name="milliseconds">Milliseconds</string>
     <string name="euro">Euro</string>
 
@@ -78,7 +78,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="connecting">Connecting</string>
-    <string name="new_string">New</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="search_hint">Search address</string>
@@ -88,5 +87,8 @@
     <string name="empty_node_list">No nodes</string>
     <string name="empty_server_list">No servers</string>
     <string name="time">Time</string>
+    <string name="osm_copyright">© OpenStreetMap contributors, CC BY-SA</string>
+    <string name="mapquest_copyright">Tiles Courtesy of MapQuest\n© OpenStreetMap contributors, CC BY-SA</string>
+    <string name="seconds_short">s</string>
 
 </resources>

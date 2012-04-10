@@ -1,15 +1,12 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters;
 
 import android.content.Context;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
-import android.widget.Button;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.BillingItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
@@ -20,7 +17,8 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	private ArrayList<String[]> billingItems = new ArrayList<String[]>();
 	private Context context;
 	public OnClickListener buttonClicklistener;
-	public BillingListAdapter(Context context, ArrayList<BillingItem> billinglist,OnClickListener buttonClicklistener) {
+
+	public BillingListAdapter(Context context, ArrayList<BillingItem> billinglist, OnClickListener buttonClicklistener) {
 		this.context = context;
 		addAll(billinglist);
 		this.buttonClicklistener = buttonClicklistener;
@@ -89,48 +87,11 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	public int getChildrenCount(int groupPosition) {
 		return billingItems.get(groupPosition).length;
 	}
-	public View getGenericGroupView(int groupPosition) {
-		// Layout parameters for the ExpandableListView
-		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		View view = View.inflate(context, R.layout.billinglist_row,null);
-		//view.setLayoutParams(lp);
-		TextView textViewGroup = (TextView) view.findViewById(R.id.t1);
-		Button buttonGroup = (Button) view.findViewById(R.id.b1);
-		buttonGroup.setOnClickListener(buttonClicklistener);
-		buttonGroup.setGravity(Gravity.RIGHT);
-
-		buttonGroup.setFocusable(false);
-		view.setId(groupPosition);
-		buttonGroup.setId(groupPosition);
-		textViewGroup.setFocusable(false);
-		textViewGroup.setText(getGroup(groupPosition).toString());
-		textViewGroup.setPadding(40, 0, 0, 0);
-
-		return view;
-	}
-	private TextView createView() {
-		TypedValue value = new TypedValue();
-		context.getTheme().resolveAttribute(android.R.attr.listPreferredItemHeightSmall, value, true);
-		int height = (int) value.getDimension(context.getResources().getDisplayMetrics());
-
-		// Layout parameters for the ExpandableListView
-		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-
-		TextView textView = new TextView(context);
-		textView.setLayoutParams(lp);
-		// Center the text vertically
-		textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-		// Set the text starting position
-		textView.setPadding(36, 0, 0, 0);
-		textView.setTextSize(20);
-		return textView;
-	}
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
 	                         View convertView, ViewGroup parent) {
-		TextView textView = convertView == null ? createView() : (TextView) convertView;
+		TextView textView = (TextView) (convertView == null ? View.inflate(context, R.layout.billinglist_childrow, null) : convertView);
 		textView.requestLayout();
 		textView.setText(getChild(groupPosition, childPosition).toString());
 		return textView;
@@ -154,8 +115,16 @@ public class BillingListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
 	                         ViewGroup parent) {
-		View textView = getGenericGroupView(groupPosition);
-		return textView;
+		View view = convertView == null ? View.inflate(context, R.layout.billinglist_grouprow, null) : convertView;
+
+		Button buttonGroup = (Button) view.findViewById(R.id.button);
+		buttonGroup.setTag(groupPosition);
+		buttonGroup.setOnClickListener(buttonClicklistener);
+
+		TextView textViewGroup = (TextView) view.findViewById(R.id.t1);
+		textViewGroup.setText(getGroup(groupPosition).toString());
+
+		return view;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class Error extends Exception {
 	public String errorId;

@@ -18,6 +18,7 @@ public class InfoScreen extends SherlockFragmentActivity {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
+		outState.putInt("Tab", getSupportActionBar().getSelectedNavigationIndex());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -45,6 +46,9 @@ public class InfoScreen extends SherlockFragmentActivity {
 							this, "Info", InfoFragment.class));
 			actionBar.addTab(tab);
 		}
+
+		if (savedInstanceState != null)
+			getSupportActionBar().selectTab(getSupportActionBar().getTabAt(savedInstanceState.getInt("Tab", 0)));
 	}
 
 	@Override

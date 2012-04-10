@@ -1,8 +1,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 import java.io.Serializable;
 
@@ -31,7 +31,7 @@ public abstract class ConstraintType implements Serializable {
 
 	public abstract String getTypename();
 
-	public static ConstraintType parse(JsonNode constraint) {
+	public static ConstraintType parseType(JsonNode constraint) {
 		String typename = constraint.path("type").asText();
 		if (FloatConstraint.typename.equals(typename)) {
 			return FloatConstraint.parse(constraint);
@@ -41,8 +41,12 @@ public abstract class ConstraintType implements Serializable {
 			return PriceConstraint.parse(constraint);
 		} else if (IntegerConstraint.typename.equals(typename)) {
 			return IntegerConstraint.parse(constraint);
+		} else if (StringConstraint.typename.equals(typename)) {
+			return StringConstraint.parse(constraint);
+		} else if (EnumConstraint.typename.equals(typename)) {
+			return EnumConstraint.parse(constraint);
 		}
-		throw new IllegalArgumentException("No constraing with that type!");
+		throw new IllegalArgumentException("No constraint with that type!");
 	}
 
 	public abstract void generate(ObjectNode node, Object value);

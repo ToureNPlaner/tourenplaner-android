@@ -85,6 +85,13 @@ public class ConstraintListFragment extends SherlockFragment {
 	}
 
 	public ArrayList<Constraint> getConstraints() {
+		int size = constraints.size();
+		constraints.clear();
+		// Old references could not be valid anymore (e.g. Activity restart) so we update them
+		for (int i = 0; i < size; i++) {
+			ConstraintFragment f = ((ConstraintFragment) getFragmentManager().findFragmentById(i + 1));
+			constraints.add(f.getConstraint());
+		}
 		return constraints;
 	}
 }

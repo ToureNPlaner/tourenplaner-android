@@ -5,7 +5,6 @@
           android:showAsAction="ifRoom|withText"
           android:title="@string/add_server"/>
     <item android:id="@+id/servercertificates"
-          android:icon="@drawable/certificate"
           android:showAsAction="withText"
           android:title="@string/add_certificates"/>
 </menu>

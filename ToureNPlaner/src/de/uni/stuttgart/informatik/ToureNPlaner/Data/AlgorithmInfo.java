@@ -1,11 +1,14 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.EnumConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
-import org.codehaus.jackson.JsonNode;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.StringConstraint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String version;
@@ -73,7 +76,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 			info.constraintTypes = new ArrayList<ConstraintType>(constraints.size());
 			for (JsonNode constraint : constraints) {
 
-				info.constraintTypes.add(ConstraintType.parse(constraint));
+				info.constraintTypes.add(ConstraintType.parseType(constraint));
 			}
 		}
 
@@ -83,7 +86,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		} else {
 			info.pointConstraintTypes = new ArrayList<ConstraintType>(pointconstraints.size());
 			for (JsonNode constraint : pointconstraints) {
-				info.pointConstraintTypes.add(ConstraintType.parse(constraint));
+				info.pointConstraintTypes.add(ConstraintType.parseType(constraint));
 			}
 		}
 
@@ -107,12 +110,15 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		info.constraintTypes = new ArrayList<ConstraintType>();
 		info.minPoints = 0;
 		info.maxPoints = 100;
-		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.pointConstraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
+		info.pointConstraintTypes.add(new EnumConstraint("asdasd", "asdasd,", "asd", new ArrayList<String>(Arrays.asList(new String[]{"asd", "basd", "shfdj"}))));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 
+		info.constraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
+		info.constraintTypes.add(new EnumConstraint("asdasd", "asdasd,", "asd", new ArrayList<String>(Arrays.asList(new String[]{"asd", "basd", "shfdj"}))));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
 		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));

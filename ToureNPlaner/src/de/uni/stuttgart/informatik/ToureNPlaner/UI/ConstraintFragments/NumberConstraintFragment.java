@@ -73,7 +73,7 @@ public class NumberConstraintFragment extends ConstraintFragment {
 	protected void setup() {
 		TextView lblMin = (TextView) getView().findViewById(R.id.lblconstMin);
 		TextView lblMax = (TextView) getView().findViewById(R.id.lblconstMax);
-		final EditText etValue = (EditText) getView().findViewById(R.id.txtconstValue);
+		final EditText etValue = (EditText) getView().findViewById(R.id.value);
 
 		lblMin.setText(String.valueOf(min));
 		lblMax.setText(String.valueOf(max));

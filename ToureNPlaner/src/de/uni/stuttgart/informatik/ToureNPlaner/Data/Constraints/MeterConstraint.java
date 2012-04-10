@@ -1,11 +1,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.MeterConstraintFragment;
-import org.codehaus.jackson.JsonNode;
 
 public class MeterConstraint extends FloatConstraint {
-	public static String typename = "meter";
+	public static final String typename = "meter";
 
 	public MeterConstraint(String name, String description, String id, float minimum, float maximum) {
 		super(name, description, id, minimum, maximum);
@@ -18,12 +18,7 @@ public class MeterConstraint extends FloatConstraint {
 
 	public static ConstraintType parse(JsonNode constraint) {
 		float min = (float) constraint.path("min").asDouble(0.0);
-		float max;
-		JsonNode n = constraint.get("max");
-		if (n == null)
-			max = 10000.f;
-		else
-			max = (float) n.getDoubleValue();
+		float max = (float) constraint.path("max").asDouble(10000.0);
 
 		return new MeterConstraint(constraint.path("name").asText(),
 				constraint.path("description").asText(),

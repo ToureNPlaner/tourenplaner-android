@@ -2,12 +2,12 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.ExpandableListView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
@@ -26,7 +26,14 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	private BillingListHandler billingListhandler;
 	private Session session;
 	private String algSuffix;
-	private OnClickListener buttonClicklistener;
+	private final OnClickListener buttonClicklistener = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+
+			int id = (Integer) view.getTag();
+			loadRequest(id);
+		}
+	};
 	BillingRequestHandler billingRequestHandler;
 
 	private ArrayList<BillingItem> billinglist = new ArrayList<BillingItem>();
@@ -45,42 +52,13 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setupListener();
-		adapter = new BillingListAdapter(this, billinglist,buttonClicklistener);
+		adapter = new BillingListAdapter(this, billinglist, buttonClicklistener);
 		setListAdapter(adapter);
 		getExpandableListView().setOnScrollListener(this);
-		registerForContextMenu(getExpandableListView());
-		getExpandableListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-			@Override
-			public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-				ExpandableListView.ExpandableListContextMenuInfo info =
-						(ExpandableListView.ExpandableListContextMenuInfo) contextMenuInfo;
-				// 0 - Group
-				// 1 - Child
-				int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-				if (type == 0 || type == 1) {
-					contextMenu.setHeaderTitle(adapter.getGroup((int) info.id).toString());
-					String[] menuItems = {getResources().getString(R.string.load_request)};
-					for (int i = 0; i < menuItems.length; i++) {
-						contextMenu.add(Menu.NONE, i, i, menuItems[i]);
-					}
-				}
-			}
-		}
-		);
-	}
-	private void setupListener(){
-		buttonClicklistener = new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-
-				int id = view.getId();
-				loadRequest(id);
-			}
-		};
+		getExpandableListView().setGroupIndicator(getResources().getDrawable(R.drawable.expandable_icon));
 	}
 
-	private void loadRequest(int id){
+	private void loadRequest(int id) {
 		int requestid = adapter.getRequestID(id);
 		algSuffix = adapter.getAlgSuffix(id);
 		String status = adapter.getStatus(id);
@@ -92,21 +70,6 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 			Toast.makeText(getApplicationContext(), "failed to load request", Toast.LENGTH_SHORT).show();
 		}
 
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		final ExpandableListView.ExpandableListContextMenuInfo info =
-				(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
-		switch (item.getItemId()) {
-			case 0: // showBilling
-				int id = (int) info.id;
-					loadRequest(id);
-				break;
-		}
-
-		return true;
 	}
 
 	// ----------- BillingRequestHandler ----------------------

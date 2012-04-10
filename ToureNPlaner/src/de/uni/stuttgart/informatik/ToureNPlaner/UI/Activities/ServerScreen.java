@@ -155,7 +155,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 				inputStream.close();
 			}
 		} catch (Exception e) {
-			Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			servers = new ArrayList<String>();
 		}
 	}

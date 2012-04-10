@@ -2,12 +2,12 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Error;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.DoneHandlerInputStream;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;

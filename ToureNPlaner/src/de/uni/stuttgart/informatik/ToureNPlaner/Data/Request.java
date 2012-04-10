@@ -1,10 +1,10 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,8 @@ public class Request {
 		o.put("id", node.getId());
 		o.put("name", node.getName());
 		o.put("shortname", node.getShortName());
+
+		generateConstraints(factory, node.getConstraintList(), o);
 		return o;
 	}
 
@@ -29,6 +31,14 @@ public class Request {
 		}
 		root.put("points", nodesArray);
 
+		ObjectNode n = new ObjectNode(factory);
+		generateConstraints(factory, constraints, n);
+		root.put("constraints", n);
+
+		return root;
+	}
+
+	private static void generateConstraints(JsonNodeFactory factory, ArrayList<Constraint> constraints, ObjectNode root) {
 		if (constraints != null && !constraints.isEmpty()) {
 			ObjectNode constraintsNode = new ObjectNode(factory);
 			for (int i = 0; i < constraints.size(); i++) {
@@ -36,9 +46,7 @@ public class Request {
 					constraints.get(i).generate(constraintsNode);
 				}
 			}
-			root.put("constraints", constraintsNode);
+			root.putAll(constraintsNode);
 		}
-
-		return root;
 	}
 }
