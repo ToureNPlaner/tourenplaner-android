@@ -16,7 +16,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 public class MainScreen extends SherlockFragmentActivity implements Observer {
 	private ServerInfoHandler handler;
 
-	private static final String url = "http://gerbera.informatik.uni-stuttgart.de";
+	private static final String url = "http://tourenplaner.informatik.uni-stuttgart.de";
 
 	public static class ConnectionProgressDialog extends MyProgressDialog {
 		static final String IDENTIFIER = "connecting";
