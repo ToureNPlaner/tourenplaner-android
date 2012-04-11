@@ -26,7 +26,7 @@ msgstr "ToureNPlaner"
 
 msgctxt "enter_server"
 msgid "Enter a server address"
-msgstr "Geben Sie die Aresse ein"
+msgstr "Geben Sie die Adresse ein"
 
 msgctxt "add_server"
 msgid "Add server"
