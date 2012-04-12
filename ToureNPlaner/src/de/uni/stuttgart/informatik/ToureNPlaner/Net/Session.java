@@ -6,6 +6,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 import org.mapsforge.core.GeoPoint;
@@ -373,18 +374,20 @@ public class Session implements Serializable {
 
 		// Check if every algorithm constraint is set
 		for (int i = 0; i < d.constraints.size(); i++) {
-			if (d.constraints.get(i).getValue() == null)
-				msg += "Not every algorithm constraint is set.";
+			if (d.constraints.get(i).getValue() == null) {
+				msg += ToureNPlanerApplication.getContext().getString(R.string.algorithm_constraint_notset);
+				break;
+			}
 		}
 
 		// Check if every point constraint is set
 		if (d.selectedAlgorithm.getPointConstraintTypes().isEmpty())
 			if (!nodeModel.allSet())
-				msg += "Not all constraints for all nodes are set.";
+				msg += ToureNPlanerApplication.getContext().getString(R.string.point_constraints_notset);
 
 		if (nodeModel.size() < d.selectedAlgorithm.getMinPoints() ||
 				nodeModel.size() > d.selectedAlgorithm.getMaxPoints()) {
-			msg += "Not enough or too many points set.";
+			msg += ToureNPlanerApplication.getContext().getString(R.string.points_notset);
 		}
 
 		return msg;

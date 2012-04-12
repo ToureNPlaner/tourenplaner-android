@@ -94,5 +94,8 @@
     <string name="about_text">A study project of the University of
         Stuttgart.\n\nUses:\nActionBarSherlock\nhttp://actionbarsherlock.com\nMapsforge\nhttp://code.google.com/p/mapsforge\nJackson\nhttp://wiki.fasterxml.com/JacksonHome
     </string>
+    <string name="algorithm_constraint_notset">Not every algorithm constraint is set.</string>
+    <string name="point_constraints_notset">Not all constraints for all nodes are set.</string>
+    <string name="points_notset">Not enough or too many points set.</string>
 
 </resources>
