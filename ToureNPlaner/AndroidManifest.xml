@@ -17,28 +17,29 @@
 
     <application android:label="@string/app_name" android:name=".ToureNPlanerApplication" android:icon="@drawable/icon"
                  android:theme="@style/Theme.Sherlock.ForceOverflow">
-        <activity android:name=".UI.Activities.LoginScreen"></activity>
-        <activity android:name=".UI.Activities.AlgorithmScreen"></activity>
-        <activity android:name=".UI.Activities.MapScreen.MapScreen" android:configChanges="orientation"></activity>
-        <activity android:name=".UI.Activities.BillingScreen" android:configChanges="orientation"></activity>
-        <activity android:name=".UI.Activities.CertificateScreen"></activity>
-        <activity android:name=".UI.Activities.InfoScreen"></activity>
+        <activity android:name=".UI.Activities.AboutScreen"/>
+        <activity android:name=".UI.Activities.AlgorithmScreen"/>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"
-                  android:windowSoftInputMode="adjustPan|stateUnchanged"></activity>
-        <activity android:name=".UI.Activities.MapScreenPreferences"></activity>
-        <activity android:name=".UI.Activities.ServerScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+                  android:windowSoftInputMode="adjustPan|stateUnchanged"/>
+        <activity android:name=".UI.Activities.BillingScreen" android:configChanges="orientation"/>
+        <activity android:name=".UI.Activities.CertificateScreen"/>
+        <activity android:name=".UI.Activities.InfoScreen"/>
+        <activity android:name=".UI.Activities.EditNodeScreen"
+                  android:windowSoftInputMode="adjustPan|stateUnchanged"/>
+        <activity android:name=".UI.Activities.LoginScreen"/>
+        <activity android:name=".UI.Activities.MapScreenPreferences"/>
+        <activity android:name=".UI.Activities.MapScreen.MapScreen" android:configChanges="orientation"/>
         <activity android:name=".UI.Activities.MainScreen" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".UI.Activities.EditNodeScreen"
-                  android:windowSoftInputMode="adjustPan|stateUnchanged"></activity>
+        <activity android:name=".UI.Activities.ServerScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

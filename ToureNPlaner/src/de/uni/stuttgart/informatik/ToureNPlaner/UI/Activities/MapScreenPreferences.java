@@ -12,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.Menu;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
 
@@ -98,6 +99,23 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 
 
 		updateUI(getPreferenceManager().getSharedPreferences());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.mapscreenpreferences, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.about:
+				startActivity(new Intent(this, AboutScreen.class));
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void updateUI(SharedPreferences sp) {
