@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    <EditText android:id="@+id/emailTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textEmailAddress" android:hint="@string/email">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    <EditText android:id="@+id/emailTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent"
+              android:inputType="textEmailAddress" android:hint="@string/email">
         <requestFocus></requestFocus>
     </EditText>
-    <EditText android:id="@+id/passwordTextfield" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textPassword" android:hint="@string/password"></EditText>
-    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/login" android:id="@+id/btnlogin"></Button>
+    <EditText android:id="@+id/passwordTextfield" android:layout_height="wrap_content"
+              android:layout_width="fill_parent" android:inputType="textPassword"
+              android:hint="@string/password"></EditText>
+    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/login"
+            android:id="@+id/btnlogin"></Button>
 
     <CheckBox
-        android:id="@+id/chkb_login_screen_save_credentials"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save_credentials" />
-    
+            android:id="@+id/chkb_login_screen_save_credentials"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_credentials"/>
+
 </LinearLayout>
