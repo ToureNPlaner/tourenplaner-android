@@ -17,7 +17,11 @@
 <resources>
     <style name="TextAppearance"/>
     <style name="TextAppearance.List_Item">
-        <item name="android:textSize">17dp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <style name="TextAppearance.List_Item2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 </resources>

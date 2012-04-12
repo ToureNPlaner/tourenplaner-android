@@ -3,8 +3,10 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -45,7 +47,7 @@ public class AlgorithmScreen extends SherlockListActivity {
 	}
 
 	private void setupListView() {
-		ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
+		final ArrayList<AlgorithmInfo> algorithms = new ArrayList<AlgorithmInfo>();
 		for (AlgorithmInfo alg : session.getServerInfo().getAlgorithms()) {
 			if (!alg.isHidden())
 				algorithms.add(alg);
@@ -53,8 +55,23 @@ public class AlgorithmScreen extends SherlockListActivity {
 
 		Collections.sort(algorithms);
 
-		ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this,
-				R.layout.list_item, algorithms);
+		ArrayAdapter<AlgorithmInfo> adapter = new ArrayAdapter<AlgorithmInfo>(this, R.layout.list_item2, algorithms) {
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				View view;
+				if (convertView == null) {
+					view = getLayoutInflater().inflate(R.layout.list_item2, parent, false);
+				} else {
+					view = convertView;
+				}
+
+				TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+				text1.setText(algorithms.get(position).getName());
+				TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+				text2.setText(algorithms.get(position).getDescription());
+				return view;
+			}
+		};
 		setListAdapter(adapter);
 
 		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {

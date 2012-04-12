@@ -13,6 +13,7 @@ import java.util.Arrays;
 public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String version;
 	private String name;
+	private String description;
 	private String urlsuffix;
 	private int minPoints;
 	private int maxPoints;
@@ -27,6 +28,14 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public boolean sourceIsTarget() {
@@ -57,6 +66,7 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		AlgorithmInfo info = new AlgorithmInfo();
 		info.version = object.get("version").asText();
 		info.name = object.get("name").asText();
+		info.description = object.get("description").asText();
 		info.urlsuffix = object.get("urlsuffix").asText();
 
 		JsonNode details = object.get("details");
