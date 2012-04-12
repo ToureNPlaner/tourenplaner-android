@@ -64,10 +64,10 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 	public static AlgorithmInfo parse(JsonNode object) {
 		AlgorithmInfo info = new AlgorithmInfo();
-		info.version = object.get("version").asText();
-		info.name = object.get("name").asText();
-		info.description = object.get("description").asText();
-		info.urlsuffix = object.get("urlsuffix").asText();
+		info.version = object.path("version").asText();
+		info.name = object.path("name").asText();
+		info.description = object.path("description").asText();
+		info.urlsuffix = object.path("urlsuffix").asText();
 
 		JsonNode details = object.get("details");
 		if (details != null) {
