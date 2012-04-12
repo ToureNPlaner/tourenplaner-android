@@ -43,8 +43,10 @@ import org.mapsforge.map.reader.header.FileOpenResult;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistance;
+import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
 
 public class MapScreen extends MapActivity implements Session.Listener {
 	MapView mapView;
@@ -139,8 +141,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupGPS(savedInstanceState, isFirstStart);
 
-		if (session.getResult() != null && session.getResult().getPoints() != null) {
-			mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
+		if (session.getResult() != null) {
+			updateDistancePopup();
+			if (session.getResult().getPoints() != null) {
+				mapView.setCenter(session.getResult().getPoints().get(0).getGeoPoint());
+			}
 		}
 		if (!mapView.getMapPosition().isValid()) {
 			mapView.setCenter(new GeoPoint(51.33, 10.45));
@@ -558,18 +563,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void updateDistancePopup() {
-		String distanceUnit = getString(R.string.meter_short);
-		double distance = session.getResult().getMisc().getDistance();
-		double time = session.getResult().getMisc().getTime() / 60;
-		if (distance > 1000) {
-			distance = distance / 1000;
-			distanceUnit = getString(R.string.kilometer_short);
-		}
-
-		DecimalFormat f = new DecimalFormat("#0.00");
-
-		String timeUnit = getString(R.string.minute_short);
-		String text = getString(R.string.traveldistance) + " : " + f.format(distance) + " " + distanceUnit + ", " + getString(R.string.travel_time) + " : " + f.format(time) + " " + timeUnit;
-		((TextView) findViewById(R.id.overlay)).setText(text);
+		((TextView) findViewById(R.id.overlay)).setText(
+				formatDistance(this, session.getResult().getMisc().getDistance()) + " " +
+						formatTime(this, session.getResult().getMisc().getTime()));
 	}
 }

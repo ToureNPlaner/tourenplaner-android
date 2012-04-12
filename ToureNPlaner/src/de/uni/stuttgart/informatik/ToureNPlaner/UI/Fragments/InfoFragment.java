@@ -16,6 +16,9 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.ResultNodeAdapter;
 
 import java.util.Map;
 
+import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistance;
+import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
+
 public class InfoFragment extends SherlockFragment {
 	private Session session;
 
@@ -40,17 +43,12 @@ public class InfoFragment extends SherlockFragment {
 
 		Result.Misc misc = session.getResult().getMisc();
 
-		String distanceUnit = getString(R.string.meter);
-		double distance = misc.getDistance();
-		if (distance > 1000) {
-			distance = distance / 1000;
-			distanceUnit = getString(R.string.kilometer);
-		}
-
 		String txt = "";
 		txt += getString(R.string.amount_of_points) + ": " + session.getResult().getPoints().size() + "\n";
-		txt += getString(R.string.traveldistance) + ": " + distance + " " + distanceUnit + "\n";
-		txt += getString(R.string.time) + ": " + (int) misc.getTime() + " " + getString(R.string.seconds_short) + "\n";
+
+		txt += formatDistance(getActivity(), misc.getDistance()) + "\n";
+		txt += formatTime(getActivity(), misc.getTime()) + "\n";
+
 		String msg = misc.getMessage();
 		if (msg != null)
 			txt += getString(R.string.message) + ": " + msg + "\n";

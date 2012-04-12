@@ -11,6 +11,9 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import java.util.List;
 import java.util.Map;
 
+import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistance;
+import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
+
 public class ResultNodeAdapter extends ArrayAdapter<ResultNode> {
 	public ResultNodeAdapter(Context context, List<ResultNode> objects) {
 		super(context, R.layout.list_item, objects);
@@ -22,6 +25,13 @@ public class ResultNodeAdapter extends ArrayAdapter<ResultNode> {
 		ResultNode node = getItem(position);
 
 		String txt = "";
+
+		if (node.getDistToPrev() != 0.0) {
+			txt += formatDistance(getContext(), node.getDistToPrev()) + "\n";
+		}
+		if (node.getTimeToPrev() != 0.0) {
+			txt += formatTime(getContext(), node.getTimeToPrev()) + "\n";
+		}
 
 		for (Map.Entry<String, String> e : node.getMisc().entrySet()) {
 			txt += e.getKey() + ": " + e.getValue() + "\n";
