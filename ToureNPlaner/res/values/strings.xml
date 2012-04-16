@@ -97,8 +97,8 @@
     <string name="algorithm_constraint_notset">Not every algorithm constraint is set.</string>
     <string name="point_constraints_notset">Not all constraints for all nodes are set.</string>
     <string name="points_notset">Not enough or too many points set.</string>
-    <string name="sp_description">Finds the fastest way between to points</string>
-    <string name="tsp_description">Finds the fastest way to travel to all points</string>
-    <string name="csp_description">Finds the fastest way with a specific maximum of height meters</string>
+    <string name="sp_description">Finds the fastest way between to points.</string>
+    <string name="tsp_description">Finds the fastest way to travel to all points.</string>
+    <string name="csp_description">Finds the fastest way with a specific maximum of height meters.</string>
 
 </resources>

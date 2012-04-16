@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string-array name="map_generators">
-        <item>Mapquest</item>
-        <item>Mapnik</item>
-        <item>OpenCycle</item>
-        <item>Kartendatei</item>
-        <item>Benutzerdefiniert</item>
-    </string-array>
-    <string-array name="instant_options">
-        <item>Nie</item>
-        <item>Manchmal</item>
-        <item>Immer</item>
-    </string-array>
+  <string-array name="map_generators">
+    <item>Mapquest</item>
+    <item>Mapnik</item>
+    <item>OpenCycle</item>
+    <item>Kartendatei</item>
+    <item>Benutzerdefiniert</item>
+  </string-array>
+  <string-array name="instant_options">
+    <item>Nie</item>
+    <item>Manchmal</item>
+    <item>Immer</item>
+  </string-array>
 </resources>
