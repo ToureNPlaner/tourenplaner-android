@@ -247,7 +247,8 @@ public class Session implements Serializable {
 		try {
 			URL uri = new URL(url);
 			d.serverInfo.setHostname(uri.getHost());
-			d.serverInfo.setPort(uri.getPort());
+			int port = uri.getPort();
+			d.serverInfo.setPort(port == -1 ? 80 : port);
 			uri.getProtocol();
 			safeData();
 		} catch (MalformedURLException e) {
