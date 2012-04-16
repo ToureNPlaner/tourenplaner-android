@@ -76,9 +76,9 @@ public class LoginScreen extends SherlockFragmentActivity implements Observer {
 		EditText emailTextfield = (EditText) findViewById(R.id.emailTextfield);
 
 		// TODO reset credentials with empty strings
-		emailTextfield.setText(applicationPreferences.getString("user", "root@toureNPlaner.de"));
+		emailTextfield.setText(applicationPreferences.getString("user", ""));
 		EditText passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
-		passwordTextfield.setText(Base64.decodeString(applicationPreferences.getString("password", Base64.encodeString("toureNPlaner"))));
+		passwordTextfield.setText(Base64.decodeString(applicationPreferences.getString("password", Base64.encodeString(""))));
 		chk_saveCredentials.setChecked(applicationPreferences.getBoolean("chk_isChecked", false));
 
 		// If we get created for the first time we get our data from the intent
