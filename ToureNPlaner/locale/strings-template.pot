@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-04-03 16:16+0200\n"
+"POT-Creation-Date: 2012-04-16 13:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,11 +86,11 @@ msgid "Tour"
 msgstr ""
 
 msgctxt "load_request"
-msgid "Load request"
+msgid "Load"
 msgstr ""
 
 msgctxt "milliseconds"
-msgid "milliseconds"
+msgid "Milliseconds"
 msgstr ""
 
 msgctxt "euro"
@@ -99,6 +99,10 @@ msgstr ""
 
 msgctxt "search"
 msgid "Search"
+msgstr ""
+
+msgctxt "gps_to_start"
+msgid "Set gps-location as starting point?"
 msgstr ""
 
 msgctxt "reverse_order"
@@ -113,8 +117,12 @@ msgctxt "Result"
 msgid "Result"
 msgstr ""
 
-msgctxt "distance"
+msgctxt "traveldistance"
 msgid "Distance"
+msgstr ""
+
+msgctxt "travel_time"
+msgid "Travel time"
 msgstr ""
 
 msgctxt "message"
@@ -209,12 +217,16 @@ msgctxt "select_a_value"
 msgid "Select a value"
 msgstr ""
 
-msgctxt "connecting"
-msgid "Connecting"
+msgctxt "yes"
+msgid "Yes"
 msgstr ""
 
-msgctxt "new_string"
-msgid "New"
+msgctxt "no"
+msgid "No"
+msgstr ""
+
+msgctxt "connecting"
+msgid "Connecting"
 msgstr ""
 
 msgctxt "delete"
@@ -239,5 +251,72 @@ msgstr ""
 
 msgctxt "clear"
 msgid "Clear"
+msgstr ""
+
+msgctxt "empty_node_list"
+msgid "No nodes"
+msgstr ""
+
+msgctxt "empty_server_list"
+msgid "No servers"
+msgstr ""
+
+msgctxt "time"
+msgid "Time"
+msgstr ""
+
+msgctxt "osm_copyright"
+msgid "© OpenStreetMap contributors, CC BY-SA"
+msgstr ""
+
+msgctxt "mapquest_copyright"
+msgid ""
+"Tiles Courtesy of MapQuest\n"
+"© OpenStreetMap contributors, CC BY-SA"
+msgstr ""
+
+msgctxt "seconds_short"
+msgid "s"
+msgstr ""
+
+msgctxt "about"
+msgid "About"
+msgstr ""
+
+msgctxt "about_text"
+msgid ""
+"A study project of the University of Stuttgart.\n"
+"\n"
+"Uses:\n"
+"ActionBarSherlock\n"
+"http://actionbarsherlock.com\n"
+"Mapsforge\n"
+"http://code.google.com/p/mapsforge\n"
+"Jackson\n"
+"http://wiki.fasterxml.com/JacksonHome"
+msgstr ""
+
+msgctxt "algorithm_constraint_notset"
+msgid "Not every algorithm constraint is set."
+msgstr ""
+
+msgctxt "point_constraints_notset"
+msgid "Not all constraints for all nodes are set."
+msgstr ""
+
+msgctxt "points_notset"
+msgid "Not enough or too many points set."
+msgstr ""
+
+msgctxt "sp_description"
+msgid "Finds the fastest way between to points."
+msgstr ""
+
+msgctxt "tsp_description"
+msgid "Finds the fastest way to travel to all points."
+msgstr ""
+
+msgctxt "csp_description"
+msgid "Finds the fastest way with a specific maximum of height meters."
 msgstr ""
 

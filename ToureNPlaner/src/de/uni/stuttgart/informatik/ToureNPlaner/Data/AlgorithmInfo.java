@@ -21,6 +21,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.EnumConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.StringConstraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,6 +53,15 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	}
 
 	public String getDescription() {
+		if (description == null || description.equals("")) {
+			if ("sp".equals(urlsuffix)) {
+				return ToureNPlanerApplication.getContext().getString(R.string.sp_description);
+			} else if ("tsp".equals(urlsuffix)) {
+				return ToureNPlanerApplication.getContext().getString(R.string.tsp_description);
+			} else if ("csp".equals(urlsuffix)) {
+				return ToureNPlanerApplication.getContext().getString(R.string.csp_description);
+			}
+		}
 		return description;
 	}
 
