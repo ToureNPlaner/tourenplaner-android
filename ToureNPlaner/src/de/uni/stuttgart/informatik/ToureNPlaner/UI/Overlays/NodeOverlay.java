@@ -19,8 +19,10 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -28,6 +30,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.EditNodeScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen.MapScreen;
 import org.mapsforge.android.maps.MapView;
+import org.mapsforge.android.maps.Projection;
 import org.mapsforge.android.maps.overlay.ItemizedOverlay;
 import org.mapsforge.android.maps.overlay.OverlayItem;
 import org.mapsforge.core.GeoPoint;
@@ -146,12 +149,12 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	}
 
 	@Override
-	public int size() {
+	public synchronized int size() {
 		return list.size() + (gpsMarker == null ? 0 : 1);
 	}
 
 	@Override
-	protected OverlayItem createItem(int i) {
+	protected synchronized OverlayItem createItem(int i) {
 		if (i == list.size())
 			return gpsMarker;
 		else
@@ -193,7 +196,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 		return true;
 	}
 
-	public void addMarkerToMap(Node node) {
+	public synchronized void addMarkerToMap(Node node) {
 		NodeDrawable drawable = (NodeDrawable) boundCenterBottom(new NodeDrawable(NodeDrawable.MarkerType.START));
 		drawable.setLabel(node.getShortName());
 		OverlayItem overlayitem = new OverlayItem(node.getGeoPoint(), null, null, drawable);
@@ -236,5 +239,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	public void onChange(Session.Change change) {
 		if (change.isModelChange() || change.isNnsChange())
 			loadFromModel();
+	}
+
+	@Override
+	protected synchronized void drawOverlayBitmap(Canvas canvas, Point drawPosition, Projection projection, byte drawZoomLevel) {
+		super.drawOverlayBitmap(canvas, drawPosition, projection, drawZoomLevel);
 	}
 }
