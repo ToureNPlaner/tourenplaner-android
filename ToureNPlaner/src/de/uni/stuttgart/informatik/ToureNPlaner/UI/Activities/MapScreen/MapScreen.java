@@ -403,7 +403,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			handler = session.performRequest(requestListener, force);
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
-			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+			if (messageToast != null) {
+				messageToast.setText(e.getMessage());
+				messageToast.show();
+			} else {
+				messageToast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
+				messageToast.show();
+			}
 			handler = null;
 		}
 	}
