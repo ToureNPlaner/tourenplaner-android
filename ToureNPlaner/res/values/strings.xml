@@ -81,7 +81,7 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="search_hint">Search address</string>
-    <string name="mapscreen_hint">Put your finger on the screen to place a marker</string>
+    <string name="mapscreen_hint">Hold your finger on the screen to place a marker</string>
     <string name="login_dialog_title">Logging in</string>
     <string name="clear">Clear</string>
     <string name="empty_node_list">No nodes</string>
@@ -94,7 +94,7 @@
     <string name="about_text">A study project of the University of
         Stuttgart.\n\nUses:\nActionBarSherlock\nhttp://actionbarsherlock.com\nMapsforge\nhttp://code.google.com/p/mapsforge\nJackson\nhttp://wiki.fasterxml.com/JacksonHome
     </string>
-    <string name="algorithm_constraint_notset">Not every algorithm constraint is set.</string>
+    <string name="algorithm_constraint_notset">Please set all constraints in the constraints menu.</string>
     <string name="point_constraints_notset">Not all constraints for all nodes are set.</string>
     <string name="points_notset">Not enough or too many points set.</string>
     <string name="sp_description">Finds the fastest way between to points.</string>

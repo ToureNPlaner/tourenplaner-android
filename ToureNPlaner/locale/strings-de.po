@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-04-16 13:51+0200\n"
+"POT-Creation-Date: 2012-05-09 10:12+0200\n"
 "PO-Revision-Date: 2012-02-08 19:43+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -20,10 +20,12 @@ msgstr ""
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
+#. ToureNPlaner
 msgctxt "app_name"
 msgid "ToureNPlaner"
 msgstr "ToureNPlaner"
 
+#. serverscreen
 msgctxt "enter_server"
 msgid "Enter a server address"
 msgstr "Geben Sie die Adresse ein"
@@ -32,6 +34,7 @@ msgctxt "add_server"
 msgid "Add server"
 msgstr "Server hinzufügen"
 
+#. certificatescreen
 msgctxt "add_certificate"
 msgid "Add certificate"
 msgstr "Zertifikat hinzufügen"
@@ -40,6 +43,7 @@ msgctxt "add_certificates"
 msgid "Manage certificates"
 msgstr "Zertifikate verwalten"
 
+#. loginscreen
 msgctxt "email"
 msgid "Email"
 msgstr "E-Mail"
@@ -56,10 +60,12 @@ msgctxt "save_credentials"
 msgid "Save credentials"
 msgstr "Anmeldedaten speichern"
 
+#. algorithmscreen
 msgctxt "billing"
 msgid "History"
 msgstr "Verlauf"
 
+#. billingscreen
 msgctxt "requestid"
 msgid "request ID"
 msgstr "Abfrage ID"
@@ -100,6 +106,7 @@ msgctxt "euro"
 msgid "Euro"
 msgstr "Euro"
 
+#. mapscreen
 msgctxt "search"
 msgid "Search"
 msgstr "Suche"
@@ -108,6 +115,7 @@ msgctxt "gps_to_start"
 msgid "Set gps-location as starting point?"
 msgstr "GPS Ort als Startpunkt setzen?"
 
+#. nodelist_menu
 msgctxt "reverse_order"
 msgid "Reverse order"
 msgstr "Reihenfolge umkehren"
@@ -157,6 +165,7 @@ msgctxt "amount_of_points"
 msgid "amount of points"
 msgstr "Anzahl an Punkten"
 
+#. mapscreen_preferences
 msgctxt "map_preferences"
 msgid "Map"
 msgstr "Karte"
@@ -196,6 +205,7 @@ msgctxt "input_instant"
 msgid "Instant Request"
 msgstr "Instant Abfrage"
 
+#. menu
 msgctxt "info"
 msgid "Info"
 msgstr "Info"
@@ -212,6 +222,7 @@ msgctxt "settings"
 msgid "Settings"
 msgstr "Einstellungen"
 
+#. editnodescreen
 #, fuzzy
 msgctxt "constraints"
 msgid "Constraints"
@@ -221,10 +232,12 @@ msgctxt "name"
 msgid "Name"
 msgstr "Name"
 
+#. constraint_screens
 msgctxt "select_a_value"
 msgid "Select a value"
 msgstr "Wählen sie einen Wert"
 
+#. various
 msgctxt "yes"
 msgid "Yes"
 msgstr "Ja"
@@ -252,8 +265,8 @@ msgstr "Suche"
 
 #, fuzzy
 msgctxt "mapscreen_hint"
-msgid "Put your finger on the screen to place a marker"
-msgstr "Drücken sie mit dem Finger auf die Karte"
+msgid "Hold your finger on the screen to place a marker"
+msgstr "Bleiben sie mit dem Finger auf der Karte, um eine Stelle zu markieren"
 
 msgctxt "login_dialog_title"
 msgid "Logging in"
@@ -308,9 +321,10 @@ msgid ""
 "http://wiki.fasterxml.com/JacksonHome"
 msgstr ""
 
+#, fuzzy
 msgctxt "algorithm_constraint_notset"
-msgid "Not every algorithm constraint is set."
-msgstr "Nicht jeder Algorithmen Constraint ist gesetzt."
+msgid "Please set all constraints in the constraints menu."
+msgstr "Bitte setzen sie alle Werte im Constraints Menu."
 
 msgctxt "point_constraints_notset"
 msgid "Not all constraints for all nodes are set."
@@ -332,3 +346,7 @@ msgctxt "csp_description"
 msgid "Finds the fastest way with a specific maximum of height meters."
 msgstr ""
 "Findet den schnellsten Weg mit einem bestimmten Maximum an Höhenmetern."
+
+#~ msgctxt "algorithm_constraint_notset"
+#~ msgid "Not every algorithm constraint is set."
+#~ msgstr "Nicht jeder Algorithmen Constraint ist gesetzt."

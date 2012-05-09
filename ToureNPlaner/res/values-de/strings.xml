@@ -56,7 +56,7 @@
   <string name="delete">Löschen</string>
   <string name="edit">Ändern</string>
   <string name="search_hint">Suche</string>
-  <string name="mapscreen_hint">Drücken sie mit dem Finger auf die Karte</string>
+  <string name="mapscreen_hint">Bleiben sie mit dem Finger auf der Karte, um eine Stelle zu markieren</string>
   <string name="login_dialog_title">Anmelden</string>
   <string name="clear">Löschen</string>
   <string name="empty_node_list">Keine Punkte</string>
@@ -66,7 +66,7 @@
   <string name="mapquest_copyright">Tiles Courtesy of MapQuest\n© OpenStreetMap contributors, CC BY-SA</string>
   <string name="seconds_short">s</string>
   <string name="about">Über</string>
-  <string name="algorithm_constraint_notset">Nicht jeder Algorithmen Constraint ist gesetzt.</string>
+  <string name="algorithm_constraint_notset">Bitte setzen sie alle Werte im Constraints Menu.</string>
   <string name="point_constraints_notset">Nicht alle Constraints für alle Puntke sind gesetzt.</string>
   <string name="points_notset">Nicht genug oder zu viele Punkte gesetzt.</string>
   <string name="sp_description">Findet den schnellsten Weg zwischen zwei Punkten.</string>
