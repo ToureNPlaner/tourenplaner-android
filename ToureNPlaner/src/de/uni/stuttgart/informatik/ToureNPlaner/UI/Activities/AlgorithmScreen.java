@@ -52,7 +52,6 @@ public class AlgorithmScreen extends SherlockListActivity {
 		// If we get created for the first time we get our data from the intent
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
-
 		setupListView();
 	}
 

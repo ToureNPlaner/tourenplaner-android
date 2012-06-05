@@ -20,6 +20,7 @@ import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ClientComputeHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -417,7 +418,11 @@ public class Session implements Serializable {
 	@SuppressWarnings("unchecked")
 	public RequestHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
 		if (canPerformRequest() && (force || result == null || nodeModel.getVersion() != result.getVersion())) {
-			return (RequestHandler) new RequestHandler(requestListener, this).execute();
+			if (d.selectedAlgorithm.isClientSide()){
+				return (RequestHandler) new ClientComputeHandler(requestListener, this).execute();
+			} else {
+				return (RequestHandler) new RequestHandler(requestListener, this).execute();
+			}
 		} else {
 			throw new RequestInvalidException(canPerformReason());
 		}

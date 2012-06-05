@@ -18,15 +18,11 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.EnumConstraint;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.FloatConstraint;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.StringConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private String version;
@@ -37,10 +33,12 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 	private int maxPoints;
 	private boolean sourceIsTarget;
 	private boolean isHidden;
+	private boolean isClientSide;
 	private ArrayList<ConstraintType> constraintTypes;
 	private ArrayList<ConstraintType> pointConstraintTypes;
 
 	private AlgorithmInfo() {
+		this.isClientSide = false;
 	}
 
 	@Override
@@ -79,6 +77,10 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 	public boolean isHidden() {
 		return isHidden;
+	}
+
+	public boolean isClientSide() {
+		return isClientSide;
 	}
 
 	public int getMinPoints() {
@@ -138,29 +140,17 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 		return name.compareTo(another.name);
 	}
 
-	public static AlgorithmInfo createMock() {
+	public static AlgorithmInfo createTestClientSide() {
 		AlgorithmInfo info = new AlgorithmInfo();
-		info.name = "Mock";
-		info.version = "";
-		info.urlsuffix = "";
+		info.name = "Client Side Shortest Path";
+		info.version = "0";
+		info.urlsuffix = "updowng";
 		info.pointConstraintTypes = new ArrayList<ConstraintType>();
 		info.constraintTypes = new ArrayList<ConstraintType>();
 		info.minPoints = 0;
 		info.maxPoints = 100;
-		info.pointConstraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
-		info.pointConstraintTypes.add(new EnumConstraint("asdasd", "asdasd,", "asd", new ArrayList<String>(Arrays.asList(new String[]{"asd", "basd", "shfdj"}))));
-		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.pointConstraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-
-		info.constraintTypes.add(new StringConstraint("asdasd", "asdasd,", "sfdg"));
-		info.constraintTypes.add(new EnumConstraint("asdasd", "asdasd,", "asd", new ArrayList<String>(Arrays.asList(new String[]{"asd", "basd", "shfdj"}))));
-		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
-		info.constraintTypes.add(new FloatConstraint("asd", "asd", "asd", 0.0f, 100.f));
+		info.isHidden = false;
+		info.isClientSide = true;
 		return info;
 	}
 

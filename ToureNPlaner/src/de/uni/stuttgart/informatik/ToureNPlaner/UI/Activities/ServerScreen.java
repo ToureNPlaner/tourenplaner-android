@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
@@ -255,7 +254,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			myIntent = new Intent(getBaseContext(), LoginScreen.class);
 		}
 
-		session.getServerInfo().getAlgorithms().add(AlgorithmInfo.createMock());
+
 
 		myIntent.putExtra(Session.IDENTIFIER, session);
 		startActivity(myIntent);
