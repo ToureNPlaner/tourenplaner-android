@@ -38,6 +38,12 @@ public class Result implements Serializable {
 
 	private int version = 0;
 
+	public Result(){
+		this.way = null;
+		this.points = new ArrayList<ResultNode>();
+		this.misc = new Misc();
+	}
+
 	public int getVersion() {
 		return version;
 	}
@@ -109,13 +115,11 @@ public class Result implements Serializable {
 	public static Result parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		Result result = new Result();
 		ArrayList<SmartIntArray> ways = new ArrayList<SmartIntArray>();
-		ArrayList<ResultNode> points = new ArrayList<ResultNode>();
-		Misc misc = new Misc();
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 
 		JsonParser jp = mapper.getJsonFactory().createJsonParser(stream);
 		try {
-			jacksonParse(jp, ways, points, misc);
+			jacksonParse(jp, ways, result.points, result.misc);
 		} finally {
 			jp.close();
 		}
@@ -125,8 +129,6 @@ public class Result implements Serializable {
 		for (int i = 0; i < size; i++) {
 			result.way[i] = ways.get(i).toArray();
 		}
-		result.points = points;
-		result.misc = misc;
 		return result;
 	}
 

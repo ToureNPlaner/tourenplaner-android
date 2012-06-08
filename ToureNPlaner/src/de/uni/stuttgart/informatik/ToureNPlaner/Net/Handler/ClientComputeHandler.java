@@ -92,12 +92,14 @@ public class ClientComputeHandler extends RequestHandler {
 
 		result.setVersion(version);
 		try {
+			long start = System.currentTimeMillis();
 			ClientGraph graph =  readClientGraph(type, inputStream);
 
 			IntIntOpenHashMap dists = new IntIntOpenHashMap(graph.getNodeCount());
 			boolean res = false;
 
 			res = ShortestPath.dijkstraStopAtDest(graph, dists);
+			Log.d(TAG, "Time: "+(System.currentTimeMillis()-start)+" ms");
 			Log.d(TAG, "Did it? " + Boolean.toString(res));
 			Log.d(TAG, "Distance " + dists.get(graph.getOrigTarget()));
 		} catch (Exception e){
