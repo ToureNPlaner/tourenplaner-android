@@ -19,9 +19,6 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 import android.util.Log;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ClientGraph;
@@ -36,29 +33,19 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 /**
  * @author Niklas Schnelle
  */
-public class ClientComputeHandler extends RequestHandler {
+public class ClientComputeHandler extends SessionAwareHandler {
 	private static final String TAG = "ToureNPlaner";
 
 	private int version;
 
 	public ClientComputeHandler(Observer listener, Session session) {
 		super(listener, session);
-	}
-
-	@Override
-	protected boolean isPost() {
-		return true;
-	}
-
-	@Override
-	protected String getSuffix() {
-		return "/alg" + session.getSelectedAlgorithm().getUrlsuffix();
 	}
 
 	protected ArrayList<Node> getNodes() {
@@ -69,97 +56,84 @@ public class ClientComputeHandler extends RequestHandler {
 		return session.getConstraints();
 	}
 
-	@Override
-	protected void handleOutput(OutputStream outputStream) throws Exception {
+	protected Object doInBackground(Void... voids) {
+		try {
+			return sendSubgraphRequest();
+		} catch (Exception e) {
+			return e;
+		}
+	}
+
+	private InputStream getCorrectStream(HttpURLConnection urlConnection) throws IOException {
+		InputStream stream;
+		try {
+			// TODO: Only works > 4.0 else we need DoneHandlerInputStream
+			stream = urlConnection.getInputStream();
+		} catch (IOException exception) {
+			stream = urlConnection.getErrorStream();
+			if (stream == null) {
+				throw exception;
+			}
+		}
+		return stream;
+	}
+
+	private void checkStatus(HttpURLConnection urlConnection, InputStream stream, JacksonManager.ContentType type) throws IOException, de.uni.stuttgart.informatik.ToureNPlaner.Data.Error {
+		if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			ObjectMapper mapper = JacksonManager.getMapper(type);
+			throw de.uni.stuttgart.informatik.ToureNPlaner.Data.Error.parse(mapper.readValue(stream, JsonNode.class));
+		}
+	}
+
+	protected Object sendSubgraphRequest() throws Exception {
+		Result result = new Result();//Result.parse(type, inputStream);
+		result.setVersion(version);
+
+		HttpURLConnection urlConnection = session.openPostConnection("/algupdowng");
+
+		try {
+			writeSubgraphRequest(urlConnection);
+
+			InputStream stream = getCorrectStream(urlConnection);
+
+			JacksonManager.ContentType type = JacksonManager.ContentType.parse(urlConnection.getContentType());
+
+			checkStatus(urlConnection, stream, type);
+
+			computeSubgraphPath(type, stream);
+
+			return result;
+		} finally {
+			urlConnection.disconnect();
+		}
+	}
+
+	private void writeSubgraphRequest(HttpURLConnection urlConnection) throws IOException {
 		ObjectMapper mapper = JacksonManager.getJsonMapper();
 		version = session.getNodeModel().getVersion();
 		JsonNode root = Request.generate(mapper.getNodeFactory(),
 				getNodes(),
 				getConstraints());
 		JsonGenerator generator = mapper.getJsonFactory()
-				.createJsonGenerator(outputStream);
+				.createJsonGenerator(urlConnection.getOutputStream());
 		mapper.writeTree(generator, root);
 		generator.close();
 	}
 
 
+	protected void computeSubgraphPath(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
 
+		long start = System.currentTimeMillis();
+		ClientGraph graph =  ClientGraph.readClientGraph(type, inputStream);
 
-	@Override
-	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
+		IntIntOpenHashMap dists = new IntIntOpenHashMap(graph.getNodeCount());
+		long endOfCreate = System.currentTimeMillis();
+		boolean res = ShortestPath.dijkstraStopAtDest(graph, dists);
+		long end = System.currentTimeMillis();
 
-		Result result = new Result();//Result.parse(type, inputStream);
-
-		result.setVersion(version);
-		try {
-			long start = System.currentTimeMillis();
-			ClientGraph graph =  readClientGraph(type, inputStream);
-
-			IntIntOpenHashMap dists = new IntIntOpenHashMap(graph.getNodeCount());
-			long endOfCreate = System.currentTimeMillis();
-			boolean res = ShortestPath.dijkstraStopAtDest(graph, dists);
-			long end = System.currentTimeMillis();
-
-			Log.d(TAG, "Time: "+(end-start)+" ms total, and "+(endOfCreate-start)+" ms for creating the Graph");
-			Log.d(TAG, "That's "+(end-endOfCreate)+" ms for the Dijkstra");
-			Log.d(TAG, "Did it? " + Boolean.toString(res));
-			Log.d(TAG, "Distance " + dists.get(graph.getOrigTarget()));
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	private ClientGraph readClientGraph(JacksonManager.ContentType type, InputStream inputStream) throws IOException {
-		ClientGraph graph = new ClientGraph();
-		ObjectMapper mapper = JacksonManager.getMapper(type);
-		final JsonParser jp = mapper.getJsonFactory().createJsonParser(inputStream);
-		if (jp.nextToken() != JsonToken.START_OBJECT) {
-			throw new JsonParseException("Request contains no json object", jp.getCurrentLocation());
-		}
-
-		String fieldname;
-		JsonToken token;
-		int srcId, trgtId, dist;
-		boolean finished = false;
-		while (!finished) {
-			//move to next field or END_OBJECT/EOF
-			token = jp.nextToken();
-			if (token == JsonToken.FIELD_NAME) {
-				fieldname = jp.getCurrentName();
-				token = jp.nextToken(); // move to value, or
-				// START_OBJECT/START_ARRAY
-				if ("edges".equals(fieldname)) {
-					while (jp.nextToken() != JsonToken.END_ARRAY && jp.getCurrentToken() != null){
-						srcId = jp.getIntValue();
-						jp.nextToken();
-						trgtId = jp.getIntValue();
-						jp.nextToken();
-					    dist = jp.getIntValue();
-						graph.addEdge(srcId, trgtId, dist);
-					}
-				} else if ("srcId".equals(fieldname)){
-					graph.setOrigSource(jp.getIntValue());
-				} else if ("trgtId".equals(fieldname)){
-					graph.setOrigTarget(jp.getIntValue());
-				} else {
-					// ignore for now TODO: user version string etc.
-					if ((token == JsonToken.START_ARRAY) || (token == JsonToken.START_OBJECT)) {
-						jp.skipChildren();
-					}
-				}
-			} else if (token == JsonToken.END_OBJECT) {
-				// Normal end of request
-				finished = true;
-			} else if (token == null) {
-				//EOF
-				throw new JsonParseException("Unexpected EOF in Request", jp.getCurrentLocation());
-			} else {
-				throw new JsonParseException("Unexpected token " + token, jp.getCurrentLocation());
-			}
-
-		}
-		return graph;
+		Log.d(TAG, "Time: "+(end-start)+" ms total, and "+(endOfCreate-start)+" ms for creating the Graph");
+		Log.d(TAG, "That's "+(end-endOfCreate)+" ms for the Dijkstra");
+		Log.d(TAG, "Did it? " + Boolean.toString(res));
+		Log.d(TAG, "Distance " + dists.get(graph.getOrigTarget()));
 	}
 }

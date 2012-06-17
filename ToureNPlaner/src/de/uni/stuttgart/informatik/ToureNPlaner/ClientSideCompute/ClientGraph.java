@@ -17,6 +17,14 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntObjectOpenHashMap;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Class ClientGraph
@@ -150,5 +158,56 @@ public class ClientGraph {
     public final int getTarget(int edgeId) {
 	    return edges.get((edgeId *3) + 1);
     }
-    
+
+	public static ClientGraph readClientGraph(JacksonManager.ContentType type, InputStream inputStream) throws IOException {
+		ClientGraph graph = new ClientGraph();
+		ObjectMapper mapper = JacksonManager.getMapper(type);
+		final JsonParser jp = mapper.getJsonFactory().createJsonParser(inputStream);
+		if (jp.nextToken() != JsonToken.START_OBJECT) {
+			throw new JsonParseException("Request contains no json object", jp.getCurrentLocation());
+		}
+
+		String fieldname;
+		JsonToken token;
+		int srcId, trgtId, dist;
+		boolean finished = false;
+		while (!finished) {
+			//move to next field or END_OBJECT/EOF
+			token = jp.nextToken();
+			if (token == JsonToken.FIELD_NAME) {
+				fieldname = jp.getCurrentName();
+				token = jp.nextToken(); // move to value, or
+				// START_OBJECT/START_ARRAY
+				if ("edges".equals(fieldname)) {
+					while (jp.nextToken() != JsonToken.END_ARRAY && jp.getCurrentToken() != null) {
+						srcId = jp.getIntValue();
+						jp.nextToken();
+						trgtId = jp.getIntValue();
+						jp.nextToken();
+						dist = jp.getIntValue();
+						graph.addEdge(srcId, trgtId, dist);
+					}
+				} else if ("srcId".equals(fieldname)) {
+					graph.setOrigSource(jp.getIntValue());
+				} else if ("trgtId".equals(fieldname)) {
+					graph.setOrigTarget(jp.getIntValue());
+				} else {
+					// ignore for now TODO: user version string etc.
+					if ((token == JsonToken.START_ARRAY) || (token == JsonToken.START_OBJECT)) {
+						jp.skipChildren();
+					}
+				}
+			} else if (token == JsonToken.END_OBJECT) {
+				// Normal end of request
+				finished = true;
+			} else if (token == null) {
+				//EOF
+				throw new JsonParseException("Unexpected EOF in Request", jp.getCurrentLocation());
+			} else {
+				throw new JsonParseException("Unexpected token " + token, jp.getCurrentLocation());
+			}
+
+		}
+		return graph;
+	}
 }
