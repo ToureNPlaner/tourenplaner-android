@@ -24,8 +24,9 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
-public class AuthRequestHandler extends ConnectionHandler {
+public class AuthRequestHandler extends SessionNetworkHandler {
 	public AuthRequestHandler(Observer listener, Session session) {
 		super(listener, session);
 	}
@@ -39,6 +40,9 @@ public class AuthRequestHandler extends ConnectionHandler {
 	protected String getSuffix() {
 		return "/authuser";
 	}
+
+	@Override
+	protected void handleOutput(OutputStream connection) {}
 
 	@Override
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {

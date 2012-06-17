@@ -23,6 +23,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ClientComputeHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.SessionAwareHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
@@ -415,13 +416,12 @@ public class Session implements Serializable {
 		return canPerformReason().equals("");
 	}
 
-	@SuppressWarnings("unchecked")
-	public RequestHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
+	public SessionAwareHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
 		if (canPerformRequest() && (force || result == null || nodeModel.getVersion() != result.getVersion())) {
 			if (d.selectedAlgorithm.isClientSide()){
-				return (RequestHandler) new ClientComputeHandler(requestListener, this).execute();
+				return (SessionAwareHandler) new ClientComputeHandler(requestListener, this).execute();
 			} else {
-				return (RequestHandler) new RequestHandler(requestListener, this).execute();
+				return (SessionAwareHandler) new RequestHandler(requestListener, this).execute();
 			}
 		} else {
 			throw new RequestInvalidException(canPerformReason());

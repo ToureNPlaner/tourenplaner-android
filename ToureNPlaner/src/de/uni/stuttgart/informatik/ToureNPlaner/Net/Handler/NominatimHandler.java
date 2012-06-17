@@ -25,6 +25,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import org.mapsforge.core.GeoPoint;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -50,6 +51,9 @@ public class NominatimHandler extends GeoCodingHandler {
 		connection.setRequestProperty("User-Agent", "Android " + ToureNPlanerApplication.getApplicationIdentifier());
 		return connection;
 	}
+
+	@Override
+	protected void handleOutput(OutputStream connection) throws Exception {}
 
 	@Override
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {

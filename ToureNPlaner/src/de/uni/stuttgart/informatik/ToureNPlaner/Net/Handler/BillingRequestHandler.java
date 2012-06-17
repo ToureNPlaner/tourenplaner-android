@@ -22,8 +22,9 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
-public class BillingRequestHandler extends ConnectionHandler {
+public class BillingRequestHandler extends SessionNetworkHandler {
 	private int id = 0;
 
 	public BillingRequestHandler(Observer listener, Session session, int id) {
@@ -35,6 +36,9 @@ public class BillingRequestHandler extends ConnectionHandler {
 	protected String getSuffix() {
 		return "/getresponse?id=" + id;
 	}
+
+	@Override
+	protected void handleOutput(OutputStream connection) {}
 
 	@Override
 	protected boolean isPost() {

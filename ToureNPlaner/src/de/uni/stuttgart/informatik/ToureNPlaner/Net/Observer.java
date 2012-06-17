@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 
 public interface Observer {
-	void onCompleted(RawHandler caller, Object object);
+	void onCompleted(AsyncHandler caller, Object object);
 
-	void onError(RawHandler caller, Object object);
+	void onError(AsyncHandler caller, Object object);
 }

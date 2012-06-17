@@ -25,8 +25,9 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
-public class BillingListHandler extends ConnectionHandler {
+public class BillingListHandler extends SessionNetworkHandler {
 	private int limit;
 	private int offset;
 
@@ -41,6 +42,9 @@ public class BillingListHandler extends ConnectionHandler {
 	protected String getSuffix() {
 		return "/listrequests?details=nojson&limit=" + limit + "&offset=" + offset;
 	}
+
+	@Override
+	protected void handleOutput(OutputStream connection) {}
 
 	@Override
 	protected boolean isPost() {

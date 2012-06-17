@@ -96,10 +96,12 @@ public class ClientComputeHandler extends RequestHandler {
 			ClientGraph graph =  readClientGraph(type, inputStream);
 
 			IntIntOpenHashMap dists = new IntIntOpenHashMap(graph.getNodeCount());
-			boolean res = false;
+			long endOfCreate = System.currentTimeMillis();
+			boolean res = ShortestPath.dijkstraStopAtDest(graph, dists);
+			long end = System.currentTimeMillis();
 
-			res = ShortestPath.dijkstraStopAtDest(graph, dists);
-			Log.d(TAG, "Time: "+(System.currentTimeMillis()-start)+" ms");
+			Log.d(TAG, "Time: "+(end-start)+" ms total, and "+(endOfCreate-start)+" ms for creating the Graph");
+			Log.d(TAG, "That's "+(end-endOfCreate)+" ms for the Dijkstra");
 			Log.d(TAG, "Did it? " + Boolean.toString(res));
 			Log.d(TAG, "Distance " + dists.get(graph.getOrigTarget()));
 		} catch (Exception e){

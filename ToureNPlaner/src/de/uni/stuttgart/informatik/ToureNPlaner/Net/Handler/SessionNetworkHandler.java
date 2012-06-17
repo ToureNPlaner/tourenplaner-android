@@ -16,55 +16,34 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
-import android.os.AsyncTask;
-import android.util.Log;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Error;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.DoneHandlerInputStream;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
-public abstract class RawHandler extends AsyncTask<Void, Void, Object> {
-	private WeakReference<Observer> listener;
+public abstract class SessionNetworkHandler extends SessionAwareHandler {
 
-	public RawHandler(Observer listener) {
-		setListener(listener);
+	public SessionNetworkHandler(Observer listener, Session session) {
+		super(listener, session);
+		this.session = session;
 	}
 
-	public void setListener(Observer listener) {
-		this.listener = new WeakReference<Observer>(listener);
-	}
 
-	/**
-	 * Will be run in UI thread
-	 *
-	 * @param object
-	 */
-	@Override
-	public void onPostExecute(Object object) {
-		if (listener == null) {
-			Log.w("TP", "Null Listener!");
-			return;
-		}
+	protected abstract Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception;
 
-		Observer l = listener.get();
+	protected abstract void handleOutput(OutputStream outputStream) throws Exception;
 
-		// The listener has been collected
-		if (l == null)
-			return;
+	protected abstract boolean isPost();
 
-		if (object instanceof Exception) {
-			l.onError(this, object);
-		} else {
-			l.onCompleted(this, object);
-		}
-	}
+	protected abstract String getSuffix();
+
 
 	@Override
 	protected Object doInBackground(Void... voids) {
@@ -86,7 +65,7 @@ public abstract class RawHandler extends AsyncTask<Void, Void, Object> {
 
 				if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
 					ObjectMapper mapper = JacksonManager.getMapper(type);
-					throw Error.parse(mapper.readValue(stream, JsonNode.class));
+					throw de.uni.stuttgart.informatik.ToureNPlaner.Data.Error.parse(mapper.readValue(stream, JsonNode.class));
 				}
 
 				return handleInput(type, stream);
@@ -98,7 +77,20 @@ public abstract class RawHandler extends AsyncTask<Void, Void, Object> {
 		}
 	}
 
-	protected abstract HttpURLConnection getHttpUrlConnection() throws Exception;
 
-	protected abstract Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception;
+	protected HttpURLConnection getHttpUrlConnection() throws Exception {
+		if (!isPost())
+			return session.openGetConnection(getSuffix());
+
+		HttpURLConnection connection = session.openPostConnection(getSuffix());
+
+		try {
+			handleOutput(connection.getOutputStream());
+		} catch (Exception e) {
+			connection.disconnect();
+			throw e;
+		}
+
+		return connection;
+	}
 }
