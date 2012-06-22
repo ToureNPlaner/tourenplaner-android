@@ -17,7 +17,9 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
 import android.util.Log;
+import com.carrotsearch.hppc.IntArrayDeque;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.cursors.IntCursor;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,11 +88,10 @@ public class ClientComputeHandler extends SessionAwareHandler {
 	}
 
 	protected Object sendSubgraphRequest() throws Exception {
-		Result result = new Result();//Result.parse(type, inputStream);
-		result.setVersion(version);
+		Result result = null;
+		ClientGraph graph = null;
 
 		HttpURLConnection urlConnection = session.openPostConnection("/algupdowng");
-
 		try {
 			writeSubgraphRequest(urlConnection);
 
@@ -99,13 +100,49 @@ public class ClientComputeHandler extends SessionAwareHandler {
 			JacksonManager.ContentType type = JacksonManager.ContentType.parse(urlConnection.getContentType());
 
 			checkStatus(urlConnection, stream, type);
-
-			computeSubgraphPath(type, stream);
-
-			return result;
+			long start = System.currentTimeMillis();
+			graph = ClientGraph.readClientGraph(type, stream);
+			long endOfCreate = System.currentTimeMillis();
+			Log.d(TAG, "Time: " +(endOfCreate - start) + " ms for creating the Graph");
 		} finally {
 			urlConnection.disconnect();
 		}
+		IntArrayDeque pathOfNodes = computeSubgraphPath(graph);
+		
+		urlConnection = session.openPostConnection("/algwaybynodeids");
+		try {
+			writeWayByNodeIdsRequest(urlConnection, pathOfNodes);
+
+			InputStream stream = getCorrectStream(urlConnection);
+
+			JacksonManager.ContentType type = JacksonManager.ContentType.parse(urlConnection.getContentType());
+
+			checkStatus(urlConnection, stream, type);
+
+			result = readResult(type, stream);
+
+
+		} finally {
+			urlConnection.disconnect();
+		}
+
+
+			return result;
+
+	}
+
+	private void writeWayByNodeIdsRequest(HttpURLConnection urlConnection, IntArrayDeque pathOfNodes) throws Exception{
+		ObjectMapper mapper = JacksonManager.getJsonMapper();
+		JsonGenerator generator = mapper.getJsonFactory()
+				.createJsonGenerator(urlConnection.getOutputStream());
+		generator.writeStartObject();
+		generator.writeArrayFieldStart("nodes");
+		for (IntCursor cursor : pathOfNodes){
+			generator.writeNumber(cursor.value);
+		}
+		generator.writeEndArray();
+		generator.writeEndObject();
+		generator.close();
 	}
 
 	private void writeSubgraphRequest(HttpURLConnection urlConnection) throws IOException {
@@ -121,19 +158,28 @@ public class ClientComputeHandler extends SessionAwareHandler {
 	}
 
 
-	protected void computeSubgraphPath(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
+	protected IntArrayDeque computeSubgraphPath(ClientGraph graph) throws Exception {
+		IntArrayDeque pathOfNodes;
+		IntIntOpenHashMap dists = new IntIntOpenHashMap(graph.getNodeCount());
+		IntIntOpenHashMap predEdges = new IntIntOpenHashMap(graph.getEdgeCount());
 
 		long start = System.currentTimeMillis();
-		ClientGraph graph =  ClientGraph.readClientGraph(type, inputStream);
 
-		IntIntOpenHashMap dists = new IntIntOpenHashMap(graph.getNodeCount());
-		long endOfCreate = System.currentTimeMillis();
-		boolean res = ShortestPath.dijkstraStopAtDest(graph, dists);
+		boolean res = ShortestPath.dijkstraStopAtDest(graph, dists, predEdges);
+		pathOfNodes = ShortestPath.backtrack(graph, predEdges);
+
 		long end = System.currentTimeMillis();
 
-		Log.d(TAG, "Time: "+(end-start)+" ms total, and "+(endOfCreate-start)+" ms for creating the Graph");
-		Log.d(TAG, "That's "+(end-endOfCreate)+" ms for the Dijkstra");
+
+		Log.d(TAG, "That's "+(end-start)+" ms for the Dijkstra");
 		Log.d(TAG, "Did it? " + Boolean.toString(res));
 		Log.d(TAG, "Distance " + dists.get(graph.getOrigTarget()));
+		return pathOfNodes;
+	}
+
+	private Result readResult(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
+		Result result = Result.parse(type, inputStream);
+		result.setVersion(version);
+		return result;
 	}
 }

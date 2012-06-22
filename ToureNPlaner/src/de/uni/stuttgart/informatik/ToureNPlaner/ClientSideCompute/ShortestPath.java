@@ -16,6 +16,7 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute;
 
+import com.carrotsearch.hppc.IntArrayDeque;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
@@ -33,7 +34,7 @@ public class ShortestPath {
      * @return
      * @throws IllegalAccessException
      */
-    public static final boolean dijkstraStopAtDest(ClientGraph graph, IntIntOpenHashMap dists)
+    public static final boolean dijkstraStopAtDest(ClientGraph graph, IntIntOpenHashMap dists, IntIntOpenHashMap predEdges)
             throws IllegalAccessException {
 		int srcId = graph.getOrigSource();
 	    int trgtId = graph.getOrigTarget();
@@ -70,13 +71,28 @@ public class ShortestPath {
 
                 if (tempDist < targetDist) {
                     dists.put(targetNode, tempDist);
-                    //prevEdges[targetNode] = edgeId;
+                    predEdges.put(targetNode, edgeId);
                     heap.insert(targetNode, tempDist);
                 }
             }
         }
         return nodeId == trgtId;
     }
+
+	public static final IntArrayDeque backtrack(ClientGraph graph, IntIntOpenHashMap predEdges){
+		IntArrayDeque result = new IntArrayDeque();
+		int srcId = graph.getOrigSource();
+		int currId = graph.getOrigTarget();
+		int edgeId;
+		while (currId != srcId){
+			result.addFirst(currId);
+			edgeId = predEdges.get(currId);
+			currId = graph.getSource(edgeId);
+		}
+		// don't forget to add the source
+		result.addFirst(srcId);
+		return result;
+	}
 
 
 }
