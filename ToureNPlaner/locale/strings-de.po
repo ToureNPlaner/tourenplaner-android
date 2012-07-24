@@ -126,8 +126,8 @@ msgid "Mapfile is not valid. Falling back."
 msgstr "Kartendatei nicht gültig. Weiche aus."
 
 msgctxt "Result"
-msgid "Result"
-msgstr "Ergebnis"
+msgid "Waypoints"
+msgstr "Wegpunkte"
 
 msgctxt "traveldistance"
 msgid "Distance"

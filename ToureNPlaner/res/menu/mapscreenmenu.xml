@@ -10,7 +10,7 @@
           android:showAsAction="always|collapseActionView"
           android:title="@string/search"/>
     <item android:id="@+id/nodelist"
-          android:title="@string/info"/>
+          android:title="@string/routeinfo"/>
     <item android:id="@+id/algorithm_constraints"
           android:title="@string/constraints"/>
     <item android:id="@+id/gps"
