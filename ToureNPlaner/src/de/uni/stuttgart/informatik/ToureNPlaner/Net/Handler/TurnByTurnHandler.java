@@ -16,12 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
-import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.WayDescriptionFragment;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;
@@ -33,9 +31,9 @@ import java.util.ArrayList;
 public class TurnByTurnHandler extends SimpleNetworkHandler {
 
 	private final String ip;
-	private final ArrayList<ArrayList<WayDescriptionFragment.Coordinate>> nodes;
+	private final ArrayList<ArrayList<int[]>> nodes;
 
-	public TurnByTurnHandler(Observer listener, String ip, ArrayList<ArrayList<WayDescriptionFragment.Coordinate>> nodes) {
+	public TurnByTurnHandler(Observer listener, String ip, ArrayList<ArrayList<int[]>> nodes) {
 		super(listener);
 		this.nodes = nodes;
 		this.ip = ip;
@@ -66,7 +64,6 @@ public class TurnByTurnHandler extends SimpleNetworkHandler {
 
 	@Override
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
-		ObjectMapper mapper = JacksonManager.getMapper(type);
-		return mapper.readValue(inputStream, JsonNode.class);
+		return TBTResult.parse(type, inputStream);
 	}
 }

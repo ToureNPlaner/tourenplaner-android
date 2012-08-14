@@ -45,6 +45,7 @@
   <string name="input_instant">Instant Abfrage</string>
   <string name="stats">Statistik</string>
   <string name="calculate">Berechnen</string>
+  <string name="tbt">Turn by Turn Navigation</string>
   <string name="your_location">Ihre Position</string>
   <string name="settings">Einstellungen</string>
   <string name="constraints">Constraints</string>

@@ -24,6 +24,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,6 +38,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -69,7 +71,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODE = 1;
 	public static final int REQUEST_CONSTRAINTS = 2;
 	NodeOverlay nodeOverlay;
-	private SessionAwareHandler handler = null;
+	private SimpleNetworkHandler simplehandler = null;
+	private SessionAwareHandler sesshandler = null;
 	private LocationManager locManager;
 	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
@@ -78,10 +81,31 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
+
+	private final Observer tbtrequestListener = new Observer() {
+		@Override
+		public void onCompleted(AsyncHandler caller, Object object) {
+			//Log.d("tp", "tbt request completed: " +object.toString());
+			sesshandler = null;
+			Edit edit = new TBTResultEdit(session, (TBTResult) object);
+			//Log.d("tp", "tbt response: " + object.toString());
+			edit.perform();
+			setSupportProgressBarIndeterminateVisibility(false);
+		}
+
+		@Override
+		public void onError(AsyncHandler caller, Object object) {
+			Log.d("tp", "error: " + object.toString());
+			simplehandler = null;
+			setSupportProgressBarIndeterminateVisibility(false);
+			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
+		}
+	};
+
 	private final Observer requestListener = new Observer() {
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
-			handler = null;
+			sesshandler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
 			setSupportProgressBarIndeterminateVisibility(false);
@@ -89,7 +113,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
-			handler = null;
+			sesshandler = null;
 			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
@@ -230,7 +254,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void setupGPS(Bundle savedInstanceState, boolean isFirstStart) {
-		Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
 		GeoPoint gpsGeoPoint = null;
 
@@ -360,16 +384,19 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				startActivityForResult(myIntent, REQUEST_NODEMODEL);
 				return true;
 			case R.id.reset:
-				if (handler != null) {
-					handler.cancel(true);
+				if (sesshandler != null) {
+					sesshandler.cancel(true);
 					setSupportProgressBarIndeterminateVisibility(false);
-					handler = null;
+					sesshandler = null;
 				}
 				Edit edit = new ClearEdit(session);
 				edit.perform();
 				return true;
 			case R.id.calculate:
 				performRequest(true);
+				return true;
+			case R.id.tbt:
+				performtbtRequest();
 				return true;
 			case R.id.gps:
 				GeoPoint pos = nodeOverlay.getGpsPosition();
@@ -389,15 +416,40 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 	}
 
-	private void performRequest(boolean force) {
-		if (handler != null && !force)
+	private void performtbtRequest() {
+		if (session.getResult() == null) {
 			return;
-
-		if (handler != null)
-			handler.cancel(true);
+		}
+		if (simplehandler != null)
+			simplehandler.cancel(true);
 
 		try {
-			handler = session.performRequest(requestListener, force);
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+			String tbtip = preferences.getString("tbtip", MapScreenPreferences.defaulttbtip);
+
+			simplehandler = session.performtbtRequest(tbtrequestListener, tbtip);
+			setSupportProgressBarIndeterminateVisibility(true);
+		} catch (Session.RequestInvalidException e) {
+			if (messageToast != null) {
+				messageToast.setText(e.getMessage());
+				messageToast.show();
+			} else {
+				messageToast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
+				messageToast.show();
+			}
+			simplehandler = null;
+		}
+	}
+
+	private void performRequest(boolean force) {
+		if (sesshandler != null && !force)
+			return;
+
+		if (sesshandler != null)
+			sesshandler.cancel(true);
+
+		try {
+			sesshandler = session.performRequest(requestListener, force);
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
 			if (messageToast != null) {
@@ -407,7 +459,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				messageToast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
 				messageToast.show();
 			}
-			handler = null;
+			sesshandler = null;
 		}
 	}
 
@@ -461,10 +513,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@SuppressWarnings("deprecation")
 	private void initializeHandler() {
-		handler = (RequestHandler) getLastNonConfigurationInstance();
+		sesshandler = (RequestHandler) getLastNonConfigurationInstance();
 
-		if (handler != null) {
-			handler.setListener(requestListener);
+		if (sesshandler != null) {
+			sesshandler.setListener(requestListener);
 			setSupportProgressBarIndeterminateVisibility(true);
 		} else {
 			setSupportProgressBarIndeterminateVisibility(false);
@@ -474,7 +526,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	@SuppressWarnings("deprecation")
 	public Object onRetainNonConfigurationInstance() {
-		return handler;
+		return sesshandler;
 	}
 
 	@Override
@@ -496,9 +548,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupMapView(preferences);
 
-		// 1 minutes, 10 meters
 		try {
-			locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1 * 60 * 1000, 10, gpsListener);
+			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, gpsListener);
 		} catch (IllegalArgumentException e) {
 			// happens on emulator
 		}
@@ -513,8 +564,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		session.removeListener(NodeOverlay.class);
 		session.removeListener(MapScreen.class);
 
-		if (handler != null)
-			handler.setListener(null);
+		if (sesshandler != null)
+			sesshandler.setListener(null);
 
 		for (RequestNN request : requestList) {
 			request.setListener(null);
@@ -527,9 +578,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
-			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		} else {
 			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		} else {
+			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
 
 		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());
@@ -564,14 +615,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					performRequest(false);
 				}
 				if (change.isModelChange()) {
-					if (!change.isAddChange()) {
-						Edit edit = new SetResultEdit(session, null);
-						edit.perform();
-					} else {
+					if (change.isAddChange()) {
 						// Important! Try to perform the NNS Search before, notifying any one else about the change.
 						// else through HTTP pipelining the NNS might be performed after the request!
 						performNNSearch(change.getNode());
 						mapView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+					} else {
+						Edit edit = new SetResultEdit(session, null);
+						edit.perform();
 					}
 					if (instantRequest != MapScreenPreferences.Instant.NEVER) {
 						performRequest(true);

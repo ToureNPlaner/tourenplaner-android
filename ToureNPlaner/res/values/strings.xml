@@ -65,6 +65,7 @@
     <!--menu-->
     <string name="stats">Statistics</string>
     <string name="calculate">Calculate</string>
+    <string name="tbt">Turn by Turn navigation</string>
     <string name="your_location">Your location</string>
     <string name="settings">Settings</string>
 

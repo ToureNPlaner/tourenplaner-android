@@ -24,4 +24,6 @@
           android:title="@string/clear"/>
     <item android:id="@+id/settings"
           android:title="@string/settings"/>
+    <item android:id="@+id/tbt"
+          android:title="@string/tbt"/>
 </menu>

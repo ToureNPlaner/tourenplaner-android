@@ -20,10 +20,7 @@ import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ClientComputeHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.SessionAwareHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
@@ -44,6 +41,7 @@ public class Session implements Serializable {
 	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
 
+
 	private static class Data implements Serializable {
 		private ServerInfo serverInfo;
 		private String username;
@@ -58,6 +56,7 @@ public class Session implements Serializable {
 	private static transient Data d;
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
+	private static transient TBTResult tbtresult;
 
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
@@ -68,13 +67,15 @@ public class Session implements Serializable {
 		d = new Data();
 		nodeModel = new NodeModel();
 		result = new Result();
+		tbtresult = new TBTResult();
 		// Also initialize the files on the disc
-		safeData();
-		safeNodeModel();
-		safeResult();
+		saveData();
+		saveNodeModel();
+		saveResult();
+		savetbtResult();
 	}
 
-	private void safe(Object o, String name) {
+	private void save(Object o, String name) {
 		try {
 			File dir = new File(openCacheDir(), uuid.toString());
 			dir.mkdirs();
@@ -92,16 +93,20 @@ public class Session implements Serializable {
 		}
 	}
 
-	private void safeData() {
-		safe(d, "data");
+	private void saveData() {
+		save(d, "data");
 	}
 
-	private void safeNodeModel() {
-		safe(nodeModel, "nodeModel");
+	private void saveNodeModel() {
+		save(nodeModel, "nodeModel");
 	}
 
-	private void safeResult() {
-		safe(result, "result");
+	private void saveResult() {
+		save(result, "result");
+	}
+
+	private void savetbtResult() {
+		save(tbtresult, "tbtresult");
 	}
 
 	private void loadAll() {
@@ -135,6 +140,7 @@ public class Session implements Serializable {
 	public static final int NNS_CHANGE = 4;
 	public static final int ADD_CHANGE = 8;
 	public static final int DND_CHANGE = 16;
+	public static final int TBT_RESULT_CHANGE = 32;
 
 	public static class Change {
 		private final int val;
@@ -158,6 +164,10 @@ public class Session implements Serializable {
 
 		public boolean isResultChange() {
 			return 0 < (val & RESULT_CHANGE);
+		}
+
+		public boolean isTBTResultChange() {
+			return 0 < (val & TBT_RESULT_CHANGE);
 		}
 
 		public boolean isNnsChange() {
@@ -214,10 +224,13 @@ public class Session implements Serializable {
 			public void run() {
 				synchronized (Session.class) {
 					if (change.isModelChange()) {
-						safeNodeModel();
+						saveNodeModel();
 					}
 					if (change.isResultChange()) {
-						safeResult();
+						saveResult();
+					}
+					if (change.isTBTResultChange()) {
+						savetbtResult();
 					}
 				}
 			}
@@ -228,13 +241,21 @@ public class Session implements Serializable {
 		return result;
 	}
 
+	public void settbtResult(TBTResult result) {
+		Session.tbtresult = result;
+	}
+
+	public TBTResult gettbtResult() {
+		return Session.tbtresult;
+	}
+
 	public void setResult(Result result) {
 		Session.result = result;
 	}
 
 	public void setUser(User user) {
 		d.user = user;
-		safeData();
+		saveData();
 	}
 
 	public User getUser() {
@@ -252,7 +273,7 @@ public class Session implements Serializable {
 			int port = uri.getPort();
 			d.serverInfo.setPort(port == -1 ? 80 : port);
 			uri.getProtocol();
-			safeData();
+			saveData();
 		} catch (MalformedURLException e) {
 			// Should never happen
 			e.printStackTrace();
@@ -317,7 +338,7 @@ public class Session implements Serializable {
 			for (int i = 0; i < selectedAlgorithm.getConstraintTypes().size(); i++) {
 				d.constraints.add(new Constraint(selectedAlgorithm.getConstraintTypes().get(i)));
 			}
-			safeData();
+			saveData();
 		}
 	}
 
@@ -353,7 +374,7 @@ public class Session implements Serializable {
 
 	public void setServerInfo(ServerInfo serverInfo) {
 		d.serverInfo = serverInfo;
-		safeData();
+		saveData();
 	}
 
 	public ServerInfo getServerInfo() {
@@ -362,12 +383,12 @@ public class Session implements Serializable {
 
 	public void setUsername(String username) {
 		d.username = username;
-		safeData();
+		saveData();
 	}
 
 	public void setPassword(String password) {
 		d.password = password;
-		safeData();
+		saveData();
 	}
 
 	/**
@@ -427,4 +448,27 @@ public class Session implements Serializable {
 			throw new RequestInvalidException(canPerformReason());
 		}
 	}
+
+	public SimpleNetworkHandler performtbtRequest(Observer tbtrequestListener, String tbtip) throws RequestInvalidException {
+		//Log.d("tp","Nodemodel: " + nodeModel.getVersion() + " result: " + result.getVersion());
+		//tbtresult == null &&
+		//TODO: need condition when to do a tbt calculation
+		if (nodeModel.getVersion() == result.getVersion()) {
+			ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
+			for (int[] sw : getResult().getWay()) {
+				ArrayList<int[]> subway = new ArrayList<int[]>();
+				for (int i = 0; i < sw.length; i += 2) {
+					//TODO: what's with the reversed lt/ln?
+					int[] c = { sw[i+1]*10, sw[i]*10};
+					subway.add(c);
+				}
+				sendnodes.add(subway);
+			}
+			//Log.d("tp", "request tbt from " + tbtip);
+			return (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
+		} else {
+			throw new RequestInvalidException("foobar");
+		}
+	}
+
 }
