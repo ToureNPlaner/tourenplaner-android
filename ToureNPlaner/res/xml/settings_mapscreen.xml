@@ -26,10 +26,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="TBT">
+            android:title="@string/tbtpref">
         <EditTextPreference
                 android:key="tbtprefs"
-                android:title="@string/tbtpref"
+                android:title="@string/tbtip"
                 android:dialogTitle="@string/tbtip"/>
         />
     </PreferenceCategory>

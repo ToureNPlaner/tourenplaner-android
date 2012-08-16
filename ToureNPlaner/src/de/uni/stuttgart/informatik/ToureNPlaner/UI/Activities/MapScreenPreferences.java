@@ -74,7 +74,7 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		addPreferencesFromResource(R.xml.settings_mapscreen);
 
 		tileServer = (EditTextPreference) getPreferenceScreen().findPreference("tile_server");
-		tbtip = (EditTextPreference) getPreferenceScreen().findPreference("tbtip");
+		tbtip = (EditTextPreference) getPreferenceScreen().findPreference("tbtprefs");
 		offlineMapLoc = (EditTextPreference) getPreferenceScreen().findPreference("offline_map_location");
 		offlineMapLoc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
