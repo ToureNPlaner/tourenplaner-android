@@ -28,9 +28,9 @@
     <PreferenceCategory
             android:title="TBT">
         <EditTextPreference
-                android:key="tbtip"
-                android:title="@string/about"
-                android:dialogTitle="@string/about"/>
+                android:key="tbtprefs"
+                android:title="@string/tbtpref"
+                android:dialogTitle="@string/tbtip"/>
         />
     </PreferenceCategory>
 </PreferenceScreen>

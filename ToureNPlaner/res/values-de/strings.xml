@@ -76,6 +76,7 @@
   <string name="get_tbt">Straßennamen</string>
   <string name="way_desc">Wegbeschreibung</string>
   <string name="routeinfo">Routeninformationen</string>
-
+  <string name="tbtip">Turn By Turn Server</string>
+  <string name="tbtpref">Turn By Turn Einstellungen</string>
 
 </resources>

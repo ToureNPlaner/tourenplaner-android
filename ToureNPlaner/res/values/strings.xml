@@ -103,5 +103,7 @@
     <string name="csp_description">Finds the fastest way with a specific maximum of height meters.</string>
     <string name="get_tbt">Get streetnames</string>
     <string name="routeinfo">Route info</string>
+    <string name="tbtip">Turn By Turn Server</string>
+    <string name="tbtpref">Turn By Turn Preferences</string>
 
 </resources>

@@ -71,22 +71,6 @@ public class WayDescriptionFragment extends SherlockFragment implements Observer
 
 	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
-//		JsonNode result = null;
-//
-//		try {
-//			result = ((ObjectNode) caller.get()).get("streets");
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		}
-//
-//		Log.d("tp", "resultstring: " + result.toString());
-//		List streets = new ArrayList<String>();
-//		int distall = 0;
-//		int dist = 0;
-
-//		Toast.makeText(ToureNPlanerApplication.getContext(), "dist: , " + distall, Toast.LENGTH_LONG).show();
 
 		if (session.gettbtResult() != null && session.gettbtResult().getStreets() != null) {
 			List streets = session.gettbtResult().getStreets();
@@ -94,12 +78,6 @@ public class WayDescriptionFragment extends SherlockFragment implements Observer
 			ListView listView = (ListView) view.findViewById(android.R.id.list);
 			listView.setAdapter(adapter);
 		}
-//		for (ArrayList<Node> nl : tbtway) {
-//			for (Node n : nl) {
-//				session.getNodeModel().getNodeVector().add(n);
-//			}
-//		}
-//		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE | Session.ADD_CHANGE));
 	}
 
 	@Override
