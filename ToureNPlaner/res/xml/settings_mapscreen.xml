@@ -28,7 +28,8 @@
     <PreferenceCategory
             android:title="@string/tbtpref">
         <EditTextPreference
-                android:key="tbtprefs"
+                android:key="tbtip"
+                android:inputType="textUri"
                 android:title="@string/tbtip"
                 android:dialogTitle="@string/tbtip"/>
         />

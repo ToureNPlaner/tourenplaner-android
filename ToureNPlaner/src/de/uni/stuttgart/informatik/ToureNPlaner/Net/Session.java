@@ -450,9 +450,9 @@ public class Session implements Serializable {
 	}
 
 	public SimpleNetworkHandler performtbtRequest(Observer tbtrequestListener, String tbtip) throws RequestInvalidException {
-		//Log.d("tp","Nodemodel: " + nodeModel.getVersion() + " result: " + result.getVersion());
-		//tbtresult == null &&
-		//TODO: need condition when to do a tbt calculation
+		if (getResult().getWay() == null) {
+			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needroute));
+		}
 		if (nodeModel.getVersion() == result.getVersion()) {
 			ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
 			for (int[] sw : getResult().getWay()) {
@@ -467,7 +467,7 @@ public class Session implements Serializable {
 			//Log.d("tp", "request tbt from " + tbtip);
 			return (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
 		} else {
-			throw new RequestInvalidException("foobar");
+			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.routeinprogress));
 		}
 	}
 
