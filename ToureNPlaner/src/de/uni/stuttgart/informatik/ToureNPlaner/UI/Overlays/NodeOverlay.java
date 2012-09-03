@@ -20,8 +20,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -66,11 +64,13 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	}
 
 	private void setupGpsDrawable() {
-		Paint p = new Paint();
-		p.setAntiAlias(true);
-		p.setColor(Color.YELLOW);
-		p.setAlpha(128);
-		gpsDrawable = new GpsDrawable(p);
+//		Paint p = new Paint();
+//		p.setAntiAlias(true);
+//		p.setColor(Color.YELLOW);
+//		p.setAlpha(128);
+//		gpsDrawable = new GpsDrawable(p);
+
+		gpsDrawable = new GpsDrawable();
 		gpsDrawable.setBounds(-GPS_RADIUS, -GPS_RADIUS, GPS_RADIUS, GPS_RADIUS);
 	}
 
@@ -220,11 +220,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 		// If we have a valid point
 		if (geoPoint != null) {
 			// Then create a new Overlayitem or update the old one
-			if (gpsMarker == null)
+			if (gpsMarker == null) {
 				gpsMarker = new OverlayItem(geoPoint, null, null, gpsDrawable);
-			else
-				gpsMarker.setPoint(geoPoint);
+			} else {
 
+			}
 		} else {
 			gpsMarker = null;
 		}
@@ -244,5 +244,12 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	@Override
 	protected synchronized void drawOverlayBitmap(Canvas canvas, Point drawPosition, Projection projection, byte drawZoomLevel) {
 		super.drawOverlayBitmap(canvas, drawPosition, projection, drawZoomLevel);
+	}
+
+	public void setDirection(double bearing) {
+		if (gpsMarker != null)
+		gpsDrawable.setrotation(bearing);
+		//TODO: only redraw marker, not the complete nodeoverlay
+		this.requestRedraw();
 	}
 }
