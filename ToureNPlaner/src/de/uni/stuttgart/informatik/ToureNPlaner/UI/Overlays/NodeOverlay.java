@@ -223,7 +223,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 			if (gpsMarker == null) {
 				gpsMarker = new OverlayItem(geoPoint, null, null, gpsDrawable);
 			} else {
-
+				gpsMarker.setPoint(geoPoint);
 			}
 		} else {
 			gpsMarker = null;
@@ -247,9 +247,10 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	}
 
 	public void setDirection(double bearing) {
-		if (gpsMarker != null)
-		gpsDrawable.setrotation(bearing);
-		//TODO: only redraw marker, not the complete nodeoverlay
-		this.requestRedraw();
+		if (gpsMarker != null) {
+			gpsDrawable.setrotation(bearing);
+			//TODO: only redraw marker, not the complete nodeoverlay
+			this.requestRedraw();
+		}
 	}
 }

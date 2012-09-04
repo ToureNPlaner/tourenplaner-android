@@ -37,6 +37,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 
 	private static final String IDENTIFIER = "GpsListenerFollowing";
 	private SensorManager sensorMgr;
+	private long lastevent;
 
 	public GpsListener(MapScreen mapScreen, Bundle savedInstanceState, GeoPoint geoPoint) {
 		this.mapScreen = new WeakReference<MapScreen>(mapScreen);
@@ -53,9 +54,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		sensors = sensorMgr.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
 		if (sensors.size() > 0) sensorMag = sensors.get(0);
 
-		//TODO: Y U NO WORK???
-		//int sensordelay = SensorManager.SENSOR_DELAY_NORMAL;
-		int sensordelay = (int) pow(10,6);
+		int sensordelay = SensorManager.SENSOR_DELAY_NORMAL; // (int) pow(10,6);
 		sensorMgr.registerListener(this, sensorGrav, sensordelay);
 		sensorMgr.registerListener(this, sensorMag, sensordelay);
 	}
@@ -152,6 +151,18 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		// We probably get so much events that we can just throw away all the low accuracy ones
+		if (event.accuracy == SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
+			return;
+		}
+
+		// mapsforge cannot really handle so much updates and we can't tell the sensor reliably how often we want
+		// updates, so throw too quickly arriving events away
+		// x * 10^9 = x seconds
+		if (event.timestamp - lastevent < 0.2*pow(10,9)) {
+			return;
+		}
+
 		//Log.d("tp", event.sensor.getName() + " Event");
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 			smoothed = lowpassfilter(event.values, grav);
@@ -190,9 +201,11 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 
 		//adjust to 0-360
 		if (floatBearing < 0) floatBearing += 360;
+
 		if (mapScreen != null && mapScreen.get() != null && mapScreen.get().nodeOverlay != null) {
 			mapScreen.get().nodeOverlay.setDirection(floatBearing);
 		}
+		lastevent = event.timestamp;
 	}
 
 	@Override

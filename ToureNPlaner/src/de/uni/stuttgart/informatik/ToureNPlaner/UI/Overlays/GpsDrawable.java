@@ -18,14 +18,12 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 public class GpsDrawable extends Drawable {
 	private final Paint paint;
 	private Bitmap arrow;
-	private Canvas currentcanvas;
 
 	public GpsDrawable() {
 		this.mutate();
@@ -39,17 +37,16 @@ public class GpsDrawable extends Drawable {
 	@Override
 	public void draw(Canvas canvas) {
 		if (canvas != null) {
-			Log.d("tp", "Redraw gps marker with rotation " + degrees);
+			//Log.d("tp", "Redraw gps marker with rotation " + degrees);
 			Rect bounds = this.getBounds();
 			m.reset();
 			// the device is pointed x degrees clockwise from north. The arrow should also point x deegrees clockwise
 			// from north to show device/car orientation correctly on the map which displays north always on the top
-			m.postRotate((float) degrees, arrow.getWidth() / 2, arrow.getHeight() / 2);
+			m.setRotate((float) degrees, arrow.getWidth() / 2, arrow.getHeight() / 2);
 			// it's not our responsibility to find out where to draw here, we already get a rectangle "bounds"
 			// which is the correct place to draw the arrow
 			m.postTranslate(bounds.left, bounds.top);
 			canvas.drawBitmap(arrow, m, paint);
-			this.currentcanvas = canvas;
 		}
 	}
 
