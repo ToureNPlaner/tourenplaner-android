@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.*;
+import android.hardware.Sensor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistance;
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
@@ -304,7 +306,53 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
 		setupSearchMenu(menu.findItem(R.id.search));
 		setupGpsMenu(menu.findItem(R.id.gps));
+		setupToggleCompassMenu(menu.findItem(R.id.togglecompass));
 		return true;
+	}
+
+	private Sensor sensorMag;
+	private Sensor sensorGrav;
+
+	private void setupToggleCompassMenu(MenuItem item) {
+		// TODO: always enabled at start? Remember last setting?
+		item.setChecked(true);
+		sensorMag = gpsListener.getSensorMag();
+		sensorGrav = gpsListener.getSensorGrav();
+		List<Sensor> sensors = gpsListener.sensorMgr
+				.getSensorList(Sensor.TYPE_ACCELEROMETER);
+		if (sensors.size() > 0) {
+			sensorGrav = sensors.get(0);
+		}
+
+		sensors = gpsListener.sensorMgr
+				.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+		if (sensors.size() > 0) {
+			sensorMag = sensors.get(0);
+		}
+
+		gpsListener.sensorMgr.registerListener(gpsListener, sensorGrav,
+				GpsListener.sensordelay);
+		gpsListener.sensorMgr.registerListener(gpsListener, sensorMag,
+				GpsListener.sensordelay);
+
+		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				if (item.isChecked()) {
+					gpsListener.sensorMgr.unregisterListener(gpsListener);
+					// TODO: replace arrow with circle
+					nodeOverlay.setDirection(0);
+					nodeOverlay.requestRedraw();
+				} else {
+					gpsListener.sensorMgr.registerListener(gpsListener,
+							sensorGrav, GpsListener.sensordelay);
+					gpsListener.sensorMgr.registerListener(gpsListener,
+							sensorMag, GpsListener.sensordelay);
+				}
+				item.setChecked(!item.isChecked());
+				return true;
+			}
+		});
 	}
 
 	private void setupGpsMenu(MenuItem item) {

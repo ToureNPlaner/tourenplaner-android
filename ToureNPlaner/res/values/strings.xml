@@ -107,4 +107,5 @@
     <string name="tbtpref">Turn By Turn Preferences</string>
     <string name="needroute">Can\'t get Turn by Turn directions without a route</string>
     <string name="routeinprogress">Route retrieval in progress, try again when it is completed</string>
+    <string name="togglecompass">Toggle Compass</string>
 </resources>

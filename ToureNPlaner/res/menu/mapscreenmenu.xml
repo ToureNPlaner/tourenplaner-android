@@ -26,4 +26,7 @@
           android:title="@string/settings"/>
     <item android:id="@+id/tbt"
           android:title="@string/tbt"/>
+    <item android:id="@+id/togglecompass"
+          android:title="@string/togglecompass"
+          android:checkable="true"/>
 </menu>

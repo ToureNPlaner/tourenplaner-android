@@ -25,7 +25,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import org.mapsforge.core.GeoPoint;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import static java.lang.Math.pow;
 
@@ -36,7 +35,9 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 	private GeoPoint lastKnownLocation = null;
 
 	private static final String IDENTIFIER = "GpsListenerFollowing";
-	private SensorManager sensorMgr;
+	public SensorManager sensorMgr;
+	public static final int sensordelay = SensorManager.SENSOR_DELAY_NORMAL; // (int)
+	// pow(10,6);
 	private long lastevent;
 
 	public GpsListener(MapScreen mapScreen, Bundle savedInstanceState, GeoPoint geoPoint) {
@@ -45,18 +46,10 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		enabled = lastKnownLocation != null;
 		if (savedInstanceState != null)
 			following = savedInstanceState.getBoolean(IDENTIFIER, false);
-		//TODO: too much battery drain when running all the time?
-		sensorMgr = (SensorManager) ToureNPlanerApplication.getContext().getSystemService(Context.SENSOR_SERVICE);
 
-		List<Sensor> sensors = sensorMgr.getSensorList(Sensor.TYPE_ACCELEROMETER);
-		if (sensors.size() > 0) sensorGrav = sensors.get(0);
-
-		sensors = sensorMgr.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
-		if (sensors.size() > 0) sensorMag = sensors.get(0);
-
-		int sensordelay = SensorManager.SENSOR_DELAY_NORMAL; // (int) pow(10,6);
-		sensorMgr.registerListener(this, sensorGrav, sensordelay);
-		sensorMgr.registerListener(this, sensorMag, sensordelay);
+		// TODO: too much battery drain when running all the time?
+		sensorMgr = (SensorManager) ToureNPlanerApplication.getContext()
+				.getSystemService(Context.SENSOR_SERVICE);
 	}
 
 	protected void onSaveInstanceState(Bundle outState) {
@@ -144,10 +137,10 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		return prev;
 	}
 
-	private static GeomagneticField gmf = null;
-	private static double floatBearing = 0;
-	private static Sensor sensorGrav = null;
-	private static Sensor sensorMag = null;
+	private GeomagneticField gmf = null;
+	private double floatBearing = 0;
+	private Sensor sensorGrav = null;
+	private Sensor sensorMag = null;
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -211,5 +204,20 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int i) {
 		//To change body of implemented methods use File | Settings | File Templates.
+	}
+	public Sensor getSensorGrav() {
+		return sensorGrav;
+	}
+
+	public Sensor getSensorMag() {
+		return sensorMag;
+	}
+
+	public void setSensorGrav(Sensor sensorGrav) {
+		this.sensorGrav = sensorGrav;
+	}
+
+	public void setSensorMag(Sensor sensorMag) {
+		this.sensorMag = sensorMag;
 	}
 }
