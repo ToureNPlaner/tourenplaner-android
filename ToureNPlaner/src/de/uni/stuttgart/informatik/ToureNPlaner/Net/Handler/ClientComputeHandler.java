@@ -26,12 +26,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ClientGraph;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ShortestPath;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.IntegerConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,7 +95,8 @@ public class ClientComputeHandler extends SessionAwareHandler {
 
 		HttpURLConnection urlConnection = session.openPostConnection("/algupdowng");
 		try {
-			writeSubgraphRequest(urlConnection);
+			int level = 40;
+			writeSubgraphRequest(level, urlConnection);
 
 			InputStream stream = getCorrectStream(urlConnection);
 
@@ -101,7 +104,7 @@ public class ClientComputeHandler extends SessionAwareHandler {
 
 			checkStatus(urlConnection, stream, type);
 			long start = System.currentTimeMillis();
-			graph = ClientGraph.readClientGraph(type, stream);
+			graph = ClientGraph.readClientGraph(ToureNPlanerApplication.getCoreGraph(), type, stream);
 			long endOfCreate = System.currentTimeMillis();
 			Log.d(TAG, "Time: " +(endOfCreate - start) + " ms for creating the Graph");
 		} finally {
@@ -145,9 +148,13 @@ public class ClientComputeHandler extends SessionAwareHandler {
 		generator.close();
 	}
 
-	private void writeSubgraphRequest(HttpURLConnection urlConnection) throws IOException {
+	private void writeSubgraphRequest(int level, HttpURLConnection urlConnection) throws IOException {
 		ObjectMapper mapper = JacksonManager.getJsonMapper();
 		version = session.getNodeModel().getVersion();
+		Constraint levelConstraint = new Constraint(new IntegerConstraint("maxSearchLevel","","maxSearchLevel",0,Integer.MAX_VALUE));
+		levelConstraint.setValue(new Integer(40));
+		// TODO: Don't add if already added
+		getConstraints().add(levelConstraint);
 		JsonNode root = Request.generate(mapper.getNodeFactory(),
 				getNodes(),
 				getConstraints());
