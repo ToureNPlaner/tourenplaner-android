@@ -23,6 +23,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ClientGraph;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.NullGraph;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
 import javax.net.ssl.SSLContext;
@@ -34,6 +38,7 @@ import java.util.Collections;
 import java.util.Date;
 
 public class ToureNPlanerApplication extends Application {
+	public static ClientGraph core;
 	private static Context context;
 	private static KeyStore keyStore;
 	private static SSLContext sslContext;
@@ -48,6 +53,12 @@ public class ToureNPlanerApplication extends Application {
 		if (keyStore == null)
 			initKeystore();
 		return keyStore;
+	}
+
+	public static SimpleGraph getCoreGraph() throws IOException {
+		if (core == null)
+			core = ClientGraph.readClientGraph(new NullGraph(), JacksonManager.ContentType.JSON, ToureNPlanerApplication.context.getResources().openRawResource(R.raw.core40));
+		return core;
 	}
 
 	private static void initKeystore() {

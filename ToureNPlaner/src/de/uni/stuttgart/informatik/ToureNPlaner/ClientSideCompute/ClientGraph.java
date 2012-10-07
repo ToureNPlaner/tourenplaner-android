@@ -31,18 +31,20 @@ import java.io.InputStream;
  *
  * @author Niklas Schnelle
  */
-public class ClientGraph {
+public class ClientGraph implements SimpleGraph {
     private static final long serialVersionUID = 1L;
 
 	private final IntObjectOpenHashMap<IntArrayList> outEdgeIndices;
+	private final SimpleGraph parent;
 	private int edgeCount;
 	private int nodeCount;
 	private int origSrc;
 	private int origTrgt;
 
-	private IntArrayList edges;
+	private final IntArrayList edges;
 
-	public ClientGraph(){
+	public ClientGraph(SimpleGraph parent){
+		this.parent = parent;
 		this.outEdgeIndices = new IntObjectOpenHashMap<IntArrayList>();
 		this.edges = new IntArrayList();
 		edgeCount = 0;
@@ -70,6 +72,7 @@ public class ClientGraph {
 
 	public void addEdge(int srcId, int trgtId, int dist){
 		edges.add(srcId, trgtId, dist);
+		edgeCount++;
 		IntArrayList outAdd;
 		if(!outEdgeIndices.containsKey(srcId)){
 			outAdd = new IntArrayList(1);
@@ -78,8 +81,8 @@ public class ClientGraph {
 		} else {
 			outAdd = outEdgeIndices.lget();
 		}
-		outAdd.add(edges.size()/3 - 1);
-		edgeCount++;
+		int newEdgeId = (edgeCount - 1)+parent.getEdgeCount();
+		outAdd.add(newEdgeId);
 	}
 
     /**
@@ -91,8 +94,10 @@ public class ClientGraph {
      * @param edgeId
      * @return int
      */
-    public final int getDist(int edgeId) {
-        return edges.get((edgeId*3)+2);
+    public int getDist(int edgeId) {
+	    if (edgeId < parent.getEdgeCount())
+		    return parent.getDist(edgeId);
+        return edges.get(((edgeId-parent.getEdgeCount())*3)+2);
     }
 
     /**
@@ -100,8 +105,8 @@ public class ClientGraph {
      *
      * @return int
      */
-    public final int getEdgeCount() {
-        return edgeCount;
+    public int getEdgeCount() {
+        return edgeCount+parent.getEdgeCount();
     }
 
     /**
@@ -109,8 +114,8 @@ public class ClientGraph {
      *
      * @return int
      */
-    public final int getNodeCount() {
-        return nodeCount;
+    public int getNodeCount() {
+        return nodeCount+parent.getNodeCount();
     }
 
 
@@ -119,8 +124,9 @@ public class ClientGraph {
      *
      * @param nodeId
      */
-    public final int getOutEdgeCount(int nodeId) {
-        return (outEdgeIndices.containsKey(nodeId))? outEdgeIndices.lget().size(): 0;
+    public int getOutEdgeCount(int nodeId) {
+	    boolean inHere = outEdgeIndices.containsKey(nodeId);
+        return (inHere)? outEdgeIndices.lget().size(): parent.getOutEdgeCount(nodeId);
     }
 
     /**
@@ -131,8 +137,9 @@ public class ClientGraph {
      * @param edgeNum
      * @return
      */
-    public final int getOutEdgeId(int nodeId, int edgeNum) {
-        return outEdgeIndices.get(nodeId).get(edgeNum);
+    public int getOutEdgeId(int nodeId, int edgeNum) {
+	    boolean inHere = outEdgeIndices.containsKey(nodeId);
+        return (inHere)?outEdgeIndices.get(nodeId).get(edgeNum):parent.getOutEdgeId(nodeId, edgeNum);
     }
 
     /**
@@ -143,8 +150,11 @@ public class ClientGraph {
      * @param edgeId
      * @return int
      */
-    public final int getSource(int edgeId) {
-        return edges.get(edgeId*3);
+    public int getSource(int edgeId) {
+	    if (edgeId < parent.getEdgeCount())
+		    return parent.getSource(edgeId);
+
+        return edges.get((edgeId-parent.getEdgeCount())*3);
     }
 
     /**
@@ -155,12 +165,15 @@ public class ClientGraph {
      * @param edgeId
      * @return int
      */
-    public final int getTarget(int edgeId) {
-	    return edges.get((edgeId *3) + 1);
+    public int getTarget(int edgeId) {
+	    if (edgeId < parent.getEdgeCount())
+		    return parent.getTarget(edgeId);
+
+	    return edges.get(((edgeId-parent.getEdgeCount()) *3) + 1);
     }
 
-	public static ClientGraph readClientGraph(JacksonManager.ContentType type, InputStream inputStream) throws IOException {
-		ClientGraph graph = new ClientGraph();
+	public static ClientGraph readClientGraph(SimpleGraph parent, JacksonManager.ContentType type, InputStream inputStream) throws IOException {
+		ClientGraph graph = new ClientGraph(parent);
 		ObjectMapper mapper = JacksonManager.getMapper(type);
 		final JsonParser jp = mapper.getJsonFactory().createJsonParser(inputStream);
 		if (jp.nextToken() != JsonToken.START_OBJECT) {
