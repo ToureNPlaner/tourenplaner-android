@@ -23,6 +23,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 import org.mapsforge.core.GeoPoint;
 
@@ -57,6 +58,8 @@ public class Session implements Serializable {
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
 	private static transient TBTResult tbtresult;
+	private static transient TBTNavigation nav;
+
 
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
@@ -68,6 +71,7 @@ public class Session implements Serializable {
 		nodeModel = new NodeModel();
 		result = new Result();
 		tbtresult = new TBTResult();
+		nav = new TBTNavigation();
 		// Also initialize the files on the disc
 		saveData();
 		saveNodeModel();
@@ -95,6 +99,7 @@ public class Session implements Serializable {
 
 	private void saveData() {
 		save(d, "data");
+		save(nav, "nav");
 	}
 
 	private void saveNodeModel() {
@@ -115,6 +120,7 @@ public class Session implements Serializable {
 		if (nodeModel == null)
 			nodeModel = new NodeModel();
 		result = (Result) load("result");
+		nav = (TBTNavigation) load("nav");
 	}
 
 	private Object load(String name) {
@@ -235,6 +241,10 @@ public class Session implements Serializable {
 				}
 			}
 		}).start();
+	}
+
+	public TBTNavigation getTBTNavigation() {
+		return nav;
 	}
 
 	public Result getResult() {

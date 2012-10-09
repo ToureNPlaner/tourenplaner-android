@@ -269,7 +269,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
-		gpsListener = new GpsListener(this, savedInstanceState, gpsGeoPoint);
+		gpsListener = new GpsListener(this, savedInstanceState, gpsGeoPoint, session);
 		nodeOverlay = new NodeOverlay(this, session, gpsGeoPoint);
 	}
 
@@ -310,24 +310,25 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		return true;
 	}
 
-	private Sensor sensorMag;
-	private Sensor sensorGrav;
-
 	private void setupToggleCompassMenu(MenuItem item) {
 		// TODO: always enabled at start? Remember last setting?
 		item.setChecked(true);
-		sensorMag = gpsListener.getSensorMag();
-		sensorGrav = gpsListener.getSensorGrav();
+		Sensor sensorMag = null;
+		Sensor sensorGrav = null;
 		List<Sensor> sensors = gpsListener.sensorMgr
 				.getSensorList(Sensor.TYPE_ACCELEROMETER);
+		Log.d("tp", "Found " + sensors.size() + " accelerometers");
 		if (sensors.size() > 0) {
 			sensorGrav = sensors.get(0);
+			gpsListener.setSensorGrav(sensorGrav);
 		}
 
 		sensors = gpsListener.sensorMgr
 				.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+		Log.d("tp", "Found " + sensors.size() + " magnetic field sensors");
 		if (sensors.size() > 0) {
 			sensorMag = sensors.get(0);
+			gpsListener.setSensorMag(sensorMag);
 		}
 
 		gpsListener.sensorMgr.registerListener(gpsListener, sensorGrav,
@@ -345,9 +346,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 					nodeOverlay.requestRedraw();
 				} else {
 					gpsListener.sensorMgr.registerListener(gpsListener,
-							sensorGrav, GpsListener.sensordelay);
+							gpsListener.getSensorGrav(), GpsListener.sensordelay);
 					gpsListener.sensorMgr.registerListener(gpsListener,
-							sensorMag, GpsListener.sensordelay);
+							gpsListener.getSensorMag(), GpsListener.sensordelay);
 				}
 				item.setChecked(!item.isChecked());
 				return true;
@@ -445,6 +446,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			case R.id.tbt:
 				performtbtRequest();
+				session.getTBTNavigation().startTBT();
 				return true;
 			case R.id.gps:
 				GeoPoint pos = nodeOverlay.getGpsPosition();

@@ -21,6 +21,7 @@ import android.hardware.*;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import org.mapsforge.core.GeoPoint;
 
@@ -38,9 +39,9 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 	public SensorManager sensorMgr;
 	public static final int sensordelay = SensorManager.SENSOR_DELAY_NORMAL; // (int)
 	// pow(10,6);
-	private long lastevent;
+	Session session;
 
-	public GpsListener(MapScreen mapScreen, Bundle savedInstanceState, GeoPoint geoPoint) {
+	public GpsListener(MapScreen mapScreen, Bundle savedInstanceState, GeoPoint geoPoint, Session s) {
 		this.mapScreen = new WeakReference<MapScreen>(mapScreen);
 		lastKnownLocation = geoPoint;
 		enabled = lastKnownLocation != null;
@@ -50,6 +51,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		// TODO: too much battery drain when running all the time?
 		sensorMgr = (SensorManager) ToureNPlanerApplication.getContext()
 				.getSystemService(Context.SENSOR_SERVICE);
+		this.session = s;
 	}
 
 	protected void onSaveInstanceState(Bundle outState) {
@@ -77,6 +79,9 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 			ms.nodeOverlay.updateGpsMarker(geoPoint);
 			if (following) {
 				ms.mapView.setCenter(geoPoint);
+			}
+			if (session.getTBTNavigation().currentlyRunning()) {
+				session.getTBTNavigation().updatedLocation(location);
 			}
 		} else {
 			Log.d("tp", "Updated location, but have no mapscreen to display it");
@@ -141,48 +146,45 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 	private double floatBearing = 0;
 	private Sensor sensorGrav = null;
 	private Sensor sensorMag = null;
+	private long lastmagneticevent = 0;
+	private long lastaccelerometerevent = 0;
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		//Log.d("tp", "Sensoracc, " + event.sensor.getName() + " " + event.accuracy);
 		// We probably get so much events that we can just throw away all the low accuracy ones
-		if (event.accuracy == SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
+		if (event.accuracy < SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
+			Log.d("tp", "omitted " + event.sensor.getName() + " event, because its accuracy was " + event.accuracy + ", it must be at least low ("+SensorManager.SENSOR_STATUS_ACCURACY_LOW+")");
 			return;
 		}
 
 		// mapsforge cannot really handle so much updates and we can't tell the sensor reliably how often we want
 		// updates, so throw too quickly arriving events away
 		// x * 10^9 = x seconds
-		if (event.timestamp - lastevent < 0.2*pow(10,9)) {
+		if (event.timestamp - lastaccelerometerevent < 0.2*pow(10,9) && event.timestamp - lastmagneticevent < 0.2 * pow(10, 9)) {
 			return;
 		}
 
-		//Log.d("tp", event.sensor.getName() + " Event");
+		//Log.d("tp", event.sensor.getName() + " Event / " + event.values.toString());
+
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+			lastaccelerometerevent = event.timestamp;
 			smoothed = lowpassfilter(event.values, grav);
 			grav[0] = smoothed[0];
 			grav[1] = smoothed[1];
 			grav[2] = smoothed[2];
 		} else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+			lastmagneticevent = event.timestamp;
 			smoothed = lowpassfilter(event.values, mag);
 			mag[0] = smoothed[0];
 			mag[1] = smoothed[1];
 			mag[2] = smoothed[2];
 		}
 
-//		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//			grav[0] = event.values[0];
-//			grav[1] = event.values[1];
-//			grav[2] = event.values[2];
-//		} else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-//			mag[0] = event.values[0];
-//			mag[1] = event.values[1];
-//			mag[2] = event.values[2];
-//		}
-
 		//Get rotation matrix given the gravity and geomagnetic matrices
 		SensorManager.getRotationMatrix(rotation, null, grav, mag);
 		SensorManager.getOrientation(rotation, orientation);
-		//TODO: rotated screen doesn't work yet
+		//TODO: rotated screen doesn't work properly yet
 		floatBearing = orientation[0];
 		//Log.d("tp", "Azimuth: " + orientation[0] + " pitch " + orientation[1] + " roll " + orientation[2]);
 
@@ -198,7 +200,6 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		if (mapScreen != null && mapScreen.get() != null && mapScreen.get().nodeOverlay != null) {
 			mapScreen.get().nodeOverlay.setDirection(floatBearing);
 		}
-		lastevent = event.timestamp;
 	}
 
 	@Override

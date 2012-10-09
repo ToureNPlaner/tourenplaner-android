@@ -247,6 +247,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 	}
 
 	public void setDirection(double bearing) {
+		//Log.d("tp", "new bearing " + bearing);
 		if (gpsMarker != null) {
 			gpsDrawable.setrotation(bearing);
 			//TODO: only redraw marker, not the complete nodeoverlay
