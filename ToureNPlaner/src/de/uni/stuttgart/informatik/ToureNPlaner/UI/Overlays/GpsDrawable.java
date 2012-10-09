@@ -45,7 +45,7 @@ public class GpsDrawable extends Drawable {
 			m.setRotate((float) degrees, arrow.getWidth() / 2, arrow.getHeight() / 2);
 			// it's not our responsibility to find out where to draw here, we already get a rectangle "bounds"
 			// which is the correct place to draw the arrow
-			m.postTranslate(bounds.left, bounds.top);
+			m.postTranslate(bounds.left - arrow.getWidth() / 2, bounds.top - arrow.getHeight() / 2);
 			canvas.drawBitmap(arrow, m, paint);
 		}
 	}
