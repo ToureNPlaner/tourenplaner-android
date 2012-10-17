@@ -52,18 +52,18 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs" />
-          <root url="file://$MODULE_DIR$/../../mapsforge-read-only/mapsforge/src/main/java" />
-          <root url="file://$MODULE_DIR$/../../mapsforge-read-only/mapsforge-map-reader/src/main/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/tools" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/perf" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/test" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/jaxrs/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/mapper/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/xc/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/smile/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/mrbean/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/sample" />
+          <root url="file://$USER_HOME$/mapsforge-read-only/mapsforge/src/main/java" />
+          <root url="file://$USER_HOME$/mapsforge-read-only/mapsforge-map-reader/src/main/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/tools" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/perf" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/test" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/jaxrs/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/mapper/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/xc/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/smile/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/mrbean/java" />
+          <root url="jar://$USER_HOME$/jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/sample" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
