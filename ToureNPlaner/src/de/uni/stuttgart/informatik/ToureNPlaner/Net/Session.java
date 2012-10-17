@@ -42,6 +42,20 @@ public class Session implements Serializable {
 	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
 
+	double direction = 0;
+	public double getDirection() {
+		return direction;
+	}
+
+	/**
+	 * This only sets the direction, it does not update the gps marker. For the marker to be updated on the screen,
+	 * mapScreen.get().nodeOverlay.updateGPSDrawableDirection() needs to be called
+	 */
+	public void setDirection(double floatBearing) {
+		direction = floatBearing;
+		//mapScreen.get().nodeOverlay.setGPSDrawableDirection(floatBearing);
+	}
+
 
 	private static class Data implements Serializable {
 		private ServerInfo serverInfo;
@@ -71,7 +85,7 @@ public class Session implements Serializable {
 		nodeModel = new NodeModel();
 		result = new Result();
 		tbtresult = new TBTResult();
-		nav = new TBTNavigation();
+		nav = new TBTNavigation(this);
 		// Also initialize the files on the disc
 		saveData();
 		saveNodeModel();

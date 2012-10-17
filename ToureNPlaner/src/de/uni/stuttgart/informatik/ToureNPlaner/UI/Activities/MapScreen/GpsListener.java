@@ -151,17 +151,17 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		//Log.d("tp", "Sensoracc, " + event.sensor.getName() + " " + event.accuracy);
-		// We probably get so much events that we can just throw away all the low accuracy ones
-		if (event.accuracy < SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
-			Log.d("tp", "omitted " + event.sensor.getName() + " event, because its accuracy was " + event.accuracy + ", it must be at least low ("+SensorManager.SENSOR_STATUS_ACCURACY_LOW+")");
-			return;
-		}
-
 		// mapsforge cannot really handle so much updates and we can't tell the sensor reliably how often we want
 		// updates, so throw too quickly arriving events away
 		// x * 10^9 = x seconds
 		if (event.timestamp - lastaccelerometerevent < 0.2*pow(10,9) && event.timestamp - lastmagneticevent < 0.2 * pow(10, 9)) {
+			return;
+		}
+
+		//Log.d("tp", "Sensoracc, " + event.sensor.getName() + " " + event.accuracy);
+		// We probably get so much events that we can just throw away all the low accuracy ones
+		if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD && event.accuracy < SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
+			Log.d("tp", "omitted " + event.sensor.getName() + " event, because its accuracy was " + event.accuracy + ", it must be at least low (" + SensorManager.SENSOR_STATUS_ACCURACY_LOW + ")");
 			return;
 		}
 
@@ -197,8 +197,10 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		//adjust to 0-360
 		if (floatBearing < 0) floatBearing += 360;
 
+		Log.d("tp", "direction " + floatBearing);
 		if (mapScreen != null && mapScreen.get() != null && mapScreen.get().nodeOverlay != null) {
-			mapScreen.get().nodeOverlay.setDirection(floatBearing);
+			session.setDirection(floatBearing);
+			mapScreen.get().nodeOverlay.updateGPSDrawableDirection();
 		}
 	}
 

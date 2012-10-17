@@ -58,10 +58,10 @@ public class WayDescriptionFragment extends SherlockFragment implements Observer
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.way_description, null);
-		if (session.gettbtResult() != null && session.gettbtResult().getStreets() != null) {
+		if (session.gettbtResult() != null && session.gettbtResult().getStreetNames() != null) {
 			TextView tv = (TextView) view.findViewById(R.id.tbtdist);
-			tv.setText("Distance " + session.gettbtResult().getDist());
-			List streets = session.gettbtResult().getStreets();
+			tv.setText("Distance " + session.gettbtResult().getCompleteDist());
+			List streets = session.gettbtResult().getStreetNames();
 			ListAdapter adapter = new ArrayAdapter<String>(ToureNPlanerApplication.getContext(), R.layout.list_item, streets);
 			ListView listView = (ListView) view.findViewById(android.R.id.list);
 			listView.setAdapter(adapter);
@@ -72,8 +72,8 @@ public class WayDescriptionFragment extends SherlockFragment implements Observer
 	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
 
-		if (session.gettbtResult() != null && session.gettbtResult().getStreets() != null) {
-			List streets = session.gettbtResult().getStreets();
+		if (session.gettbtResult() != null && session.gettbtResult().getStreetNames() != null) {
+			List streets = session.gettbtResult().getStreetNames();
 			ListAdapter adapter = new ArrayAdapter<String>(ToureNPlanerApplication.getContext(), R.layout.list_item, streets);
 			ListView listView = (ListView) view.findViewById(android.R.id.list);
 			listView.setAdapter(adapter);

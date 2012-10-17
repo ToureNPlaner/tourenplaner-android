@@ -18,6 +18,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.Data;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
+import de.uni.stuttgart.informatik.ToureNPlaner.Util.CoordinateTools;
 import org.mapsforge.core.GeoPoint;
 
 import java.io.IOException;
@@ -31,39 +32,33 @@ import static java.lang.Math.round;
 
 public class TBTResult implements Serializable {
 
-	private static final double calcDirectDistance(double lat1, double lng1, double lat2, double lng2) {
-		double earthRadius = 6370.97327862;
-		double dLat = Math.toRadians(lat2 - lat1);
-		double dLng = Math.toRadians(lng2 - lng1);
-		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		double dist = earthRadius * c;
-		return dist * 1000;
-	}
-
 	public TBTResult(){
 	}
 
-	public int getDist() {
+	public int getCompleteDist() {
 		return dist;
 	}
 
-	public List getStreets() {
+	public List<String> getStreetNames() {
 		return streets;
+	}
+
+	public ArrayList<ArrayList<Node>> gettbtway() {
+		return tbtway;
 	}
 
 	private int dist = 0;
 	List streets = new ArrayList<String>();
 
+	private static ArrayList<ArrayList<Node>> tbtway = null;
 	public static TBTResult parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		JsonNode result = JacksonManager.getMapper(type).readValue(stream, JsonNode.class);
 
 		TBTResult r = new TBTResult();
-		ArrayList<ArrayList<Node>> tbtway = new ArrayList<ArrayList<Node>>();
+		tbtway = new ArrayList<ArrayList<Node>>();
 		double onestreetdist = 0;
 		for (JsonNode onestreetlist : result.get("streets")) {
 			ArrayList<Node> onestreet = new ArrayList<Node>(onestreetlist.size());
-			Object a = onestreetlist.fields();
 			for (int i = 0; i < onestreetlist.get("coordinates").size() - 1; i += 1) {
 				double lt = onestreetlist.get("coordinates").get(i).get("lt").asDouble();
 				double ln = onestreetlist.get("coordinates").get(i).get("ln").asDouble();
@@ -75,7 +70,7 @@ public class TBTResult implements Serializable {
 //				tbtsubway.add((int) (ln * Math.pow(10, 6)));
 //				tbtsubway.add((int) (lt2 * Math.pow(10, 6)));
 //				tbtsubway.add((int) (ln2 * Math.pow(10, 6)));
-				onestreetdist += calcDirectDistance(lt, ln, lt2, ln2);
+				onestreetdist += CoordinateTools.directDistance(lt, ln, lt2, ln2);
 			}
 			tbtway.add(onestreet);
 			r.streets.add(onestreetlist.get("name") + " (" + round(onestreetdist) + " meter)");

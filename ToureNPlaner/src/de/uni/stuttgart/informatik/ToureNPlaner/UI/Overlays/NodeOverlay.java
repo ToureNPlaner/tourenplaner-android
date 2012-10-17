@@ -246,10 +246,9 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 		super.drawOverlayBitmap(canvas, drawPosition, projection, drawZoomLevel);
 	}
 
-	public void setDirection(double bearing) {
-		//Log.d("tp", "new bearing " + bearing);
+	public void updateGPSDrawableDirection() {
 		if (gpsMarker != null) {
-			gpsDrawable.setrotation(bearing);
+			gpsDrawable.setrotation(session.getDirection());
 			//TODO: only redraw marker, not the complete nodeoverlay
 			this.requestRedraw();
 		}

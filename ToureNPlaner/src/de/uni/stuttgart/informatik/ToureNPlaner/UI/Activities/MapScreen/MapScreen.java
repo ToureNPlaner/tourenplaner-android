@@ -44,6 +44,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
@@ -93,6 +94,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			//Log.d("tp", "tbt response: " + object.toString());
 			edit.perform();
 			setSupportProgressBarIndeterminateVisibility(false);
+			if (!session.getTBTNavigation().currentlyRunning()) {
+				session.getTBTNavigation().startTBT();
+			}
 		}
 
 		@Override
@@ -342,7 +346,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				if (item.isChecked()) {
 					gpsListener.sensorMgr.unregisterListener(gpsListener);
 					// TODO: replace arrow with circle
-					nodeOverlay.setDirection(0);
+					session.setDirection(0);
+					nodeOverlay.updateGPSDrawableDirection();
 					nodeOverlay.requestRedraw();
 				} else {
 					gpsListener.sensorMgr.registerListener(gpsListener,
@@ -446,8 +451,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			case R.id.tbt:
 				performtbtRequest();
-				session.getTBTNavigation().startTBT();
-				return true;
+				// intentionally run the case R.id.gps also
 			case R.id.gps:
 				GeoPoint pos = nodeOverlay.getGpsPosition();
 				if (pos != null)
@@ -468,6 +472,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void performtbtRequest() {
 		if (session.getResult() == null) {
+			Toast.makeText(getContext(), ToureNPlanerApplication.getContext().getString(R.string.needroute), Toast.LENGTH_LONG).show();
 			return;
 		}
 		if (simplehandler != null)
