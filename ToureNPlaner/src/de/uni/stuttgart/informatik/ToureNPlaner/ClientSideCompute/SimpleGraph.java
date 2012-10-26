@@ -85,4 +85,5 @@ public interface SimpleGraph {
 	 */
 	public int getTarget(int edgeId);
 
+	boolean hasNode(int nodeId);
 }

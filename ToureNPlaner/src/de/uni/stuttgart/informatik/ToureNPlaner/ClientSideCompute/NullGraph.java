@@ -58,4 +58,9 @@ public class NullGraph implements  SimpleGraph{
 	public final int getTarget(int edgeId) {
 		return -1;
 	}
+
+	@Override
+	public final boolean hasNode(int nodeId){
+		return false;
+	}
 }
