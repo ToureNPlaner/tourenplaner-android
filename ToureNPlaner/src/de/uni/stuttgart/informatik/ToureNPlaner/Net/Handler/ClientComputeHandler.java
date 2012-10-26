@@ -152,7 +152,7 @@ public class ClientComputeHandler extends SessionAwareHandler {
 		ObjectMapper mapper = JacksonManager.getJsonMapper();
 		version = session.getNodeModel().getVersion();
 		Constraint levelConstraint = new Constraint(new IntegerConstraint("maxSearchLevel","","maxSearchLevel",0,Integer.MAX_VALUE));
-		levelConstraint.setValue(new Integer(40));
+		levelConstraint.setValue(level);
 		// TODO: Don't add if already added
 		getConstraints().add(levelConstraint);
 		JsonNode root = Request.generate(mapper.getNodeFactory(),
@@ -173,8 +173,12 @@ public class ClientComputeHandler extends SessionAwareHandler {
 		long start = System.currentTimeMillis();
 
 		boolean res = ShortestPath.dijkstraStopAtDest(graph, dists, predEdges);
-		pathOfNodes = ShortestPath.backtrack(graph, predEdges);
-
+		if (res) {
+			pathOfNodes = ShortestPath.backtrack(graph, predEdges);
+		} else {
+			// No path found
+			pathOfNodes = new IntArrayDeque(0);
+		}
 		long end = System.currentTimeMillis();
 
 
