@@ -246,6 +246,11 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 		super.drawOverlayBitmap(canvas, drawPosition, projection, drawZoomLevel);
 	}
 
+	public void setGPSDirectional(boolean b) {
+		gpsDrawable.setDirectional(b);
+		this.requestRedraw();
+	}
+
 	public void updateGPSDrawableDirection() {
 		if (gpsMarker != null) {
 			gpsDrawable.setrotation(session.getDirection());

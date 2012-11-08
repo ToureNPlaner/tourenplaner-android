@@ -16,9 +16,14 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -41,6 +46,8 @@ import java.util.zip.GZIPOutputStream;
 public class Session implements Serializable {
 	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
+	public static SimpleNetworkHandler simplehandler = null;
+	public static SessionAwareHandler sesshandler = null;
 
 	double direction = 0;
 	public double getDirection() {
@@ -113,7 +120,10 @@ public class Session implements Serializable {
 
 	private void saveData() {
 		save(d, "data");
-		save(nav, "nav");
+		//maybe we don't have turn by turn navigation data but if we have, we want to save it
+		if (nav != null) {
+			save(nav, "nav");
+		}
 	}
 
 	private void saveNodeModel() {
@@ -473,26 +483,63 @@ public class Session implements Serializable {
 		}
 	}
 
-	public SimpleNetworkHandler performtbtRequest(Observer tbtrequestListener, String tbtip) throws RequestInvalidException {
+	public SimpleNetworkHandler performtbtRequest(final Observer tbtrequestListener, final String tbtip) throws RequestInvalidException {
 		if (getResult().getWay() == null) {
 			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needroute));
 		}
-		if (nodeModel.getVersion() == result.getVersion()) {
-			ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
-			for (int[] sw : getResult().getWay()) {
-				ArrayList<int[]> subway = new ArrayList<int[]>();
-				for (int i = 0; i < sw.length; i += 2) {
-					//TODO: what's with the reversed lt/ln?
-					int[] c = { sw[i+1]*10, sw[i]*10};
-					subway.add(c);
-				}
-				sendnodes.add(subway);
-			}
-			//Log.d("tp", "request tbt from " + tbtip);
-			return (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
-		} else {
-			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.routeinprogress));
+
+		//TODO: how do we get from the current location to the chosen way?
+		//for now: remove first node from the chosen way and add our current location instead
+//		ArrayList<ResultNode> currentpoints = getResult().getPoints();
+//		if (currentpoints.size() > 0) {
+//			currentpoints.remove(0);
+//		} else {
+//			return null;
+//		}
+//
+//		ArrayList<Node> nodevector = new ArrayList<Node>(nodeModel.getNodeVector());
+//		nodeModel.clear();
+//
+		Location loc = ((LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+//		getNodeModel().setNodeVector(nodevector);
+		getNodeModel().incVersion();
+		getNodeModel().getNodeVector().add(0,new Node(1,"Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()),new ArrayList<ConstraintType>()));
+		sesshandler = performRequest(new TBTObserver(tbtrequestListener, tbtip), true);
+		return null;
+	}
+
+	private class TBTObserver implements Observer {
+
+		private Observer tbtrequestListener;
+		private String tbtip;
+
+		public TBTObserver(Observer tbtrequestlistener, String tbtip) {
+			this.tbtrequestListener = tbtrequestlistener;
+			this.tbtip = tbtip;
+		}
+		@Override
+		public void onCompleted(AsyncHandler caller, Object object) {
+			doTBTReq(tbtrequestListener,tbtip);
+		}
+
+		@Override
+		public void onError(AsyncHandler caller, Object object) {
+			Toast.makeText(ToureNPlanerApplication.getContext(),"Error:\n" + object.toString(), Toast.LENGTH_LONG).show();
 		}
 	}
 
+	private void doTBTReq(Observer tbtrequestListener, String tbtip) {
+		ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
+		for (int[] sw : getResult().getWay()) {
+			ArrayList<int[]> subway = new ArrayList<int[]>();
+			for (int i = 0; i < sw.length; i += 2) {
+				//TODO: what's with the reversed lt/ln?
+				int[] c = {sw[i + 1] * 10, sw[i] * 10};
+				subway.add(c);
+			}
+			sendnodes.add(subway);
+		}
+		simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
+	}
 }

@@ -31,12 +31,24 @@ public class GpsDrawable extends Drawable {
 		this.paint = new Paint();
 		this.paint.setAlpha(128);
 		this.paint.setAntiAlias(true);
+		this.paint.setColor(Color.MAGENTA);
 	}
+
+	public boolean isDirectional() {
+		return directional;
+	}
+
+	public void setDirectional(boolean directional) {
+		this.directional = directional;
+	}
+
+	boolean directional = true;
 
 	private double degrees = 0;
 	@Override
 	public void draw(Canvas canvas) {
 		if (canvas != null) {
+			if (directional) {
 			//Log.d("tp", "Redraw gps marker with rotation " + degrees);
 			Rect bounds = this.getBounds();
 			m.reset();
@@ -46,8 +58,13 @@ public class GpsDrawable extends Drawable {
 			// it's not our responsibility to find out where to draw here, we already get a rectangle "bounds"
 			// which is the correct place to draw the arrow
 			m.postTranslate(bounds.left - arrow.getWidth() / 2, bounds.top - arrow.getHeight() / 2);
-			canvas.drawBitmap(arrow, m, paint);
-		}
+			canvas.drawBitmap(arrow, m, paint); }
+			else {
+				Rect bounds = this.getBounds();
+				//add a line for the circle
+				canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint);
+			}
+			}
 	}
 
 	@Override

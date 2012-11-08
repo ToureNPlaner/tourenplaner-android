@@ -161,7 +161,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		//Log.d("tp", "Sensoracc, " + event.sensor.getName() + " " + event.accuracy);
 		// We probably get so much events that we can just throw away all the low accuracy ones
 		if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD && event.accuracy < SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
-			Log.d("tp", "omitted " + event.sensor.getName() + " event, because its accuracy was " + event.accuracy + ", it must be at least low (" + SensorManager.SENSOR_STATUS_ACCURACY_LOW + ")");
+			Log.v("tp", "omitted " + event.sensor.getName() + " event, because its accuracy was " + event.accuracy + ", it must be at least low (" + SensorManager.SENSOR_STATUS_ACCURACY_LOW + ")");
 			return;
 		}
 
@@ -197,7 +197,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		//adjust to 0-360
 		if (floatBearing < 0) floatBearing += 360;
 
-		Log.d("tp", "direction " + floatBearing);
+		Log.v("tp", "direction " + floatBearing);
 		if (mapScreen != null && mapScreen.get() != null && mapScreen.get().nodeOverlay != null) {
 			session.setDirection(floatBearing);
 			mapScreen.get().nodeOverlay.updateGPSDrawableDirection();

@@ -74,8 +74,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODE = 1;
 	public static final int REQUEST_CONSTRAINTS = 2;
 	NodeOverlay nodeOverlay;
-	private SimpleNetworkHandler simplehandler = null;
-	private SessionAwareHandler sesshandler = null;
 	private LocationManager locManager;
 	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
@@ -89,7 +87,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
 			//Log.d("tp", "tbt request completed: " +object.toString());
-			sesshandler = null;
+			Session.sesshandler = null;
 			Edit edit = new TBTResultEdit(session, (TBTResult) object);
 			//Log.d("tp", "tbt response: " + object.toString());
 			edit.perform();
@@ -97,12 +95,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			if (!session.getTBTNavigation().currentlyRunning()) {
 				session.getTBTNavigation().startTBT();
 			}
+			session.notifyChangeListerners(new Session.Change(Session.ADD_CHANGE | Session.MODEL_CHANGE | Session.TBT_RESULT_CHANGE | Session.RESULT_CHANGE));
 		}
 
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
 			Log.d("tp", "error: " + object.toString());
-			simplehandler = null;
+			Session.simplehandler = null;
 			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
@@ -111,7 +110,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private final Observer requestListener = new Observer() {
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
-			sesshandler = null;
+			Session.sesshandler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
 			setSupportProgressBarIndeterminateVisibility(false);
@@ -119,7 +118,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
-			sesshandler = null;
+			Session.sesshandler = null;
 			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
@@ -345,7 +344,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			public boolean onMenuItemClick(MenuItem item) {
 				if (item.isChecked()) {
 					gpsListener.sensorMgr.unregisterListener(gpsListener);
-					// TODO: replace arrow with circle
+					nodeOverlay.setGPSDirectional(false);
 					session.setDirection(0);
 					nodeOverlay.updateGPSDrawableDirection();
 					nodeOverlay.requestRedraw();
@@ -354,6 +353,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 							gpsListener.getSensorGrav(), GpsListener.sensordelay);
 					gpsListener.sensorMgr.registerListener(gpsListener,
 							gpsListener.getSensorMag(), GpsListener.sensordelay);
+					nodeOverlay.setGPSDirectional(true);
 				}
 				item.setChecked(!item.isChecked());
 				return true;
@@ -438,10 +438,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				startActivityForResult(myIntent, REQUEST_NODEMODEL);
 				return true;
 			case R.id.reset:
-				if (sesshandler != null) {
-					sesshandler.cancel(true);
+				if (Session.sesshandler != null) {
+					Session.sesshandler.cancel(true);
 					setSupportProgressBarIndeterminateVisibility(false);
-					sesshandler = null;
+					Session.sesshandler = null;
 				}
 				Edit edit = new ClearEdit(session);
 				edit.perform();
@@ -475,14 +475,17 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			Toast.makeText(getContext(), ToureNPlanerApplication.getContext().getString(R.string.needroute), Toast.LENGTH_LONG).show();
 			return;
 		}
-		if (simplehandler != null)
-			simplehandler.cancel(true);
+		if (Session.simplehandler != null)
+			Session.simplehandler.cancel(true);
 
 		try {
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 			String tbtip = preferences.getString("tbtip", MapScreenPreferences.defaulttbtip);
 
-			simplehandler = session.performtbtRequest(tbtrequestListener, tbtip);
+			SimpleNetworkHandler handler = session.performtbtRequest(tbtrequestListener, tbtip);
+			if (Session.simplehandler != null) {
+				Session.simplehandler = handler;
+			}
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
 			if (messageToast != null) {
@@ -492,19 +495,19 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				messageToast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
 				messageToast.show();
 			}
-			simplehandler = null;
+			Session.simplehandler = null;
 		}
 	}
 
 	private void performRequest(boolean force) {
-		if (sesshandler != null && !force)
+		if (Session.sesshandler != null && !force)
 			return;
 
-		if (sesshandler != null)
-			sesshandler.cancel(true);
+		if (Session.sesshandler != null)
+			Session.sesshandler.cancel(true);
 
 		try {
-			sesshandler = session.performRequest(requestListener, force);
+			Session.sesshandler = session.performRequest(requestListener, force);
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
 			if (messageToast != null) {
@@ -514,7 +517,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				messageToast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
 				messageToast.show();
 			}
-			sesshandler = null;
+			Session.sesshandler = null;
 		}
 	}
 
@@ -568,10 +571,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@SuppressWarnings("deprecation")
 	private void initializeHandler() {
-		sesshandler = (RequestHandler) getLastNonConfigurationInstance();
+		Session.sesshandler = (RequestHandler) getLastNonConfigurationInstance();
 
-		if (sesshandler != null) {
-			sesshandler.setListener(requestListener);
+		if (Session.sesshandler != null) {
+			Session.sesshandler.setListener(requestListener);
 			setSupportProgressBarIndeterminateVisibility(true);
 		} else {
 			setSupportProgressBarIndeterminateVisibility(false);
@@ -581,7 +584,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	@SuppressWarnings("deprecation")
 	public Object onRetainNonConfigurationInstance() {
-		return sesshandler;
+		return Session.sesshandler;
 	}
 
 	@Override
@@ -619,8 +622,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		session.removeListener(NodeOverlay.class);
 		session.removeListener(MapScreen.class);
 
-		if (sesshandler != null)
-			sesshandler.setListener(null);
+		if (Session.sesshandler != null)
+			Session.sesshandler.setListener(null);
 
 		for (RequestNN request : requestList) {
 			request.setListener(null);
