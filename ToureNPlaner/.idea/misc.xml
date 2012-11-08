@@ -3,6 +3,14 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="android" url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library" />
+    <file type="android" url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/demos" />
+    <file type="android" url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/fragments" />
+    <file type="android" url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/known-bugs" />
+    <file type="android" url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/roboguice" />
+    <file type="android" url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/styled" />
+  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -20,10 +28,34 @@
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
   </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/pom.xml" />
+      </list>
+    </option>
+    <option name="activeProfiles">
+      <list>
+        <option value="sonatype-oss-release" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/demos/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/fragments/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/known-bugs/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/roboguice/pom.xml" />
+        <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/styled/pom.xml" />
+      </set>
+    </option>
+  </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="Android 4.0.3 Platform" project-jdk-type="Android SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="Android 4.1.2 Platform" project-jdk-type="Android SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

@@ -37,7 +37,6 @@ public class ClientGraph implements SimpleGraph {
 	private final IntObjectOpenHashMap<IntArrayList> outEdgeIndices;
 	private final SimpleGraph parent;
 	private int edgeCount;
-	private int nodeCount;
 	private int origSrc;
 	private int origTrgt;
 
@@ -48,7 +47,6 @@ public class ClientGraph implements SimpleGraph {
 		this.outEdgeIndices = new IntObjectOpenHashMap<IntArrayList>();
 		this.edges = new IntArrayList();
 		edgeCount = 0;
-		nodeCount = 0;
 		origSrc = 0;
 		origTrgt = 0;
 	}
@@ -70,13 +68,16 @@ public class ClientGraph implements SimpleGraph {
 		return origTrgt;
 	}
 
+	public boolean hasNode(int nodeId){
+		return outEdgeIndices.containsKey(nodeId) || parent.hasNode(nodeId);
+	}
+
 	public void addEdge(int srcId, int trgtId, int dist){
 		edges.add(srcId, trgtId, dist);
 		edgeCount++;
 		IntArrayList outAdd;
 		if(!outEdgeIndices.containsKey(srcId)){
 			outAdd = new IntArrayList(1);
-			nodeCount++;
 			outEdgeIndices.put(srcId, outAdd);
 		} else {
 			outAdd = outEdgeIndices.lget();
@@ -115,7 +116,7 @@ public class ClientGraph implements SimpleGraph {
      * @return int
      */
     public int getNodeCount() {
-        return nodeCount+parent.getNodeCount();
+        return outEdgeIndices.size()+parent.getNodeCount();
     }
 
 
@@ -126,7 +127,16 @@ public class ClientGraph implements SimpleGraph {
      */
     public int getOutEdgeCount(int nodeId) {
 	    boolean inHere = outEdgeIndices.containsKey(nodeId);
-        return (inHere)? outEdgeIndices.lget().size(): parent.getOutEdgeCount(nodeId);
+
+	    if (!inHere)
+		    return parent.getOutEdgeCount(nodeId);
+
+	    boolean parentHasIt = parent.hasNode(nodeId);
+
+	    if (!parentHasIt)
+		    return outEdgeIndices.lget().size();
+	    else
+		    return outEdgeIndices.lget().size() + parent.getOutEdgeCount(nodeId);
     }
 
     /**
@@ -139,7 +149,18 @@ public class ClientGraph implements SimpleGraph {
      */
     public int getOutEdgeId(int nodeId, int edgeNum) {
 	    boolean inHere = outEdgeIndices.containsKey(nodeId);
-        return (inHere)?outEdgeIndices.get(nodeId).get(edgeNum):parent.getOutEdgeId(nodeId, edgeNum);
+        if (!inHere)
+	        return parent.getOutEdgeId(nodeId, edgeNum);
+
+	    boolean parentHasIt = parent.hasNode(nodeId);
+
+	    if (!parentHasIt)
+		    return outEdgeIndices.lget().get(edgeNum);
+	    else {
+		    int parentOutCount = parent.getOutEdgeCount(nodeId);
+
+		    return (edgeNum < parentOutCount)? parent.getOutEdgeId(nodeId, edgeNum):outEdgeIndices.lget().get(edgeNum-parentOutCount);
+	    }
     }
 
     /**
