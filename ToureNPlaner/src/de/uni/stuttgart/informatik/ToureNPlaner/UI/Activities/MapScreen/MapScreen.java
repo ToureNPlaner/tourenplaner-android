@@ -95,7 +95,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			if (!session.getTBTNavigation().currentlyRunning()) {
 				session.getTBTNavigation().startTBT();
 			}
-			session.notifyChangeListerners(new Session.Change(Session.ADD_CHANGE | Session.MODEL_CHANGE | Session.TBT_RESULT_CHANGE | Session.RESULT_CHANGE));
+			session.notifyChangeListerners(new Session.Change(Session.TBT_RESULT_CHANGE | Session.RESULT_CHANGE));
 		}
 
 		@Override
