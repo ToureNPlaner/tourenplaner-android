@@ -85,13 +85,18 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		lat = l.getLatitude();
 		lon = l.getLongitude();
 		accuracy = l.getAccuracy();
-		// Only do something when we didn't only move in the tolerance radius of the last location update
-		if (CoordinateTools.directDistance(lat, lon, lastlat, lastlon) < lastaccuracy) {
+		// Only do something when we didn't only move less than 10 percent of tolerance radius of the last location update
+		if (CoordinateTools.directDistance(lat, lon, lastlat, lastlon) < lastaccuracy - (1 - lastaccuracy / lastaccuracy * 1.1)) {
 			return;
 		}
 		double templat;
 		double templon;
-		double direction = session.getDirection();
+
+		// we already have a direction from the compass but I think having a direction based on the last and the current
+		// coordinates is better for telling what the user is actually doing
+		//double direction = session.getDirection();
+		double direction = getBearing(lastlat, lastlon, lat, lon);
+
 		for (ArrayList<Node> way : tbtway) {
 			for (Node n : way) {
 				templat = n.getGeoPoint().getLatitude();
@@ -109,5 +114,33 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	private  boolean active = true;
 	public boolean currentlyRunning() {
 		return active;
+	}
+
+	// http://www.smokycogs.com/blog/finding-the-bearing-between-two-gps-coordinates/
+	private double getBearing(double lt1, double ln1, double lt2, double ln2) {
+		double lat1 = DegToRad(lt1);
+		double long1 = DegToRad(ln1);
+		double lat2 = DegToRad(lt2);
+		double long2 = DegToRad(ln2);
+
+		double deltaLong = long2 - long1;
+
+		double y = Math.sin(deltaLong) * Math.cos(lat2);
+		double x = Math.cos(lat1) * Math.sin(lat2) -
+				Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLong);
+		double bearing = Math.atan2(y, x);
+		return ConvertToBearing(RadToDeg(bearing));
+	}
+
+	public static double RadToDeg(double radians) {
+		return radians * (180 / Math.PI);
+	}
+
+	public static double DegToRad(double degrees) {
+		return degrees * (Math.PI / 180);
+	}
+
+	public static double ConvertToBearing(double deg) {
+		return (deg + 360) % 360;
 	}
 }
