@@ -33,10 +33,14 @@ public class TurnByTurnHandler extends SimpleNetworkHandler {
 	private final String ip;
 	private final ArrayList<ArrayList<int[]>> nodes;
 
+
 	public TurnByTurnHandler(Observer listener, String ip, ArrayList<ArrayList<int[]>> nodes) {
 		super(listener);
 		this.nodes = nodes;
 		this.ip = ip;
+
+
+
 	}
 
 	@Override

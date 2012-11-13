@@ -45,26 +45,27 @@ public class GpsDrawable extends Drawable {
 	boolean directional = true;
 
 	private double degrees = 0;
+
 	@Override
 	public void draw(Canvas canvas) {
 		if (canvas != null) {
 			if (directional) {
-			//Log.d("tp", "Redraw gps marker with rotation " + degrees);
-			Rect bounds = this.getBounds();
-			m.reset();
-			// the device is pointed x degrees clockwise from north. The arrow should also point x deegrees clockwise
-			// from north to show device/car orientation correctly on the map which displays north always on the top
-			m.setRotate((float) degrees, arrow.getWidth() / 2, arrow.getHeight() / 2);
-			// it's not our responsibility to find out where to draw here, we already get a rectangle "bounds"
-			// which is the correct place to draw the arrow
-			m.postTranslate(bounds.left - arrow.getWidth() / 2, bounds.top - arrow.getHeight() / 2);
-			canvas.drawBitmap(arrow, m, paint); }
-			else {
+				//Log.d("tp", "Redraw gps marker with rotation " + degrees);
+				Rect bounds = this.getBounds();
+				m.reset();
+				// the device is pointed x degrees clockwise from north. The arrow should also point x deegrees clockwise
+				// from north to show device/car orientation correctly on the map which displays north always on the top
+				m.setRotate((float) degrees, arrow.getWidth() / 2, arrow.getHeight() / 2);
+				// it's not our responsibility to find out where to draw here, we already get a rectangle "bounds"
+				// which is the correct place to draw the arrow
+				m.postTranslate(bounds.left - arrow.getWidth() / 2, bounds.top - arrow.getHeight() / 2);
+				canvas.drawBitmap(arrow, m, paint);
+			} else {
 				Rect bounds = this.getBounds();
 				//add a line for the circle
 				canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint);
 			}
-			}
+		}
 	}
 
 	@Override

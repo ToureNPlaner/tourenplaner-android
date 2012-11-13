@@ -16,33 +16,146 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 
+import android.graphics.*;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.SimpleNetworkHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.TurnByTurnHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen.MapScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.CoordinateTools;
+import org.mapsforge.android.maps.overlay.ArrayItemizedOverlay;
+import org.mapsforge.android.maps.overlay.OverlayItem;
+import org.mapsforge.core.GeoPoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable {
 	private static TextToSpeech tts;
 	private ArrayList<ArrayList<Node>> tbtway = null;
 
+	List<OverlayItem> markings;
+	private MapScreen ms;
+
+	private class turnmarker extends Drawable {
+
+		private Paint paint;
+
+		public turnmarker() {
+			this.paint = new Paint();
+			this.paint.setAlpha(128);
+			this.paint.setAntiAlias(true);
+			this.paint.setColor(Color.BLUE);
+		}
+
+		@Override
+		public void draw(Canvas canvas) {
+			Rect bounds = this.getBounds();
+			//add a line for the circle
+			canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint);
+		}
+
+		@Override
+		public void setAlpha(int i) {
+			//To change body of implemented methods use File | Settings | File Templates.
+		}
+
+		@Override
+		public void setColorFilter(ColorFilter colorFilter) {
+			//To change body of implemented methods use File | Settings | File Templates.
+		}
+
+		@Override
+		public int getOpacity() {
+			return 0;  //To change body of implemented methods use File | Settings | File Templates.
+		}
+	}
+
+
 	public static void say(String s) {
 		tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
 	}
 
 	Session session;
-	public TBTNavigation(Session s) {
+
+	public TBTNavigation(Session s, MapScreen ms) {
 		tts = new TextToSpeech(ToureNPlanerApplication.getContext(), this);
 		session = s;
-		tbtway = session.gettbtResult().gettbtway();
+		this.ms = ms;
+	}
 
+
+
+	public void init(String tbtip, Observer tbtrequestListener) {
+		ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
+		for (int[] sw : session.getResult().getWay()) {
+			ArrayList<int[]> subway = new ArrayList<int[]>();
+			for (int i = 0; i < sw.length; i += 2) {
+				//TODO: what's with the reversed lt/ln?
+				int[] c = {sw[i + 1] * 10, sw[i] * 10};
+				subway.add(c);
+			}
+			sendnodes.add(subway);
+		}
+
+		// the requestlistener will call tbtreqcompleted() when the request is successful
+		Session.simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
+	}
+
+	public void tbtreqcompleted() {
+
+		tbtway = session.gettbtResult().gettbtway();
+		Toast.makeText(ToureNPlanerApplication.getContext(), "tbtway " + tbtway.size() + " items", Toast.LENGTH_LONG);
+
+		if (tbtway == null) {
+			//something is wrong
+			Toast.makeText(ToureNPlanerApplication.getContext(), "no tbtway", Toast.LENGTH_LONG);
+			return;
+		}
+
+		tbtoverlay.clear();
+		// TODO: 30?
+		markings = new ArrayList<OverlayItem>(tbtway.size() * 30);
+		String lastname = "";
+		for (ArrayList<Node> nodelist : tbtway) {
+			for (Node n : nodelist) {
+				if (!n.getName().equals(lastname)) {
+					lastname = n.getName();
+					OverlayItem item = new OverlayItem();
+					item.setMarker(new turnmarker());
+					item.setPoint(new GeoPoint(n.getLaE7(), n.getLaE7()));
+					markings.add(item);
+				}
+			}
+		}
+
+		for (OverlayItem marking : markings) {
+			tbtoverlay.addItem(marking);
+		}
+
+		if (!ms.getMapView().getOverlays().contains(tbtoverlay)) {
+			ms.getMapView().getOverlays().add(tbtoverlay);
+			tbtoverlay.setupOverlay(ms.getMapView());
+		}
+		Toast.makeText(ToureNPlanerApplication.getContext(), "added " + tbtoverlay.size() + " items", Toast.LENGTH_LONG);
+	}
+
+	private ArrayItemizedOverlay  tbtoverlay = new Tbtoverlay(new turnmarker());
+
+	private class Tbtoverlay extends ArrayItemizedOverlay  {
+
+		public Tbtoverlay(Drawable defaultMarker) {
+			super(defaultMarker);
+		}
 	}
 
 	public void startTBT() {

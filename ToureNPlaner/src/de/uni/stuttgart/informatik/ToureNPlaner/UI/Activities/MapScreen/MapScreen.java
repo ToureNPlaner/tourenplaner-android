@@ -49,6 +49,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
 import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
@@ -67,12 +68,26 @@ import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistan
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
 
 public class MapScreen extends MapActivity implements Session.Listener {
+	public MapView getMapView() {
+		return mapView;
+	}
+
 	MapView mapView;
+
+	public FastWayOverlay getFastWayOverlay() {
+		return fastWayOverlay;
+	}
+
 	private FastWayOverlay fastWayOverlay;
 	private Session session;
 	public static final int REQUEST_NODEMODEL = 0;
 	public static final int REQUEST_NODE = 1;
 	public static final int REQUEST_CONSTRAINTS = 2;
+
+	public NodeOverlay getNodeOverlay() {
+		return nodeOverlay;
+	}
+
 	NodeOverlay nodeOverlay;
 	private LocationManager locManager;
 	private MapScreenPreferences.Instant instantRequest;
@@ -92,6 +107,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			//Log.d("tp", "tbt response: " + object.toString());
 			edit.perform();
 			setSupportProgressBarIndeterminateVisibility(false);
+
+			session.getTBTNavigation().tbtreqcompleted();
+
 			if (!session.getTBTNavigation().currentlyRunning()) {
 				session.getTBTNavigation().startTBT();
 			}
@@ -451,6 +469,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			case R.id.tbt:
 				performtbtRequest();
+				Session.nav = new TBTNavigation(session,this);
 				// intentionally run the case R.id.gps also
 			case R.id.gps:
 				GeoPoint pos = nodeOverlay.getGpsPosition();
@@ -482,10 +501,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 			String tbtip = preferences.getString("tbtip", MapScreenPreferences.defaulttbtip);
 
-			SimpleNetworkHandler handler = session.performtbtRequest(tbtrequestListener, tbtip);
-			if (Session.simplehandler != null) {
-				Session.simplehandler = handler;
-			}
+			session.performtbtRequest(tbtrequestListener, tbtip);
+
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
 			if (messageToast != null) {

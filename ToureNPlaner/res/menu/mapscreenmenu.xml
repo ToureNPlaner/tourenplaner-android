@@ -15,7 +15,6 @@
           android:title="@string/constraints"/>
     <item android:id="@+id/gps"
           android:icon="@drawable/location"
-          android:showAsAction="ifRoom"
           android:checkable="true"
           android:title="@string/your_location"/>
     <item android:id="@+id/reset"

@@ -79,7 +79,7 @@ public class Session implements Serializable {
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
 	private static transient TBTResult tbtresult;
-	private static transient TBTNavigation nav;
+	public static transient TBTNavigation nav;
 
 
 	public static File openCacheDir() {
@@ -92,7 +92,6 @@ public class Session implements Serializable {
 		nodeModel = new NodeModel();
 		result = new Result();
 		tbtresult = new TBTResult();
-		nav = new TBTNavigation(this);
 		// Also initialize the files on the disc
 		saveData();
 		saveNodeModel();
@@ -503,43 +502,33 @@ public class Session implements Serializable {
 		Location loc = ((LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //		nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
 //		getNodeModel().setNodeVector(nodevector);
-		getNodeModel().incVersion();
-		getNodeModel().getNodeVector().add(0,new Node(1,"Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()),new ArrayList<ConstraintType>()));
-		sesshandler = performRequest(new TBTObserver(tbtrequestListener, tbtip), true);
+		notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
+
+		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start") && loc != null) {
+			getNodeModel().getNodeVector().add(0, new Node(0, "Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()), new ArrayList<ConstraintType>()));
+		}
+		sesshandler = performRequest(new PrepareTBTObserver(tbtrequestListener, tbtip), true);
 		return null;
 	}
 
-	private class TBTObserver implements Observer {
+	private class PrepareTBTObserver implements Observer {
 
 		private Observer tbtrequestListener;
 		private String tbtip;
 
-		public TBTObserver(Observer tbtrequestlistener, String tbtip) {
+		public PrepareTBTObserver(Observer tbtrequestlistener, String tbtip) {
 			this.tbtrequestListener = tbtrequestlistener;
 			this.tbtip = tbtip;
 		}
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
-			doTBTReq(tbtrequestListener,tbtip);
+			notifyChangeListerners(new Session.Change(Session.RESULT_CHANGE));
+			nav.init(tbtip, tbtrequestListener);
 		}
 
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
 			Toast.makeText(ToureNPlanerApplication.getContext(),"Error:\n" + object.toString(), Toast.LENGTH_LONG).show();
 		}
-	}
-
-	private void doTBTReq(Observer tbtrequestListener, String tbtip) {
-		ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
-		for (int[] sw : getResult().getWay()) {
-			ArrayList<int[]> subway = new ArrayList<int[]>();
-			for (int i = 0; i < sw.length; i += 2) {
-				//TODO: what's with the reversed lt/ln?
-				int[] c = {sw[i + 1] * 10, sw[i] * 10};
-				subway.add(c);
-			}
-			sendnodes.add(subway);
-		}
-		simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
 	}
 }
