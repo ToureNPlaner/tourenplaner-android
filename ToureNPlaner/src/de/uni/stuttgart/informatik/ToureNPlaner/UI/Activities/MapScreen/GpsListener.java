@@ -80,7 +80,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 			if (following) {
 				ms.mapView.setCenter(geoPoint);
 			}
-			if (session.getTBTNavigation().currentlyRunning()) {
+			if (session.getTBTNavigation() != null && session.getTBTNavigation().currentlyRunning()) {
 				session.getTBTNavigation().updatedLocation(location);
 			}
 		} else {

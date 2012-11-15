@@ -64,8 +64,10 @@ public class TBTResult implements Serializable {
 				double ln = onestreetlist.get("coordinates").get(i).get("ln").asDouble();
 				double lt2 = onestreetlist.get("coordinates").get(i + 1).get("lt").asDouble();
 				double ln2 = onestreetlist.get("coordinates").get(i + 1).get("ln").asDouble();
-				onestreet.add(new Node(i, onestreetlist.get("name") + ": " + String.valueOf(i), String.valueOf(i), new GeoPoint(lt, ln), null));
-				onestreet.add(new Node(i + 1, onestreetlist.get("name") + ": " + String.valueOf(i), String.valueOf(i + 1), new GeoPoint(lt2, ln2), null));
+
+				//+": " + String.valueOf(i)
+				onestreet.add(new Node(i, onestreetlist.get("name").asText() , String.valueOf(i), new GeoPoint(lt, ln), null));
+				onestreet.add(new Node(i + 1, onestreetlist.get("name").asText(), String.valueOf(i + 1), new GeoPoint(lt2, ln2), null));
 //				tbtsubway.add((int) (lt * Math.pow(10,6)));
 //				tbtsubway.add((int) (ln * Math.pow(10, 6)));
 //				tbtsubway.add((int) (lt2 * Math.pow(10, 6)));

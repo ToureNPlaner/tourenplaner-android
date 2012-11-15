@@ -103,6 +103,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		public void onCompleted(AsyncHandler caller, Object object) {
 			//Log.d("tp", "tbt request completed: " +object.toString());
 			Session.sesshandler = null;
+			Session.simplehandler = null;
 			Edit edit = new TBTResultEdit(session, (TBTResult) object);
 			//Log.d("tp", "tbt response: " + object.toString());
 			edit.perform();
