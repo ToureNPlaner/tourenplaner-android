@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="JakeWharton-ActionBarSherlock">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/src" />
+      <root url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/test" />
+      <root url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/gen" />
+      <root url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/gen" />
+    </SOURCES>
+  </library>
+</component>

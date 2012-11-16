@@ -7,5 +7,4 @@
           android:paddingTop="2dp"
           android:paddingBottom="2dp"
           android:gravity="center_vertical"
-          android:textSize="@dimen/abs__action_bar_subtitle_text_size"
         />

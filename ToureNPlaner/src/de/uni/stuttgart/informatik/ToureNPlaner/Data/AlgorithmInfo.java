@@ -142,13 +142,14 @@ public class AlgorithmInfo implements Serializable, Comparable<AlgorithmInfo> {
 
 	public static AlgorithmInfo createTestClientSide() {
 		AlgorithmInfo info = new AlgorithmInfo();
-		info.name = "Client Side Shortest Path";
-		info.version = "0";
+		info.name = "DORC";
+		info.version = "1";
+		info.description = "Shortest Path computed on the client (experimental)";
 		info.urlsuffix = "updowng";
 		info.pointConstraintTypes = new ArrayList<ConstraintType>();
 		info.constraintTypes = new ArrayList<ConstraintType>();
-		info.minPoints = 0;
-		info.maxPoints = 100;
+		info.minPoints = 2;
+		info.maxPoints = 2;
 		info.isHidden = false;
 		info.isClientSide = true;
 		return info;
