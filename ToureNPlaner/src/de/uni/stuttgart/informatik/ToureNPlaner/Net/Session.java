@@ -50,6 +50,8 @@ public class Session implements Serializable {
 	public static SessionAwareHandler sesshandler = null;
 
 	double direction = 0;
+	public boolean compassenabled = false;
+
 	public double getDirection() {
 		return direction;
 	}
@@ -119,6 +121,7 @@ public class Session implements Serializable {
 
 	private void saveData() {
 		save(d, "data");
+		save(compassenabled, "compassenabled");
 		//maybe we don't have turn by turn navigation data but if we have, we want to save it
 		if (nav != null) {
 			save(nav, "nav");
@@ -144,6 +147,7 @@ public class Session implements Serializable {
 			nodeModel = new NodeModel();
 		result = (Result) load("result");
 		nav = (TBTNavigation) load("nav");
+		compassenabled = (Boolean) load("compassenabled");
 	}
 
 	private Object load(String name) {

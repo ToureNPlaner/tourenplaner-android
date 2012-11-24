@@ -333,30 +333,31 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void setupToggleCompassMenu(MenuItem item) {
-		// TODO: always enabled at start? Remember last setting?
-		item.setChecked(true);
-		Sensor sensorMag = null;
-		Sensor sensorGrav = null;
-		List<Sensor> sensors = gpsListener.sensorMgr
-				.getSensorList(Sensor.TYPE_ACCELEROMETER);
-		Log.d("tp", "Found " + sensors.size() + " accelerometers");
-		if (sensors.size() > 0) {
-			sensorGrav = sensors.get(0);
-			gpsListener.setSensorGrav(sensorGrav);
-		}
+		item.setChecked(session.compassenabled);
+		if (session.compassenabled) {
+			Sensor sensorMag = null;
+			Sensor sensorGrav = null;
+			List<Sensor> sensors = gpsListener.sensorMgr
+					.getSensorList(Sensor.TYPE_ACCELEROMETER);
+			Log.d("tp", "Found " + sensors.size() + " accelerometers");
+			if (sensors.size() > 0) {
+				sensorGrav = sensors.get(0);
+				gpsListener.setSensorGrav(sensorGrav);
+			}
 
-		sensors = gpsListener.sensorMgr
-				.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
-		Log.d("tp", "Found " + sensors.size() + " magnetic field sensors");
-		if (sensors.size() > 0) {
-			sensorMag = sensors.get(0);
-			gpsListener.setSensorMag(sensorMag);
-		}
+			sensors = gpsListener.sensorMgr
+					.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+			Log.d("tp", "Found " + sensors.size() + " magnetic field sensors");
+			if (sensors.size() > 0) {
+				sensorMag = sensors.get(0);
+				gpsListener.setSensorMag(sensorMag);
+			}
 
-		gpsListener.sensorMgr.registerListener(gpsListener, sensorGrav,
-				GpsListener.sensordelay);
-		gpsListener.sensorMgr.registerListener(gpsListener, sensorMag,
-				GpsListener.sensordelay);
+			gpsListener.sensorMgr.registerListener(gpsListener, sensorGrav,
+					GpsListener.sensordelay);
+			gpsListener.sensorMgr.registerListener(gpsListener, sensorMag,
+					GpsListener.sensordelay);
+		}
 
 		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
