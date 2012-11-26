@@ -86,6 +86,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 
 
 	public static void say(String s) {
+		Log.i("tp", "said: " + s);
 		tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
 	}
 
@@ -234,29 +235,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		//	return;
 		//}
 
-		// we already have a direction from the compass but I think having a direction based on the last and the current
-		// coordinates is better for telling what the user is actually doing
-		//double direction = session.getDirection();
-		double direction = getBearing(lastlat, lastlon, lat, lon);
-
-//		for (ArrayList<Node> way : tbtway) {
-//			for (Node n : way) {
-//				currentlat = n.getGeoPoint().getLatitude();
-//				currentlon = n.getGeoPoint().getLongitude();
-//				double tempdist = CoordinateTools.directDistance(lat, lon, currentlat, currentlon);
-//				double directionlasttothis;
-//			}
-//		}
-
-
-
-//		Node[] nearestnodes = getTwoNearestNodes(lat,lon);
-//		if (nearestnodes == null || nearestnodes[0] == null || nearestnodes[1] == null) {
-//			//meh
-//			return;
-//		}
-		//double nodesdirection = getBearing(nearestnodes[0].getGeoPoint().getLatitude(), nearestnodes[0].getGeoPoint().getLongitude(), nearestnodes[1].getGeoPoint().getLatitude(), nearestnodes[0].getGeoPoint().getLongitude());
-
+		//TODO: Better method for determining the progress on the way
 		Node n = nearestNode(currentlat, currentlon);
 		Log.d("tp", "Nearest node: " + n.getName());
 		if (n == null) {
@@ -265,82 +244,63 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 			return;
 		}
 
-		double lastcurrentstreetdirection = Double.NaN;
-		double firstnextstreetdirection = Double.NaN;
-		// we go from the current node along the way until we reach some interesting point
-		// if
-		double distToPOI = Double.POSITIVE_INFINITY;
-		boolean interestingway = false;
-		Node lastnode = null;
-		String lastname = "";
-		String tempname = "";
-		boolean brokesearch = false;
-		boolean stillneednextnode = true;
-		SEARCH:
+		double tempdist = 0;
+		int nodesindex = -1;
+		int tbtwayindex = -1;
 		for (ArrayList<Node> nodes : tbtway) {
-			tempname = nodes.get(0).getName();
-			for (Node node : nodes) {
-				if (node.equals(n)) {
-					interestingway = true;
-					lastname = tempname;
-					// begin with our distance to the nearest point on the way
-					distToPOI = CoordinateTools.directDistance(n.getGeoPoint().getLatitude(), n.getGeoPoint().getLongitude(), node.getGeoPoint().getLatitude(), node.getGeoPoint().getLongitude());
-				}
-
-				if (lastnode != null) {
-					if (interestingway) {
-						distToPOI += CoordinateTools.directDistance(lastnode.getGeoPoint().getLatitude(), lastnode.getGeoPoint().getLongitude(), node.getGeoPoint().getLatitude(), node.getGeoPoint().getLongitude());
-						if (tempname != lastname) {
-							if (stillneednextnode) {
-								stillneednextnode = false;
-								continue;
-							}
-							firstnextstreetdirection = getBearing(lastnode.getGeoPoint().getLatitude(), lastnode.getGeoPoint().getLongitude(), node.getGeoPoint().getLatitude(), node.getGeoPoint().getLongitude());
-							brokesearch = true;
-							break SEARCH;
-						}
-					}
-					lastcurrentstreetdirection = getBearing(lastnode.getGeoPoint().getLatitude(), lastnode.getGeoPoint().getLongitude(), node.getGeoPoint().getLatitude(), node.getGeoPoint().getLongitude());
-				}
-				lastnode = node;
+			if (nodes.contains(n)) {
+				tbtwayindex = tbtway.indexOf(nodes);
+				nodesindex = nodes.indexOf(n);
+				break;
 			}
-			lastname = tempname;
+		}
+		if (nodesindex == -1 || tbtwayindex == -1) {
+			sayGerman("Irgendetwas stimmt hier nicht!");
+			return;
 		}
 
-		if (!brokesearch && distToPOI < 100) {
-			sayGerman("Das Ziel liegt innerhalb von 100 Metern");
+		ArrayList<Node> tempway = tbtway.get(tbtwayindex);
+		// from the node after the current node to the last node on the current street
+		for (int i = nodesindex + 1; i <= tempway.size() - 1; i++) {
+			tempdist += CoordinateTools.directDistance(tempway.get(i-1).getGeoPoint().getLatitude(), tempway.get(i - 1).getGeoPoint().getLongitude(),
+					tempway.get(i).getGeoPoint().getLatitude(), tempway.get(i).getGeoPoint().getLongitude());
+		}
+		if (tempdist > 800) {
+			// no street change in the next 800 meters so we don't say anything
+			Log.d("tp", tempdist + " meters to the next turn");
+			return;
+		}
+
+		if (tbtwayindex == tbtway.size() - 1) {
+			// we are on the street where the destination is
+			Log.d("tp", tempdist + " to destination");
+			sayGerman("Das Ziel liegt innerhalb von " + tempdist + " Metern");
 			this.active = false;
 			return;
 		}
 
-		Log.i("tp", "next poi: " + lastname + " -> " + tempname);
-		Log.i("tp", "distance to poi: " + (int) distToPOI);
-		if (distToPOI < 800) {
-			Log.i("tp", "change direction from " + lastcurrentstreetdirection + " to " + firstnextstreetdirection);
-			// at least 5 seconds between direction speeches
-			if ((new Date()).getTime() - lastdirectionspeech > 5000) {
+		int directionbeforeturn = (int) getBearing(tempway.get(tempway.size() - 2).getGeoPoint().getLatitude(), tempway.get(tempway.size() - 2).getGeoPoint().getLongitude(),
+				tempway.get(tempway.size() - 1).getGeoPoint().getLatitude(), tempway.get(tempway.size() - 1).getGeoPoint().getLongitude());
+		ArrayList<Node> tempwaynext = tbtway.get(tbtwayindex + 1);
+		int directionafterturn = (int) getBearing(tempwaynext.get(0).getGeoPoint().getLatitude(), tempwaynext.get(0).getGeoPoint().getLongitude(),
+				tempwaynext.get(1).getGeoPoint().getLatitude(), tempwaynext.get(1).getGeoPoint().getLongitude());
 
-				double diff = (lastcurrentstreetdirection - firstnextstreetdirection + 360) % 360;
-				Log.i("tp", String.valueOf(diff));
-				String directionwords = "geradeaus fahren";
-				if (!brokesearch) {
-					//TODO: Sprache
-					directionwords = "zum Ziel";
-				}
-				// ~ 0 to 180 = everything to the left, ~ 20 in each direction = no turn
-				if (diff > 10 && diff < 170) {
-					directionwords = "nach links abbiegen";
-				} else if (diff < 350 && diff > 190) {
-					directionwords = " nach rechts abbiegen ";
-				} else if (abs(diff) <= 10 || abs(diff) >= 350) {
-					directionwords = "wenden";
-				}
-				String say = "In " + (int) distToPOI + " Metern " + directionwords + " auf " + (tempname.startsWith("??") ? " eine unbenannte Straße" : " die " + tempname) + "!";
-				Log.i("tp", "Say: " + say);
-				Toast.makeText(ToureNPlanerApplication.getContext(), say, Toast.LENGTH_LONG).show();
-				sayGerman(say);
-			}
+		String currentstreetname = tempway.get(0).getName().startsWith("??") ? "eine unbenannte Straße" : tempway.get(0).getName();
+		String nextstreetname = tempwaynext.get(0).getName().startsWith("??") ? "eine unbenannte Straße" : tempwaynext.get(0).getName();
+
+		double diff = (directionbeforeturn - directionafterturn + 360) % 360;
+		String directionwords = "geradeaus fahren";
+
+		// ~ 0 to 180 = everything to the left, ~ 20 in each direction = no turn
+		if (diff > 10 && diff < 170) {
+			directionwords = "nach links abbiegen";
+		} else if (diff < 350 && diff > 190) {
+			directionwords = " nach rechts abbiegen ";
+		} else if (abs(diff) <= 10 || abs(diff) >= 350) {
+			directionwords = "wenden";
 		}
+		String say = "In " + (int) tempdist + " Metern " + directionwords + " auf " + nextstreetname + "!";
+		sayGerman(say);
 
 		lastlat = lat;
 		lastlon = lon;
@@ -434,6 +394,8 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	}
 
 	public void sayGerman(final String s)  {
+		Toast.makeText(ToureNPlanerApplication.getContext(), s, Toast.LENGTH_LONG).show();
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
