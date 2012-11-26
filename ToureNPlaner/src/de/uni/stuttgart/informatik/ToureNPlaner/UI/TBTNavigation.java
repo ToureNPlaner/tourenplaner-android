@@ -50,6 +50,10 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	private MapScreen ms;
 	private static long lastdirectionspeech = (new Date()).getTime();
 
+	public void stopTBT() {
+		active = false;
+	}
+
 	private class turnmarker extends Drawable {
 
 		private Paint paint;
@@ -86,6 +90,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 
 
 	public static void say(String s) {
+		lastdirectionspeech = (new Date()).getTime();
 		Log.i("tp", "said: " + s);
 		tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
 	}
@@ -296,8 +301,13 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 			directionwords = "nach links abbiegen";
 		} else if (diff < 350 && diff > 190) {
 			directionwords = " nach rechts abbiegen ";
-		} else if (abs(diff) <= 10 || abs(diff) >= 350) {
+		} else if (abs(diff) <= 190 && abs(diff) >= 170) {
 			directionwords = "wenden";
+		}
+
+		//TODO: Here?
+		if ((new Date()).getTime() - lastdirectionspeech < 5000) {
+			return;
 		}
 		String say = "In " + (int) tempdist + " Metern " + directionwords + " auf " + nextstreetname + "!";
 		sayGerman(say);

@@ -50,6 +50,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
+import org.mapsforge.android.maps.MapController;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
 import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
@@ -334,25 +335,25 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void setupToggleCompassMenu(MenuItem item) {
 		item.setChecked(session.compassenabled);
+		Sensor sensorMag = null;
+		Sensor sensorGrav = null;
+		List<Sensor> sensors = gpsListener.sensorMgr
+				.getSensorList(Sensor.TYPE_ACCELEROMETER);
+		Log.d("tp", "Found " + sensors.size() + " accelerometers");
+		if (sensors.size() > 0) {
+			sensorGrav = sensors.get(0);
+			gpsListener.setSensorGrav(sensorGrav);
+		}
+
+		sensors = gpsListener.sensorMgr
+				.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+		Log.d("tp", "Found " + sensors.size() + " magnetic field sensors");
+		if (sensors.size() > 0) {
+			sensorMag = sensors.get(0);
+			gpsListener.setSensorMag(sensorMag);
+		}
+
 		if (session.compassenabled) {
-			Sensor sensorMag = null;
-			Sensor sensorGrav = null;
-			List<Sensor> sensors = gpsListener.sensorMgr
-					.getSensorList(Sensor.TYPE_ACCELEROMETER);
-			Log.d("tp", "Found " + sensors.size() + " accelerometers");
-			if (sensors.size() > 0) {
-				sensorGrav = sensors.get(0);
-				gpsListener.setSensorGrav(sensorGrav);
-			}
-
-			sensors = gpsListener.sensorMgr
-					.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
-			Log.d("tp", "Found " + sensors.size() + " magnetic field sensors");
-			if (sensors.size() > 0) {
-				sensorMag = sensors.get(0);
-				gpsListener.setSensorMag(sensorMag);
-			}
-
 			gpsListener.sensorMgr.registerListener(gpsListener, sensorGrav,
 					GpsListener.sensordelay);
 			gpsListener.sensorMgr.registerListener(gpsListener, sensorMag,
@@ -472,11 +473,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.tbt:
 				performtbtRequest();
 				Session.nav = new TBTNavigation(session,this);
+				mapView.getController().setZoom();
 				// intentionally run the case R.id.gps also
 			case R.id.gps:
 				GeoPoint pos = nodeOverlay.getGpsPosition();
 				if (pos != null)
-					mapView.getController().setCenter(nodeOverlay.getGpsPosition());
+					mapView.setCenter(nodeOverlay.getGpsPosition());
 				return true;
 			case R.id.algorithm_constraints:
 				myIntent = new Intent(this, AlgorithmConstraintsScreen.class);
