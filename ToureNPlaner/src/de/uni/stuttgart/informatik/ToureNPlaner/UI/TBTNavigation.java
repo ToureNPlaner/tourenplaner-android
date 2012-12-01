@@ -209,11 +209,11 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 
 	double lat;
 	double lon;
-	double currentaccuracy;
-	double lastlat = 0;
-	double lastlon = 0;
-	double currentlon;
-	double currentlat;
+	double currentaccuracy = Double.POSITIVE_INFINITY;
+	double lastlat = -1;
+	double lastlon = -1;
+	double currentlon = -1;
+	double currentlat = -1;
 	double lastaccuracy = Double.POSITIVE_INFINITY;
 	public void updatedLocation(Location l) {
 		//say("Location updated with " + l.getAccuracy() + " meter currentaccuracy");
@@ -232,6 +232,10 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		if (currentaccuracy > 50) {
 			Log.i("tp", "Location update with accuracy > 50: " + currentaccuracy);
 			// useless coordinates
+			return;
+		}
+		if (currentaccuracy - lastaccuracy > 10) {
+			Log.i("tp", "accuracy got worse more than 10 meters since last check, discarding (" + lastaccuracy + "->" + currentaccuracy  +")");
 			return;
 		}
 
@@ -320,7 +324,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	private Node nearestNode(double lat,double lon) {
 
 		double shortestdist = Double.POSITIVE_INFINITY;
-		double tempdist = Double.POSITIVE_INFINITY;
+		double tempdist;
 		Node result = null;
 		for (ArrayList<Node> nodes : tbtway) {
 			for (Node node : nodes) {
@@ -330,7 +334,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 					result = node;
 				}
 			}
-
 		}
 		return result;
 	}

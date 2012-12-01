@@ -40,7 +40,10 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.GeoCodingHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -50,7 +53,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.NodeOverlay;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
-import org.mapsforge.android.maps.MapController;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.Projection;
 import org.mapsforge.android.maps.mapgenerator.databaserenderer.DatabaseRenderer;
@@ -69,6 +71,8 @@ import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistan
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
 
 public class MapScreen extends MapActivity implements Session.Listener {
+	private MenuItem gpsmenuentry;
+
 	public MapView getMapView() {
 		return mapView;
 	}
@@ -328,6 +332,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
 		setupSearchMenu(menu.findItem(R.id.search));
+		this.gpsmenuentry = menu.findItem(R.id.gps);
 		setupGpsMenu(menu.findItem(R.id.gps));
 		setupToggleCompassMenu(menu.findItem(R.id.togglecompass));
 		return true;
@@ -473,7 +478,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.tbt:
 				performtbtRequest();
 				Session.nav = new TBTNavigation(session,this);
-				mapView.getController().setZoom();
+				mapView.getController().setZoom(mapView.getMapGenerator().getZoomLevelMax());
+				gpsListener.setFollowing(true);
+				gpsmenuentry.setChecked(true);
+				this.supportInvalidateOptionsMenu();
 				// intentionally run the case R.id.gps also
 			case R.id.gps:
 				GeoPoint pos = nodeOverlay.getGpsPosition();
@@ -662,7 +670,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
 
-		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());
+		//menu.findItem(R.id.gps).setCheckable(gpsListener.isEnabled());
 		menu.findItem(R.id.gps).setIcon(gpsListener.isFollowing() ? R.drawable.location_enabled : R.drawable.location_disabled);
 		return true;
 	}
