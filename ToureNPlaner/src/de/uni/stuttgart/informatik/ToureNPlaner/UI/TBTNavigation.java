@@ -30,14 +30,12 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen.MapScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.CoordinateTools;
-import org.mapsforge.android.maps.overlay.ArrayItemizedOverlay;
 import org.mapsforge.android.maps.overlay.OverlayItem;
 import org.mapsforge.core.GeoPoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import static java.lang.Math.abs;
@@ -46,7 +44,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	private static TextToSpeech tts;
 	private ArrayList<ArrayList<Node>> tbtway = null;
 
-	List<OverlayItem> markings;
 	private MapScreen ms;
 	private static long lastdirectionspeech = (new Date()).getTime();
 
@@ -150,8 +147,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 			return;
 		}
 
-		// TODO: 30?
-		markings = new ArrayList<OverlayItem>(tbtway.size() * 30);
 		String lastname = "";
 		for (ArrayList<Node> nodelist : tbtway) {
 			for (Node n : nodelist) {
@@ -160,29 +155,8 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 					OverlayItem item = new OverlayItem();
 					item.setMarker(new turnmarker());
 					item.setPoint(new GeoPoint(n.getLaE7(), n.getLaE7()));
-					markings.add(item);
 				}
 			}
-		}
-
-		if (!ms.getMapView().getOverlays().contains(tbtoverlay)) {
-			//tbtoverlay.setupOverlay(ms.getMapView());
-			//ms.getMapView().getOverlays().add(tbtoverlay);
-		}
-		tbtoverlay.clear();
-		tbtoverlay.addItems(markings);
-		tbtoverlay.requestRedraw();
-
-		Toast.makeText(ToureNPlanerApplication.getContext(), "added " + tbtoverlay.size() + " items", Toast.LENGTH_LONG).show();
-		Log.i("tp", "added " + tbtoverlay.size() + " items");
-	}
-
-	private ArrayItemizedOverlay  tbtoverlay = new Tbtoverlay(new turnmarker());
-
-	private class Tbtoverlay extends ArrayItemizedOverlay  {
-
-		public Tbtoverlay(Drawable defaultMarker) {
-			super(defaultMarker);
 		}
 	}
 
