@@ -257,8 +257,10 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		if (tbtwayindex == tbtway.size() - 1) {
 			// we are on the street where the destination is
 			Log.d("tp", tempdist + " to destination");
-			sayGerman("Das Ziel liegt innerhalb von " + tempdist + " Metern");
-			this.active = false;
+			sayGerman("Das Ziel liegt innerhalb von " + (int) tempdist + " Metern");
+			if (tempdist < 20) {
+				this.active = false;
+			}
 			return;
 		}
 
@@ -267,6 +269,45 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		ArrayList<Node> tempwaynext = tbtway.get(tbtwayindex + 1);
 		int directionafterturn = (int) getBearing(tempwaynext.get(0).getGeoPoint().getLatitude(), tempwaynext.get(0).getGeoPoint().getLongitude(),
 				tempwaynext.get(1).getGeoPoint().getLatitude(), tempwaynext.get(1).getGeoPoint().getLongitude());
+
+		Log.d("tp", "Direction 1: " + directionbeforeturn + " -> " + directionafterturn);
+
+		double directionchange = 0;
+		double tempdirection;
+		int tempdirectionindex = tempway.size() - 1; // we already have the direction from this node to the last
+		double tempdirectiondist = 0;
+		double lastdirection = directionbeforeturn;
+		if (tempway.size() > 2) {
+			do {
+				tempdirectiondist += CoordinateTools.directDistance(tempway.get(tempdirectionindex - 1).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex - 1).getGeoPoint().getLongitude(),
+						tempway.get(tempdirectionindex).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex).getGeoPoint().getLongitude());
+				tempdirection = getBearing(tempway.get(tempdirectionindex - 1).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex - 1).getGeoPoint().getLongitude(),
+						tempway.get(tempdirectionindex).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex).getGeoPoint().getLongitude());
+				directionchange += tempdirection - lastdirection;
+				lastdirection = tempdirection;
+				tempdirectionindex -= 1;
+			} while (tempdirectiondist < 25 && tempdirectionindex > 0);
+			directionbeforeturn += directionchange;
+		}
+		if (tempwaynext.size() > 2) {
+			lastdirection = directionafterturn;
+			// reuse directionchange, tempdirectionindex, lastdirection and tempdirectiondist
+			directionchange = 0;
+			tempdirectiondist = 0;
+			tempdirectionindex = 2;
+			do {
+				tempdirectiondist += CoordinateTools.directDistance(tempwaynext.get(tempdirectionindex).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex).getGeoPoint().getLongitude(),
+						tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLongitude());
+				tempdirection = getBearing(tempwaynext.get(tempdirectionindex).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex).getGeoPoint().getLongitude(),
+						tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLongitude());
+				directionchange += tempdirection- lastdirection;
+				lastdirection = tempdirection;
+				tempdirectionindex += 1;
+			} while (tempdirectiondist < 25 && tempdirectionindex < tempwaynext.size() - 1);
+			directionafterturn += directionchange;
+		}
+
+		Log.d("tp", "Direction 2: " + directionbeforeturn + " -> " + directionafterturn);
 
 		String currentstreetname = tempway.get(0).getName().startsWith("??") ? "eine unbenannte Straße" : tempway.get(0).getName();
 		String nextstreetname = tempwaynext.get(0).getName().startsWith("??") ? "eine unbenannte Straße" : tempwaynext.get(0).getName();
