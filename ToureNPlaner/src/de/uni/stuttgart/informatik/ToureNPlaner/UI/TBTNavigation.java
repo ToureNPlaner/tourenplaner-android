@@ -190,6 +190,9 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	double currentlat = -1;
 	double lastaccuracy = Double.POSITIVE_INFINITY;
 	public void updatedLocation(Location l) {
+		if (!active) {
+			return;
+		}
 		//say("Location updated with " + l.getAccuracy() + " meter currentaccuracy");
 		if (tbtway == null) {
 			tbtway = session.gettbtResult().gettbtway();
@@ -429,7 +432,11 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 			public void run() {
 				Locale l = tts.getLanguage();
 				tts.setLanguage(Locale.GERMAN);
-				say(s);
+				// Workarounds:
+				// the german voice can't say "-" for some reason, it says something like "a" instead. wat
+				// make sure, "straße" is pronounced correctly, additional space won't hurt but will force the correct pronounciation of "st"
+				// weg often needs a long "e"
+				say(s.replace('-',' ').replace("straße", " Straße").replace("weg", " Weeg"));
 				tts.setLanguage(l);
 			}
 		}).start();
