@@ -246,6 +246,8 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		}
 
 		ArrayList<Node> tempway = tbtway.get(tbtwayindex);
+		tempdist += CoordinateTools.directDistance(currentlat, currentlon,
+				tempway.get(nodesindex).getGeoPoint().getLatitude(), tempway.get(nodesindex).getGeoPoint().getLongitude());
 		// from the node after the current node to the last node on the current street
 		for (int i = nodesindex + 1; i <= tempway.size() - 1; i++) {
 			tempdist += CoordinateTools.directDistance(tempway.get(i-1).getGeoPoint().getLatitude(), tempway.get(i - 1).getGeoPoint().getLongitude(),
@@ -260,9 +262,11 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		if (tbtwayindex == tbtway.size() - 1) {
 			// we are on the street where the destination is
 			Log.d("tp", tempdist + " to destination");
-			sayGerman("Das Ziel liegt innerhalb von " + (int) tempdist + " Metern");
 			if (tempdist < 20) {
+				sayGerman("Sie erreichen Ihr Ziel in " + (int) tempdist + " Metern!");
 				this.active = false;
+			} else {
+				sayGerman("Ihr Ziel liegt auf dieser Straße in " + (int) tempdist + " Metern!");
 			}
 			return;
 		}
