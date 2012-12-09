@@ -47,9 +47,7 @@ public class TurnByTurnHandler extends SimpleNetworkHandler {
 	protected HttpURLConnection getHttpUrlConnection() throws Exception {
 		URL tbt_url = new URL("http://"+ip+"/streetname/");
 		HttpURLConnection urlConnection = (HttpURLConnection) tbt_url.openConnection();
-
-		// Doesn't work, it's still text/html. Why?
-		//urlConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+		urlConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 
 		if (urlConnection instanceof HttpsURLConnection) {
 			((HttpsURLConnection) urlConnection).setSSLSocketFactory(ToureNPlanerApplication.getSslContext().getSocketFactory());
@@ -62,7 +60,7 @@ public class TurnByTurnHandler extends SimpleNetworkHandler {
 
 	@Override
 	protected void handleOutput(OutputStream connection) throws Exception {
-		connection.write("nodes=".getBytes());
+		//connection.write("nodes=".getBytes());
 		JacksonManager.getJsonMapper().writeValue(connection, nodes);
 	}
 

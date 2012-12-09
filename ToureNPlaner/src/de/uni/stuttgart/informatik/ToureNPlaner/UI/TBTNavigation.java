@@ -211,7 +211,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 			// useless coordinates
 			return;
 		}
-		if (currentaccuracy - lastaccuracy > 10) {
+		if (currentaccuracy - lastaccuracy > 20 && CoordinateTools.directDistance(lastlat, lastlon, lat,lon) < 20) {
 			Log.i("tp", "accuracy got worse more than 10 meters since last check, discarding (" + lastaccuracy + "->" + currentaccuracy  +")");
 			return;
 		}
@@ -322,7 +322,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		if (diff > 10 && diff < 170) {
 			directionwords = "nach links abbiegen";
 		} else if (diff < 350 && diff > 190) {
-			directionwords = " nach rechts abbiegen ";
+			directionwords = "nach rechts abbiegen";
 		} else if (abs(diff) <= 190 && abs(diff) >= 170) {
 			directionwords = "wenden";
 		}
