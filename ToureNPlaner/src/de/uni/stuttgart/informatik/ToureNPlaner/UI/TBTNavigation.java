@@ -413,7 +413,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		double x = Math.cos(lat1) * Math.sin(lat2) -
 				Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLong);
 		double bearing = Math.atan2(y, x);
-		return ConvertToBearing(RadToDeg(bearing));
+		return (RadToDeg(bearing) + 360 ) % 360;
 	}
 
 	public static double RadToDeg(double radians) {
@@ -422,10 +422,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 
 	public static double DegToRad(double degrees) {
 		return degrees * (Math.PI / 180);
-	}
-
-	public static double ConvertToBearing(double deg) {
-		return (deg + 360) % 360;
 	}
 
 	public void sayGerman(final String s)  {
