@@ -34,11 +34,6 @@
         <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/pom.xml" />
       </list>
     </option>
-    <option name="activeProfiles">
-      <list>
-        <option value="sonatype-oss-release" />
-      </list>
-    </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/pom.xml" />

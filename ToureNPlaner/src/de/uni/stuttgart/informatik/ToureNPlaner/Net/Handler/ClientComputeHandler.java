@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ClientGraph;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ShortestPath;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.IntegerConstraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -95,6 +96,7 @@ public class ClientComputeHandler extends SessionAwareHandler {
 
 		HttpURLConnection urlConnection = session.openPostConnection("/algupdowng");
 		try {
+			// TODO don't hard code
 			int level = 40;
 			writeSubgraphRequest(level, urlConnection);
 
@@ -104,7 +106,11 @@ public class ClientComputeHandler extends SessionAwareHandler {
 
 			checkStatus(urlConnection, stream, type);
 			long start = System.currentTimeMillis();
-			graph = ClientGraph.readClientGraph(ToureNPlanerApplication.getCoreGraph(), type, stream);
+			SimpleGraph core = ToureNPlanerApplication.getCoreGraph();
+			if(core == null){
+				throw new Exception("Core Graph unreadable, please retry later");
+			}
+			graph = ClientGraph.readClientGraph(core, type, stream);
 			long endOfCreate = System.currentTimeMillis();
 			Log.d(TAG, "Time: " +(endOfCreate - start) + " ms for creating the Graph");
 		} finally {
