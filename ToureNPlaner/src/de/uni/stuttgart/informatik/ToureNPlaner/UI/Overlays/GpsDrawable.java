@@ -16,29 +16,64 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays;
 
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 public class GpsDrawable extends Drawable {
 	private final Paint paint;
+	private Bitmap arrow;
 
-	public GpsDrawable(Paint paint) {
-		this.paint = paint;
+	public GpsDrawable() {
+		this.mutate();
+		this.arrow = BitmapFactory.decodeResource(ToureNPlanerApplication.getContext().getResources(), R.drawable.arrow);
+		this.paint = new Paint();
+		this.paint.setAlpha(128);
+		this.paint.setAntiAlias(true);
+		this.paint.setColor(Color.MAGENTA);
 	}
+
+	public boolean isDirectional() {
+		return directional;
+	}
+
+	public void setDirectional(boolean directional) {
+		this.directional = directional;
+	}
+
+	boolean directional = true;
+
+	private double degrees = 0;
 
 	@Override
 	public void draw(Canvas canvas) {
-		Rect bounds = this.getBounds();
-		//add a line for the circle
-		canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint);
+		if (canvas != null) {
+			if (directional) {
+				//Log.d("tp", "Redraw gps marker with rotation " + degrees);
+				Rect bounds = this.getBounds();
+				m.reset();
+				// the device is pointed x degrees clockwise from north. The arrow should also point x deegrees clockwise
+				// from north to show device/car orientation correctly on the map which displays north always on the top
+				m.setRotate((float) degrees, arrow.getWidth() / 2, arrow.getHeight() / 2);
+				// it's not our responsibility to find out where to draw here, we already get a rectangle "bounds"
+				// which is the correct place to draw the arrow
+				m.postTranslate(bounds.left - arrow.getWidth() / 2, bounds.top - arrow.getHeight() / 2);
+				canvas.drawBitmap(arrow, m, paint);
+			} else {
+				Rect bounds = this.getBounds();
+				//add a line for the circle
+				canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint);
+			}
+		}
 	}
 
 	@Override
+	/**
+	 * The Alpha value will be changed on the next redraw of the arrow
+	 */
 	public void setAlpha(int i) {
-
+		paint.setAlpha(i);
 	}
 
 	@Override
@@ -49,5 +84,10 @@ public class GpsDrawable extends Drawable {
 	@Override
 	public int getOpacity() {
 		return 0;
+	}
+
+	Matrix m = new Matrix();
+	public void setrotation(double degrees) {
+		this.degrees = degrees;
 	}
 }

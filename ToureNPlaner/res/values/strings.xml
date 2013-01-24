@@ -39,7 +39,7 @@
     <!--nodelist_menu-->
     <string name="reverse_order">Reverse order</string>
     <string name="map_file_error">Mapfile is not valid. Falling back.</string>
-    <string name="Result">Result</string>
+    <string name="waypoints">Waypoints</string>
     <string name="traveldistance">Distance</string>
     <string name="travel_time">Travel time</string>
     <string name="message">Message</string>
@@ -61,10 +61,11 @@
     <string name="input_map_generator">Choose a Map</string>
     <string name="input_instant">Instant Request</string>
 
-
+    <string name="way_desc">Way description</string>
     <!--menu-->
-    <string name="info">Info</string>
+    <string name="stats">Statistics</string>
     <string name="calculate">Calculate</string>
+    <string name="tbt">Turn by Turn navigation</string>
     <string name="your_location">Your location</string>
     <string name="settings">Settings</string>
 
@@ -100,5 +101,11 @@
     <string name="sp_description">Finds the fastest way between to points.</string>
     <string name="tsp_description">Finds the fastest way to travel to all points.</string>
     <string name="csp_description">Finds the fastest way with a specific maximum of height meters.</string>
-
+    <string name="get_tbt">Get streetnames</string>
+    <string name="routeinfo">Route info</string>
+    <string name="tbtip">Turn By Turn Server</string>
+    <string name="tbtpref">Turn By Turn Preferences</string>
+    <string name="needroute">Can\'t get Turn by Turn directions without a route</string>
+    <string name="routeinprogress">Route retrieval in progress, try again when it is completed</string>
+    <string name="togglecompass">Toggle Compass</string>
 </resources>

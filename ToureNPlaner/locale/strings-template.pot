@@ -114,7 +114,7 @@ msgid "Mapfile is not valid. Falling back."
 msgstr ""
 
 msgctxt "Result"
-msgid "Result"
+msgid "Waypoints"
 msgstr ""
 
 msgctxt "traveldistance"
@@ -189,8 +189,8 @@ msgctxt "input_instant"
 msgid "Instant Request"
 msgstr ""
 
-msgctxt "info"
-msgid "Info"
+msgctxt "stats"
+msgid "Statistics"
 msgstr ""
 
 msgctxt "calculate"

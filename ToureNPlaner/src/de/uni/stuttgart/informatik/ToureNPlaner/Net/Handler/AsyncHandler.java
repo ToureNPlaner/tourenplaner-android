@@ -51,8 +51,10 @@ public abstract class AsyncHandler extends AsyncTask<Void, Void, Object> {
 		Observer l = listener.get();
 
 		// The listener has been collected
-		if (l == null)
+		if (l == null) {
+			Log.d("tp","The listener has been collected");
 			return;
+		}
 
 		if (object instanceof Exception) {
 			l.onError(this, object);

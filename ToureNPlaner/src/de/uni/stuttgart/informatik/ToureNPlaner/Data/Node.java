@@ -37,9 +37,11 @@ public class Node implements Serializable {
 		this.name = name;
 		this.shortName = shortName;
 		this.geoPoint = point;
-		constraintList = new ArrayList<Constraint>(constraintTypes.size());
-		for (int i = 0; i < constraintTypes.size(); i++) {
-			constraintList.add(new Constraint(constraintTypes.get(i)));
+		if (constraintTypes != null) {
+			constraintList = new ArrayList<Constraint>(constraintTypes.size());
+			for (int i = 0; i < constraintTypes.size(); i++) {
+				constraintList.add(new Constraint(constraintTypes.get(i)));
+			}
 		}
 	}
 

@@ -26,6 +26,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.InfoFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.NodeListFragment;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.WayDescriptionFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TabListener;
 
 public class InfoScreen extends SherlockFragmentActivity {
@@ -50,18 +51,21 @@ public class InfoScreen extends SherlockFragmentActivity {
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		ActionBar.Tab tab = getSupportActionBar().newTab()
-				.setText(R.string.info)
+				.setText(R.string.waypoints)
 				.setTabListener(new TabListener<NodeListFragment>(
 						this, "NodeList", NodeListFragment.class));
 		actionBar.addTab(tab);
 
 		if (session.getResult() != null) {
 			tab = getSupportActionBar().newTab()
-					.setText(R.string.Result)
+					.setText(R.string.stats)
 					.setTabListener(new TabListener<InfoFragment>(
 							this, "Info", InfoFragment.class));
 			actionBar.addTab(tab);
 		}
+
+		tab = getSupportActionBar().newTab().setText(R.string.way_desc).setTabListener(new TabListener<WayDescriptionFragment>(this,"waydesc", WayDescriptionFragment.class));
+		actionBar.addTab(tab);
 
 		if (savedInstanceState != null)
 			getSupportActionBar().selectTab(getSupportActionBar().getTabAt(savedInstanceState.getInt("Tab", 0)));
