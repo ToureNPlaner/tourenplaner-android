@@ -25,8 +25,10 @@ public class GpsDrawable extends Drawable {
 	private final Paint paint;
 	private Bitmap arrow;
 
-	public GpsDrawable() {
+	public GpsDrawable(boolean compassenabled) {
 		this.mutate();
+		this.directional = compassenabled;
+
 		this.arrow = BitmapFactory.decodeResource(ToureNPlanerApplication.getContext().getResources(), R.drawable.arrow);
 		this.paint = new Paint();
 		this.paint.setAlpha(128);

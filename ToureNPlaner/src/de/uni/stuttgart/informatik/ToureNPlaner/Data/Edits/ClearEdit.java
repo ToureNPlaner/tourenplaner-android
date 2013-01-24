@@ -27,5 +27,8 @@ public class ClearEdit extends Edit {
 	public void perform() {
 		session.getNodeModel().clear();
 		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
+		if (session.getTBTNavigation() != null && session.getTBTNavigation().currentlyRunning()) {
+			session.getTBTNavigation().stopTBT();
+		}
 	}
 }

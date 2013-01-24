@@ -51,6 +51,8 @@ public class Session implements Serializable {
 	public static SessionAwareHandler sesshandler = null;
 
 	double direction = 0;
+	public boolean compassenabled = false;
+
 	public double getDirection() {
 		return direction;
 	}
@@ -121,6 +123,7 @@ public class Session implements Serializable {
 
 	private void saveData() {
 		save(d, "data");
+		save(compassenabled, "compassenabled");
 		//maybe we don't have turn by turn navigation data but if we have, we want to save it
 		if (nav != null) {
 			save(nav, "nav");
@@ -146,6 +149,7 @@ public class Session implements Serializable {
 			nodeModel = new NodeModel();
 		result = (Result) load("result");
 		nav = (TBTNavigation) load("nav");
+		compassenabled = (Boolean) load("compassenabled");
 	}
 
 	private Object load(String name) {
@@ -493,26 +497,19 @@ public class Session implements Serializable {
 			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needroute));
 		}
 
-		//TODO: how do we get from the current location to the chosen way?
-		//for now: remove first node from the chosen way and add our current location instead
-//		ArrayList<ResultNode> currentpoints = getResult().getPoints();
-//		if (currentpoints.size() > 0) {
-//			currentpoints.remove(0);
-//		} else {
-//			return null;
-//		}
-//
-//		ArrayList<Node> nodevector = new ArrayList<Node>(nodeModel.getNodeVector());
-//		nodeModel.clear();
-//
 		Location loc = ((LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //		nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
-//		getNodeModel().setNodeVector(nodevector);
+		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start") && loc != null) {
+			ArrayList<Node> newNodeVector = new ArrayList<Node>(getNodeModel().getNodeVector().size() + 1);
+			newNodeVector.add(new Node(getNodeModel().getNodeVector().get(0).getId(), "Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()), new ArrayList<ConstraintType>()));
+			for (Node n: getNodeModel().getNodeVector()) {
+				newNodeVector.add(new Node(n.getId() + 1, n.getName(), n.getShortName(), n.getGeoPoint(), n.getConstraintTypes()));
+			}
+			getNodeModel().setNodeVector(newNodeVector);
+			getNodeModel().incVersion();
+		}
 		notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
 
-		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start") && loc != null) {
-			getNodeModel().getNodeVector().add(0, new Node(0, "Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()), new ArrayList<ConstraintType>()));
-		}
 		sesshandler = performRequest(new PrepareTBTObserver(tbtrequestListener, tbtip), true);
 		return null;
 	}

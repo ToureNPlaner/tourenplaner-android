@@ -70,7 +70,7 @@ public class NodeOverlay extends ItemizedOverlay<OverlayItem> implements Session
 //		p.setAlpha(128);
 //		gpsDrawable = new GpsDrawable(p);
 
-		gpsDrawable = new GpsDrawable();
+		gpsDrawable = new GpsDrawable(session.compassenabled);
 		gpsDrawable.setBounds(-GPS_RADIUS, -GPS_RADIUS, GPS_RADIUS, GPS_RADIUS);
 	}
 
