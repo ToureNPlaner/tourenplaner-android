@@ -23,28 +23,17 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ClientGraph;
-import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.NullGraph;
-import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import org.apache.commons.io.input.TeeInputStream;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.File;
+import java.io.IOException;
 import java.security.KeyStore;
 import java.util.Collections;
 import java.util.Date;
 
 public class ToureNPlanerApplication extends Application {
-	public static ClientGraph core;
-	public static  int coreLevel = 40;
-	public static String coreURL = "http://tourenplaner.informatik.uni-stuttgart.de/cores/";
-	public static String coreName = "core"+coreLevel+".json";
 	private static Context context;
 	private static KeyStore keyStore;
 	private static SSLContext sslContext;
@@ -59,85 +48,6 @@ public class ToureNPlanerApplication extends Application {
 		if (keyStore == null)
 			initKeystore();
 		return keyStore;
-	}
-
-	public static InputStream readCoreFileFromNetAndCache(String cacheDir) throws IOException {
-		HttpURLConnection con = null;
-		try {
-			URL url = new URL(coreURL + coreName);
-			con = (HttpURLConnection) url.openConnection();
-			Log.d("TP", "Trying to download core to "+context.getExternalCacheDir().getAbsolutePath()+coreName);
-			FileOutputStream coreFileStream = new FileOutputStream(new File(context.getExternalCacheDir(), coreName));
-			Log.d("TP", "Content-Length: "+con.getContentLength());
-			InputStream in = new BufferedInputStream(con.getInputStream());
-			TeeInputStream teeStream = new TeeInputStream(con.getInputStream(), coreFileStream, true);
-			return teeStream;
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			if (con != null ){
-				con.disconnect();
-			}
-			return null;
-		}
-	}
-
-	public static long getLastModifiedOnServer() throws IOException {
-		HttpURLConnection con = null;
-		long result = new Date().getTime();
-		try {
-			URL url = new URL(coreURL + coreName);
-			con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("HEAD");
-			result = con.getHeaderFieldDate("Last-Modified", result);
-			Log.d("TP", "Last modified is "+new Date(result));
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return result;
-		} finally {
-			if (con != null ){
-				con.disconnect();
-			}
-		}
-		return result;
-	}
-
-	public static InputStream readCoreFileCached(File coreFile, String cacheDir) throws IOException{
-		if (getLastModifiedOnServer() > coreFile.lastModified()-1000*60*10){
-			return readCoreFileFromNetAndCache(cacheDir);
-		}
-		return  new FileInputStream(coreFile);
-	}
-
-	public static synchronized SimpleGraph getCoreGraph() throws IOException {
-		if (core == null){
-			String cacheDir = context.getExternalCacheDir().getAbsolutePath();
-			File coreFile = new File(context.getExternalCacheDir(), coreName);
-			InputStream coreFileStream = null;
-			if (!coreFile.exists()){
-				Log.d("TP", "Core does not exist");
-				coreFileStream = readCoreFileFromNetAndCache(cacheDir);
-			} else {
-				Log.d("TP", "Core exists");
-				coreFileStream = readCoreFileCached(coreFile, cacheDir);
-			}
-			try {
-				core = ClientGraph.readClientGraph(new NullGraph(), JacksonManager.ContentType.JSON, coreFileStream);
-			} catch (Exception ex) {
-				// We might have messed up our cached Core, delete it
-				// so we don't stumble upon it
-				if (coreFile.exists()){
-					Log.e("TP", "Deleting core because of Exception");
-					coreFile.delete();
-				}
-				core = null;
-			}
-		} else {
-			Log.d("TP", "Core is loaded");
-		}
-
-		return core;
 	}
 
 	private static void initKeystore() {

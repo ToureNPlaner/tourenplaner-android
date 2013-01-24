@@ -34,7 +34,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,7 +105,7 @@ public class ClientComputeHandler extends SessionAwareHandler {
 
 			checkStatus(urlConnection, stream, type);
 			long start = System.currentTimeMillis();
-			SimpleGraph core = ToureNPlanerApplication.getCoreGraph();
+			SimpleGraph core = session.getCoreGraph();
 			if(core == null){
 				throw new Exception("Core Graph unreadable, please retry later");
 			}

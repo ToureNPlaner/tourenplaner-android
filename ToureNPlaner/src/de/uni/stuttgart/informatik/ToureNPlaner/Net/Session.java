@@ -20,13 +20,11 @@ import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ClientComputeHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.SessionAwareHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
 import org.mapsforge.core.GeoPoint;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -58,6 +56,7 @@ public class Session implements Serializable {
 	private static transient Data d;
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
+	private static transient SyncCoreLoader cl;
 
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
@@ -68,6 +67,7 @@ public class Session implements Serializable {
 		d = new Data();
 		nodeModel = new NodeModel();
 		result = new Result();
+		cl = new SyncCoreLoader();
 		// Also initialize the files on the disc
 		safeData();
 		safeNodeModel();
@@ -251,7 +251,7 @@ public class Session implements Serializable {
 			d.serverInfo.setHostname(uri.getHost());
 			int port = uri.getPort();
 			d.serverInfo.setPort(port == -1 ? 80 : port);
-			uri.getProtocol();
+			cl.setURL(url);
 			safeData();
 		} catch (MalformedURLException e) {
 			// Should never happen
@@ -414,6 +414,10 @@ public class Session implements Serializable {
 
 	public boolean canPerformRequest() {
 		return canPerformReason().equals("");
+	}
+
+	public SimpleGraph getCoreGraph() throws IOException {
+		return cl.getCoreGraph();
 	}
 
 	public SessionAwareHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
