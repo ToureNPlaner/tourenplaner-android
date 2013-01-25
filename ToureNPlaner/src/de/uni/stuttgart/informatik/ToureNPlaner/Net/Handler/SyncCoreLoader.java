@@ -80,11 +80,14 @@ public class SyncCoreLoader {
 		HttpURLConnection con = null;
 		long result = new Date().getTime();
 		try {
-			URL url = new URL(coreURL + "/" + corePrefix + coreLevel + coreSuffix);
+			URL url = new URL(coreURL + pathPrefix + corePrefix + coreLevel + coreSuffix);
 			con = (HttpURLConnection) url.openConnection();
+
 			con.setRequestMethod("HEAD");
+			con.setDoInput(true);
+			con.setAllowUserInteraction(false);
 			result = con.getHeaderFieldDate("Last-Modified", result);
-			Log.d("TP", "Last modified is " + new Date(result));
+			Log.d("TP", "Last modified is parsed " + new Date(result));
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
