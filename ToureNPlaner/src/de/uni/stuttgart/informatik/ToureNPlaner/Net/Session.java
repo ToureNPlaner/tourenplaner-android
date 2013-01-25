@@ -191,7 +191,7 @@ public class Session implements Serializable {
 	 * @param listener
 	 */
 	public void registerListener(Object identifier, Listener listener) {
-		listeners.put(listener.getClass(), listener);
+		listeners.put(identifier, listener);
 	}
 
 	public void removeListener(Object identifier) {
