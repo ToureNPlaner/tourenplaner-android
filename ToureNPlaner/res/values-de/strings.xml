@@ -24,7 +24,7 @@
   <string name="gps_to_start">GPS Ort als Startpunkt setzen?</string>
   <string name="reverse_order">Reihenfolge umkehren</string>
   <string name="map_file_error">Kartendatei nicht gültig. Weiche aus.</string>
-  <string name="Result">Ergebnis</string>
+  <string name="waypoints">Wegpunkte</string>
   <string name="traveldistance">Entfernung</string>
   <string name="travel_time">Zeit</string>
   <string name="message">Nachricht</string>
@@ -43,8 +43,9 @@
   <string name="map_generator">Karte</string>
   <string name="input_map_generator">Wählen sie eine Karte</string>
   <string name="input_instant">Instant Abfrage</string>
-  <string name="info">Info</string>
+  <string name="stats">Statistik</string>
   <string name="calculate">Berechnen</string>
+  <string name="tbt">Turn by Turn Navigation</string>
   <string name="your_location">Ihre Position</string>
   <string name="settings">Einstellungen</string>
   <string name="constraints">Constraints</string>
@@ -72,4 +73,12 @@
   <string name="sp_description">Findet den schnellsten Weg zwischen zwei Punkten.</string>
   <string name="tsp_description">Findet den schnellsten Weg zwischen allen Punkten.</string>
   <string name="csp_description">Findet den schnellsten Weg mit einem bestimmten Maximum an Höhenmetern.</string>
+  <string name="get_tbt">Straßennamen</string>
+  <string name="way_desc">Wegbeschreibung</string>
+  <string name="routeinfo">Routeninformationen</string>
+  <string name="tbtip">Turn By Turn Server</string>
+  <string name="tbtpref">Turn By Turn Einstellungen</string>
+  <string name="needroute">Benötige eine Route, um Turn By Turn Directions abzurufen</string>
+    <string name="routeinprogress">Route wird gerade aktualisiert, bitte mit neuer Route nochmal versuchen</string>
+  <string name="togglecompass">Kompass ein/aus</string>
 </resources>

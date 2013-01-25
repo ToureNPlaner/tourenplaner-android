@@ -16,15 +16,21 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
-import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
 import org.mapsforge.core.GeoPoint;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -41,6 +47,25 @@ import java.util.zip.GZIPOutputStream;
 public class Session implements Serializable {
 	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
+	public static SimpleNetworkHandler simplehandler = null;
+	public static SessionAwareHandler sesshandler = null;
+
+	double direction = 0;
+	public boolean compassenabled = false;
+
+	public double getDirection() {
+		return direction;
+	}
+
+	/**
+	 * This only sets the direction, it does not update the gps marker. For the marker to be updated on the screen,
+	 * mapScreen.get().nodeOverlay.updateGPSDrawableDirection() needs to be called
+	 */
+	public void setDirection(double floatBearing) {
+		direction = floatBearing;
+		//mapScreen.get().nodeOverlay.setGPSDrawableDirection(floatBearing);
+	}
+
 
 	private static class Data implements Serializable {
 		private ServerInfo serverInfo;
@@ -57,6 +82,8 @@ public class Session implements Serializable {
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
 	private static transient SyncCoreLoader cl;
+	private static transient TBTResult tbtresult;
+	public static transient TBTNavigation nav;
 
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
@@ -68,13 +95,15 @@ public class Session implements Serializable {
 		nodeModel = new NodeModel();
 		result = new Result();
 		cl = new SyncCoreLoader();
+		tbtresult = new TBTResult();
 		// Also initialize the files on the disc
-		safeData();
-		safeNodeModel();
-		safeResult();
+		saveData();
+		saveNodeModel();
+		saveResult();
+		savetbtResult();
 	}
 
-	private void safe(Object o, String name) {
+	private void save(Object o, String name) {
 		try {
 			File dir = new File(openCacheDir(), uuid.toString());
 			dir.mkdirs();
@@ -92,16 +121,25 @@ public class Session implements Serializable {
 		}
 	}
 
-	private void safeData() {
-		safe(d, "data");
+	private void saveData() {
+		save(d, "data");
+		save(compassenabled, "compassenabled");
+		//maybe we don't have turn by turn navigation data but if we have, we want to save it
+		if (nav != null) {
+			save(nav, "nav");
+		}
 	}
 
-	private void safeNodeModel() {
-		safe(nodeModel, "nodeModel");
+	private void saveNodeModel() {
+		save(nodeModel, "nodeModel");
 	}
 
-	private void safeResult() {
-		safe(result, "result");
+	private void saveResult() {
+		save(result, "result");
+	}
+
+	private void savetbtResult() {
+		save(tbtresult, "tbtresult");
 	}
 
 	private void loadAll() {
@@ -110,6 +148,8 @@ public class Session implements Serializable {
 		if (nodeModel == null)
 			nodeModel = new NodeModel();
 		result = (Result) load("result");
+		nav = (TBTNavigation) load("nav");
+		compassenabled = (Boolean) load("compassenabled");
 	}
 
 	private Object load(String name) {
@@ -135,6 +175,7 @@ public class Session implements Serializable {
 	public static final int NNS_CHANGE = 4;
 	public static final int ADD_CHANGE = 8;
 	public static final int DND_CHANGE = 16;
+	public static final int TBT_RESULT_CHANGE = 32;
 
 	public static class Change {
 		private final int val;
@@ -158,6 +199,10 @@ public class Session implements Serializable {
 
 		public boolean isResultChange() {
 			return 0 < (val & RESULT_CHANGE);
+		}
+
+		public boolean isTBTResultChange() {
+			return 0 < (val & TBT_RESULT_CHANGE);
 		}
 
 		public boolean isNnsChange() {
@@ -217,18 +262,33 @@ public class Session implements Serializable {
 			public void run() {
 				synchronized (Session.class) {
 					if (change.isModelChange()) {
-						safeNodeModel();
+						saveNodeModel();
 					}
 					if (change.isResultChange()) {
-						safeResult();
+						saveResult();
+					}
+					if (change.isTBTResultChange()) {
+						savetbtResult();
 					}
 				}
 			}
 		}).start();
 	}
 
+	public TBTNavigation getTBTNavigation() {
+		return nav;
+	}
+
 	public Result getResult() {
 		return result;
+	}
+
+	public void settbtResult(TBTResult result) {
+		Session.tbtresult = result;
+	}
+
+	public TBTResult gettbtResult() {
+		return Session.tbtresult;
 	}
 
 	public void setResult(Result result) {
@@ -237,7 +297,7 @@ public class Session implements Serializable {
 
 	public void setUser(User user) {
 		d.user = user;
-		safeData();
+		saveData();
 	}
 
 	public User getUser() {
@@ -255,7 +315,7 @@ public class Session implements Serializable {
 			int port = uri.getPort();
 			d.serverInfo.setPort(port == -1 ? 80 : port);
 			cl.setURL(url);
-			safeData();
+			saveData();
 		} catch (MalformedURLException e) {
 			// Should never happen
 			e.printStackTrace();
@@ -320,7 +380,7 @@ public class Session implements Serializable {
 			for (int i = 0; i < selectedAlgorithm.getConstraintTypes().size(); i++) {
 				d.constraints.add(new Constraint(selectedAlgorithm.getConstraintTypes().get(i)));
 			}
-			safeData();
+			saveData();
 		}
 	}
 
@@ -356,7 +416,7 @@ public class Session implements Serializable {
 
 	public void setServerInfo(ServerInfo serverInfo) {
 		d.serverInfo = serverInfo;
-		safeData();
+		saveData();
 	}
 
 	public ServerInfo getServerInfo() {
@@ -365,12 +425,12 @@ public class Session implements Serializable {
 
 	public void setUsername(String username) {
 		d.username = username;
-		safeData();
+		saveData();
 	}
 
 	public void setPassword(String password) {
 		d.password = password;
-		safeData();
+		saveData();
 	}
 
 	/**
@@ -432,6 +492,49 @@ public class Session implements Serializable {
 			}
 		} else {
 			throw new RequestInvalidException(canPerformReason());
+		}
+	}
+
+	public SimpleNetworkHandler performtbtRequest(final Observer tbtrequestListener, final String tbtip) throws RequestInvalidException {
+		if (getResult().getWay() == null) {
+			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needroute));
+		}
+
+		Location loc = ((LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start") && loc != null) {
+			ArrayList<Node> newNodeVector = new ArrayList<Node>(getNodeModel().getNodeVector().size() + 1);
+			newNodeVector.add(new Node(getNodeModel().getNodeVector().get(0).getId(), "Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()), new ArrayList<ConstraintType>()));
+			for (Node n: getNodeModel().getNodeVector()) {
+				newNodeVector.add(new Node(n.getId() + 1, n.getName(), n.getShortName(), n.getGeoPoint(), n.getConstraintTypes()));
+			}
+			getNodeModel().setNodeVector(newNodeVector);
+			getNodeModel().incVersion();
+		}
+		notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
+
+		sesshandler = performRequest(new PrepareTBTObserver(tbtrequestListener, tbtip), true);
+		return null;
+	}
+
+	private class PrepareTBTObserver implements Observer {
+
+		private Observer tbtrequestListener;
+		private String tbtip;
+
+		public PrepareTBTObserver(Observer tbtrequestlistener, String tbtip) {
+			this.tbtrequestListener = tbtrequestlistener;
+			this.tbtip = tbtip;
+		}
+		@Override
+		public void onCompleted(AsyncHandler caller, Object object) {
+			notifyChangeListerners(new Session.Change(Session.RESULT_CHANGE));
+			nav.init(tbtip, tbtrequestListener);
+		}
+
+		@Override
+		public void onError(AsyncHandler caller, Object object) {
+			Toast.makeText(ToureNPlanerApplication.getContext(),"Error:\n" + object.toString(), Toast.LENGTH_LONG).show();
 		}
 	}
 }

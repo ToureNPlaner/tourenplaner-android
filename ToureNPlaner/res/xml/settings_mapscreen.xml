@@ -24,4 +24,14 @@
                 android:dialogTitle="@string/input_instant"/>
         />
     </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/tbtpref">
+        <EditTextPreference
+                android:key="tbtip"
+                android:inputType="textUri"
+                android:title="@string/tbtip"
+                android:dialogTitle="@string/tbtip"/>
+        />
+    </PreferenceCategory>
 </PreferenceScreen>

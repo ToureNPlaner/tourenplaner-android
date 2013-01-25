@@ -31,15 +31,19 @@ public class Node implements Serializable {
 	private final int id;
 
 	private ArrayList<Constraint> constraintList;
+	private ArrayList<ConstraintType> constraintTypes;
 
 	public Node(int id, String name, String shortName, GeoPoint point, ArrayList<ConstraintType> constraintTypes) {
 		this.id = id;
 		this.name = name;
 		this.shortName = shortName;
 		this.geoPoint = point;
-		constraintList = new ArrayList<Constraint>(constraintTypes.size());
-		for (int i = 0; i < constraintTypes.size(); i++) {
-			constraintList.add(new Constraint(constraintTypes.get(i)));
+		if (constraintTypes != null) {
+			this.constraintTypes = constraintTypes;
+			constraintList = new ArrayList<Constraint>(constraintTypes.size());
+			for (int i = 0; i < constraintTypes.size(); i++) {
+				constraintList.add(new Constraint(constraintTypes.get(i)));
+			}
 		}
 	}
 
@@ -86,6 +90,10 @@ public class Node implements Serializable {
 
 	public void setConstraintList(ArrayList<Constraint> constraintList) {
 		this.constraintList = constraintList;
+	}
+
+	public ArrayList<ConstraintType> getConstraintTypes() {
+		return constraintTypes;
 	}
 }
 

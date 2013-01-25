@@ -63,16 +63,18 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 	private ListPreference instant;
 	private EditTextPreference tileServer;
 	private EditTextPreference offlineMapLoc;
+	private EditTextPreference tbtip;
 
 	public static final String defaultTileServer = "http://gerbera.informatik.uni-stuttgart.de/osm/tiles/%1$d/%2$d/%3$d.png";
 	public static final String defaultMapLocation = Environment.getExternalStorageDirectory().toString();
-
+	public static final String defaulttbtip = "192.168.1.105:8080";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings_mapscreen);
 
 		tileServer = (EditTextPreference) getPreferenceScreen().findPreference("tile_server");
+		tbtip = (EditTextPreference) getPreferenceScreen().findPreference("tbtip");
 		offlineMapLoc = (EditTextPreference) getPreferenceScreen().findPreference("offline_map_location");
 		offlineMapLoc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
@@ -113,6 +115,9 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		offlineMapLoc.setSummary(offlineMapText);
 		offlineMapLoc.setText(offlineMapText);
 
+		String tbtipText = tbtip.getSharedPreferences().getString("tbtip", defaulttbtip);
+		tbtip.setSummary(tbtipText);
+		tbtip.setText(tbtipText);
 
 		updateUI(getPreferenceManager().getSharedPreferences());
 	}
@@ -143,6 +148,7 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		mapGenerator.setSummary(mapGenerator.getEntry());
 		tileServer.setSummary(sp.getString("tile_server", defaultTileServer));
 		offlineMapLoc.setSummary(sp.getString("offline_map_location", defaultMapLocation));
+		tbtip.setSummary(sp.getString("tbtip", defaulttbtip));
 	}
 
 	@Override

@@ -16,19 +16,21 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 
-public class ClearEdit extends Edit {
-	public ClearEdit(Session session) {
+public class TBTResultEdit extends Edit {
+	private final TBTResult result;
+
+	public TBTResultEdit(Session session, TBTResult result) {
 		super(session);
+		this.result = result;
 	}
 
 	@Override
 	public void perform() {
-		session.getNodeModel().clear();
-		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
-		if (session.getTBTNavigation() != null && session.getTBTNavigation().currentlyRunning()) {
-			session.getTBTNavigation().stopTBT();
-		}
+		session.settbtResult(result);
+
+		session.notifyChangeListerners(new Session.Change(Session.TBT_RESULT_CHANGE));
 	}
 }

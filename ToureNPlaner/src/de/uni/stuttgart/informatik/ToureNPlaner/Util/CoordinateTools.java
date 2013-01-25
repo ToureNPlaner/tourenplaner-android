@@ -14,21 +14,16 @@
  *    limitations under the License.
  */
 
-package de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits;
+package de.uni.stuttgart.informatik.ToureNPlaner.Util;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
-
-public class ClearEdit extends Edit {
-	public ClearEdit(Session session) {
-		super(session);
-	}
-
-	@Override
-	public void perform() {
-		session.getNodeModel().clear();
-		session.notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
-		if (session.getTBTNavigation() != null && session.getTBTNavigation().currentlyRunning()) {
-			session.getTBTNavigation().stopTBT();
-		}
+public class CoordinateTools {
+	public static final double directDistance(double lat1, double lng1, double lat2, double lng2) {
+		double earthRadius = 6370.97327862;
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLng = Math.toRadians(lng2 - lng1);
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double dist = earthRadius * c;
+		return dist * 1000;
 	}
 }
