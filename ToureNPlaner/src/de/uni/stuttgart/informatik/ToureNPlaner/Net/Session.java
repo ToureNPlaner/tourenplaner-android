@@ -183,6 +183,9 @@ public class Session implements Serializable {
 		in.defaultReadObject();
 		if (d == null)
 			loadAll();
+		cl = new SyncCoreLoader();
+		cl.setURL(d.serverInfo.getURL());
+
 		listeners = new WeakHashMap<Object, Listener>();
 	}
 

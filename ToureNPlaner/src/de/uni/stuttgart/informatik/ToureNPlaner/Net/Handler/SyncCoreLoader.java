@@ -54,7 +54,7 @@ public class SyncCoreLoader {
 		coreLevel = level;
 	}
 
-	private InputStream readCoreFileFromNetAndCache(String cacheDir) throws IOException {
+	private InputStream readCoreFileFromNetAndCache() throws IOException {
 		HttpURLConnection con = null;
 		try {
 			URL url = new URL(coreURL + pathPrefix + corePrefix + coreLevel + coreSuffix);
@@ -100,9 +100,9 @@ public class SyncCoreLoader {
 		return result;
 	}
 
-	private InputStream readCoreFileCached(File coreFile, String cacheDir) throws IOException {
+	private InputStream readCoreFileCached(File coreFile) throws IOException {
 		if (getLastModifiedOnServer() > coreFile.lastModified() - 1000 * 60 * 10) {
-			return readCoreFileFromNetAndCache(cacheDir);
+			return readCoreFileFromNetAndCache();
 		}
 		return new FileInputStream(coreFile);
 	}
@@ -111,15 +111,14 @@ public class SyncCoreLoader {
 		if (core == null) {
 			assert coreURL != null : "Core URL was not set before trying to getCoreGraph";
 			File cacheDirFile = ToureNPlanerApplication.getContext().getExternalCacheDir();
-			String cacheDir = cacheDirFile.getAbsolutePath();
 			File coreFile = new File(cacheDirFile, corePrefix + coreLevel + coreSuffix);
 			InputStream coreFileStream = null;
 			if (!coreFile.exists()) {
 				Log.d("TP", "Core does not exist");
-				coreFileStream = readCoreFileFromNetAndCache(cacheDir);
+				coreFileStream = readCoreFileFromNetAndCache();
 			} else {
 				Log.d("TP", "Core exists");
-				coreFileStream = readCoreFileCached(coreFile, cacheDir);
+				coreFileStream = readCoreFileCached(coreFile);
 			}
 			try {
 				core = ClientGraph.readClientGraph(new NullGraph(), JacksonManager.ContentType.JSON, coreFileStream);
