@@ -33,6 +33,27 @@ public interface SimpleGraph {
 	 * @return int
 	 */
 	public int getDist(int edgeId);
+
+	/**
+	 * Gets the source of the the edge given by it's edgeId (that's not an
+	 * edgeNum but a unique Id for each edge) get the Id with GetOutEdgeID() and
+	 * GetInEdgeID()
+	 *
+	 * @param edgeId
+	 * @return int
+	 */
+	public int getSource(int edgeId);
+
+	/**
+	 * Gets the target of the the edge given by it's edgeId (that's not an
+	 * edgeNum but a unique Id for each edge) get the Id with GetOutEdgeID() and
+	 * GetInEdgeID()
+	 *
+	 * @param edgeId
+	 * @return int
+	 */
+	public int getTarget(int edgeId);
+
 	/**
 	 * Gets the number of edges in the graph
 	 *
@@ -41,7 +62,8 @@ public interface SimpleGraph {
 	public int getEdgeCount();
 
 	/**
-	 * Gets the number of nodes in the graph
+	 * Gets the (maximum) number of nodes in the graph
+	 * Due to nesting the actual number of nodes might be less than what this function reports.
 	 *
 	 * @return int
 	 */
@@ -64,26 +86,6 @@ public interface SimpleGraph {
 	 * @return
 	 */
 	public int getOutEdgeId(int nodeId, int edgeNum);
-
-	/**
-	 * Gets the source of the the edge given by it's edgeId (that's not an
-	 * edgeNum but a unique Id for each edge) get the Id with GetOutEdgeID() and
-	 * GetInEdgeID()
-	 *
-	 * @param edgeId
-	 * @return int
-	 */
-	public int getSource(int edgeId);
-
-	/**
-	 * Gets the target of the the edge given by it's edgeId (that's not an
-	 * edgeNum but a unique Id for each edge) get the Id with GetOutEdgeID() and
-	 * GetInEdgeID()
-	 *
-	 * @param edgeId
-	 * @return int
-	 */
-	public int getTarget(int edgeId);
 
 	boolean hasNode(int nodeId);
 }
