@@ -326,12 +326,12 @@ public class Session implements Serializable {
 		return d.serverInfo.getURL();
 	}
 
-	public HttpURLConnection openGetConnection(String path) throws IOException {
-		URL uri = new URL(getUrl() + path);
+	public HttpURLConnection openGetConnection(String path, String url) throws IOException {
+		URL uri = new URL(url + path);
 
 		HttpURLConnection con = (HttpURLConnection) uri.openConnection();
 
-		if (d.serverInfo.getServerType() == ServerInfo.ServerType.PRIVATE) {
+		if (d.serverInfo.getServerType() == ServerInfo.ServerType.PRIVATE && url.equals(getUrl())) {
 			try {
 				((HttpsURLConnection) con).setSSLSocketFactory(ToureNPlanerApplication.getSslContext().getSocketFactory());
 				String userPassword = getUsername() + ":" + getPassword();
@@ -348,14 +348,22 @@ public class Session implements Serializable {
 		return con;
 	}
 
-	public HttpURLConnection openPostConnection(String path) throws IOException {
-		HttpURLConnection con = openGetConnection(path);
+	public HttpURLConnection openGetConnection(String path) throws IOException {
+		return openGetConnection(path, getUrl());
+	}
+
+	public HttpURLConnection openPostConnection(String path, String url) throws IOException {
+		HttpURLConnection con = openGetConnection(path, url);
 
 		con.setDoOutput(true);
 		con.setChunkedStreamingMode(0);
 		con.setRequestProperty("Content-Type", "application/json;");
 
 		return con;
+	}
+
+	public HttpURLConnection openPostConnection(String path) throws IOException {
+		return openPostConnection(path, getUrl());
 	}
 
 	public String getUsername() {
@@ -495,41 +503,60 @@ public class Session implements Serializable {
 		}
 	}
 
-	public SimpleNetworkHandler performtbtRequest(final Observer tbtrequestListener, final String tbtip) throws RequestInvalidException {
-		if (getResult().getWay() == null) {
-			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needroute));
+	public SessionAwareHandler performtbtRequestPreparation(final String tbtip) throws RequestInvalidException {
+		if (getNodeModel().getNodeVector().size() < 1) {
+			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needtargetmarker));
 		}
 
 		Location loc = ((LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//		nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
-		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start") && loc != null) {
-			ArrayList<Node> newNodeVector = new ArrayList<Node>(getNodeModel().getNodeVector().size() + 1);
-			newNodeVector.add(new Node(getNodeModel().getNodeVector().get(0).getId(), "Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()), new ArrayList<ConstraintType>()));
-			for (Node n: getNodeModel().getNodeVector()) {
-				newNodeVector.add(new Node(n.getId() + 1, n.getName(), n.getShortName(), n.getGeoPoint(), n.getConstraintTypes()));
+
+		// if we want to change the first node's position to our position we use this:
+		// nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+
+		// instead we create a new node at our current position
+		// or, if the user has already done a tbt request and is doing a new one now, the first node will be the special "Start" node and we will move it to the current gps position
+		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start")) {
+			if (loc == null) {
+				// android does not provide us with a last location :(
+				// use the first node the user set or someething. Am I doing this right?
+				loc = new Location("reverseGeocoded");
+				loc.setLatitude(getNodeModel().getNodeVector().get(0).getLaE7()/1e7);
+				loc.setLongitude(getNodeModel().getNodeVector().get(0).getLoE7() / 1e7);
 			}
-			getNodeModel().setNodeVector(newNodeVector);
+			for (Node n: getNodeModel().getNodeVector()) {
+				n.setId(n.getId() + 1);
+			}
+			getNodeModel().getNodeVector().add(0, new Node(getNodeModel().getNodeVector().get(0).getId() - 1, "Start", "start", new GeoPoint(loc.getLatitude(), loc.getLongitude()), new ArrayList<ConstraintType>()));
 			getNodeModel().incVersion();
+		} else {
+			// if we already have a start node, but no current location, there's no point in doing anything
+			if (loc != null) {
+				// should be the startnode
+				Node n = getNodeModel().getNodeVector().get(0);
+				if (!n.getName().equals("Start")) {
+					//well, shit, what am I doing?
+					return null;
+				}
+				n.setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+				getNodeModel().incVersion();
+			}
 		}
 		notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
 
-		sesshandler = performRequest(new PrepareTBTObserver(tbtrequestListener, tbtip), true);
-		return null;
+		// We will get a new route from the ToureNPlaner server and after that is finished we let the TBTRequester be notified and it will make the tbt request
+		return performRequest(new TBTRequester(tbtip), true);
 	}
 
-	private class PrepareTBTObserver implements Observer {
+	private class TBTRequester implements Observer {
 
-		private Observer tbtrequestListener;
 		private String tbtip;
 
-		public PrepareTBTObserver(Observer tbtrequestlistener, String tbtip) {
-			this.tbtrequestListener = tbtrequestlistener;
+		public TBTRequester(String tbtip) {
 			this.tbtip = tbtip;
 		}
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
-			notifyChangeListerners(new Session.Change(Session.RESULT_CHANGE));
-			nav.init(tbtip, tbtrequestListener);
+			nav.initTBT(tbtip);
 		}
 
 		@Override

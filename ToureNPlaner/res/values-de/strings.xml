@@ -78,7 +78,7 @@
   <string name="routeinfo">Routeninformationen</string>
   <string name="tbtip">Turn By Turn Server</string>
   <string name="tbtpref">Turn By Turn Einstellungen</string>
-  <string name="needroute">Benötige eine Route, um Turn By Turn Directions abzurufen</string>
+  <string name="needtargetmarker">Benötige mindestens ein Ziel, um Turn By Turn Directions abzurufen</string>
     <string name="routeinprogress">Route wird gerade aktualisiert, bitte mit neuer Route nochmal versuchen</string>
   <string name="togglecompass">Kompass ein/aus</string>
 </resources>

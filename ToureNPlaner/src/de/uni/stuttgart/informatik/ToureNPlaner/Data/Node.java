@@ -28,7 +28,7 @@ public class Node implements Serializable {
 	private String shortName;
 	private GeoPoint geoPoint;
 
-	private final int id;
+	private int id;
 
 	private ArrayList<Constraint> constraintList;
 	private ArrayList<ConstraintType> constraintTypes;
@@ -86,6 +86,10 @@ public class Node implements Serializable {
 
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public void setConstraintList(ArrayList<Constraint> constraintList) {

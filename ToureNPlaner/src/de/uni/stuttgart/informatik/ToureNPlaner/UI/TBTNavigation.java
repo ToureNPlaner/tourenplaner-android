@@ -22,7 +22,11 @@ import android.location.Location;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.Edit;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.TBTResultEdit;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.SimpleNetworkHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.TurnByTurnHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
@@ -40,7 +44,7 @@ import java.util.Locale;
 
 import static java.lang.Math.abs;
 
-public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable {
+public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable, Observer {
 	private static TextToSpeech tts;
 	private ArrayList<ArrayList<Node>> tbtway = null;
 
@@ -49,6 +53,28 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 
 	public void stopTBT() {
 		active = false;
+	}
+
+	@Override
+	public void onCompleted(AsyncHandler caller, Object object) {
+		Log.d("tp", "tbt request completed: " +object.toString());
+		Session.sesshandler = null;
+		Session.simplehandler = null;
+		Edit edit = new TBTResultEdit(session, (TBTResult) object);
+		//Log.d("tp", "tbt response: " + object.toString());
+		edit.perform();
+		//setSupportProgressBarIndeterminateVisibility(false);
+
+		session.getTBTNavigation().tbtreqcompleted();
+		active = true;
+	}
+
+	@Override
+	public void onError(AsyncHandler caller, Object object) {
+		Log.d("tp", "error: " + object.toString());
+		Session.simplehandler = null;
+		//setSupportProgressBarIndeterminateVisibility(false);
+		Toast.makeText(ToureNPlanerApplication.getContext(), "TBT Request Error:\n" + object.toString(), Toast.LENGTH_LONG).show();
 	}
 
 	private class turnmarker extends Drawable {
@@ -100,10 +126,9 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		this.ms = ms;
 	}
 
-
-
-	public void init(String tbtip, Observer tbtrequestListener) {
+	public void initTBT(String tbtip) {
 		Log.i("tp", "Doing tbt request");
+		// create a data structure out of the current ways that we can send to the tbt server
 		ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
 		if (session.getResult() == null) {
 			Toast.makeText(ToureNPlanerApplication.getContext(), "TBT called but we don't have a result, WTF", Toast.LENGTH_LONG).show();
@@ -122,7 +147,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		if (Session.simplehandler != null) {
 			Session.simplehandler.cancel(true);
 		}
-		Session.simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(tbtrequestListener, tbtip, sendnodes).execute();
+		Session.simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(this, tbtip, sendnodes).execute();
 	}
 
 	public void tbtreqcompleted() {
@@ -360,7 +385,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		return result;
 	}
 
-	//TODO: this is linear complexity for every single location update
+	//TODO: this is horrible and not even used
 	private Node[] getTwoNearestNodes(double lat, double lon) {
 		if (tbtway.size() < 2 && tbtway.get(0).size() < 2 ) {
 			return null;
@@ -394,8 +419,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 		return new Node[] {nearest1, nearest2};
 	}
 
-	//TODO: disable per default
-	private  boolean active = true;
+	private  boolean active = false;
 	public boolean currentlyRunning() {
 		return active;
 	}
@@ -425,28 +449,33 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable 
 	}
 
 	public void sayGerman(final String s)  {
-		Toast.makeText(ToureNPlanerApplication.getContext(), s, Toast.LENGTH_LONG).show();
+		Toast.makeText(ToureNPlanerApplication.getContext(), "Sprachausgabe:\n" + s, Toast.LENGTH_LONG).show();
 
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Locale l = tts.getLanguage();
-				tts.setLanguage(Locale.GERMAN);
-				// Workarounds:
-				// the german voice can't say "-" for some reason, it says something like "a" instead. wat
-				// make sure, "straße" is pronounced correctly, additional space won't hurt but will force the correct pronounciation of "st"
-				// weg often needs a long "e"
-				say(s.replace('-',' ').replace("straße", " Straße").replace("weg", " Weeg"));
-				tts.setLanguage(l);
+				// this is all sorts of wrong
+				synchronized (tts) {
+					Locale l = tts.getLanguage();
+					tts.setLanguage(Locale.GERMAN);
+					// Workarounds:
+					// the german voice can't say "-" for some reason, it says something like "a" instead. wat
+					// make sure, "straße" is pronounced correctly, additional space won't hurt but will force the correct pronounciation of "st"
+					// weg often needs a long "e"
+					say(s.replace('-',' ').replace("straße", " Straße").replace("weg", " Weeg"));
+					tts.setLanguage(l);
+				}
 			}
 		}).start();
 	}
 
 	public void sayEnglish(String s) {
-		Locale l = tts.getLanguage();
-		tts.setLanguage(Locale.ENGLISH);
-		say(s);
-		tts.setLanguage(l);
+		synchronized (tts) {
+			Locale l = tts.getLanguage();
+			tts.setLanguage(Locale.ENGLISH);
+			say(s);
+			tts.setLanguage(l);
+		}
 	}
 
 }

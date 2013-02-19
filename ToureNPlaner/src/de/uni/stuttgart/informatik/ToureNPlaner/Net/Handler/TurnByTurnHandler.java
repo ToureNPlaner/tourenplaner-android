@@ -20,6 +20,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;
@@ -34,13 +35,10 @@ public class TurnByTurnHandler extends SimpleNetworkHandler {
 	private final ArrayList<ArrayList<int[]>> nodes;
 
 
-	public TurnByTurnHandler(Observer listener, String ip, ArrayList<ArrayList<int[]>> nodes) {
+	public TurnByTurnHandler(TBTNavigation listener, String ip, ArrayList<ArrayList<int[]>> nodes) {
 		super(listener);
 		this.nodes = nodes;
 		this.ip = ip;
-
-
-
 	}
 
 	@Override

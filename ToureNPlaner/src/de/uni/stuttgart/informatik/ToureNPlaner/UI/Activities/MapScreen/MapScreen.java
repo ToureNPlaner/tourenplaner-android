@@ -39,7 +39,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.GeoCodingHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
@@ -101,35 +100,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	private GpsListener gpsListener;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
-
-
-	private final Observer tbtrequestListener = new Observer() {
-		@Override
-		public void onCompleted(AsyncHandler caller, Object object) {
-			//Log.d("tp", "tbt request completed: " +object.toString());
-			Session.sesshandler = null;
-			Session.simplehandler = null;
-			Edit edit = new TBTResultEdit(session, (TBTResult) object);
-			//Log.d("tp", "tbt response: " + object.toString());
-			edit.perform();
-			setSupportProgressBarIndeterminateVisibility(false);
-
-			session.getTBTNavigation().tbtreqcompleted();
-
-			if (!session.getTBTNavigation().currentlyRunning()) {
-				session.getTBTNavigation().startTBT();
-			}
-			session.notifyChangeListerners(new Session.Change(Session.TBT_RESULT_CHANGE | Session.RESULT_CHANGE));
-		}
-
-		@Override
-		public void onError(AsyncHandler caller, Object object) {
-			Log.d("tp", "error: " + object.toString());
-			Session.simplehandler = null;
-			setSupportProgressBarIndeterminateVisibility(false);
-			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
-		}
-	};
 
 	private final Observer requestListener = new Observer() {
 		@Override
@@ -503,7 +473,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void performtbtRequest() {
 		if (session.getResult() == null) {
-			Toast.makeText(getContext(), ToureNPlanerApplication.getContext().getString(R.string.needroute), Toast.LENGTH_LONG).show();
+			Toast.makeText(getContext(), ToureNPlanerApplication.getContext().getString(R.string.needtargetmarker), Toast.LENGTH_LONG).show();
 			return;
 		}
 		if (Session.simplehandler != null)
@@ -513,7 +483,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 			String tbtip = preferences.getString("tbtip", MapScreenPreferences.defaulttbtip);
 
-			session.performtbtRequest(tbtrequestListener, tbtip);
+			session.performtbtRequestPreparation(tbtip);
 
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
