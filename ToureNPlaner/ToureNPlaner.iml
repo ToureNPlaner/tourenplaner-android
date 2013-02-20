@@ -57,7 +57,19 @@
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Library" exported="" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/actionbar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/actionbar" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/actionbar" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/actionbar" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
