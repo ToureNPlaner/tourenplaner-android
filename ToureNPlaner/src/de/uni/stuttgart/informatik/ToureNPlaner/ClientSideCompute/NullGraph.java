@@ -30,6 +30,16 @@ public class NullGraph implements  SimpleGraph{
 	}
 
 	@Override
+	public final int getSource(int edgeId) {
+		return -1;
+	}
+
+	@Override
+	public final int getTarget(int edgeId) {
+		return -1;
+	}
+
+	@Override
 	public final int getEdgeCount() {
 		return 0;
 	}
@@ -41,21 +51,11 @@ public class NullGraph implements  SimpleGraph{
 
 	@Override
 	public final int getOutEdgeCount(int nodeId) {
-		return -1;
+		return 0;
 	}
 
 	@Override
 	public final int getOutEdgeId(int nodeId, int edgeNum) {
-		return -1;
-	}
-
-	@Override
-	public final int getSource(int edgeId) {
-		return -1;
-	}
-
-	@Override
-	public final int getTarget(int edgeId) {
 		return -1;
 	}
 
