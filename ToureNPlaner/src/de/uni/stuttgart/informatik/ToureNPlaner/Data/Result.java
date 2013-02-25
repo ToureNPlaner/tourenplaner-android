@@ -56,6 +56,10 @@ public class Result implements Serializable {
 		return way;
 	}
 
+	public void setWay(int[][] way) {
+		this.way = way;
+	}
+
 	public ArrayList<ResultNode> getPoints() {
 		return points;
 	}
@@ -142,12 +146,24 @@ public class Result implements Serializable {
 			return info.get("message");
 		}
 
+		public void setMessage(String message) {
+			info.put("message", message);
+		}
+
 		public double getDistance() {
 			return distance;
 		}
 
+		public void setDistance(float distance) {
+			this.distance = distance;
+		}
+
 		public double getTime() {
 			return time;
+		}
+
+		public void setTime(float time) {
+			this.time = time;
 		}
 
 		public static void parse(Misc misc, JsonNode node) {

@@ -47,6 +47,10 @@ public class ResultNode implements Serializable {
 		this(id, new GeoPoint(lt / 10, ln / 10), name, shortName, misc, distToPrev, timeToPrev);
 	}
 
+	public ResultNode(GeoPoint geoPoint) {
+		this(-1, geoPoint, "", "", new HashMap<String, String>(), 0, 0);
+	}
+
 	public int getId() {
 		return id;
 	}
