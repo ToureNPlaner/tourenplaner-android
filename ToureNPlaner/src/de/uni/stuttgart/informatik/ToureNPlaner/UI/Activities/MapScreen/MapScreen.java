@@ -472,18 +472,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void performtbtRequest() {
-		if (session.getResult() == null) {
-			Toast.makeText(getContext(), ToureNPlanerApplication.getContext().getString(R.string.needtargetmarker), Toast.LENGTH_LONG).show();
-			return;
-		}
-		if (Session.simplehandler != null)
-			Session.simplehandler.cancel(true);
+		if (Session.sesshandler != null)
+			Session.sesshandler.cancel(true);
 
 		try {
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 			String tbtip = preferences.getString("tbtip", MapScreenPreferences.defaulttbtip);
 
-			session.performtbtRequestPreparation(tbtip);
+			Session.sesshandler = session.performtbtRequestPreparation(tbtip);
 
 			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
@@ -494,7 +490,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				messageToast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
 				messageToast.show();
 			}
-			Session.simplehandler = null;
 		}
 	}
 
