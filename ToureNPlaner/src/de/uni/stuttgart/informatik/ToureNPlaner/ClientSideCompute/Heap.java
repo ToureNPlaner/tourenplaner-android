@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute;
 
+import com.carrotsearch.hppc.ArraySizingStrategy;
+
 import java.util.Arrays;
 import java.util.logging.Logger;
-
-import com.carrotsearch.hppc.ArraySizingStrategy;
 
 /**
  * provides heap structures for a minimum heap for ints
@@ -70,7 +70,7 @@ public class Heap {
 	/**
 	 * initializes a heap with given initialSize
 	 *
-	 * @param initialSize number of items to reserve space for
+	 * @param initialCapacity number of items to reserve space for
 	 */
 	public Heap(int initialCapacity) {
 		this(initialCapacity, new com.carrotsearch.hppc.BoundedProportionalArraySizingStrategy());
@@ -79,7 +79,7 @@ public class Heap {
 	/**
 	 * initializes a heap with given initialSize and a custom resizing strategy.
 	 *
-	 * @param initialSize number of items to reserve space for
+	 * @param initialCapacity number of items to reserve space for
 	 */
 	public Heap(int initialCapacity, ArraySizingStrategy resizer) {
 		assert resizer != null;
