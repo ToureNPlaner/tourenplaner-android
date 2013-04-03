@@ -233,8 +233,9 @@ public class Heap {
 	public final void ensureBufferSpace(int expectedAdditions) {
 		final int minlen = (heapentries + expectedAdditions) * 2;
 		if (minlen > heaparr.length) {
-			final int newLen = resizer.grow(heaparr.length, heapentries * 2, 2);
-			log.finer("Increased Heap size from " + heaparr.length + " to " +  newLen);
+			final int oldLen = heaparr.length;
+			final int newLen = resizer.grow(oldLen, heapentries * 2, expectedAdditions);
+			log.finer("Increased Heap size from " + oldLen + " to " +  newLen);
 			heaparr = Arrays.copyOf(heaparr, newLen);
 		}
 	}
