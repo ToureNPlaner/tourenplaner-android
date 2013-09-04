@@ -26,6 +26,7 @@
         <activity android:name=".UI.Activities.EditNodeScreen"
                   android:windowSoftInputMode="adjustPan|stateUnchanged"/>
         <activity android:name=".UI.Activities.LoginScreen"/>
+        <activity android:name=".UI.Activities.LoadRouteScreen"/>
         <activity android:name=".UI.Activities.MapScreenPreferences"/>
         <activity android:name=".UI.Activities.MapScreen.MapScreen" android:configChanges="orientation"/>
         <activity android:name=".UI.Activities.MainScreen" android:noHistory="true">
