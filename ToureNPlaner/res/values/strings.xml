@@ -68,6 +68,8 @@
     <string name="tbt">Turn by Turn navigation</string>
     <string name="your_location">Your location</string>
     <string name="settings">Settings</string>
+    <string name="saveroute">Save Current Route</string>
+    <string name="loadroute">Load Stored Routes</string>
 
     <!-- editnodescreen -->
     <string name="constraints">Constraints</string>

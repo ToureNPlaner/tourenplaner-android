@@ -28,4 +28,11 @@
     <item android:id="@+id/togglecompass"
           android:title="@string/togglecompass"
           android:checkable="true"/>
+    <item android:id="@+id/saveroute"
+        android:title="@string/saveroute"
+        android:icon="@android:drawable/ic_menu_save" />
+    <item android:id="@+id/loadroute"
+        android:title="@string/loadroute"
+        android:icon="@android:drawable/ic_menu_gallery" />
+
 </menu>

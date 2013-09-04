@@ -81,4 +81,6 @@
   <string name="needtargetmarker">Benötige mindestens ein Ziel, um Turn By Turn Directions abzurufen</string>
     <string name="routeinprogress">Route wird gerade aktualisiert, bitte mit neuer Route nochmal versuchen</string>
   <string name="togglecompass">Kompass ein/aus</string>
+    <string name="saveroute">Speichere Route</string>
+    <string name="loadroute">Lade gespeicherte Routen</string>
 </resources>

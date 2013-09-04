@@ -36,9 +36,12 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.RoutesStorageDbHelper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.GeoCodingHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
@@ -46,7 +49,6 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
-import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
@@ -87,6 +89,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODEMODEL = 0;
 	public static final int REQUEST_NODE = 1;
 	public static final int REQUEST_CONSTRAINTS = 2;
+	public static final int REQUEST_LOADROUTE = 3;
+
 
 	public NodeOverlay getNodeOverlay() {
 		return nodeOverlay;
@@ -305,6 +309,18 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		this.gpsmenuentry = menu.findItem(R.id.gps);
 		setupGpsMenu(menu.findItem(R.id.gps));
 		setupToggleCompassMenu(menu.findItem(R.id.togglecompass));
+
+		MenuItem saverouteitem;
+		saverouteitem = menu.findItem(R.id.saveroute);
+		saverouteitem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				RoutesStorageDbHelper helper = new RoutesStorageDbHelper(getContext());
+				helper.storeRoute(session.getResult());
+				return true;
+			}
+		});
+
 		return true;
 	}
 
@@ -466,6 +482,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.settings:
 				startActivity(new Intent(this, MapScreenPreferences.class));
 				return true;
+			case R.id.loadroute:
+				myIntent = new Intent(this, LoadRouteScreen.class);
+				myIntent.putExtra(Session.IDENTIFIER, session);
+				startActivityForResult(myIntent, REQUEST_LOADROUTE);
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -524,6 +545,21 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				switch (resultCode) {
 					case RESULT_OK:
 						edit = new ChangeNodeModelEdit(session, (ArrayList<Node>) data.getExtras().getSerializable(NodeModel.IDENTIFIER));
+						edit.perform();
+						break;
+				}
+				break;
+			case REQUEST_LOADROUTE:
+				switch (resultCode) {
+					case RESULT_OK:
+						Result r = (Result) data.getExtras().getSerializable("result");
+						ArrayList<Node> nodes = new ArrayList<Node>(r.getPoints().size());
+						for (ResultNode rn : r.getPoints()) {
+							nodes.add(new Node(rn.getId(), rn.getName(), rn.getShortName(), rn.getGeoPoint(),new ArrayList<ConstraintType>(0)));
+						}
+						edit = new ChangeNodeModelEdit(session, nodes);
+						edit.perform();
+						edit = new SetResultEdit(session, r);
 						edit.perform();
 						break;
 				}
