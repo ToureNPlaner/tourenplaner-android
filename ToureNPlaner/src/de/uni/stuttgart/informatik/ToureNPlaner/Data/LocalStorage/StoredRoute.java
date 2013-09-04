@@ -23,8 +23,8 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.CoordinateTools;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StoredRoute implements Serializable {
 	public Result result;
