@@ -35,16 +35,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.GPXExporter;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.RoutesStorageDbHelper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.StoredRoute;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.GeoCodingHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
@@ -567,6 +564,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						StoredRoute sr = (StoredRoute) data.getExtras().getSerializable("storedroute");
 
 						Result r = sr.result;
+
+						AlgorithmInfo ai = sr.getAlgorithm(session);
+						if (ai == null) {
+							//Shouldn't happen... I think
+							Toast.makeText(getContext(), "Algorithm " + ai.getName() + " not supported by this app!", Toast.LENGTH_LONG).show();
+						}
+						session.setSelectedAlgorithm(ai);
+
 						ArrayList<Node> nodes = new ArrayList<Node>(r.getPoints().size());
 						for (ResultNode rn : r.getPoints()) {
 							nodes.add(new Node(rn.getId(), rn.getName(), rn.getShortName(), rn.getGeoPoint(),new ArrayList<ConstraintType>(0)));

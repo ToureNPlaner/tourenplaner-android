@@ -73,6 +73,7 @@ public class RequestHandler extends SessionNetworkHandler {
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
 		Result result = Result.parse(type, inputStream);
 		result.setVersion(version);
+		result.getMisc().setAlgorithm(session.getSelectedAlgorithm());
 		return result;
 	}
 }

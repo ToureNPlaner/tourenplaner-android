@@ -142,6 +142,14 @@ public class Result implements Serializable {
 		float distance;
 		float time;
 
+		public String getAlgorithm() {
+			return info.get("algorithm");
+		}
+
+		public void setAlgorithm(AlgorithmInfo s) {
+			info.put("algorithm", s.getName());
+		}
+
 		public String getMessage() {
 			return info.get("message");
 		}

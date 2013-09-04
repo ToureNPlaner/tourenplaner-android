@@ -16,8 +16,11 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage;
 
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.Util.CoordinateTools;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -37,9 +40,31 @@ public class StoredRoute implements Serializable {
 		return numnodes;
 	}
 
+	private static double factor = 1000000;
+
+	public int getMeters() {
+		int meter = 0;
+		for (int[] subway : result.getWay()) {
+			for (int i = 0; i < subway.length-2; i+=2) {
+				meter += CoordinateTools.directDistance(subway[i+1]/factor, subway[i]/factor, subway[i+3]/factor, subway[i+2]/factor);
+			}
+		}
+		return meter;
+	}
+
+	public AlgorithmInfo getAlgorithm(Session session) {
+		String alg = result.getMisc().getAlgorithm();
+		for (AlgorithmInfo ai : session.getServerInfo().getAlgorithms()) {
+			if (ai.getName().equals(alg)) {
+				return ai;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public String toString() {
 		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return dateFormater.format(new Date(timestamp*1000)) + " (" + getNumnodes() +")";
+		return dateFormater.format(new Date(timestamp*1000)) + " (" + result.getMisc().getAlgorithm() +  ", " + result.getMisc().getDistance() / 1000 +" Kilometer)";
 	}
 }

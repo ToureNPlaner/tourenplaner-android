@@ -195,6 +195,7 @@ public class ClientComputeHandler extends SessionAwareHandler {
 
 	private Result readResult(JacksonManager.ContentType type, InputStream inputStream) throws Exception {
 		Result result = Result.parse(type, inputStream);
+		result.getMisc().setAlgorithm(session.getSelectedAlgorithm());
 		result.setVersion(version);
 		return result;
 	}
