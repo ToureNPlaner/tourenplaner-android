@@ -82,6 +82,6 @@
     <string name="routeinprogress">Route wird gerade aktualisiert, bitte mit neuer Route nochmal versuchen</string>
   <string name="togglecompass">Kompass ein/aus</string>
     <string name="saveroute">Speichere Route</string>
-    <string name="loadroute">Lade gespeicherte Routen</string>
+    <string name="loadroute">Gespeicherte Routen</string>
     <string name="exportgpxroute">Exportiere Route als GPX</string>
 </resources>

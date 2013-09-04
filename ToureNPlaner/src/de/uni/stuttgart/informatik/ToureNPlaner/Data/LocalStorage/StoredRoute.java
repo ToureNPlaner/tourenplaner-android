@@ -30,6 +30,7 @@ public class StoredRoute implements Serializable {
 	public Result result;
 	public long timestamp;
 	public TBTResult tbtresult;
+	public String _ID;
 
 	public int getNumnodes() {
 		int[][] subways = result.getWay();

@@ -18,10 +18,14 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.RoutesStorageDbHelper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.StoredRoute;
@@ -35,6 +39,9 @@ public class LoadRouteScreen extends SherlockActivity{
 	List<StoredRoute> routes;
 	private Session session;
 
+	ListView listview;
+	ArrayAdapter<StoredRoute> adapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
@@ -43,9 +50,9 @@ public class LoadRouteScreen extends SherlockActivity{
 		setContentView(R.layout.storedroutes);
 		RoutesStorageDbHelper helper = new RoutesStorageDbHelper(ToureNPlanerApplication.getContext());
 		routes = helper.LoadRoutes();
-		ListView listview = (ListView) findViewById(R.id.routeslist);
+		listview = (ListView) findViewById(R.id.routeslist);
 
-		ArrayAdapter<StoredRoute> adapter = new ArrayAdapter<StoredRoute>(ToureNPlanerApplication.getContext(), R.layout.list_item,routes);
+		adapter = new ArrayAdapter<StoredRoute>(ToureNPlanerApplication.getContext(), R.layout.list_item,routes);
 		listview.setAdapter(adapter);
 
 		listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,5 +69,37 @@ public class LoadRouteScreen extends SherlockActivity{
 				finish();
 			}
 		});
+
+		registerForContextMenu(listview);
+
+	}
+
+
+	private final int deleteid = 5;
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenu.ContextMenuInfo menuInfo) {
+		if (v.getId()==R.id.routeslist) {
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+			//menu.setHeaderTitle(Countries[info.position]);
+			//String[] menuItems = getResources().getStringArray(R.array.menu);
+			StoredRoute item = routes.get(info.position);
+			menu.add(item.toString());
+			menu.add(Menu.NONE, deleteid, 0, "Delete this route");
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		if (item.getItemId() == deleteid) {
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+			Toast.makeText(ToureNPlanerApplication.getContext(), "Deleting Item...", Toast.LENGTH_LONG).show();
+			RoutesStorageDbHelper helper = new RoutesStorageDbHelper(ToureNPlanerApplication.getContext());
+			StoredRoute r = routes.get(info.position);
+			helper.deleteRoute(r);
+			routes.remove(info.position);
+			adapter.notifyDataSetChanged();
+		}
+		return true;
 	}
 }

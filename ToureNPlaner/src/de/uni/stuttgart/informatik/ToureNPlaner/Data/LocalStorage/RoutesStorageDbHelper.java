@@ -52,7 +52,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_ENTRIES =
 			"DROP TABLE IF EXISTS " + TABLE_NAME;
 
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "FeedReader.db";
 
 	public RoutesStorageDbHelper(Context context) {
@@ -138,7 +138,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 		long timestamp;
 		c.moveToFirst();
 		while (!c.isAfterLast()) {
-			//long itemId = c.getLong(c.getColumnIndexOrThrow(_ID));
+			String itemId = c.getString(c.getColumnIndexOrThrow(_ID));
 			timestamp = c.getLong(c.getColumnIndexOrThrow(COLUMN_NAME_TIMESTAMP));
 			byte[] serializedRoute = c.getBlob(c.getColumnIndexOrThrow(COLUMN_NAME_ROUTEDATA));
 			byte[] serializedtbtRoute = c.getBlob(c.getColumnIndexOrThrow(COLUMN_NAME_TBTROUTEDATA));
@@ -152,6 +152,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 			route.timestamp = timestamp;
 			route.result = result;
 			route.tbtresult = tbtresult;
+			route._ID = itemId;
 			Log.d("TP", "Loaded route with timestamp " + route.timestamp + " and " + route.getNumnodes() + " nodes");
 			list.add(route);
 			c.moveToNext();
@@ -183,5 +184,15 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 		} catch(IOException e) {
 			return null;
 		}
+	}
+
+	public void deleteRoute(StoredRoute storedRoute) {
+		SQLiteDatabase db = getWritableDatabase();
+		// Define 'where' part of query.
+		String selection = _ID  + " LIKE ?";
+		// Specify arguments in placeholder order.
+		String[] selectionArgs = { String.valueOf(storedRoute._ID) };
+		// Issue SQL statement.
+		db.delete(TABLE_NAME, selection, selectionArgs);
 	}
 }
