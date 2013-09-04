@@ -315,7 +315,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				RoutesStorageDbHelper helper = new RoutesStorageDbHelper(getContext());
-				helper.storeRoute(session);
+				if (session.getResult() != null && session.getResult().getPoints().size() > 0) {
+					helper.storeRoute(session);
+				} else {
+					Toast.makeText(getContext(), "Not saving empty route", Toast.LENGTH_LONG).show();
+				}
 				return true;
 			}
 		});
