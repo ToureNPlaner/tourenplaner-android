@@ -34,5 +34,7 @@
     <item android:id="@+id/loadroute"
         android:title="@string/loadroute"
         android:icon="@android:drawable/ic_menu_gallery" />
-
+    <item android:id="@+id/exportgpxroute"
+        android:title="@string/exportgpxroute"
+        android:icon="@android:drawable/ic_menu_save" />
 </menu>

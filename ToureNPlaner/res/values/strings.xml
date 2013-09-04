@@ -110,4 +110,5 @@
     <string name="needtargetmarker">Can\'t get Turn by Turn directions without at least one target marker</string>
     <string name="routeinprogress">Route retrieval in progress, try again when it is completed</string>
     <string name="togglecompass">Toggle Compass</string>
+    <string name="exportgpxroute">Export Route as GPX</string>
 </resources>

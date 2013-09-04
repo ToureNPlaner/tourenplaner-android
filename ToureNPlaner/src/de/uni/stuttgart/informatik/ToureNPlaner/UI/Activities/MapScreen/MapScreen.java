@@ -38,6 +38,7 @@ import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.GPXExporter;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.RoutesStorageDbHelper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
@@ -310,13 +311,22 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		setupGpsMenu(menu.findItem(R.id.gps));
 		setupToggleCompassMenu(menu.findItem(R.id.togglecompass));
 
-		MenuItem saverouteitem;
-		saverouteitem = menu.findItem(R.id.saveroute);
+		MenuItem saverouteitem = menu.findItem(R.id.saveroute);
 		saverouteitem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				RoutesStorageDbHelper helper = new RoutesStorageDbHelper(getContext());
 				helper.storeRoute(session.getResult());
+				return true;
+			}
+		});
+
+		MenuItem savegpxroute = menu.findItem(R.id.exportgpxroute);
+		savegpxroute.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				//TODO: make name
+				GPXExporter.exportGPX(session.getResult(), "gpxroute.gpx");
 				return true;
 			}
 		});
