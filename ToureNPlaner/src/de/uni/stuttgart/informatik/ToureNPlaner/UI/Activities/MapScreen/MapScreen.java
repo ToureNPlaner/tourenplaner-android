@@ -571,6 +571,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 							Toast.makeText(getContext(), "Algorithm " + ai.getName() + " not supported by this app!", Toast.LENGTH_LONG).show();
 						}
 						session.setSelectedAlgorithm(ai);
+						getSupportActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
 
 						ArrayList<Node> nodes = new ArrayList<Node>(r.getPoints().size());
 						for (ResultNode rn : r.getPoints()) {
