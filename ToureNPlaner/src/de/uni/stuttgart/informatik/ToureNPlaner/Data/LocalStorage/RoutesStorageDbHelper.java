@@ -24,6 +24,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.io.*;
@@ -43,6 +45,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 					_ID + " INTEGER PRIMARY KEY," +
 					COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
 					COLUMN_NAME_ROUTEDATA + BINARY_TYPE + COMMA_SEP +
+					COLUMN_NAME_TBTROUTEDATA + BINARY_TYPE + COMMA_SEP +
 					COLUMN_NAME_TIMESTAMP + INT_TYPE +
 					" )";
 
@@ -67,21 +70,31 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public void storeRoute(Result result) {
+	public void storeRoute(Session session) {
 		// Gets the data repository in write mode
 		SQLiteDatabase db = getWritableDatabase();
 
 // Create a new map of values, where column names are the keys
 		ContentValues values = new ContentValues();
 		//values.put(RoutesStorageContract.RoutesEntry.COLUMN_NAME_ENTRY_ID, result.);
-		byte[] serializedroute = serializeObject(result);
-		if (result == null) {
+		byte[] serializedroute = serializeObject(session.getResult());
+		if (serializedroute == null) {
 			//TODO: Log something
 			return;
 		}
+
+		byte[] serializedtbtroute = null;
+		if (session.gettbtResult() != null) {
+			serializedtbtroute = serializeObject(session.gettbtResult());
+		}
+		if (serializedtbtroute == null) {
+			//whatever
+		}
+
 		long timestamp = System.currentTimeMillis() / 1000;
 		values.put(COLUMN_NAME_ROUTEDATA, serializedroute);
 		values.put(COLUMN_NAME_TIMESTAMP, timestamp);
+		values.put(COLUMN_NAME_TBTROUTEDATA, serializedtbtroute);
 
 // Insert the new row, returning the primary key value of the new row
 		long newRowId;
@@ -103,6 +116,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 		String[] projection = {
 				_ID,
 				COLUMN_NAME_ROUTEDATA,
+				COLUMN_NAME_TBTROUTEDATA,
 				COLUMN_NAME_TIMESTAMP
 		};
 
@@ -127,7 +141,9 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 			//long itemId = c.getLong(c.getColumnIndexOrThrow(_ID));
 			timestamp = c.getLong(c.getColumnIndexOrThrow(COLUMN_NAME_TIMESTAMP));
 			byte[] serializedRoute = c.getBlob(c.getColumnIndexOrThrow(COLUMN_NAME_ROUTEDATA));
+			byte[] serializedtbtRoute = c.getBlob(c.getColumnIndexOrThrow(COLUMN_NAME_TBTROUTEDATA));
 			Result result = (Result) deserializeObject(serializedRoute);
+			TBTResult tbtresult = (TBTResult) deserializeObject(serializedtbtRoute);
 			if (result == null) {
 				Log.d("TP", "Tried to load invalid result from database, continue");
 				continue;
@@ -135,6 +151,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 			StoredRoute route = new StoredRoute();
 			route.timestamp = timestamp;
 			route.result = result;
+			route.tbtresult = tbtresult;
 			Log.d("TP", "Loaded route with timestamp " + route.timestamp + " and " + route.getNumnodes() + " nodes");
 			list.add(route);
 			c.moveToNext();

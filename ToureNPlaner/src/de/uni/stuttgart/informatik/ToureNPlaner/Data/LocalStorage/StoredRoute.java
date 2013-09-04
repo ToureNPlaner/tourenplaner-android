@@ -17,13 +17,16 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.TBTResult;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-public class StoredRoute {
+public class StoredRoute implements Serializable {
 	public Result result;
 	public long timestamp;
+	public TBTResult tbtresult;
 
 	public int getNumnodes() {
 		int[][] subways = result.getWay();

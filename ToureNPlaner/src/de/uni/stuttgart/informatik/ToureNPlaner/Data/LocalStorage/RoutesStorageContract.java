@@ -28,6 +28,7 @@ public final class RoutesStorageContract {
         public static final String TABLE_NAME = "routes";
         public static final String COLUMN_NAME_ENTRY_ID = "route_id";
         public static final String COLUMN_NAME_ROUTEDATA = "routedata";
+        public static final String COLUMN_NAME_TBTROUTEDATA = "tbtroutedata";
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
     }
 }

@@ -57,7 +57,7 @@ public class LoadRouteScreen extends SherlockActivity{
 				//Log.d("TP", "Set route " + item.toString());
 				//session.notifyChangeListerners(new Session.Change(Session.RESULT_CHANGE));
 				Intent i = new Intent();
-				i.putExtra("result", item.result);
+				i.putExtra("storedroute", item);
 				setResult(RESULT_OK, i);
 				finish();
 			}
