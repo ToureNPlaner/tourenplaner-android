@@ -65,7 +65,10 @@ public class StoredRoute implements Serializable {
 
 	@Override
 	public String toString() {
+		boolean hasTBT = tbtresult != null && tbtresult.hasActualResult();
 		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return dateFormater.format(new Date(timestamp*1000)) + " (" + result.getMisc().getAlgorithm() +  ", " + result.getMisc().getDistance() / 1000 +" Kilometer)";
+		return dateFormater.format(new Date(timestamp*1000)) + " (" + result.getMisc().getAlgorithm() +  ", "
+				+ result.getMisc().getDistance() / 1000 +" Kilometer" +
+				(hasTBT ? ", +Turn by Turn Directions)" : ")");
 	}
 }

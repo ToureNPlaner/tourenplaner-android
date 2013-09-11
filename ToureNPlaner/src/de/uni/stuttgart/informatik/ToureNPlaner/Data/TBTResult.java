@@ -39,23 +39,32 @@ public class TBTResult implements Serializable {
 		return dist;
 	}
 
+	public boolean hasActualResult() {
+		return streets != null && !streets.isEmpty();
+	}
+
 	public List<String> getStreetNames() {
 		return streets;
 	}
+
 
 	public ArrayList<ArrayList<Node>> gettbtway() {
 		return tbtway;
 	}
 
+	public void settbtway(ArrayList<ArrayList<Node>> tbtway) {
+		this.tbtway = tbtway;
+	}
+
 	private int dist = 0;
 	List streets = new ArrayList<String>();
 
-	private static ArrayList<ArrayList<Node>> tbtway = null;
+	private ArrayList<ArrayList<Node>> tbtway = null;
 	public static TBTResult parse(JacksonManager.ContentType type, InputStream stream) throws IOException {
 		JsonNode result = JacksonManager.getMapper(type).readValue(stream, JsonNode.class);
 
 		TBTResult r = new TBTResult();
-		tbtway = new ArrayList<ArrayList<Node>>();
+		ArrayList<ArrayList<Node>> tbtway = new ArrayList<ArrayList<Node>>();
 		double onestreetdist = 0;
 		for (JsonNode onestreetlist : result.get("streets")) {
 			ArrayList<Node> onestreet = new ArrayList<Node>(onestreetlist.size());
@@ -79,6 +88,7 @@ public class TBTResult implements Serializable {
 			r.dist += onestreetdist;
 			onestreetdist = 0;
 		}
+		r.settbtway(tbtway);
 		return r;
 	}
 

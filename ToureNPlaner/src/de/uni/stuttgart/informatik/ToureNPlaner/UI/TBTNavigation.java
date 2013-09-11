@@ -120,10 +120,9 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 
 	Session session;
 
-	public TBTNavigation(Session s, MapScreen ms) {
+	public TBTNavigation(Session s) {
 		tts = new TextToSpeech(ToureNPlanerApplication.getContext(), this);
 		session = s;
-		this.ms = ms;
 	}
 
 	public void initTBT(String tbtip) {

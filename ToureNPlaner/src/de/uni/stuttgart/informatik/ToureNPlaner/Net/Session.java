@@ -95,7 +95,7 @@ public class Session implements Serializable {
 		nodeModel = new NodeModel();
 		result = new Result();
 		cl = new SyncCoreLoader();
-		tbtresult = new TBTResult();
+		tbtresult = null;
 		// Also initialize the files on the disc
 		saveData();
 		saveNodeModel();
@@ -273,6 +273,10 @@ public class Session implements Serializable {
 				}
 			}
 		}).start();
+	}
+
+	public void setTBTNavigation(TBTNavigation nav) {
+		this.nav = nav;
 	}
 
 	public TBTNavigation getTBTNavigation() {
@@ -503,6 +507,17 @@ public class Session implements Serializable {
 		}
 	}
 
+	/**
+	 * Stops Turn by Turn navigation and discards all turn by turn navigation data
+	 */
+	public void removetbt() {
+		if (getTBTNavigation() != null && getTBTNavigation().currentlyRunning()) {
+			getTBTNavigation().stopTBT();
+		}
+		settbtResult(null);
+		setTBTNavigation(null);
+	}
+
 	public SessionAwareHandler performtbtRequestPreparation(final String tbtip) throws RequestInvalidException {
 		if (getNodeModel().getNodeVector().size() < 1) {
 			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needtargetmarker));
@@ -544,18 +559,20 @@ public class Session implements Serializable {
 		notifyChangeListerners(new Session.Change(Session.MODEL_CHANGE));
 
 		// We will get a new route from the ToureNPlaner server and after that is finished we let the TBTRequester be notified and it will make the tbt request
-		return performRequest(new TBTRequester(tbtip), true);
+		return performRequest(new TBTRequester(tbtip, this), true);
 	}
 
 	private class TBTRequester implements Observer {
 
 		private String tbtip;
-
-		public TBTRequester(String tbtip) {
+		private Session session;
+		public TBTRequester(String tbtip, Session s) {
 			this.tbtip = tbtip;
+			this.session = s;
 		}
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
+			nav = new TBTNavigation(session);
 			nav.initTBT(tbtip);
 		}
 

@@ -476,7 +476,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			case R.id.tbt:
 				performtbtRequest();
-				Session.nav = new TBTNavigation(session,this);
+				Session.nav = new TBTNavigation(session);
 				mapView.getController().setZoom(mapView.getMapGenerator().getZoomLevelMax());
 				gpsListener.setFollowing(true);
 				gpsmenuentry.setChecked(true);
@@ -496,6 +496,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				startActivity(new Intent(this, MapScreenPreferences.class));
 				return true;
 			case R.id.loadroute:
+				session.removetbt();
 				myIntent = new Intent(this, LoadRouteScreen.class);
 				myIntent.putExtra(Session.IDENTIFIER, session);
 				startActivityForResult(myIntent, REQUEST_LOADROUTE);
@@ -590,6 +591,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 						if (tr != null) {
 							edit = new TBTResultEdit(session,tr);
 							edit.perform();
+
+							session.setTBTNavigation(new TBTNavigation(session));
+							session.getTBTNavigation().tbtreqcompleted();
+							session.getTBTNavigation().startTBT();
 						}
 
 						if (session.getResult().getPoints().size() > 0) {
@@ -718,6 +723,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			@Override
 			public void run() {
 				if (change.isResultChange()) {
+					session.removetbt();
+					Log.d("TP", "discarded tbt data");
 					if (session.getResult() == null) {
 						addPathToMap(null);
 						((TextView) findViewById(R.id.overlay)).setText("");

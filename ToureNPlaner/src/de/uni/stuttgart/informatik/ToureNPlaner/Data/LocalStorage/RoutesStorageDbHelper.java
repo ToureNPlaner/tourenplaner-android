@@ -107,6 +107,7 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 			Log.d("TP", successmsg);
 			Toast.makeText(ToureNPlanerApplication.getContext(), successmsg, Toast.LENGTH_LONG).show();
 		}
+		db.close();
 	}
 
 	public List<StoredRoute> LoadRoutes() {
@@ -142,21 +143,28 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 			timestamp = c.getLong(c.getColumnIndexOrThrow(COLUMN_NAME_TIMESTAMP));
 			byte[] serializedRoute = c.getBlob(c.getColumnIndexOrThrow(COLUMN_NAME_ROUTEDATA));
 			byte[] serializedtbtRoute = c.getBlob(c.getColumnIndexOrThrow(COLUMN_NAME_TBTROUTEDATA));
-			Result result = (Result) deserializeObject(serializedRoute);
-			TBTResult tbtresult = (TBTResult) deserializeObject(serializedtbtRoute);
-			if (result == null) {
-				Log.d("TP", "Tried to load invalid result from database, continue");
-				continue;
-			}
+
 			StoredRoute route = new StoredRoute();
 			route.timestamp = timestamp;
-			route.result = result;
-			route.tbtresult = tbtresult;
+			if (serializedRoute != null) {
+				Result result = (Result) deserializeObject(serializedRoute);
+				if (result == null) {
+					Log.d("TP", "Tried to load invalid result from database, continue");
+					continue;
+				}
+				route.result = result;
+			}
+			if (serializedtbtRoute != null) {
+				TBTResult tbtresult = (TBTResult) deserializeObject(serializedtbtRoute);
+
+				route.tbtresult = tbtresult;
+			}
 			route._ID = itemId;
 			Log.d("TP", "Loaded route with timestamp " + route.timestamp + " and " + route.getNumnodes() + " nodes");
 			list.add(route);
 			c.moveToNext();
 		}
+		db.close();
 		return list;
 	}
 
@@ -180,8 +188,10 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 			in.close();
 			return object;
 		} catch(ClassNotFoundException e) {
+			Log.d("TP", "class not found while reading object", e);
 			return null;
 		} catch(IOException e) {
+			Log.d("TP", "error reading object", e);
 			return null;
 		}
 	}
