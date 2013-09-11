@@ -67,9 +67,11 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 
 	public static final String defaultTileServer = "http://gerbera.informatik.uni-stuttgart.de/osm/tiles/%1$d/%2$d/%3$d.png";
 	public static final String defaultMapLocation = Environment.getExternalStorageDirectory().toString();
-	public static final String defaulttbtip = "192.168.1.105:8080";
+	public static String defaulttbtip = "";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		defaulttbtip = getString(R.string.defaulttbtip);
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings_mapscreen);
 
