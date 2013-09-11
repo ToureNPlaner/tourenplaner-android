@@ -111,13 +111,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		}
 	}
 
-
-	public static void say(String s) {
-		lastdirectionspeech = (new Date()).getTime();
-		Log.i("tp", "said: " + s);
-		tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
-	}
-
 	Session session;
 
 	public TBTNavigation(Session s) {
@@ -149,8 +142,20 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		Session.simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(this, tbtip, sendnodes).execute();
 	}
 
+	boolean TTSInitialized = false;
 	public void tbtreqcompleted() {
-		sayEnglish("Turn by Turn request complete");
+		if (!TTSInitialized) {
+			try {
+				Thread.sleep(1000,0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		if (!TTSInitialized) {
+			Log.w("TP", "TTS Initialization taking too long. Not waiting any longer for it");
+		} else {
+			say("Navigationsdaten erhalten");
+		}
 		tbtway = session.gettbtResult().gettbtway();
 
 		// 10 streets with 10 characters each?
@@ -192,16 +197,21 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 	public void onInit(int status) {
 		if (status == TextToSpeech.SUCCESS) {
 
+			//TODO: i18n
 			int result = tts.setLanguage(Locale.GERMAN);
 
-			if (result == TextToSpeech.LANG_MISSING_DATA
-					|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
+			if (result == TextToSpeech.LANG_MISSING_DATA) {
+				Log.e("TTS", "Missing data for this language");
+			}
+			if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
 				Log.e("TTS", "This Language is not supported");
 			} else {
+				Log.d("TTS", "ToureNPlaner: TTS initialized");
 				//say("Text to Speech initialized!");
+				TTSInitialized = true;
 			}
 		} else {
-			Log.e("TTS", "Initilization Failed!");
+			Log.e("TTS", "ToureNPlaner: TTS Initialization Failed!");
 		}
 	}
 
@@ -265,7 +275,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 			}
 		}
 		if (nodesindex == -1 || tbtwayindex == -1) {
-			sayGerman("Irgendetwas stimmt hier nicht!");
+			say("Irgendetwas stimmt hier nicht!");
 			return;
 		}
 
@@ -287,10 +297,10 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 			// we are on the street where the destination is
 			Log.d("tp", tempdist + " to destination");
 			if (tempdist < 20) {
-				sayGerman("Sie erreichen Ihr Ziel in " + (int) tempdist + " Metern!");
+				say("Sie erreichen Ihr Ziel in " + (int) tempdist + " Metern!");
 				this.active = false;
 			} else {
-				sayGerman("Ihr Ziel liegt auf dieser Straße in " + (int) tempdist + " Metern!");
+				say("Ihr Ziel liegt auf dieser Straße in " + (int) tempdist + " Metern!");
 			}
 			return;
 		}
@@ -359,8 +369,8 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		if ((new Date()).getTime() - lastdirectionspeech < 5000) {
 			return;
 		}
-		String say = "In " + (int) tempdist + " Metern " + directionwords + " auf " + nextstreetname + "!";
-		sayGerman(say);
+		String s = "In " + (int) tempdist + " Metern " + directionwords + " auf " + nextstreetname + "!";
+		say(s);
 
 		lastlat = lat;
 		lastlon = lon;
@@ -447,34 +457,30 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		return degrees * (Math.PI / 180);
 	}
 
-	public void sayGerman(final String s)  {
-		Toast.makeText(ToureNPlanerApplication.getContext(), "Sprachausgabe:\n" + s, Toast.LENGTH_LONG).show();
+	public void say(String s)  {
+		Toast.makeText(ToureNPlanerApplication.getContext(), "Saying...\n" + s, Toast.LENGTH_LONG).show();
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// this is all sorts of wrong
-				synchronized (tts) {
-					Locale l = tts.getLanguage();
-					tts.setLanguage(Locale.GERMAN);
-					// Workarounds:
-					// the german voice can't say "-" for some reason, it says something like "a" instead. wat
-					// make sure, "straße" is pronounced correctly, additional space won't hurt but will force the correct pronounciation of "st"
-					// weg often needs a long "e"
-					say(s.replace('-',' ').replace("straße", " Straße").replace("weg", " Weeg"));
-					tts.setLanguage(l);
-				}
-			}
-		}).start();
-	}
-
-	public void sayEnglish(String s) {
-		synchronized (tts) {
-			Locale l = tts.getLanguage();
-			tts.setLanguage(Locale.ENGLISH);
-			say(s);
-			tts.setLanguage(l);
+		if (tts == null) {
+			// Not a good idea I think, race conditions?
+			//tts = new TextToSpeech(ToureNPlanerApplication.getContext(), this);
+			Log.e("TP", "Text to speech was null, not saying [" + s + "]");
+			return;
 		}
-	}
+		if (tts.getLanguage() == null) {
+			Log.e("TP", "Text to speech language was for [" + s + "], setting to german");
+			tts.setLanguage(Locale.GERMAN);
+		}
 
+		if (Locale.GERMAN.equals(tts.getLanguage())) {
+			lastdirectionspeech = (new Date()).getTime();
+
+			// Workarounds:
+			// the german voice can't say "-" for some reason, it says something like "a" instead. wat
+			// make sure, "straße" is pronounced correctly, additional space won't hurt but will force the correct pronounciation of "st"
+			// weg often needs a long "e"
+			s = s.replace('-',' ').replace("straße", " Straße").replace("weg", " Weeg");
+		}
+		Log.i("tp", "Saying: [" + s + "] with locale " + tts.getLanguage());
+		tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+	}
 }

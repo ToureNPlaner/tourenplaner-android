@@ -532,6 +532,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		if (Session.sesshandler != null && !force)
 			return;
 
+		session.removetbt();
+		Log.d("TP", "discarded tbt data");
+
 		if (Session.sesshandler != null)
 			Session.sesshandler.cancel(true);
 
@@ -723,8 +726,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			@Override
 			public void run() {
 				if (change.isResultChange()) {
-					session.removetbt();
-					Log.d("TP", "discarded tbt data");
 					if (session.getResult() == null) {
 						addPathToMap(null);
 						((TextView) findViewById(R.id.overlay)).setText("");
