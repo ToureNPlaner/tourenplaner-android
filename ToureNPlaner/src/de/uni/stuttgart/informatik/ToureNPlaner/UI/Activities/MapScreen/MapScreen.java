@@ -49,6 +49,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.CustomTileDownloader;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Overlays.FastWayOverlay;
@@ -67,6 +68,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistance;
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
@@ -476,7 +478,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			case R.id.tbt:
 				performtbtRequest();
-				Session.nav = new TBTNavigation(session);
+				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ToureNPlanerApplication.getContext());
+				String tbtlocale = preferences.getString("tbtlocale", ToureNPlanerApplication.getContext().getResources().getConfiguration().locale.getLanguage());
+				Session.nav = new TBTNavigation(session, new Locale(tbtlocale));
 				mapView.getController().setZoom(mapView.getMapGenerator().getZoomLevelMax());
 				gpsListener.setFollowing(true);
 				gpsmenuentry.setChecked(true);
@@ -595,7 +599,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 							edit = new TBTResultEdit(session,tr);
 							edit.perform();
 
-							session.setTBTNavigation(new TBTNavigation(session));
+							SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ToureNPlanerApplication.getContext());
+							String tbtlocale = preferences.getString("tbtlocale", ToureNPlanerApplication.getContext().getResources().getConfiguration().locale.getLanguage());
+							session.setTBTNavigation(new TBTNavigation(session, new Locale(tbtlocale)));
 							session.getTBTNavigation().tbtreqcompleted();
 							session.getTBTNavigation().startTBT();
 						}

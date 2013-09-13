@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tbtreceiveerror">Fehler beim Empfangen der Turn by Turn Navigationsdaten</string>
+    <string name="tbtreceived">Turn by Turn Navigationsdaten empfangen</string>
+    <string name="tbtreceivedroute">Empfangene Route:</string>
+    <string name="targetonthisstreet">Ihr Ziel liegt auf dieser Straße!</string>
+    <string name="tilltarget">Meter bis zum Ziel!</string>
+    <string name="unknownstreetname">eine unbenannte Straße</string>
+    <string name="drivestraight">geradeaus fahren</string>
+    <string name="turnleft">nach links abbiegen</string>
+    <string name="turnright">nach rechts abbiegen</string>
+    <string name="turnaround">wenden</string>
+    <string name="meters">Metern</string>
+    <string name="in">in</string>
+    <string name="onto">auf</string>
+</resources>

@@ -17,8 +17,10 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
@@ -39,6 +41,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.zip.GZIPInputStream;
@@ -49,7 +52,6 @@ public class Session implements Serializable {
 	public static final String DIRECTORY = "session";
 	public static SimpleNetworkHandler simplehandler = null;
 	public static SessionAwareHandler sesshandler = null;
-
 	double direction = 0;
 	public boolean compassenabled = false;
 
@@ -572,7 +574,9 @@ public class Session implements Serializable {
 		}
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
-			nav = new TBTNavigation(session);
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ToureNPlanerApplication.getContext());
+			String tbtlocale = preferences.getString("tbtlocale", ToureNPlanerApplication.getContext().getResources().getConfiguration().locale.getLanguage());
+			nav = new TBTNavigation(session, new Locale(tbtlocale));
 			nav.initTBT(tbtip);
 		}
 

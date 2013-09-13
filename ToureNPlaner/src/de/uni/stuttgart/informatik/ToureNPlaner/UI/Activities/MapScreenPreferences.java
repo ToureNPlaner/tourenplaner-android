@@ -30,7 +30,11 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.Menu;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
+
+import java.util.Locale;
 
 @SuppressWarnings("deprecation")
 public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
@@ -64,20 +68,25 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 	private EditTextPreference tileServer;
 	private EditTextPreference offlineMapLoc;
 	private EditTextPreference tbtip;
+	private ListPreference tbtlocale;
 
-	public static final String defaultTileServer = "http://gerbera.informatik.uni-stuttgart.de/osm/tiles/%1$d/%2$d/%3$d.png";
 	public static final String defaultMapLocation = Environment.getExternalStorageDirectory().toString();
+	public static String defaultTileServer = "";
 	public static String defaulttbtip = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		defaulttbtip = getString(R.string.defaulttbtip);
+		defaultTileServer = getString(R.string.defaulttileserver);
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings_mapscreen);
 
+		// TODO: this is deprecated!
 		tileServer = (EditTextPreference) getPreferenceScreen().findPreference("tile_server");
 		tbtip = (EditTextPreference) getPreferenceScreen().findPreference("tbtip");
+		tbtlocale = (ListPreference) getPreferenceScreen().findPreference("tbtlocale");
 		offlineMapLoc = (EditTextPreference) getPreferenceScreen().findPreference("offline_map_location");
+
 		offlineMapLoc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -120,6 +129,33 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		String tbtipText = tbtip.getSharedPreferences().getString("tbtip", defaulttbtip);
 		tbtip.setSummary(tbtipText);
 		tbtip.setText(tbtipText);
+
+
+		Locale currentlocale = (ToureNPlanerApplication.getContext().getResources().getConfiguration().locale);
+		boolean currentsupported = false;
+		String[] localesvalues = new String[TBTNavigation.supportedLocales.length];
+		for (int i = 0; i < TBTNavigation.supportedLocales.length; i++) {
+			localesvalues[i] = TBTNavigation.supportedLocales[i].getDisplayLanguage();
+		}
+
+		String[] localescode = new String[TBTNavigation.supportedLocales.length];
+		for (int i = 0; i < TBTNavigation.supportedLocales.length; i++) {
+			localescode[i] = TBTNavigation.supportedLocales[i].getISO3Language();
+			if (new Locale(localescode[i]).equals(currentlocale)) {
+				currentsupported = true;
+			}
+		}
+
+		if (!currentsupported) {
+			currentlocale = TBTNavigation.supportedLocales[0];
+		}
+		String savedlocalecode = tbtlocale.getSharedPreferences().getString("tbtlocale", currentlocale.getISO3Language());
+
+		//TODO: update gui when changed
+		tbtlocale.setEntries(localesvalues);
+		tbtlocale.setEntryValues(localescode);
+		tbtlocale.setValue(new Locale(savedlocalecode).getDisplayLanguage());
+		tbtlocale.setSummary(new Locale(savedlocalecode).getDisplayLanguage());
 
 		updateUI(getPreferenceManager().getSharedPreferences());
 	}

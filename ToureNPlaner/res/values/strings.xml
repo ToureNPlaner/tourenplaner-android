@@ -111,4 +111,5 @@
     <string name="routeinprogress">Route retrieval in progress, try again when it is completed</string>
     <string name="togglecompass">Toggle Compass</string>
     <string name="exportgpxroute">Export Route as GPX</string>
+    <string name="tbtlocale">Turn by Turn Navigation Language</string>
 </resources>

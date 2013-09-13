@@ -33,5 +33,12 @@
                 android:title="@string/tbtip"
                 android:dialogTitle="@string/tbtip"/>
         />
+
+        <ListPreference
+            android:key="tbtlocale"
+            android:title="@string/tbtlocale"
+            android:dialogTitle="@string/tbtlocale"
+            />
+
     </PreferenceCategory>
 </PreferenceScreen>

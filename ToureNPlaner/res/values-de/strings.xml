@@ -84,4 +84,5 @@
     <string name="saveroute">Speichere Route</string>
     <string name="loadroute">Gespeicherte Routen</string>
     <string name="exportgpxroute">Exportiere Route als GPX</string>
+    <string name="tbtlocale">Turn by Turn Navigation Sprache</string>
 </resources>

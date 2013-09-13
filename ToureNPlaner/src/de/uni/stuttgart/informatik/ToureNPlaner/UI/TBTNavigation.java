@@ -16,6 +16,8 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -31,6 +33,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.SimpleNetworkHandler
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.TurnByTurnHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
+import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen.MapScreen;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.CoordinateTools;
@@ -45,6 +48,7 @@ import java.util.Locale;
 import static java.lang.Math.abs;
 
 public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable, Observer {
+	public static final Locale[] supportedLocales = { Locale.ENGLISH, Locale.GERMAN };
 	private static TextToSpeech tts;
 	private ArrayList<ArrayList<Node>> tbtway = null;
 
@@ -54,6 +58,11 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 	public void stopTBT() {
 		active = false;
 	}
+
+	Resources res = ToureNPlanerApplication.getContext().getResources();
+
+	private Configuration localizedconfig = new Configuration();
+	private Resources localizedresources = new Resources(res.getAssets(),res.getDisplayMetrics(), this.localizedconfig);
 
 	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
@@ -74,7 +83,8 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		Log.d("tp", "error: " + object.toString());
 		Session.simplehandler = null;
 		//setSupportProgressBarIndeterminateVisibility(false);
-		Toast.makeText(ToureNPlanerApplication.getContext(), "TBT Request Error:\n" + object.toString(), Toast.LENGTH_LONG).show();
+		String errormsg = localizedresources.getString(R.string.tbtreceiveerror);
+		Toast.makeText(ToureNPlanerApplication.getContext(), errormsg + "\n" + object.toString(), Toast.LENGTH_LONG).show();
 	}
 
 	private class turnmarker extends Drawable {
@@ -92,7 +102,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 			Rect bounds = this.getBounds();
 			//add a line for the circle
 			canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint);
-			Log.d("tp", "circle");
+			//Log.d("tp", "circle");
 		}
 
 		@Override
@@ -113,9 +123,24 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 
 	Session session;
 
-	public TBTNavigation(Session s) {
-		tts = new TextToSpeech(ToureNPlanerApplication.getContext(), this);
-		session = s;
+	Locale locale = Locale.ENGLISH;
+
+	public TBTNavigation(Session s, Locale l) {
+		this.locale = new Locale(l.getISO3Language());
+		updateLocalizedConfiguration();
+		this.session = s;
+		this.tts = new TextToSpeech(ToureNPlanerApplication.getContext(), this);
+	}
+
+	private void updateLocalizedConfiguration() {
+		Configuration c = this.localizedconfig;
+		c.locale = this.locale;
+		this.localizedresources.updateConfiguration(this.localizedconfig, localizedresources.getDisplayMetrics());
+	}
+
+
+	private TBTNavigation(Session s, Locale l, TextToSpeech tts) {
+		this.tts = tts;
 	}
 
 	public void initTBT(String tbtip) {
@@ -123,12 +148,14 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		// create a data structure out of the current ways that we can send to the tbt server
 		ArrayList<ArrayList<int[]>> sendnodes = new ArrayList<ArrayList<int[]>>();
 		if (session.getResult() == null) {
-			Toast.makeText(ToureNPlanerApplication.getContext(), "TBT called but we don't have a result, WTF", Toast.LENGTH_LONG).show();
+			// shouldn't happen
+			Log.d("TP", "TBT called but we don't have a result");
+			return;
 		}
 		for (int[] sw : session.getResult().getWay()) {
 			ArrayList<int[]> subway = new ArrayList<int[]>();
 			for (int i = 0; i < sw.length; i += 2) {
-				//TODO: what's with the reversed lt/ln?
+				// yes, first longitude and then latitude
 				int[] c = {sw[i + 1] * 10, sw[i] * 10};
 				subway.add(c);
 			}
@@ -142,39 +169,31 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		Session.simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(this, tbtip, sendnodes).execute();
 	}
 
-	boolean TTSInitialized = false;
 	public void tbtreqcompleted() {
-		if (!TTSInitialized) {
-			try {
-				Thread.sleep(1000,0);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		if (!TTSInitialized) {
-			Log.w("TP", "TTS Initialization taking too long. Not waiting any longer for it");
-		} else {
-			say("Navigationsdaten erhalten");
-		}
+		//String datareceived = localizedresources.getString(R.string.tbtreceived);
+		//say(datareceived);
 		tbtway = session.gettbtResult().gettbtway();
 
-		// 10 streets with 10 characters each?
-		StringBuilder str = new StringBuilder(tbtway.size()  * 10 * 10);
-		for (ArrayList<Node> nodes : tbtway) {
-			if (!nodes.get(0).getName().trim().contains("??")) {
-				str.append(nodes.get(0).getName()).append("! ");
-			}
-		}
-
-		Log.d("tp", str.toString());
-		//say("Deine Route ist: " + str.toString());
-
-		Toast.makeText(ToureNPlanerApplication.getContext(), "tbtway " + tbtway.size() + " items", Toast.LENGTH_LONG).show();
-
 		if (tbtway == null) {
-			//something is wrong
+			Log.w("TP", "tbtway == null");
 			return;
 		}
+
+		// 10 streets with 10 characters each?
+		StringBuilder summary = new StringBuilder(tbtway.size()  * 10 * 10);
+		for (ArrayList<Node> nodes : tbtway) {
+			// Don't include streets we don't know the name of (named "??") in our "summary"
+			if (nodes.get(0).getName().trim().contains("??")) {
+				continue;
+			}
+			summary.append(nodes.get(0).getName()).append("! ");
+		}
+
+		Log.d("TP", "Received route: [" + summary.toString() + "]");
+		//say("Deine Route ist: " + str.toString());
+
+		String receivedroute = localizedresources.getString(R.string.tbtreceivedroute);
+		Toast.makeText(ToureNPlanerApplication.getContext(), receivedroute + "\n" + summary.toString(), Toast.LENGTH_LONG).show();
 
 		String lastname = "";
 		for (ArrayList<Node> nodelist : tbtway) {
@@ -198,17 +217,18 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		if (status == TextToSpeech.SUCCESS) {
 
 			//TODO: i18n
-			int result = tts.setLanguage(Locale.GERMAN);
+			int result = tts.setLanguage(this.locale);
 
 			if (result == TextToSpeech.LANG_MISSING_DATA) {
-				Log.e("TTS", "Missing data for this language");
+				Log.e("TTS", "Missing data for this language (" + this.locale + "), setting to " + res.getConfiguration().locale);
+				this.locale = new Locale(res.getConfiguration().locale.getISO3Language());
 			}
 			if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
-				Log.e("TTS", "This Language is not supported");
+				Log.e("TTS", "This Language (" + this.locale  + ") is not supported, setting to " + res.getConfiguration().locale);
+				this.locale = new Locale(res.getConfiguration().locale.getISO3Language());
 			} else {
 				Log.d("TTS", "ToureNPlaner: TTS initialized");
 				//say("Text to Speech initialized!");
-				TTSInitialized = true;
 			}
 		} else {
 			Log.e("TTS", "ToureNPlaner: TTS Initialization Failed!");
@@ -227,13 +247,18 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		if (!active) {
 			return;
 		}
+
+		//TODO: Detect when the configuration has changed (Mainly a rotated screen!) and only update then
+		updateLocalizedConfiguration();
+
 		//say("Location updated with " + l.getAccuracy() + " meter currentaccuracy");
 		if (tbtway == null) {
-			tbtway = session.gettbtResult().gettbtway();
-			if (tbtway == null) {
+			if (session.gettbtResult() == null || session.gettbtResult().gettbtway() == null) {
 				Toast.makeText(ToureNPlanerApplication.getContext(), "No turn by turn data available, please run a turn by turn request", Toast.LENGTH_LONG);
 				active = false;
 				return;
+			} else {
+				tbtway = session.gettbtResult().gettbtway();
 			}
 		}
 
@@ -241,12 +266,14 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		currentlon = l.getLongitude();
 		currentaccuracy = l.getAccuracy();
 		if (currentaccuracy > 50) {
-			Log.i("tp", "Location update with accuracy > 50: " + currentaccuracy);
+			Log.i("tp", "Location update with accuracy > 50: " + currentaccuracy + ", ignoring...");
 			// useless coordinates
 			return;
 		}
 		if (currentaccuracy - lastaccuracy > 20 && CoordinateTools.directDistance(lastlat, lastlon, lat,lon) < 20) {
-			Log.i("tp", "accuracy got worse more than 10 meters since last check, discarding (" + lastaccuracy + "->" + currentaccuracy  +")");
+			Log.i("tp", "accuracy \"circle\" radius grew more than 20 meters since last check " +
+					"and we moved less than that radius (" +  CoordinateTools.directDistance(lastlat, lastlon, lat,lon) + " meter) "
+					+ ", discarding (" + lastaccuracy + "->" + currentaccuracy  +")");
 			return;
 		}
 
@@ -259,7 +286,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		Node n = nearestNode(currentlat, currentlon);
 		Log.d("tp", "Nearest node: " + n.getName());
 		if (n == null) {
-			Log.i("tp", "tbtway too short??");
+			Log.i("tp", "tbtway too short, nearest node too far away??");
 			//meh
 			return;
 		}
@@ -275,7 +302,8 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 			}
 		}
 		if (nodesindex == -1 || tbtwayindex == -1) {
-			say("Irgendetwas stimmt hier nicht!");
+			//say("Irgendetwas stimmt hier nicht!");
+			Log.w("TP", "something is wrong, nodes index " + nodesindex + " tbtwayindex" + tbtwayindex);
 			return;
 		}
 
@@ -296,11 +324,13 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		if (tbtwayindex == tbtway.size() - 1) {
 			// we are on the street where the destination is
 			Log.d("tp", tempdist + " to destination");
+			String tilltarget = localizedresources.getString(R.string.tilltarget);
 			if (tempdist < 20) {
-				say("Sie erreichen Ihr Ziel in " + (int) tempdist + " Metern!");
+				say((int) tempdist + tilltarget);
 				this.active = false;
 			} else {
-				say("Ihr Ziel liegt auf dieser Straße in " + (int) tempdist + " Metern!");
+				String targetonthisstreet = localizedresources.getString(R.string.targetonthisstreet);
+				say(targetonthisstreet + (int) tempdist + tilltarget);
 			}
 			return;
 		}
@@ -318,30 +348,50 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		int tempdirectionindex = tempway.size() - 1; // we already have the direction from this node to the last
 		double tempdirectiondist = 0;
 		double lastdirection = directionbeforeturn;
+
+		// if there are only two nodes in that street, we already have all available information in directionbeforeturn
 		if (tempway.size() > 2) {
+
+			// we have the direction of the last part of the street we are currently on
+			// for the last 25 meter of that street, sum the change of each street part relative to its next one
+			// (for long, slight corners, to get over a certain angle threshold the last part of the current and the first part of the next might nor cross)
 			do {
-				tempdirectiondist += CoordinateTools.directDistance(tempway.get(tempdirectionindex - 1).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex - 1).getGeoPoint().getLongitude(),
-						tempway.get(tempdirectionindex).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex).getGeoPoint().getLongitude());
-				tempdirection = getBearing(tempway.get(tempdirectionindex - 1).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex - 1).getGeoPoint().getLongitude(),
-						tempway.get(tempdirectionindex).getGeoPoint().getLatitude(), tempway.get(tempdirectionindex).getGeoPoint().getLongitude());
+				double firstlat = tempway.get(tempdirectionindex - 1).getGeoPoint().getLatitude();
+				double firstlon = tempway.get(tempdirectionindex - 1).getGeoPoint().getLongitude();
+				double secondlat = tempway.get(tempdirectionindex).getGeoPoint().getLatitude();
+				double secondlon = tempway.get(tempdirectionindex).getGeoPoint().getLongitude();
+
+				tempdirectiondist += CoordinateTools.directDistance(firstlat, firstlon, secondlat, secondlon);
+				tempdirection = getBearing(firstlat, firstlon, secondlat, secondlon);
+
+				// add the change in direction relative to the last streetpart
 				directionchange += tempdirection - lastdirection;
+
 				lastdirection = tempdirection;
 				tempdirectionindex -= 1;
 			} while (tempdirectiondist < 25 && tempdirectionindex > 0);
 			directionbeforeturn += directionchange;
 		}
+
 		if (tempwaynext.size() > 2) {
 			lastdirection = directionafterturn;
 			// reuse directionchange, tempdirectionindex, lastdirection and tempdirectiondist
 			directionchange = 0;
 			tempdirectiondist = 0;
 			tempdirectionindex = 2;
+
+			// then, for the first 25 meter of the next street, sum the change of each street part relative to its previous one
 			do {
-				tempdirectiondist += CoordinateTools.directDistance(tempwaynext.get(tempdirectionindex).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex).getGeoPoint().getLongitude(),
-						tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLongitude());
-				tempdirection = getBearing(tempwaynext.get(tempdirectionindex).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex).getGeoPoint().getLongitude(),
-						tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLatitude(), tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLongitude());
+				double firstlat = tempwaynext.get(tempdirectionindex).getGeoPoint().getLatitude();
+				double firstlon = tempwaynext.get(tempdirectionindex).getGeoPoint().getLongitude();
+				double secondlat = tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLatitude();
+				double secondlon = tempwaynext.get(tempdirectionindex + 1).getGeoPoint().getLongitude();
+
+				tempdirectiondist += CoordinateTools.directDistance(firstlat, firstlon, secondlat, secondlon);
+				tempdirection = getBearing(firstlat, firstlon, secondlat, secondlon);
+
 				directionchange += tempdirection- lastdirection;
+
 				lastdirection = tempdirection;
 				tempdirectionindex += 1;
 			} while (tempdirectiondist < 25 && tempdirectionindex < tempwaynext.size() - 1);
@@ -350,26 +400,30 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 
 		Log.d("tp", "Direction 2: " + directionbeforeturn + " -> " + directionafterturn);
 
-		String currentstreetname = tempway.get(0).getName().startsWith("??") ? "eine unbenannte Straße" : tempway.get(0).getName();
-		String nextstreetname = tempwaynext.get(0).getName().startsWith("??") ? "eine unbenannte Straße" : tempwaynext.get(0).getName();
+		String unknownstreetname = localizedresources.getString(R.string.unknownstreetname);
+		String currentstreetname = tempway.get(0).getName().trim().contains("??") ? unknownstreetname : tempway.get(0).getName();
+		String nextstreetname = tempwaynext.get(0).getName().trim().contains("??") ? unknownstreetname : tempwaynext.get(0).getName();
 
 		double diff = (directionbeforeturn - directionafterturn + 360) % 360;
-		String directionwords = "geradeaus fahren";
+		String directionwords = localizedresources.getString(R.string.drivestraight);
 
 		// ~ 0 to 180 = everything to the left, ~ 20 in each direction = no turn
 		if (diff > 10 && diff < 170) {
-			directionwords = "nach links abbiegen";
+			directionwords = localizedresources.getString(R.string.turnleft);
 		} else if (diff < 350 && diff > 190) {
-			directionwords = "nach rechts abbiegen";
+			directionwords = localizedresources.getString(R.string.turnright);
 		} else if (abs(diff) <= 190 && abs(diff) >= 170) {
-			directionwords = "wenden";
+			directionwords = localizedresources.getString(R.string.turnaround);
 		}
 
 		//TODO: Here?
 		if ((new Date()).getTime() - lastdirectionspeech < 5000) {
 			return;
 		}
-		String s = "In " + (int) tempdist + " Metern " + directionwords + " auf " + nextstreetname + "!";
+		String in = localizedresources.getString(R.string.in);
+		String meters = localizedresources.getString(R.string.meters);
+		String onto = localizedresources.getString(R.string.onto);
+		String s = in + " " + (int) tempdist + " " + meters + ": " + directionwords + " " + onto + " " + nextstreetname + "!";
 		say(s);
 
 		lastlat = lat;
@@ -467,13 +521,11 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 			return;
 		}
 		if (tts.getLanguage() == null) {
-			Log.e("TP", "Text to speech language was for [" + s + "], setting to german");
-			tts.setLanguage(Locale.GERMAN);
+			Log.e("TP", "Text to speech language was null for [" + s + "], setting to " + res.getConfiguration().locale.getLanguage());
+			tts.setLanguage(res.getConfiguration().locale);
 		}
 
-		if (Locale.GERMAN.equals(tts.getLanguage())) {
-			lastdirectionspeech = (new Date()).getTime();
-
+		if (this.locale.getISO3Language().toLowerCase().equals("deu")) {
 			// Workarounds:
 			// the german voice can't say "-" for some reason, it says something like "a" instead. wat
 			// make sure, "straße" is pronounced correctly, additional space won't hurt but will force the correct pronounciation of "st"
@@ -482,5 +534,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		}
 		Log.i("tp", "Saying: [" + s + "] with locale " + tts.getLanguage());
 		tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+		lastdirectionspeech = (new Date()).getTime();
 	}
 }
