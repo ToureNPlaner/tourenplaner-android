@@ -62,7 +62,6 @@ public class RoutesStorageDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(SQL_CREATE_ENTRIES);
-		db.close();
 	}
 
 	@Override
