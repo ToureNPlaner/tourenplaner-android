@@ -132,7 +132,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		this.tts = new TextToSpeech(ToureNPlanerApplication.getContext(), this);
 	}
 
-	private void updateLocalizedConfiguration() {
+	public void updateLocalizedConfiguration() {
 		Configuration c = this.localizedconfig;
 		c.locale = this.locale;
 		this.localizedresources.updateConfiguration(this.localizedconfig, localizedresources.getDisplayMetrics());
@@ -247,9 +247,6 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		if (!active) {
 			return;
 		}
-
-		//TODO: Detect when the configuration has changed (Mainly a rotated screen!) and only update then
-		updateLocalizedConfiguration();
 
 		//say("Location updated with " + l.getAccuracy() + " meter currentaccuracy");
 		if (tbtway == null) {

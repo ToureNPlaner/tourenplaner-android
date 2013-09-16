@@ -197,6 +197,11 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		session.registerListener(NodeOverlay.class, nodeOverlay);
 		session.registerListener(MapScreen.class, this);
+
+		TBTNavigation nav = session.getTBTNavigation();
+		if (nav != null) {
+			nav.updateLocalizedConfiguration();
+		}
 	}
 
 	private String tileServer;
