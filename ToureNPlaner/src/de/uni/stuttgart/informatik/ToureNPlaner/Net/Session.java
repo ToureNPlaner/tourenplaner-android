@@ -50,7 +50,7 @@ import java.util.zip.GZIPOutputStream;
 public class Session implements Serializable {
 	public static final String IDENTIFIER = "session";
 	public static final String DIRECTORY = "session";
-	public static SimpleNetworkHandler simplehandler = null;
+	public static SimpleNetworkHandler turnbyturnhandler = null;
 	public static SessionAwareHandler sesshandler = null;
 	double direction = 0;
 	public boolean compassenabled = false;

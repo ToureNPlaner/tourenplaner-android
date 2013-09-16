@@ -68,7 +68,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 	public void onCompleted(AsyncHandler caller, Object object) {
 		Log.d("tp", "tbt request completed: " +object.toString());
 		Session.sesshandler = null;
-		Session.simplehandler = null;
+		Session.turnbyturnhandler = null;
 		Edit edit = new TBTResultEdit(session, (TBTResult) object);
 		//Log.d("tp", "tbt response: " + object.toString());
 		edit.perform();
@@ -81,7 +81,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 	@Override
 	public void onError(AsyncHandler caller, Object object) {
 		Log.d("tp", "error: " + object.toString());
-		Session.simplehandler = null;
+		Session.turnbyturnhandler = null;
 		//setSupportProgressBarIndeterminateVisibility(false);
 		String errormsg = localizedresources.getString(R.string.tbtreceiveerror);
 		Toast.makeText(ToureNPlanerApplication.getContext(), errormsg + "\n" + object.toString(), Toast.LENGTH_LONG).show();
@@ -163,10 +163,10 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		}
 
 		// the requestlistener will call tbtreqcompleted() when the request is successful
-		if (Session.simplehandler != null) {
-			Session.simplehandler.cancel(true);
+		if (Session.turnbyturnhandler != null) {
+			Session.turnbyturnhandler.cancel(true);
 		}
-		Session.simplehandler = (SimpleNetworkHandler) new TurnByTurnHandler(this, tbtip, sendnodes).execute();
+		Session.turnbyturnhandler = (SimpleNetworkHandler) new TurnByTurnHandler(this, tbtip, sendnodes).execute();
 	}
 
 	public void tbtreqcompleted() {

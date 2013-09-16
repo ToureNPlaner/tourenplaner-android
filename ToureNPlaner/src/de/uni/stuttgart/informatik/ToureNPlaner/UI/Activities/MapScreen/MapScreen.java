@@ -516,8 +516,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	private void performtbtRequest() {
-		if (Session.sesshandler != null)
+		if (Session.sesshandler != null) {
 			Session.sesshandler.cancel(true);
+		}
+
+		if (Session.turnbyturnhandler != null) {
+			Session.turnbyturnhandler.cancel(true);
+			Session.turnbyturnhandler = null;
+		}
 
 		try {
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
