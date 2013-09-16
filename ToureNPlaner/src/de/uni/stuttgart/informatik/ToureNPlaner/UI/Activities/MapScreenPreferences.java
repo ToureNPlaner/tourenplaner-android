@@ -141,7 +141,7 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		String[] localescode = new String[TBTNavigation.supportedLocales.length];
 		for (int i = 0; i < TBTNavigation.supportedLocales.length; i++) {
 			localescode[i] = TBTNavigation.supportedLocales[i].getISO3Language();
-			if (new Locale(localescode[i]).equals(currentlocale)) {
+			if (new Locale(localescode[i]).getISO3Language().equals(currentlocale.getISO3Language())) {
 				currentsupported = true;
 			}
 		}
@@ -154,8 +154,8 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 		//TODO: update gui when changed
 		tbtlocale.setEntries(localesvalues);
 		tbtlocale.setEntryValues(localescode);
-		tbtlocale.setValue(new Locale(savedlocalecode).getDisplayLanguage());
-		tbtlocale.setSummary(new Locale(savedlocalecode).getDisplayLanguage());
+		tbtlocale.setValue(savedlocalecode);
+		tbtlocale.setSummary(savedlocalecode);
 
 		updateUI(getPreferenceManager().getSharedPreferences());
 	}
