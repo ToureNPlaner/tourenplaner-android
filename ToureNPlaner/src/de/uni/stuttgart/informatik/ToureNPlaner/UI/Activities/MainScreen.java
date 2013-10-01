@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -54,7 +54,7 @@ public class MainScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	@Override
-	public void onCompleted(RawHandler caller, Object object) {
+	public void onCompleted(AsyncHandler caller, Object object) {
 		Session session = (Session) object;
 		Intent myIntent;
 		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
@@ -68,7 +68,7 @@ public class MainScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	@Override
-	public void onError(RawHandler caller, Object object) {
+	public void onError(AsyncHandler caller, Object object) {
 		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		finish();
 	}

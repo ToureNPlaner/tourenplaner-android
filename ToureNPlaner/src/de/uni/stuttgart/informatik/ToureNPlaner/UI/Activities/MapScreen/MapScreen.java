@@ -37,10 +37,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.GeoCodingHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestNN;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -72,7 +69,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public static final int REQUEST_NODE = 1;
 	public static final int REQUEST_CONSTRAINTS = 2;
 	NodeOverlay nodeOverlay;
-	private RequestHandler handler = null;
+	private SessionAwareHandler handler = null;
 	private LocationManager locManager;
 	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
@@ -83,7 +80,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private final Observer requestListener = new Observer() {
 		@Override
-		public void onCompleted(RawHandler caller, Object object) {
+		public void onCompleted(AsyncHandler caller, Object object) {
 			handler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
@@ -91,7 +88,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		}
 
 		@Override
-		public void onError(RawHandler caller, Object object) {
+		public void onError(AsyncHandler caller, Object object) {
 			handler = null;
 			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
@@ -100,14 +97,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private final Observer nnsListener = new Observer() {
 		@Override
-		public void onCompleted(RawHandler caller, Object object) {
+		public void onCompleted(AsyncHandler caller, Object object) {
 			Edit edit = new UpdateNNSEdit(session, ((RequestNN) caller).getNode(), ((Result) object).getPoints().get(0).getGeoPoint());
 			edit.perform();
 			requestList.remove(caller);
 		}
 
 		@Override
-		public void onError(RawHandler caller, Object object) {
+		public void onError(AsyncHandler caller, Object object) {
 			Toast.makeText(getApplicationContext(), object.toString(),
 					Toast.LENGTH_LONG).show();
 			requestList.remove(caller);
@@ -116,12 +113,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private final Observer geoCodingListener = new Observer() {
 		@Override
-		public void onCompleted(RawHandler caller, Object object) {
+		public void onCompleted(AsyncHandler caller, Object object) {
 			mapView.setCenter(((GeoCodingHandler.GeoCodingResult) object).location);
 		}
 
 		@Override
-		public void onError(RawHandler caller, Object object) {
+		public void onError(AsyncHandler caller, Object object) {
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
 	};

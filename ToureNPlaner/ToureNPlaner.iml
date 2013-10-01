@@ -17,8 +17,6 @@
         <option name="RES_FOLDER_RELATIVE_PATH" value="/res" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/assets" />
         <option name="LIBS_FOLDER_RELATIVE_PATH" value="/libs" />
-        <option name="REGENERATE_R_JAVA" value="true" />
-        <option name="REGENERATE_JAVA_BY_AIDL" value="true" />
         <option name="USE_CUSTOM_APK_RESOURCE_FOLDER" value="false" />
         <option name="CUSTOM_APK_RESOURCE_FOLDER" value="" />
         <option name="USE_CUSTOM_COMPILER_MANIFEST" value="false" />
@@ -32,6 +30,9 @@
         <option name="RUN_PROGUARD" value="false" />
         <option name="PROGUARD_CFG_PATH" value="/proguard.cfg" />
         <resOverlayFolders />
+        <includeSystemProguardFile>false</includeSystemProguardFile>
+        <includeAssetsFromLibraries>true</includeAssetsFromLibraries>
+        <additionalNativeLibs />
       </configuration>
     </facet>
   </component>
@@ -42,7 +43,7 @@
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/libs" />
@@ -50,25 +51,13 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs" />
-          <root url="file://$MODULE_DIR$/../../mapsforge-read-only/mapsforge/src/main/java" />
-          <root url="file://$MODULE_DIR$/../../mapsforge-read-only/mapsforge-map-reader/src/main/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/tools" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/perf" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/test" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/jaxrs/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/mapper/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/xc/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/smile/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/mrbean/java" />
-          <root url="jar://$MODULE_DIR$/../../jackson-src-1.9.6.zip!/jackson-src-1.9.6/src/sample" />
+          <root url="jar://$MODULE_DIR$/../../mapsforge-fork/mapsforge-map/target/mapsforge-map-0.3.1-SNAPSHOT-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="ActionBarSherlock" exported="" />
-    <orderEntry type="jdk" jdkName="Android 4.0.3 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android 4.1.2 Platform" jdkType="Android SDK" />
   </component>
 </module>
 

@@ -26,10 +26,11 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ServerInfoHandler extends RawHandler {
+public class ServerInfoHandler extends SimpleNetworkHandler {
 	private final String url;
 
 	public ServerInfoHandler(Observer listener, String url) {
@@ -46,6 +47,9 @@ public class ServerInfoHandler extends RawHandler {
 		}
 		return urlConnection;
 	}
+
+	@Override
+	protected void handleOutput(OutputStream connection) throws Exception {}
 
 	@Override
 	protected Object handleInput(JacksonManager.ContentType type, InputStream inputStream) throws Exception {

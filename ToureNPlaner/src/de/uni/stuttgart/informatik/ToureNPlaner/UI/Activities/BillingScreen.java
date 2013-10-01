@@ -26,9 +26,9 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingRequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -91,7 +91,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	// ----------- BillingRequestHandler ----------------------
 	private final Observer billingRequestListener = new Observer() {
 		@Override
-		public void onCompleted(RawHandler caller, Object object) {
+		public void onCompleted(AsyncHandler caller, Object object) {
 			setSupportProgressBarIndeterminateVisibility(false);
 
 			Result result = (Result) object;
@@ -128,7 +128,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		}
 
 		@Override
-		public void onError(RawHandler caller, Object object) {
+		public void onError(AsyncHandler caller, Object object) {
 			billingRequestHandler = null;
 			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
@@ -138,7 +138,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	//------ BillingListHandler ------
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onCompleted(RawHandler caller, Object object) {
+	public void onCompleted(AsyncHandler caller, Object object) {
 		setSupportProgressBarIndeterminateVisibility(false);
 		adapter.addAll((ArrayList<BillingItem>) object);
 		adapter.notifyDataSetChanged();
@@ -146,7 +146,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	}
 
 	@Override
-	public void onError(RawHandler caller, Object object) {
+	public void onError(AsyncHandler caller, Object object) {
 		billingListhandler = null;
 		setSupportProgressBarIndeterminateVisibility(false);
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG).show();

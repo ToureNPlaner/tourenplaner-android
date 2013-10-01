@@ -3,8 +3,20 @@
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
     <excludeFromCompile>
-      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/gen" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/roboguice/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/roboguice/target/generated-sources/r" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/fragments/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/fragments/target/generated-sources/r" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/styled/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/styled/target/generated-sources/r" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/demos/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/demos/target/generated-sources/r" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/known-bugs/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/samples/known-bugs/target/generated-sources/r" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/target/generated-sources/r" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/gen" includeSubdirectories="true" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>
@@ -19,7 +31,14 @@
       <entry name="?*.tld" />
       <entry name="?*.ftl" />
     </wildcardResourcePatterns>
-    <annotationProcessing enabled="false" useClasspath="true" />
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-target 1.6" />
   </component>
 </project>
 

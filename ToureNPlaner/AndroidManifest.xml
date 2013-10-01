@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="de.uni.stuttgart.informatik.ToureNPlaner"
           android:installLocation="auto"
-          android:versionCode="3"
-          android:versionName="1.0.1">
+          android:versionCode="5"
+          android:versionName="1.2">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -15,8 +15,7 @@
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
 
-    <application android:label="@string/app_name" android:name=".ToureNPlanerApplication" android:icon="@drawable/icon"
-                 android:theme="@style/Theme.Sherlock.ForceOverflow">
+    <application android:label="@string/app_name" android:name=".ToureNPlanerApplication" android:icon="@drawable/icon">
         <activity android:name=".UI.Activities.AboutScreen"/>
         <activity android:name=".UI.Activities.AlgorithmScreen"/>
         <activity android:name=".UI.Activities.AlgorithmConstraintsScreen"
@@ -35,11 +34,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".UI.Activities.ServerScreen">
+
+        <!--
+        <activity android:name=".UI.Activities.ServerScreen" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        -->
     </application>
 </manifest>

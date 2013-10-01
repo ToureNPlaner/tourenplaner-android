@@ -20,11 +20,11 @@ import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RequestHandler;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
+import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
 import org.mapsforge.core.GeoPoint;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -56,6 +56,7 @@ public class Session implements Serializable {
 	private static transient Data d;
 	private static transient NodeModel nodeModel = new NodeModel();
 	private static transient Result result;
+	private static transient SyncCoreLoader cl;
 
 	public static File openCacheDir() {
 		return new File(ToureNPlanerApplication.getContext().getCacheDir(), DIRECTORY);
@@ -66,6 +67,7 @@ public class Session implements Serializable {
 		d = new Data();
 		nodeModel = new NodeModel();
 		result = new Result();
+		cl = new SyncCoreLoader();
 		// Also initialize the files on the disc
 		safeData();
 		safeNodeModel();
@@ -181,6 +183,9 @@ public class Session implements Serializable {
 		in.defaultReadObject();
 		if (d == null)
 			loadAll();
+		cl = new SyncCoreLoader();
+		cl.setURL(d.serverInfo.getURL());
+
 		listeners = new WeakHashMap<Object, Listener>();
 	}
 
@@ -189,7 +194,7 @@ public class Session implements Serializable {
 	 * @param listener
 	 */
 	public void registerListener(Object identifier, Listener listener) {
-		listeners.put(listener.getClass(), listener);
+		listeners.put(identifier, listener);
 	}
 
 	public void removeListener(Object identifier) {
@@ -249,7 +254,7 @@ public class Session implements Serializable {
 			d.serverInfo.setHostname(uri.getHost());
 			int port = uri.getPort();
 			d.serverInfo.setPort(port == -1 ? 80 : port);
-			uri.getProtocol();
+			cl.setURL(url);
 			safeData();
 		} catch (MalformedURLException e) {
 			// Should never happen
@@ -414,10 +419,17 @@ public class Session implements Serializable {
 		return canPerformReason().equals("");
 	}
 
-	@SuppressWarnings("unchecked")
-	public RequestHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
+	public SimpleGraph getCoreGraph() throws IOException {
+		return cl.getCoreGraph();
+	}
+
+	public SessionAwareHandler performRequest(Observer requestListener, boolean force) throws RequestInvalidException {
 		if (canPerformRequest() && (force || result == null || nodeModel.getVersion() != result.getVersion())) {
-			return (RequestHandler) new RequestHandler(requestListener, this).execute();
+			if (d.selectedAlgorithm.isClientSide()){
+				return (SessionAwareHandler) new ClientComputeHandler(requestListener, this).execute();
+			} else {
+				return (SessionAwareHandler) new RequestHandler(requestListener, this).execute();
+			}
 		} else {
 			throw new RequestInvalidException(canPerformReason());
 		}

@@ -29,9 +29,8 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.RawHandler;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -238,7 +237,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	@Override
-	public void onCompleted(RawHandler caller, Object object) {
+	public void onCompleted(AsyncHandler caller, Object object) {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
@@ -255,14 +254,14 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			myIntent = new Intent(getBaseContext(), LoginScreen.class);
 		}
 
-		session.getServerInfo().getAlgorithms().add(AlgorithmInfo.createMock());
+
 
 		myIntent.putExtra(Session.IDENTIFIER, session);
 		startActivity(myIntent);
 	}
 
 	@Override
-	public void onError(RawHandler caller, Object object) {
+	public void onError(AsyncHandler caller, Object object) {
 		handler = null;
 		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);

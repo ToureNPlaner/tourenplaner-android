@@ -14,12 +14,15 @@
  *    limitations under the License.
  */
 
-package de.uni.stuttgart.informatik.ToureNPlaner.Net;
+package de.uni.stuttgart.informatik.ToureNPlaner.Util;
 
-import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
+/**
+ * @author Niklas Schnelle
+ */
+public abstract class SortAdapter {
+	public abstract void swap(int i, int j);
 
-public interface Observer {
-	void onCompleted(AsyncHandler caller, Object object);
+	public abstract boolean less(int i, int j);
 
-	void onError(AsyncHandler caller, Object object);
+	public abstract int length();
 }

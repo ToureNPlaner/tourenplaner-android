@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/ActionBarSherlock.iml" filepath="$PROJECT_DIR$/../JakeWharton-ActionBarSherlock/library/ActionBarSherlock.iml" />
       <module fileurl="file://$PROJECT_DIR$/ToureNPlaner.iml" filepath="$PROJECT_DIR$/ToureNPlaner.iml" />
     </modules>
   </component>

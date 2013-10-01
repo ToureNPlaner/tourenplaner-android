@@ -27,6 +27,9 @@ public class ServerInfo implements Serializable {
 		PRIVATE
 	}
 
+	public ServerInfo(){
+	}
+
 	private String version;
 	private ServerType serverType;
 	private int port;
@@ -85,9 +88,9 @@ public class ServerInfo implements Serializable {
 		info.algorithms = new ArrayList<AlgorithmInfo>(algorithms.size());
 		for (JsonNode node : algorithms) {
 			info.algorithms.add(AlgorithmInfo.parse(node));
-
 		}
 
+		info.algorithms.add(AlgorithmInfo.createTestClientSide());
 		return info;
 	}
 }

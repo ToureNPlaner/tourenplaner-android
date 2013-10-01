@@ -20,7 +20,7 @@ import android.graphics.RectF;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import org.mapsforge.core.GeoPoint;
 
-public abstract class GeoCodingHandler extends RawHandler {
+public abstract class GeoCodingHandler extends SimpleNetworkHandler {
 	public static class GeoCodingResult {
 		public GeoPoint location;
 	}
