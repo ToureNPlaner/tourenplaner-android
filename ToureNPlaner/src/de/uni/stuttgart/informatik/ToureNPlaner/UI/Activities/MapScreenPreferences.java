@@ -71,13 +71,11 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 	private ListPreference tbtlocale;
 
 	public static final String defaultMapLocation = Environment.getExternalStorageDirectory().toString();
-	public static String defaultTileServer = "";
-	public static String defaulttbtip = "";
+	public static String defaultTileServer = ToureNPlanerApplication.getContext().getString(R.string.defaulttileserver);
+	public static String defaulttbtip = ToureNPlanerApplication.getContext().getString(R.string.defaulttbtip);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		defaulttbtip = getString(R.string.defaulttbtip);
-		defaultTileServer = getString(R.string.defaulttileserver);
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings_mapscreen);
 
