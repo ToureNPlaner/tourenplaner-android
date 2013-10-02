@@ -1,3 +1,4 @@
-ToureNPlaner/.idea/misc.xml
-ToureNPlaner/ToureNPlaner.iml
-ToureNPlaner/.idea/codeStyleSettings.xml
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
