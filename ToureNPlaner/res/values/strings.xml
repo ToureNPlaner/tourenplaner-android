@@ -100,5 +100,6 @@
     <string name="sp_description">Finds the fastest way between to points.</string>
     <string name="tsp_description">Finds the fastest way to travel to all points.</string>
     <string name="csp_description">Finds the fastest way with a specific maximum of height meters.</string>
+    <string name="private_not_supported">Private Servers are no longer supported</string>
 
 </resources>

@@ -72,4 +72,5 @@
   <string name="sp_description">Findet den schnellsten Weg zwischen zwei Punkten.</string>
   <string name="tsp_description">Findet den schnellsten Weg zwischen allen Punkten.</string>
   <string name="csp_description">Findet den schnellsten Weg mit einem bestimmten Maximum an Höhenmetern.</string>
+    <string name="private_not_supported">Private Server werden nicht mehr unterstützt</string>
 </resources>

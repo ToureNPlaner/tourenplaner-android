@@ -27,6 +27,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 
 public class MainScreen extends Activity implements Observer {
@@ -59,12 +60,12 @@ public class MainScreen extends Activity implements Observer {
 		Intent myIntent;
 		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
 			myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
+            myIntent.putExtra(Session.IDENTIFIER, session);
+            startActivity(myIntent);
 		} else {
-			myIntent = new Intent(getBaseContext(), LoginScreen.class);
+            Toast.makeText(ToureNPlanerApplication.getContext(), R.string.private_not_supported, Toast.LENGTH_LONG).show();
+            // TODO do something useful
 		}
-
-		myIntent.putExtra(Session.IDENTIFIER, session);
-		startActivity(myIntent);
 	}
 
 	@Override

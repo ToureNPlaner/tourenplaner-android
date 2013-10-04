@@ -19,15 +19,12 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.AlgorithmInfo;
-import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen.MapScreen;
@@ -102,31 +99,5 @@ public class AlgorithmScreen extends ListActivity {
 				startActivity(myIntent);
 			}
 		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.algorithmscreenmenu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
-			menu.findItem(R.id.billing).setVisible(false);
-		}
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.billing:
-				Intent myIntent = new Intent(this, BillingScreen.class);
-				myIntent.putExtra(Session.IDENTIFIER, session);
-				startActivity(myIntent);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }
