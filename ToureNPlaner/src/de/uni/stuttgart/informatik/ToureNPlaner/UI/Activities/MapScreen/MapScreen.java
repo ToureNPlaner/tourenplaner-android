@@ -26,13 +26,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
@@ -84,13 +84,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			handler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
-			setSupportProgressBarIndeterminateVisibility(false);
+			setProgressBarIndeterminateVisibility(false);
 		}
 
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
 			handler = null;
-			setSupportProgressBarIndeterminateVisibility(false);
+			setProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
 	};
@@ -147,7 +147,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setBuiltInZoomControls(true);
 		mapView.getFileSystemTileCache().setPersistent(false);
 
-		getSupportActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
+		getActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
 		initializeHandler();
 
 		setupWayOverlay();
@@ -277,7 +277,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
+		getMenuInflater().inflate(R.menu.mapscreenmenu, menu);
 		setupSearchMenu(menu.findItem(R.id.search));
 		setupGpsMenu(menu.findItem(R.id.gps));
 		return true;
@@ -290,7 +290,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			public boolean onMenuItemClick(MenuItem item) {
 				item.setChecked(!item.isChecked());
 				gpsListener.setFollowing(item.isChecked());
-				MapScreen.this.supportInvalidateOptionsMenu();
+				MapScreen.this.invalidateOptionsMenu();
 				return true;
 			}
 		});
@@ -362,7 +362,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.reset:
 				if (handler != null) {
 					handler.cancel(true);
-					setSupportProgressBarIndeterminateVisibility(false);
+					setProgressBarIndeterminateVisibility(false);
 					handler = null;
 				}
 				Edit edit = new ClearEdit(session);
@@ -398,7 +398,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		try {
 			handler = session.performRequest(requestListener, force);
-			setSupportProgressBarIndeterminateVisibility(true);
+			setProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
 			if (messageToast != null) {
 				messageToast.setText(e.getMessage());
@@ -465,9 +465,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		if (handler != null) {
 			handler.setListener(requestListener);
-			setSupportProgressBarIndeterminateVisibility(true);
+			setProgressBarIndeterminateVisibility(true);
 		} else {
-			setSupportProgressBarIndeterminateVisibility(false);
+			setProgressBarIndeterminateVisibility(false);
 		}
 	}
 
@@ -492,7 +492,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		instantRequest = MapScreenPreferences.Instant.valueOf(preferences.getString("instant_request", MapScreenPreferences.Instant.ALWAYS.name()));
 
-		this.supportInvalidateOptionsMenu();
+		this.invalidateOptionsMenu();
 
 		setupMapView(preferences);
 

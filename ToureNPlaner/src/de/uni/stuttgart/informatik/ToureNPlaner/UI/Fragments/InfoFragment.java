@@ -17,13 +17,13 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 
 import android.os.Bundle;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Result;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ResultNode;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -35,7 +35,7 @@ import java.util.Map;
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatDistance;
 import static de.uni.stuttgart.informatik.ToureNPlaner.UI.Formatter.formatTime;
 
-public class InfoFragment extends SherlockFragment {
+public class InfoFragment extends Fragment {
 	private Session session;
 
 	@Override

@@ -16,17 +16,17 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
 import java.util.ArrayList;
 
-public class AlgorithmConstraintsScreen extends SherlockFragmentActivity {
+public class AlgorithmConstraintsScreen extends Activity {
 	public static String IDENTIFIER = "constraints";
 
 	@Override
@@ -35,7 +35,7 @@ public class AlgorithmConstraintsScreen extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		if (savedInstanceState == null) {
-			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.add(android.R.id.content, ConstraintListFragment.newInstance(
 					(ArrayList<Constraint>) getIntent().getExtras().getSerializable(IDENTIFIER)), "list");
 			ft.commit();
@@ -45,7 +45,7 @@ public class AlgorithmConstraintsScreen extends SherlockFragmentActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			ConstraintListFragment fragment = ((ConstraintListFragment) getSupportFragmentManager().findFragmentByTag("list"));
+			ConstraintListFragment fragment = ((ConstraintListFragment) getFragmentManager().findFragmentByTag("list"));
 
 			Intent data = new Intent();
 			boolean dirty = fragment.isDirty();

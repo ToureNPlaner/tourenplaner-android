@@ -19,18 +19,18 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -41,7 +41,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.DragDrop.DragNDropListView;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DragListener;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Listener.DropListener;
 
-public class NodeListFragment extends SherlockListFragment implements Session.Listener {
+public class NodeListFragment extends ListFragment implements Session.Listener {
 	private NodeListAdapter adapter;
 	private Session session;
 	private boolean dirty;

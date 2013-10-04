@@ -16,19 +16,19 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
@@ -45,7 +45,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ServerScreen extends SherlockFragmentActivity implements Observer {
+public class ServerScreen extends Activity implements Observer {
 	private static final String SERVERLIST_FILENAME = "serverlist";
 	private ArrayAdapter<String> adapter;
 	private ServerInfoHandler handler;
@@ -175,12 +175,12 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	private void initializeHandler() {
-		handler = (ServerInfoHandler) getLastCustomNonConfigurationInstance();
+		handler = (ServerInfoHandler) getLastNonConfigurationInstance();
 
 		if (handler != null)
 			handler.setListener(this);
 		else {
-			MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
+			MyProgressDialog dialog = (MyProgressDialog) getFragmentManager()
 					.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 			if (dialog != null)
 				dialog.dismiss();
@@ -219,7 +219,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			case 0: // edit
 				EditDialog.newInstance(getResources().getString(R.string.enter_server),
 						servers.get(info.position), info.position)
-						.show(getSupportFragmentManager(), EditDialog.IDENTIFIER);
+						.show(getFragmentManager(), EditDialog.IDENTIFIER);
 				break;
 			case 1: // delete
 				servers.remove(info.position);
@@ -239,7 +239,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
 		handler = null;
-		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
+		MyProgressDialog dialog = (MyProgressDialog) getFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 		try {
 			dialog.dismiss();
@@ -263,7 +263,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 	@Override
 	public void onError(AsyncHandler caller, Object object) {
 		handler = null;
-		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
+		MyProgressDialog dialog = (MyProgressDialog) getFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 		try {
 			dialog.dismiss();
@@ -271,11 +271,6 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 			// Can not perform this action after onSaveInstanceState
 		}
 		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
-	}
-
-	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		return handler;
 	}
 
 	@Override
@@ -296,13 +291,13 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 		}
 
 		ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
-				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
+				.show(getFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		handler = Session.createSession(url, this);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.serverscreenmenu, menu);
+		getMenuInflater().inflate(R.menu.serverscreenmenu, menu);
 		return true;
 	}
 
@@ -314,7 +309,7 @@ public class ServerScreen extends SherlockFragmentActivity implements Observer {
 				return true;
 			case R.id.add_server:
 				NewDialog.newInstance(getResources().getString(R.string.enter_server), "")
-						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
+						.show(getFragmentManager(), NewDialog.IDENTIFIER);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

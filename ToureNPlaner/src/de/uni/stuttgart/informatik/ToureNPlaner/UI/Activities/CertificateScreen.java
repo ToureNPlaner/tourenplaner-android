@@ -16,15 +16,15 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.KeystoreAdapter;
@@ -37,7 +37,7 @@ import java.security.cert.CertificateFactory;
 import java.util.Collection;
 import java.util.List;
 
-public class CertificateScreen extends SherlockListActivity {
+public class CertificateScreen extends ListActivity {
 	private KeyStore keyStore;
 	private KeystoreAdapter adapter;
 
@@ -101,7 +101,7 @@ public class CertificateScreen extends SherlockListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.certificatescreenmenu, menu);
+		getMenuInflater().inflate(R.menu.certificatescreenmenu, menu);
 		return true;
 	}
 

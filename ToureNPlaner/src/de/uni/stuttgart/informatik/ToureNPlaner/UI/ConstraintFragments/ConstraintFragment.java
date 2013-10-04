@@ -16,15 +16,15 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
 import java.io.Serializable;
 
-public class ConstraintFragment extends SherlockFragment {
+public class ConstraintFragment extends Fragment {
 	protected Constraint constraint;
 	protected int index;
 	protected boolean dirty;

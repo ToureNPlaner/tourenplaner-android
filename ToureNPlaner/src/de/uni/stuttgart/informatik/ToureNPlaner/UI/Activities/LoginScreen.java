@@ -20,13 +20,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AuthRequestHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
@@ -35,7 +35,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 import de.uni.stuttgart.informatik.ToureNPlaner.Util.Base64;
 
-public class LoginScreen extends SherlockFragmentActivity implements Observer {
+public class LoginScreen extends Activity implements Observer {
 	private AuthRequestHandler handler;
 	private Session session;
 	public static final String SHARED_PREFERENCES_CREDENTIALS = "credentials";
@@ -114,7 +114,7 @@ public class LoginScreen extends SherlockFragmentActivity implements Observer {
 					preferencesEditor.clear();
 					preferencesEditor.commit();
 				}
-				ConnectionProgressDialog.newInstance(getString(R.string.login_dialog_title), session.getUsername()).show(getSupportFragmentManager(), "login");
+				ConnectionProgressDialog.newInstance(getString(R.string.login_dialog_title), session.getUsername()).show(getFragmentManager(), "login");
 				handler = new AuthRequestHandler(LoginScreen.this, session);
 				handler.execute();
 			}
@@ -122,12 +122,12 @@ public class LoginScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	private void initializeHandler() {
-		handler = (AuthRequestHandler) getLastCustomNonConfigurationInstance();
+		handler = (AuthRequestHandler) getLastNonConfigurationInstance();
 
 		if (handler != null)
 			handler.setListener(this);
 		else {
-			MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
+			MyProgressDialog dialog = (MyProgressDialog) getFragmentManager().findFragmentByTag("login");
 			if (dialog != null)
 				dialog.dismiss();
 		}
@@ -147,14 +147,9 @@ public class LoginScreen extends SherlockFragmentActivity implements Observer {
 	}
 
 	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		return handler;
-	}
-
-	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
 		handler = null;
-		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
+		MyProgressDialog dialog = (MyProgressDialog) getFragmentManager().findFragmentByTag("login");
 		try {
 			dialog.dismiss();
 		} catch (IllegalStateException e) {
@@ -168,7 +163,7 @@ public class LoginScreen extends SherlockFragmentActivity implements Observer {
 	@Override
 	public void onError(AsyncHandler caller, Object object) {
 		handler = null;
-		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager().findFragmentByTag("login");
+		MyProgressDialog dialog = (MyProgressDialog) getFragmentManager().findFragmentByTag("login");
 		try {
 			dialog.dismiss();
 		} catch (IllegalStateException e) {

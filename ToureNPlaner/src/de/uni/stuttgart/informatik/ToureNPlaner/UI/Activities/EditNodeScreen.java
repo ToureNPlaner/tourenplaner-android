@@ -16,20 +16,20 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
-public class EditNodeScreen extends SherlockFragmentActivity {
+public class EditNodeScreen extends Activity {
 	public static final int RESULT_DELETE = RESULT_FIRST_USER;
 
 	private Session session;
@@ -80,7 +80,7 @@ public class EditNodeScreen extends SherlockFragmentActivity {
 		// -----------------btnSave-----------------------
 		btnSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				ConstraintListFragment fragment = (ConstraintListFragment) getSupportFragmentManager().findFragmentByTag("list");
+				ConstraintListFragment fragment = (ConstraintListFragment) getFragmentManager().findFragmentByTag("list");
 				if (fragment != null && fragment.isDirty())
 					node.setConstraintList(fragment.getConstraints());
 				node.setName(etName.getText().toString());
@@ -97,7 +97,7 @@ public class EditNodeScreen extends SherlockFragmentActivity {
 	}
 
 	private void setupListView() {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.add(android.R.id.list, ConstraintListFragment.newInstance(node.getConstraintList()), "list");
 		ft.commit();
 	}

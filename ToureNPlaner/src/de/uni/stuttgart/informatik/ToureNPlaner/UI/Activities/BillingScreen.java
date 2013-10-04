@@ -16,6 +16,7 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,7 +25,6 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.BillingListHandler;
@@ -37,7 +37,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Adapters.BillingListAdapter;
 
 import java.util.ArrayList;
 
-public class BillingScreen extends SherlockExpandableListActivity implements Observer, OnScrollListener {
+public class BillingScreen extends ListActivity implements Observer, OnScrollListener {
 	private BillingListAdapter adapter;
 	private BillingListHandler billingListhandler;
 	private Session session;
@@ -69,9 +69,10 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		adapter = new BillingListAdapter(this, billinglist, buttonClicklistener);
-		setListAdapter(adapter);
-		getExpandableListView().setOnScrollListener(this);
-		getExpandableListView().setGroupIndicator(getResources().getDrawable(R.drawable.expandable_icon));
+		// TODO: BROKEN BEYOND REPAIR
+		//setListAdapter(adapter);
+		//getExpandableListView().setOnScrollListener(this);
+		//getExpandableListView().setGroupIndicator(getResources().getDrawable(R.drawable.expandable_icon));
 	}
 
 	private void loadRequest(int id) {
@@ -79,7 +80,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		algSuffix = adapter.getAlgSuffix(id);
 		String status = adapter.getStatus(id);
 		if (status.equals("ok")) {
-			setSupportProgressBarIndeterminateVisibility(true);
+			setProgressBarIndeterminateVisibility(true);
 			billingRequestHandler = new BillingRequestHandler(billingRequestListener, session, requestid);
 			billingRequestHandler.execute();
 		} else {
@@ -92,7 +93,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	private final Observer billingRequestListener = new Observer() {
 		@Override
 		public void onCompleted(AsyncHandler caller, Object object) {
-			setSupportProgressBarIndeterminateVisibility(false);
+			setProgressBarIndeterminateVisibility(false);
 
 			Result result = (Result) object;
 			ArrayList<ResultNode> resultArray;
@@ -130,7 +131,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
 			billingRequestHandler = null;
-			setSupportProgressBarIndeterminateVisibility(false);
+			setProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG);
 		}
 	};
@@ -139,7 +140,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
-		setSupportProgressBarIndeterminateVisibility(false);
+		setProgressBarIndeterminateVisibility(false);
 		adapter.addAll((ArrayList<BillingItem>) object);
 		adapter.notifyDataSetChanged();
 		billingListhandler = null;
@@ -148,7 +149,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 	@Override
 	public void onError(AsyncHandler caller, Object object) {
 		billingListhandler = null;
-		setSupportProgressBarIndeterminateVisibility(false);
+		setProgressBarIndeterminateVisibility(false);
 		Toast.makeText(this, ((Exception) object).getLocalizedMessage(), Toast.LENGTH_LONG).show();
 	}
 
@@ -159,7 +160,7 @@ public class BillingScreen extends SherlockExpandableListActivity implements Obs
 				firstVisible + visibleCount >= totalCount - 20;
 
 		if (loadMore && billingListhandler == null) {
-			setSupportProgressBarIndeterminateVisibility(true);
+			setProgressBarIndeterminateVisibility(true);
 			billingListhandler = new BillingListHandler(this, session, 20, adapter.getGroupCount());
 			billingListhandler.execute();
 		}
