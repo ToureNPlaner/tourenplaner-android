@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.ListFragment;
+import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -202,7 +202,7 @@ public class NodeListFragment extends ListFragment implements Session.Listener {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Edit edit;
 		switch (resultCode) {
-			case Activity.RESULT_OK:
+			case FragmentActivity.RESULT_OK:
 				edit = new UpdateNodeEdit(session, data.getExtras().getInt("index"), (Node) data.getSerializableExtra("node"));
 				edit.perform();
 				break;

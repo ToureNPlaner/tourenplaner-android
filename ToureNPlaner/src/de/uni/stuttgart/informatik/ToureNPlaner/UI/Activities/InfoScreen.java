@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -28,7 +28,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.InfoFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.NodeListFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TabListener;
 
-public class InfoScreen extends Activity {
+public class InfoScreen extends ActionBarActivity {
 	private Session session;
 
 	@Override
@@ -46,17 +46,17 @@ public class InfoScreen extends Activity {
 		Bundle data = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
 		session = (Session) data.getSerializable(Session.IDENTIFIER);
 
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		ActionBar.Tab tab = getActionBar().newTab()
+		ActionBar.Tab tab = getSupportActionBar().newTab()
 				.setText(R.string.info)
 				.setTabListener(new TabListener<NodeListFragment>(
 						this, "NodeList", NodeListFragment.class));
 		actionBar.addTab(tab);
 
 		if (session.getResult() != null) {
-			tab = getActionBar().newTab()
+			tab = getSupportActionBar().newTab()
 					.setText(R.string.Result)
 					.setTabListener(new TabListener<InfoFragment>(
 							this, "Info", InfoFragment.class));
@@ -64,7 +64,7 @@ public class InfoScreen extends Activity {
 		}
 
 		if (savedInstanceState != null)
-			getActionBar().selectTab(getActionBar().getTabAt(savedInstanceState.getInt("Tab", 0)));
+			getSupportActionBar().selectTab(getSupportActionBar().getTabAt(savedInstanceState.getInt("Tab", 0)));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class InfoScreen extends Activity {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 			Intent data = new Intent();
 			data.putExtra(NodeModel.IDENTIFIER, session.getNodeModel().getNodeVector());
-			boolean dirty = ((NodeListFragment) getFragmentManager().findFragmentByTag("NodeList")).isDirty();
+			boolean dirty = ((NodeListFragment) getSupportFragmentManager().findFragmentByTag("NodeList")).isDirty();
 			setResult(dirty ? RESULT_OK : RESULT_CANCELED, data);
 		}
 		return super.onKeyDown(keyCode, event);

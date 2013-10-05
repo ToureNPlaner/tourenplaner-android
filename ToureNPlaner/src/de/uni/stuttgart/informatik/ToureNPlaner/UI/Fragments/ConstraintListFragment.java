@@ -17,8 +17,8 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 
 import android.os.Bundle;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +37,7 @@ public class ConstraintListFragment extends Fragment {
 
 	public boolean isDirty() {
 		for (int i = 0; i < constraints.size(); i++) {
-			if (((ConstraintFragment) getFragmentManager().findFragmentById(i + 1)).isDirty()) {
+			if (((ConstraintFragment)  getActivity().getSupportFragmentManager().findFragmentById(i + 1)).isDirty()) {
 				return true;
 			}
 		}

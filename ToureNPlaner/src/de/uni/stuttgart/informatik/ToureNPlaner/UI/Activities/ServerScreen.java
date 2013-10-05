@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -46,7 +46,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ServerScreen extends Activity implements Observer {
+public class ServerScreen extends FragmentActivity implements Observer {
 	private static final String SERVERLIST_FILENAME = "serverlist";
 	private ArrayAdapter<String> adapter;
 	private ServerInfoHandler handler;
@@ -181,7 +181,7 @@ public class ServerScreen extends Activity implements Observer {
 		if (handler != null)
 			handler.setListener(this);
 		else {
-			MyProgressDialog dialog = (MyProgressDialog) getFragmentManager()
+			MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 					.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 			if (dialog != null)
 				dialog.dismiss();
@@ -240,7 +240,7 @@ public class ServerScreen extends Activity implements Observer {
 	@Override
 	public void onCompleted(AsyncHandler caller, Object object) {
 		handler = null;
-		MyProgressDialog dialog = (MyProgressDialog) getFragmentManager()
+		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 		try {
 			dialog.dismiss();
@@ -262,7 +262,7 @@ public class ServerScreen extends Activity implements Observer {
 	@Override
 	public void onError(AsyncHandler caller, Object object) {
 		handler = null;
-		MyProgressDialog dialog = (MyProgressDialog) getFragmentManager()
+		MyProgressDialog dialog = (MyProgressDialog) getSupportFragmentManager()
 				.findFragmentByTag(ConnectionProgressDialog.IDENTIFIER);
 		try {
 			dialog.dismiss();
@@ -290,7 +290,7 @@ public class ServerScreen extends Activity implements Observer {
 		}
 
 		ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
-				.show(getFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
+				.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		handler = Session.createSession(url, this);
 	}
 

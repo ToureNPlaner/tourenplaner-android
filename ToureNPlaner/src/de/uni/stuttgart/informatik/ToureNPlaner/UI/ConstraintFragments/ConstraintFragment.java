@@ -16,7 +16,7 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.widget.TextView;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;

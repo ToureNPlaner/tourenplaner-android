@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,7 +29,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
-public class EditNodeScreen extends Activity {
+public class EditNodeScreen extends FragmentActivity {
 	public static final int RESULT_DELETE = RESULT_FIRST_USER;
 
 	private Session session;
@@ -80,7 +80,7 @@ public class EditNodeScreen extends Activity {
 		// -----------------btnSave-----------------------
 		btnSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				ConstraintListFragment fragment = (ConstraintListFragment) getFragmentManager().findFragmentByTag("list");
+				ConstraintListFragment fragment = (ConstraintListFragment) getSupportFragmentManager().findFragmentByTag("list");
 				if (fragment != null && fragment.isDirty())
 					node.setConstraintList(fragment.getConstraints());
 				node.setName(etName.getText().toString());
@@ -97,7 +97,7 @@ public class EditNodeScreen extends Activity {
 	}
 
 	private void setupListView() {
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.add(android.R.id.list, ConstraintListFragment.newInstance(node.getConstraintList()), "list");
 		ft.commit();
 	}

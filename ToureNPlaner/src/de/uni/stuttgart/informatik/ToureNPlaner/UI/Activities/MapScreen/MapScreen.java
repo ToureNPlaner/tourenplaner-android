@@ -472,12 +472,6 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public Object onRetainNonConfigurationInstance() {
-		return handler;
-	}
-
-	@Override
 	protected void onPause() {
 		locManager.removeUpdates(gpsListener);
 		super.onPause();

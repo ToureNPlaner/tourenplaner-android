@@ -17,14 +17,14 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	private Fragment mFragment;
-	private final Activity mActivity;
+	private final FragmentActivity mActivity;
 	private final String mTag;
 	private final Class<T> mClass;
 
@@ -35,7 +35,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	 * @param tag      The identifier tag for the fragment
 	 * @param clz      The fragment's Class, used to instantiate the fragment
 	 */
-	public TabListener(Activity activity, String tag, Class<T> clz) {
+	public TabListener(FragmentActivity activity, String tag, Class<T> clz) {
 		mActivity = activity;
 		mTag = tag;
 		mClass = clz;
@@ -46,11 +46,11 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 		boolean shouldCommit = false;
 		if (ft == null) {
-			ft = mActivity.getFragmentManager().beginTransaction();
+			ft = mActivity.getSupportFragmentManager().beginTransaction();
 			shouldCommit = true;
 		}
 
-		mFragment = mActivity.getFragmentManager().findFragmentByTag(mTag);
+		mFragment = mActivity.getSupportFragmentManager().findFragmentByTag(mTag);
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
 			// If not, instantiate and add it to the activity

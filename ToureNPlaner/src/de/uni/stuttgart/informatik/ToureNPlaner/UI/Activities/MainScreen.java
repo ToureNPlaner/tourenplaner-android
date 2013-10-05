@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
@@ -30,7 +30,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 
-public class MainScreen extends Activity implements Observer {
+public class MainScreen extends FragmentActivity implements Observer {
 	private ServerInfoHandler handler;
 
 	private static final String url = "http://tourenplaner.informatik.uni-stuttgart.de";
@@ -96,7 +96,7 @@ public class MainScreen extends Activity implements Observer {
 		else {
 			handler = Session.createSession(url, this);
 			ConnectionProgressDialog.newInstance(getResources().getString(R.string.connecting), url)
-					.show(getFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
+					.show(getSupportFragmentManager(), ConnectionProgressDialog.IDENTIFIER);
 		}
 	}
 }
