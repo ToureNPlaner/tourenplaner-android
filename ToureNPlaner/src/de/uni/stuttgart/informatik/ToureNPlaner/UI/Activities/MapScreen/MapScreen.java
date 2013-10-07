@@ -319,7 +319,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				return true;
 			}
 		});
-        /*MenuItemCompat.getActionView(searchMenu).findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
+        MenuItemCompat.getActionView(searchMenu).findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -336,7 +336,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				}
 				return false;
 			}
-		});*/
+		});
 	}
 
 	@Override
@@ -528,9 +528,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
-			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate),MenuItem.SHOW_AS_ACTION_ALWAYS);
+			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate),MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 		} else {
-			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate),MenuItem.SHOW_AS_ACTION_NEVER);
+			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate),MenuItemCompat.SHOW_AS_ACTION_NEVER);
 		}
 
 		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());
