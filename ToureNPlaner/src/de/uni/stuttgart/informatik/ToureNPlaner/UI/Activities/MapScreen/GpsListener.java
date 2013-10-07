@@ -64,7 +64,7 @@ class GpsListener implements android.location.LocationListener {
 		enabled = true;
 		MapScreen ms = mapScreen.get();
 		if (ms != null)
-			ms.invalidateOptionsMenu();
+			ms.supportInvalidateOptionsMenu();
 	}
 
 	@Override
@@ -74,7 +74,7 @@ class GpsListener implements android.location.LocationListener {
 		MapScreen ms = mapScreen.get();
 		if (ms != null) {
 			ms.nodeOverlay.updateGpsMarker(null);
-			ms.invalidateOptionsMenu();
+			ms.supportInvalidateOptionsMenu();
 		}
 	}
 

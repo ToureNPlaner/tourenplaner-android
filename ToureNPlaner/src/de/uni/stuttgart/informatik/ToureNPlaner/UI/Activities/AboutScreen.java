@@ -16,12 +16,12 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
-public class AboutScreen extends FragmentActivity {
+public class AboutScreen extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

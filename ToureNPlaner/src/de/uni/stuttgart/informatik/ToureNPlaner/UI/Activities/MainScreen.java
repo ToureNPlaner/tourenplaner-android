@@ -81,6 +81,11 @@ public class MainScreen extends FragmentActivity implements Observer {
 		initializeHandler();
 	}
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return handler;
+    }
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -89,7 +94,7 @@ public class MainScreen extends FragmentActivity implements Observer {
 	}
 
 	private void initializeHandler() {
-		handler = (ServerInfoHandler) getLastNonConfigurationInstance();
+		handler = (ServerInfoHandler) getLastCustomNonConfigurationInstance();
 
 		if (handler != null)
 			handler.setListener(this);

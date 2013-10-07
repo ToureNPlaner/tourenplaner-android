@@ -19,7 +19,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -46,7 +46,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ServerScreen extends FragmentActivity implements Observer {
+public class ServerScreen extends ActionBarActivity implements Observer {
 	private static final String SERVERLIST_FILENAME = "serverlist";
 	private ArrayAdapter<String> adapter;
 	private ServerInfoHandler handler;
@@ -176,7 +176,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 	}
 
 	private void initializeHandler() {
-		handler = (ServerInfoHandler) getLastNonConfigurationInstance();
+		handler = (ServerInfoHandler) getLastCustomNonConfigurationInstance();
 
 		if (handler != null)
 			handler.setListener(this);
@@ -220,7 +220,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 			case 0: // edit
 				EditDialog.newInstance(getResources().getString(R.string.enter_server),
 						servers.get(info.position), info.position)
-						.show(getFragmentManager(), EditDialog.IDENTIFIER);
+						.show(getSupportFragmentManager(), EditDialog.IDENTIFIER);
 				break;
 			case 1: // delete
 				servers.remove(info.position);
@@ -272,6 +272,11 @@ public class ServerScreen extends FragmentActivity implements Observer {
 		Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 	}
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return handler;
+    }
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -308,7 +313,7 @@ public class ServerScreen extends FragmentActivity implements Observer {
 				return true;
 			case R.id.add_server:
 				NewDialog.newInstance(getResources().getString(R.string.enter_server), "")
-						.show(getFragmentManager(), NewDialog.IDENTIFIER);
+						.show(getSupportFragmentManager(), NewDialog.IDENTIFIER);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

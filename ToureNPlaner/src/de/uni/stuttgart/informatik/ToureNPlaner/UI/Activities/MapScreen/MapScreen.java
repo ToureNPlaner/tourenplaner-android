@@ -24,6 +24,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -84,13 +85,13 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			handler = null;
 			Edit edit = new SetResultEdit(session, (Result) object);
 			edit.perform();
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 		}
 
 		@Override
 		public void onError(AsyncHandler caller, Object object) {
 			handler = null;
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 			Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG).show();
 		}
 	};
@@ -147,7 +148,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		mapView.setBuiltInZoomControls(true);
 		mapView.getFileSystemTileCache().setPersistent(false);
 
-		getActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
+		getSupportActionBar().setSubtitle(session.getSelectedAlgorithm().toString());
 		initializeHandler();
 
 		setupWayOverlay();
@@ -296,14 +297,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		});
 	}
 
-	private MenuItem search = null;
+	private MenuItem search;
 
 	private void setupSearchMenu(MenuItem searchMenu) {
 		search = searchMenu;
-		searchMenu.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		MenuItemCompat.setOnActionExpandListener(searchMenu,new MenuItemCompat.OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
-				final EditText field = (EditText) item.getActionView().findViewById(R.id.search_field);
+				final EditText field = (EditText) MenuItemCompat.getActionView(item).findViewById(R.id.search_field);
 				field.requestFocus();
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.toggleSoftInput(0, 0);
@@ -312,19 +313,19 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 			@Override
 			public boolean onMenuItemActionCollapse(MenuItem item) {
-				EditText field = (EditText) item.getActionView().findViewById(R.id.search_field);
+				EditText field = (EditText) MenuItemCompat.getActionView(item).findViewById(R.id.search_field);
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.hideSoftInputFromWindow(field.getWindowToken(), 0);
 				return true;
 			}
 		});
-		searchMenu.getActionView().findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
+        /*MenuItemCompat.getActionView(searchMenu).findViewById(R.id.search_field).setOnKeyListener(new View.OnKeyListener() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_ENTER) {
-					EditText field = ((EditText) search.getActionView().findViewById(R.id.search_field));
-					search.collapseActionView();
+					EditText field = ((EditText) MenuItemCompat.getActionView(search).findViewById(R.id.search_field));
+					MenuItemCompat.collapseActionView(search);
 					Projection projection = mapView.getProjection();
 					GeoPoint topLeft = projection.fromPixels(0, 0);
 					GeoPoint bottomRight = projection.fromPixels(mapView.getWidth(), mapView.getHeight());
@@ -335,14 +336,14 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				}
 				return false;
 			}
-		});
+		});*/
 	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
 			if (search != null) {
-				search.expandActionView();
+				MenuItemCompat.expandActionView(search);
 			}
 			return true;
 		}
@@ -362,7 +363,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			case R.id.reset:
 				if (handler != null) {
 					handler.cancel(true);
-					setProgressBarIndeterminateVisibility(false);
+					setSupportProgressBarIndeterminateVisibility(false);
 					handler = null;
 				}
 				Edit edit = new ClearEdit(session);
@@ -398,7 +399,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		try {
 			handler = session.performRequest(requestListener, force);
-			setProgressBarIndeterminateVisibility(true);
+			setSupportProgressBarIndeterminateVisibility(true);
 		} catch (Session.RequestInvalidException e) {
 			if (messageToast != null) {
 				messageToast.setText(e.getMessage());
@@ -465,13 +466,19 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		if (handler != null) {
 			handler.setListener(requestListener);
-			setProgressBarIndeterminateVisibility(true);
+			setSupportProgressBarIndeterminateVisibility(true);
 		} else {
-			setProgressBarIndeterminateVisibility(false);
+			setSupportProgressBarIndeterminateVisibility(false);
 		}
 	}
 
-	@Override
+    @Override
+    @SuppressWarnings("deprecation")
+    public Object onRetainCustomNonConfigurationInstance() {
+        return handler;
+        }
+
+    @Override
 	protected void onPause() {
 		locManager.removeUpdates(gpsListener);
 		super.onPause();
@@ -486,7 +493,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		instantRequest = MapScreenPreferences.Instant.valueOf(preferences.getString("instant_request", MapScreenPreferences.Instant.ALWAYS.name()));
 
-		this.invalidateOptionsMenu();
+		this.supportInvalidateOptionsMenu();
 
 		setupMapView(preferences);
 
@@ -521,9 +528,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
-			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate),MenuItem.SHOW_AS_ACTION_ALWAYS);
 		} else {
-			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate),MenuItem.SHOW_AS_ACTION_NEVER);
 		}
 
 		menu.findItem(R.id.gps).setVisible(gpsListener.isEnabled());

@@ -34,7 +34,7 @@ public class InfoScreen extends ActionBarActivity {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
-		outState.putInt("Tab", getActionBar().getSelectedNavigationIndex());
+		outState.putInt("Tab", getSupportActionBar().getSelectedNavigationIndex());
 		super.onSaveInstanceState(outState);
 	}
 

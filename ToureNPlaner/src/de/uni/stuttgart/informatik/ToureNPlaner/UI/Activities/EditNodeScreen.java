@@ -16,10 +16,10 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
-import android.support.v4.app.FragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,7 +29,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
-public class EditNodeScreen extends FragmentActivity {
+public class EditNodeScreen extends ActionBarActivity {
 	public static final int RESULT_DELETE = RESULT_FIRST_USER;
 
 	private Session session;
