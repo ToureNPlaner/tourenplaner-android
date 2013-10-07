@@ -78,7 +78,7 @@ public class Session implements Serializable {
 		try {
 			File dir = new File(openCacheDir(), uuid.toString());
 			if (dir.mkdirs()){
-                Log.e("Error","Directory could not be created");
+                Log.e("ToureNPLaner",dir.getAbsolutePath() + "Directory could not be created");
             }
 
 			FileOutputStream outputStream = new FileOutputStream(new File(dir, name));
