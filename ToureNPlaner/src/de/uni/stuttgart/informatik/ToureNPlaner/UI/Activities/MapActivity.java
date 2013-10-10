@@ -18,14 +18,17 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Window;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Window;
+
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import org.mapsforge.android.maps.IMapActivity;
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.core.GeoPoint;
 
-public class MapActivity extends SherlockActivity implements IMapActivity {
+public class MapActivity extends ActionBarActivity implements IMapActivity {
 	private MapView mapView;
 
 	@Override

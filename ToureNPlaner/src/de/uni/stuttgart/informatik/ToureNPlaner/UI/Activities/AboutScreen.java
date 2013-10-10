@@ -17,10 +17,11 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
 import android.os.Bundle;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBarActivity;
+
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 
-public class AboutScreen extends SherlockActivity {
+public class AboutScreen extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -26,7 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v4.app.FragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.RoutesStorageDbHelper;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.LocalStorage.StoredRoute;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -35,7 +35,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.util.List;
 
-public class LoadRouteScreen extends SherlockActivity{
+public class LoadRouteScreen extends FragmentActivity{
 	List<StoredRoute> routes;
 	private Session session;
 

@@ -16,17 +16,17 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
 import java.util.ArrayList;
 
-public class AlgorithmConstraintsScreen extends SherlockFragmentActivity {
+public class AlgorithmConstraintsScreen extends ActionBarActivity {
 	public static String IDENTIFIER = "constraints";
 
 	@Override

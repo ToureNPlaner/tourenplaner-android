@@ -26,9 +26,10 @@ import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.Menu;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TBTNavigation;
@@ -37,7 +38,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.Util.Intents;
 import java.util.Locale;
 
 @SuppressWarnings("deprecation")
-public class MapScreenPreferences extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
+public class MapScreenPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	public static enum MapGenerator {
 		MAPQUEST, MAPNIK, OPENCYCLE, FILE, CUSTOM
 	}
@@ -160,13 +161,13 @@ public class MapScreenPreferences extends SherlockPreferenceActivity implements 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.mapscreenpreferences, menu);
+		getMenuInflater().inflate(R.menu.mapscreenpreferences, menu);
 		return true;
 	}
 
 
 	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.about:
 				startActivity(new Intent(this, AboutScreen.class));

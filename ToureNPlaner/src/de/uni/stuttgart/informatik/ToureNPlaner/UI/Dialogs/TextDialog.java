@@ -18,15 +18,15 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 
-public abstract class TextDialog extends SherlockDialogFragment {
+public abstract class TextDialog extends DialogFragment {
 
 	private EditText input;
 

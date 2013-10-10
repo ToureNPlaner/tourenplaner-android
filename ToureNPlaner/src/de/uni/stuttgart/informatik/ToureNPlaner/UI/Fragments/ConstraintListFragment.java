@@ -17,27 +17,27 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import com.actionbarsherlock.app.SherlockFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.ConstraintFragments.ConstraintFragment;
 
 import java.util.ArrayList;
 
-public class ConstraintListFragment extends SherlockFragment {
+public class ConstraintListFragment extends Fragment {
 	public static String IDENTIFIER = "constraints";
 
 	private ArrayList<Constraint> constraints;
 
 	public boolean isDirty() {
 		for (int i = 0; i < constraints.size(); i++) {
-			if (((ConstraintFragment) getFragmentManager().findFragmentById(i + 1)).isDirty()) {
+			if (((ConstraintFragment)  getActivity().getSupportFragmentManager().findFragmentById(i + 1)).isDirty()) {
 				return true;
 			}
 		}

@@ -19,17 +19,17 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Node;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.ConstraintListFragment;
 
-public class EditNodeScreen extends SherlockFragmentActivity {
+public class EditNodeScreen extends ActionBarActivity {
 	public static final int RESULT_DELETE = RESULT_FIRST_USER;
 
 	private Session session;

@@ -18,20 +18,6 @@
     <string name="save_credentials">Save credentials</string>
 
     <!--algorithmscreen-->
-    <string name="billing">History</string>
-
-    <!-- billingscreen -->
-    <string name="requestid">request ID</string>
-    <string name="algorithmn">Algorithm</string>
-    <string name="cost">Cost</string>
-    <string name="requestdate">Request date</string>
-    <string name="duration">Duration</string>
-    <string name="status">Status</string>
-    <string name="tour">Tour</string>
-    <string name="load_request">Load</string>
-    <string name="milliseconds">Milliseconds</string>
-    <string name="euro">Euro</string>
-
     <!--mapscreen-->
     <string name="search">Search</string>
     <string name="gps_to_start">Set gps-location as starting point?</string>
@@ -112,4 +98,5 @@
     <string name="togglecompass">Toggle Compass</string>
     <string name="exportgpxroute">Export Route as GPX</string>
     <string name="tbtlocale">Turn by Turn Navigation Language</string>
+    <string name="private_not_supported">Private Servers are no longer supported</string>
 </resources>

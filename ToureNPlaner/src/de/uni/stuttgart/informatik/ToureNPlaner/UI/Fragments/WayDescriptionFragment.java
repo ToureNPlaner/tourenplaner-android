@@ -25,7 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v4.app.Fragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -34,7 +34,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 
 import java.util.List;
 
-public class WayDescriptionFragment extends SherlockFragment implements Observer {
+public class WayDescriptionFragment extends Fragment implements Observer {
 	private Session session;
 	private WayDescriptionFragment wd;
 

@@ -108,7 +108,9 @@ public class Session implements Serializable {
 	private void save(Object o, String name) {
 		try {
 			File dir = new File(openCacheDir(), uuid.toString());
-			dir.mkdirs();
+			if (dir.mkdirs()){
+                Log.e("ToureNPLaner",dir.getAbsolutePath() + "Directory could not be created");
+            }
 
 			FileOutputStream outputStream = new FileOutputStream(new File(dir, name));
 			ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new BufferedOutputStream(outputStream)));
@@ -385,7 +387,8 @@ public class Session implements Serializable {
 	}
 
 	public void setSelectedAlgorithm(AlgorithmInfo selectedAlgorithm) {
-		if (!selectedAlgorithm.equals(d.selectedAlgorithm)) {
+
+        if (!selectedAlgorithm.equals(d.selectedAlgorithm)) {
 			d.nameCounter = 0;
 			nodeModel.clear();
 			result = null;

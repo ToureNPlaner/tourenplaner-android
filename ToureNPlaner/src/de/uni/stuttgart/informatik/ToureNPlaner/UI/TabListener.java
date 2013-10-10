@@ -17,14 +17,14 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI;
 
+import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	private Fragment mFragment;
-	private final SherlockFragmentActivity mActivity;
+	private final FragmentActivity mActivity;
 	private final String mTag;
 	private final Class<T> mClass;
 
@@ -35,39 +35,37 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	 * @param tag      The identifier tag for the fragment
 	 * @param clz      The fragment's Class, used to instantiate the fragment
 	 */
-	public TabListener(SherlockFragmentActivity activity, String tag, Class<T> clz) {
+	public TabListener(FragmentActivity activity, String tag, Class<T> clz) {
 		mActivity = activity;
 		mTag = tag;
 		mClass = clz;
+		mFragment = null;
 	}
 
 	/* The following are each of the ActionBar.TabListener callbacks */
 
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-		boolean shouldCommit = false;
-		if (ft == null) {
-			ft = mActivity.getSupportFragmentManager().beginTransaction();
-			shouldCommit = true;
-		}
-
 		mFragment = mActivity.getSupportFragmentManager().findFragmentByTag(mTag);
+		// We need a new transaction because ¯\_(ツ)_/¯
+		// see also https://groups.google.com/forum/#!topic/actionbarsherlock/ierFjBP-GuA
+		FragmentTransaction fft = mActivity.getSupportFragmentManager().beginTransaction();
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
 			// If not, instantiate and add it to the activity
 			mFragment = Fragment.instantiate(mActivity, mClass.getName());
-			ft.add(android.R.id.content, mFragment, mTag);
+			fft.add(android.R.id.content, mFragment, mTag).commit();
 		} else {
 			// If it exists, simply attach it in order to show it
-			ft.attach(mFragment);
+			fft.attach(mFragment).commit();
 		}
-		if (shouldCommit)
-			ft.commit();
 	}
 
 	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
 		if (mFragment != null) {
+			// We need a new transaction because ¯\_(ツ)_/¯
+			// see also https://groups.google.com/forum/#!topic/actionbarsherlock/ierFjBP-GuA
 			// Detach the fragment, because another one is being attached
-			ft.detach(mFragment);
+			mActivity.getSupportFragmentManager().beginTransaction().detach(mFragment).commit();
 		}
 	}
 

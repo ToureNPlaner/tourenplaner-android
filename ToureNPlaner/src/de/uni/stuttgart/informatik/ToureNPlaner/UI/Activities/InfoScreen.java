@@ -16,11 +16,11 @@
 
 package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 
+import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Edits.NodeModel;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
@@ -29,7 +29,7 @@ import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.NodeListFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Fragments.WayDescriptionFragment;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.TabListener;
 
-public class InfoScreen extends SherlockFragmentActivity {
+public class InfoScreen extends ActionBarActivity {
 	private Session session;
 
 	@Override

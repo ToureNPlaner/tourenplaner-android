@@ -19,17 +19,18 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.ServerInfo;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.AsyncHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler.ServerInfoHandler;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Observer;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.R;
+import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
 import de.uni.stuttgart.informatik.ToureNPlaner.UI.Dialogs.MyProgressDialog;
 
-public class MainScreen extends SherlockFragmentActivity implements Observer {
+public class MainScreen extends FragmentActivity implements Observer {
 	private ServerInfoHandler handler;
 
 	private static final String url = "http://tourenplaner.informatik.uni-stuttgart.de";
@@ -59,12 +60,12 @@ public class MainScreen extends SherlockFragmentActivity implements Observer {
 		Intent myIntent;
 		if (session.getServerInfo().getServerType() == ServerInfo.ServerType.PUBLIC) {
 			myIntent = new Intent(getBaseContext(), AlgorithmScreen.class);
+            myIntent.putExtra(Session.IDENTIFIER, session);
+            startActivity(myIntent);
 		} else {
-			myIntent = new Intent(getBaseContext(), LoginScreen.class);
+            Toast.makeText(ToureNPlanerApplication.getContext(), R.string.private_not_supported, Toast.LENGTH_LONG).show();
+            // TODO do something useful
 		}
-
-		myIntent.putExtra(Session.IDENTIFIER, session);
-		startActivity(myIntent);
 	}
 
 	@Override
@@ -80,10 +81,10 @@ public class MainScreen extends SherlockFragmentActivity implements Observer {
 		initializeHandler();
 	}
 
-	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		return handler;
-	}
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return handler;
+    }
 
 	@Override
 	protected void onDestroy() {

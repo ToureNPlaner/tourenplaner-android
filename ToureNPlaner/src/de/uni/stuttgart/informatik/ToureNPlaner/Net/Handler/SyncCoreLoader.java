@@ -41,7 +41,8 @@ public class SyncCoreLoader {
 	private static final String pathPrefix = "/cores/";
 	private String coreURL = null;
 	private ClientGraph core = null;
-
+	private static final String TAG = "ToureNPlaner";
+	
 	public SyncCoreLoader() {
 	}
 
@@ -60,9 +61,9 @@ public class SyncCoreLoader {
 			URL url = new URL(coreURL + pathPrefix + corePrefix + coreLevel + coreSuffix);
 			con = (HttpURLConnection) url.openConnection();
 			File cacheDirFile = ToureNPlanerApplication.getContext().getExternalCacheDir();
-			Log.d("TP", "Trying to download core to " + cacheDirFile.getAbsolutePath() + corePrefix + coreLevel + coreSuffix);
+			Log.d(TAG, "Trying to download core to " + cacheDirFile.getAbsolutePath() + corePrefix + coreLevel + coreSuffix);
 			FileOutputStream coreFileStream = new FileOutputStream(new File(cacheDirFile, corePrefix + coreLevel + coreSuffix));
-			Log.d("TP", "Content-Length: " + con.getContentLength());
+			Log.d(TAG, "Content-Length: " + con.getContentLength());
 			InputStream in = new BufferedInputStream(con.getInputStream());
 			TeeInputStream teeStream = new TeeInputStream(in, coreFileStream, true);
 			return teeStream;
@@ -87,7 +88,7 @@ public class SyncCoreLoader {
 			con.setDoInput(true);
 			con.setAllowUserInteraction(false);
 			result = con.getHeaderFieldDate("Last-Modified", result);
-			Log.d("TP", "Last modified is parsed " + new Date(result));
+			Log.d(TAG, "Last modified is parsed " + new Date(result));
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -114,25 +115,26 @@ public class SyncCoreLoader {
 			File coreFile = new File(cacheDirFile, corePrefix + coreLevel + coreSuffix);
 			InputStream coreFileStream = null;
 			if (!coreFile.exists()) {
-				Log.d("TP", "Core does not exist");
+				Log.d(TAG, "Core does not exist");
 				coreFileStream = readCoreFileFromNetAndCache();
 			} else {
-				Log.d("TP", "Core exists");
+				Log.d(TAG, "Core exists");
 				coreFileStream = readCoreFileCached(coreFile);
 			}
 			try {
 				core = ClientGraph.readClientGraph(new NullGraph(), JacksonManager.ContentType.JSON, coreFileStream);
+				Log.d(TAG, "Nodes: "+core.getNodeCount());
 			} catch (Exception ex) {
 				// We might have messed up our cached Core, delete it
 				// so we don't stumble upon it
 				if (coreFile.exists()) {
-					Log.e("TP", "Deleting core because of Exception");
+					Log.e(TAG, "Deleting core because of Exception");
 					coreFile.delete();
 				}
 				core = null;
 			}
 		} else {
-			Log.d("TP", "Core is loaded");
+			Log.d(TAG, "Core is loaded");
 		}
 
 		return core;

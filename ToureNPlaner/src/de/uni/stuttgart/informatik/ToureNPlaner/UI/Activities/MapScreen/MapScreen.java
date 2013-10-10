@@ -28,13 +28,15 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v4.view.MenuCompat;
+import android.support.v4.view.MenuItemCompat;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.ConstraintType;
@@ -311,7 +313,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.mapscreenmenu, menu);
+
+		getMenuInflater().inflate(R.menu.mapscreenmenu, menu);
 		setupSearchMenu(menu.findItem(R.id.search));
 		this.gpsmenuentry = menu.findItem(R.id.gps);
 		setupGpsMenu(menu.findItem(R.id.gps));
@@ -410,10 +413,10 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void setupSearchMenu(MenuItem searchMenu) {
 		search = searchMenu;
-		searchMenu.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		MenuItemCompat.setOnActionExpandListener(searchMenu, new MenuItemCompat.OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
-				final EditText field = (EditText) item.getActionView().findViewById(R.id.search_field);
+				final EditText field = (EditText) MenuItemCompat.getActionView(item).findViewById(R.id.search_field);
 				field.requestFocus();
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.toggleSoftInput(0, 0);
@@ -452,7 +455,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
 			if (search != null) {
-				search.expandActionView();
+				MenuItemCompat.expandActionView(search);
 			}
 			return true;
 		}
@@ -671,8 +674,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public Object onRetainNonConfigurationInstance() {
+	public Object onRetainCustomNonConfigurationInstance() {
 		return Session.sesshandler;
 	}
 
@@ -725,9 +727,9 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		menu.findItem(R.id.algorithm_constraints).setVisible(
 				!session.getSelectedAlgorithm().getConstraintTypes().isEmpty());
 		if (instantRequest == MapScreenPreferences.Instant.NEVER) {
-			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItem.SHOW_AS_ACTION_NEVER);
 		} else {
-			menu.findItem(R.id.calculate).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
 
 		//menu.findItem(R.id.gps).setCheckable(gpsListener.isEnabled());
