@@ -74,7 +74,11 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		edit.perform();
 		//setSupportProgressBarIndeterminateVisibility(false);
 
-        if 
+		if (session.getTBTNavigation() == null) {
+			Log.i("TP", "Turn By Turn Request completed, but route was already invalidated (e.g. marker was moved)");
+			active = false; // to be sure
+			return;
+		}
 		session.getTBTNavigation().tbtreqcompleted();
 		active = true;
 	}
