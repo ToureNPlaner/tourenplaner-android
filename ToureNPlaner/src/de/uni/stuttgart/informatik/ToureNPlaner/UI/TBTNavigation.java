@@ -74,6 +74,7 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 		edit.perform();
 		//setSupportProgressBarIndeterminateVisibility(false);
 
+        if 
 		session.getTBTNavigation().tbtreqcompleted();
 		active = true;
 	}
@@ -186,14 +187,14 @@ public class TBTNavigation implements TextToSpeech.OnInitListener, Serializable,
 			if (nodes.get(0).getName().trim().contains("??")) {
 				continue;
 			}
-			summary.append(nodes.get(0).getName()).append("! ");
+			summary.append(nodes.get(0).getName()).append("\n");
 		}
 
 		Log.d("TP", "Received route: [" + summary.toString() + "]");
 		//say("Deine Route ist: " + str.toString());
 
 		String receivedroute = localizedresources.getString(R.string.tbtreceivedroute);
-		Toast.makeText(ToureNPlanerApplication.getContext(), receivedroute + "\n" + summary.toString(), Toast.LENGTH_LONG).show();
+		Toast.makeText(ToureNPlanerApplication.getContext(), receivedroute + "\n\n" + summary.toString(), Toast.LENGTH_LONG).show();
 
 		String lastname = "";
 		for (ArrayList<Node> nodelist : tbtway) {
