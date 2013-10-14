@@ -528,7 +528,20 @@ public class Session implements Serializable {
 			throw new RequestInvalidException(ToureNPlanerApplication.getContext().getString(R.string.needtargetmarker));
 		}
 
+
 		Location loc = ((LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+		int secondslastloc = (loc == null ?
+				Integer.MAX_VALUE :
+				(int) ((System.currentTimeMillis() - loc.getTime()) /1000));
+
+		// 5 minutes
+		if (secondslastloc > 60*5) {
+			Log.d("TP", "Last location is " + secondslastloc + " seconds ago, getting network location instead");
+			LocationManager locationManager = (LocationManager) ToureNPlanerApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
+			String locationProvider = LocationManager.NETWORK_PROVIDER;
+			loc = locationManager.getLastKnownLocation(locationProvider);
+		}
 
 		// if we want to change the first node's position to our position we use this:
 		// nodevector.get(0).setGeoPoint(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
@@ -537,8 +550,9 @@ public class Session implements Serializable {
 		// or, if the user has already done a tbt request and is doing a new one now, the first node will be the special "Start" node and we will move it to the current gps position
 		if (!getNodeModel().getNodeVector().get(0).getName().equals("Start")) {
 			if (loc == null) {
+				// shouldn't happen with network location above
 				// android does not provide us with a last location :(
-				// use the first node the user set or someething. Am I doing this right?
+				// use the first node the user set
 				loc = new Location("reverseGeocoded");
 				loc.setLatitude(getNodeModel().getNodeVector().get(0).getLaE7()/1e7);
 				loc.setLongitude(getNodeModel().getNodeVector().get(0).getLoE7() / 1e7);
