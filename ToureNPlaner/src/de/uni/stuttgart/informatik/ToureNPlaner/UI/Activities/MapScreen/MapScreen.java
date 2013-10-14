@@ -267,11 +267,24 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	private void setupGPS(Bundle savedInstanceState, boolean isFirstStart) {
 		Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		int secondslastloc = (loc == null ?
+				Integer.MAX_VALUE :
+				(int) ((System.currentTimeMillis() - loc.getTime()) /1000));
+
+		// 5 minutes
+		if (secondslastloc > 60*5) {
+			Log.d("TP", "Last location is " + secondslastloc + " seconds ago, getting network location instead");
+			LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+			String locationProvider = LocationManager.NETWORK_PROVIDER;
+			loc = locationManager.getLastKnownLocation(locationProvider);
+		}
 
 		GeoPoint gpsGeoPoint = null;
 
 		if (loc != null) {
 			gpsGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+		} else {
+			Log.w("TP", "No last known location. Please wait for a GPS fix instead!");
 		}
 
 		// setting up LocationManager and set MapFocus on lastknown GPS-Location
