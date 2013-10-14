@@ -35,7 +35,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.view.MenuCompat;
 import android.support.v4.view.MenuItemCompat;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.*;
 import de.uni.stuttgart.informatik.ToureNPlaner.Data.Constraints.Constraint;
@@ -101,11 +100,22 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	}
 
 	NodeOverlay nodeOverlay;
+
+	public void gpsEnableDisable(boolean enabled, GpsListener listener) {
+		if (enabled) {
+			Log.d("TP", "start gps sensors listener");
+			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, listener);
+		} else {
+			Log.d("TP", "stop gps sensors listener");
+			locManager.removeUpdates(listener);
+		}
+	}
+
 	private LocationManager locManager;
 	private MapScreenPreferences.Instant instantRequest;
 	private Toast messageToast;
 
-	private GpsListener gpsListener;
+	private GpsListener sensorsListener;
 
 	private final ArrayList<RequestNN> requestList = new ArrayList<RequestNN>();
 
@@ -157,7 +167,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Session.IDENTIFIER, session);
-		gpsListener.onSaveInstanceState(outState);
+		sensorsListener.onSaveInstanceState(outState);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -292,7 +302,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			mapView.getController().setCenter(gpsGeoPoint);
 		}
 
-		gpsListener = new GpsListener(this, savedInstanceState, gpsGeoPoint, session);
+		sensorsListener = new GpsListener(this, savedInstanceState, gpsGeoPoint, session);
 		nodeOverlay = new NodeOverlay(this, session, gpsGeoPoint);
 	}
 
@@ -364,59 +374,61 @@ public class MapScreen extends MapActivity implements Session.Listener {
 		item.setChecked(session.compassenabled);
 		Sensor sensorMag = null;
 		Sensor sensorGrav = null;
-		List<Sensor> sensors = gpsListener.sensorMgr
+		List<Sensor> sensors = sensorsListener.sensorMgr
 				.getSensorList(Sensor.TYPE_ACCELEROMETER);
 		Log.d("tp", "Found " + sensors.size() + " accelerometers");
 		if (sensors.size() > 0) {
 			sensorGrav = sensors.get(0);
-			gpsListener.setSensorGrav(sensorGrav);
+			sensorsListener.setSensorGrav(sensorGrav);
 		}
 
-		sensors = gpsListener.sensorMgr
+		sensors = sensorsListener.sensorMgr
 				.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
 		Log.d("tp", "Found " + sensors.size() + " magnetic field sensors");
 		if (sensors.size() > 0) {
 			sensorMag = sensors.get(0);
-			gpsListener.setSensorMag(sensorMag);
+			sensorsListener.setSensorMag(sensorMag);
 		}
 
 		if (session.compassenabled) {
-			gpsListener.sensorMgr.registerListener(gpsListener, sensorGrav,
+			sensorsListener.sensorMgr.registerListener(sensorsListener, sensorGrav,
 					GpsListener.sensordelay);
-			gpsListener.sensorMgr.registerListener(gpsListener, sensorMag,
+			sensorsListener.sensorMgr.registerListener(sensorsListener, sensorMag,
 					GpsListener.sensordelay);
 		}
 
 		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
+				item.setChecked(!item.isChecked());
 				if (item.isChecked()) {
-					gpsListener.sensorMgr.unregisterListener(gpsListener);
+					Log.d("TP", "start accel + mag sensors listener");
+					sensorsListener.sensorMgr.registerListener(sensorsListener,
+							sensorsListener.getSensorGrav(), GpsListener.sensordelay);
+					sensorsListener.sensorMgr.registerListener(sensorsListener,
+							sensorsListener.getSensorMag(), GpsListener.sensordelay);
+					nodeOverlay.setGPSDirectional(true);
+				} else {
+					Log.d("TP", "stop accel + mag sensors listener");
+					sensorsListener.sensorMgr.unregisterListener(sensorsListener);
 					nodeOverlay.setGPSDirectional(false);
 					session.setDirection(0);
 					nodeOverlay.updateGPSDrawableDirection();
 					nodeOverlay.requestRedraw();
-				} else {
-					gpsListener.sensorMgr.registerListener(gpsListener,
-							gpsListener.getSensorGrav(), GpsListener.sensordelay);
-					gpsListener.sensorMgr.registerListener(gpsListener,
-							gpsListener.getSensorMag(), GpsListener.sensordelay);
-					nodeOverlay.setGPSDirectional(true);
 				}
-				item.setChecked(!item.isChecked());
 				return true;
 			}
 		});
 	}
 
 	private void setupGpsMenu(MenuItem item) {
-		item.setChecked(gpsListener.isFollowing());
+		item.setChecked(sensorsListener.isFollowing());
 		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				item.setChecked(!item.isChecked());
-				gpsListener.setFollowing(item.isChecked());
-				MapScreen.this.supportInvalidateOptionsMenu();
+				sensorsListener.setFollowing(item.isChecked());
+				supportInvalidateOptionsMenu();
 				return true;
 			}
 		});
@@ -503,7 +515,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 				String tbtlocale = preferences.getString("tbtlocale", ToureNPlanerApplication.getContext().getResources().getConfiguration().locale.getLanguage());
 				Session.nav = new TBTNavigation(session, new Locale(tbtlocale));
 				mapView.getController().setZoom(mapView.getMapGenerator().getZoomLevelMax());
-				gpsListener.setFollowing(true);
+				sensorsListener.setFollowing(true);
 				gpsmenuentry.setChecked(true);
 				this.supportInvalidateOptionsMenu();
 				// intentionally run the case R.id.gps also
@@ -693,7 +705,7 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 	@Override
 	protected void onPause() {
-		locManager.removeUpdates(gpsListener);
+		locManager.removeUpdates(sensorsListener);
 		super.onPause();
 	}
 
@@ -710,10 +722,12 @@ public class MapScreen extends MapActivity implements Session.Listener {
 
 		setupMapView(preferences);
 
-		try {
-			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, gpsListener);
-		} catch (IllegalArgumentException e) {
-			// happens on emulator
+		if (sensorsListener.isFollowing()) {
+			try {
+				locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, sensorsListener);
+			} catch (IllegalArgumentException e) {
+				// happens on emulator
+			}
 		}
 	}
 
@@ -745,8 +759,8 @@ public class MapScreen extends MapActivity implements Session.Listener {
 			MenuItemCompat.setShowAsAction(menu.findItem(R.id.calculate), MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
 
-		//menu.findItem(R.id.gps).setCheckable(gpsListener.isEnabled());
-		menu.findItem(R.id.gps).setIcon(gpsListener.isFollowing() ? R.drawable.location_enabled : R.drawable.location_disabled);
+		//menu.findItem(R.id.gps).setCheckable(sensorsListener.isEnabled());
+		menu.findItem(R.id.gps).setIcon(sensorsListener.isFollowing() ? R.drawable.location_enabled : R.drawable.location_disabled);
 		return true;
 	}
 

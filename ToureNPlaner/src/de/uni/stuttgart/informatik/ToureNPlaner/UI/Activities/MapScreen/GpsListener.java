@@ -19,6 +19,7 @@ package de.uni.stuttgart.informatik.ToureNPlaner.UI.Activities.MapScreen;
 import android.content.Context;
 import android.hardware.*;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
@@ -48,7 +49,6 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 		if (savedInstanceState != null)
 			following = savedInstanceState.getBoolean(IDENTIFIER, false);
 
-		// TODO: too much battery drain when running all the time?
 		sensorMgr = (SensorManager) ToureNPlanerApplication.getContext()
 				.getSystemService(Context.SENSOR_SERVICE);
 		this.session = s;
@@ -127,6 +127,7 @@ class GpsListener implements android.location.LocationListener, SensorEventListe
 				ms.mapView.setCenter(lastKnownLocation);
 			}
 		}
+		mapScreen.get().gpsEnableDisable(following, this);
 	}
 
 	// http://code.google.com/p/android-compass/source/browse/trunk/src/com/jwetherell/compass/common/LowPassFilter.java
