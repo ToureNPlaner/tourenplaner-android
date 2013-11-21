@@ -70,7 +70,6 @@
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
     <orderEntry type="library" exported="" name="ComAndroidSupportAppcompatV71800.aar" level="project" />
     <orderEntry type="library" exported="" name="jackson-dataformat-smile-2.0.0" level="project" />
-    <orderEntry type="library" exported="" name="commons-logging-1.1.1-sources" level="project" />
     <orderEntry type="library" exported="" name="mapsforge-map-0.3.1-SNAPSHOT-jar-with-dependencies" level="project" />
     <orderEntry type="library" exported="" name="jackson-annotations-2.0.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.0.0" level="project" />
@@ -78,7 +77,6 @@
     <orderEntry type="library" exported="" name="jackson-core-2.0.0" level="project" />
     <orderEntry type="library" exported="" name="commons-io-2.4-sources" level="project" />
     <orderEntry type="library" exported="" name="hppc-0.4.1" level="project" />
-    <orderEntry type="library" exported="" name="commons-logging-1.1.1" level="project" />
   </component>
 </module>
 
