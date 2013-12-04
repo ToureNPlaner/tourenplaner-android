@@ -1,9 +1,13 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
 apply plugin: 'android'
