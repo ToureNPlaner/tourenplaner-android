@@ -3,24 +3,29 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:0.10.+'
     }
 }
-apply plugin: 'android'
 
 repositories {
   mavenCentral()
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
+
+apply plugin: 'android'
+
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: '*javadoc.jar')
+    compile fileTree(dir: 'libs', include: '*.jar', excludes: ['*javadoc.jar', '*-sources.jar'])
     compile 'com.android.support:support-v4:18.0.+'
     compile 'com.android.support:appcompat-v7:18.0.+'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19"
+    buildToolsVersion "19.1"
 
     defaultConfig {
         minSdkVersion 7

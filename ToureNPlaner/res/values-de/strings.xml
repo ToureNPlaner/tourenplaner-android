@@ -9,7 +9,7 @@
   <string name="password">Passwort</string>
   <string name="login">Anmelden</string>
   <string name="save_credentials">Anmeldedaten speichern</string>
-  <string name="algorithmn">Algorithmus</string>
+  <string name="algorithm">Algorithmus</string>
   <string name="search">Suche</string>
   <string name="gps_to_start">GPS Ort als Startpunkt setzen?</string>
   <string name="reverse_order">Reihenfolge umkehren</string>
@@ -57,6 +57,9 @@
   <string name="mapquest_copyright">Tiles Courtesy of MapQuest\n© OpenStreetMap contributors, CC BY-SA</string>
   <string name="seconds_short">s</string>
   <string name="about">Über</string>
+  <string name="about_text">Ein Studienprojekt der Universität
+        Stuttgart.\n\nVerwendet:\nMapsforge\nhttp://code.google.com/p/mapsforge\nJackson\nhttp://wiki.fasterxml.com/JacksonHome
+  </string>
   <string name="algorithm_constraint_notset">Bitte setzen sie alle Werte im Constraints Menu.</string>
   <string name="point_constraints_notset">Nicht alle Constraints für alle Puntke sind gesetzt.</string>
   <string name="points_notset">Nicht genug oder zu viele Punkte gesetzt.</string>

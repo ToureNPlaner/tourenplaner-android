@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="defaulttbtip" type="string">tourenplaner.informatik.uni-stuttgart.de:80</item>
-    <string name="defaulttileserver">http://gerbera.informatik.uni-stuttgart.de/osm/tiles/%1$d/%2$d/%3$d.png</string>
+    <item name="defaulttbtip" type="string" translatable="false">tourenplaner.informatik.uni-stuttgart.de:80</item>
+    <string name="defaulttileserver" translatable="false">http://gerbera.informatik.uni-stuttgart.de/osm/tiles/%1$d/%2$d/%3$d.png</string>
 </resources>

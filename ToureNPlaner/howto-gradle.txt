@@ -1,5 +1,12 @@
-If the wrapper is not yet built or not up to date, create it:
-gradle -b build-wrapper.gradle wrapper
-It has to be in a separate build script because the whole problem is that we can't execute our main build script with an up to date grade. Thanks, google.
+Build with native gradle:
+    gradle assembleDebug
+or
+    gradle assembleRelease
 
-Then, use ./gradlew assembleDebug etc.
+Build with gradle wrapper e.g. if your native gradle version somehow fails to build the project:
+If the wrapper is not yet built or not up to date, create it:
+    gradle wrapper
+Then, use
+    ./gradlew assembleDebug
+or
+    ./gradlew assembleRelease
