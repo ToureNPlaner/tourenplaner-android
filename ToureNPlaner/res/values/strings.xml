@@ -81,7 +81,7 @@
     <string name="seconds_short">s</string>
     <string name="about">About</string>
     <string name="about_text">A study project of the University of
-        Stuttgart.\n\nUses:\nhttp://actionbarsherlock.com\nMapsforge\nhttp://code.google.com/p/mapsforge\nJackson\nhttp://wiki.fasterxml.com/JacksonHome
+        Stuttgart.\n\nUses:\nMapsforge\nhttp://code.google.com/p/mapsforge\nJackson\nhttp://wiki.fasterxml.com/JacksonHome
     </string>
     <string name="algorithm_constraint_notset">Please set all constraints in the constraints menu.</string>
     <string name="point_constraints_notset">Not all constraints for all nodes are set.</string>
