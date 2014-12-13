@@ -96,7 +96,7 @@ public class ClientComputeHandler extends SessionAwareHandler {
 		HttpURLConnection urlConnection = session.openPostConnection("/algupdowng");
 		try {
 			// TODO don't hard code
-			int level = 40;
+			int level = SyncCoreLoader.coreLevel;
 			writeSubgraphRequest(level, urlConnection);
 
 			InputStream stream = getCorrectStream(urlConnection);
