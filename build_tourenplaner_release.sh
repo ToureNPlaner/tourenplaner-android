@@ -12,3 +12,5 @@ cd "${START}"
 (cd ToureNPlaner; ./gradlew assembleRelease)
 
 mv ToureNPlaner/build/outputs/apk/ToureNPlaner-release-unsigned.apk ./
+
+echo -e "\n\n\nNow sign the APK with ./sign.sh debug.keystore alias_name ToureNPlaner-release-unsigned.apk"
