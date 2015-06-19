@@ -17,11 +17,23 @@
 package de.uni.stuttgart.informatik.ToureNPlaner.Net.Handler;
 
 import android.util.Log;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.ClientGraph;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.NullGraph;
 import de.uni.stuttgart.informatik.ToureNPlaner.ClientSideCompute.SimpleGraph;
+import de.uni.stuttgart.informatik.ToureNPlaner.Data.Request;
 import de.uni.stuttgart.informatik.ToureNPlaner.Net.JacksonManager;
+import de.uni.stuttgart.informatik.ToureNPlaner.Net.Session;
 import de.uni.stuttgart.informatik.ToureNPlaner.ToureNPlanerApplication;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.TeeInputStream;
 
 import java.io.*;
@@ -35,33 +47,37 @@ import java.util.Date;
  */
 public class SyncCoreLoader {
 
-	public int coreLevel = 40;
+	public static final int coreLevel = 50;
 	private static final String corePrefix = "core";
 	private static final String coreSuffix = ".json";
-	private static final String pathPrefix = "/cores/";
-	private String coreURL = null;
 	private ClientGraph core = null;
 	private static final String TAG = "ToureNPlaner";
+	private final Session session;
 	
-	public SyncCoreLoader() {
+	public SyncCoreLoader(Session session) {
+		this.session = session;
 	}
-
-
-	public void setURL(String url) {
-		coreURL = url;
-	}
-
-	public void setLevel(int level) {
-		coreLevel = level;
+	protected void writeRequest(OutputStream outputStream) throws Exception {
+		ObjectMapper mapper = JacksonManager.getJsonMapper();
+		JsonNodeFactory factory = mapper.getNodeFactory();
+		ObjectNode root = new ObjectNode(factory);
+		ObjectNode constraintsNode = new ObjectNode(factory);
+		constraintsNode.put("coreLevel", coreLevel);
+		root.put("constraints", constraintsNode);
+		JsonGenerator generator = mapper.getJsonFactory()
+				.createJsonGenerator(outputStream);
+		mapper.writeTree(generator, root);
+		generator.close();
 	}
 
 	private InputStream readCoreFileFromNetAndCache() throws IOException {
 		HttpURLConnection con = null;
 		try {
-			URL url = new URL(coreURL + pathPrefix + corePrefix + coreLevel + coreSuffix);
-			con = (HttpURLConnection) url.openConnection();
+			con = session.openPostConnection("/algcore");
+			con.setDoOutput(true);
+			writeRequest(con.getOutputStream());
 			File cacheDirFile = ToureNPlanerApplication.getContext().getExternalCacheDir();
-			Log.d(TAG, "Trying to download core to " + cacheDirFile.getAbsolutePath() + corePrefix + coreLevel + coreSuffix);
+			Log.d(TAG, "Trying to download core to " + cacheDirFile.getAbsolutePath() + "/"+ corePrefix + coreLevel + coreSuffix);
 			FileOutputStream coreFileStream = new FileOutputStream(new File(cacheDirFile, corePrefix + coreLevel + coreSuffix));
 			Log.d(TAG, "Content-Length: " + con.getContentLength());
 			InputStream in = new BufferedInputStream(con.getInputStream());
@@ -74,35 +90,17 @@ public class SyncCoreLoader {
 				con.disconnect();
 			}
 			return null;
-		}
-	}
-
-	private long getLastModifiedOnServer() throws IOException {
-		HttpURLConnection con = null;
-		long result = new Date().getTime();
-		try {
-			URL url = new URL(coreURL + pathPrefix + corePrefix + coreLevel + coreSuffix);
-			con = (HttpURLConnection) url.openConnection();
-
-			con.setRequestMethod("HEAD");
-			con.setDoInput(true);
-			con.setAllowUserInteraction(false);
-			result = con.getHeaderFieldDate("Last-Modified", result);
-			Log.d(TAG, "Last modified is parsed " + new Date(result));
-
-		} catch (MalformedURLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			return result;
-		} finally {
 			if (con != null) {
 				con.disconnect();
 			}
+			return null;
 		}
-		return result;
 	}
 
 	private InputStream readCoreFileCached(File coreFile) throws IOException {
-		if (getLastModifiedOnServer() > coreFile.lastModified() - 1000 * 60 * 10) {
+		if (new Date().getTime() > coreFile.lastModified() + 1000 * 60 * 100) {
 			return readCoreFileFromNetAndCache();
 		}
 		return new FileInputStream(coreFile);
@@ -110,7 +108,6 @@ public class SyncCoreLoader {
 
 	public synchronized SimpleGraph getCoreGraph() throws IOException {
 		if (core == null) {
-			assert coreURL != null : "Core URL was not set before trying to getCoreGraph";
 			File cacheDirFile = ToureNPlanerApplication.getContext().getExternalCacheDir();
 			File coreFile = new File(cacheDirFile, corePrefix + coreLevel + coreSuffix);
 			InputStream coreFileStream = null;
@@ -122,14 +119,15 @@ public class SyncCoreLoader {
 				coreFileStream = readCoreFileCached(coreFile);
 			}
 			try {
-				core = ClientGraph.readClientGraph(new NullGraph(), JacksonManager.ContentType.JSON, coreFileStream);
+				core = ClientGraph.readClientGraph(new NullGraph(), JacksonManager.ContentType.SMILE, coreFileStream);
 				Log.d(TAG, "Nodes: "+core.getNodeCount());
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				// We might have messed up our cached Core, delete it
 				// so we don't stumble upon it
 				if (coreFile.exists()) {
 					Log.e(TAG, "Deleting core because of Exception");
-					coreFile.delete();
+					//coreFile.delete();
 				}
 				core = null;
 			}

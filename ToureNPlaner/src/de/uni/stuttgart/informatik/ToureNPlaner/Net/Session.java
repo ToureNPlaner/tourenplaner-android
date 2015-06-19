@@ -96,7 +96,7 @@ public class Session implements Serializable {
 		d = new Data();
 		nodeModel = new NodeModel();
 		result = new Result();
-		cl = new SyncCoreLoader();
+		cl = new SyncCoreLoader(this);
 		tbtresult = null;
 		// Also initialize the files on the disc
 		saveData();
@@ -232,8 +232,7 @@ public class Session implements Serializable {
 		in.defaultReadObject();
 		if (d == null)
 			loadAll();
-		cl = new SyncCoreLoader();
-		cl.setURL(d.serverInfo.getURL());
+		cl = new SyncCoreLoader(this);
 
 		listeners = new WeakHashMap<Object, Listener>();
 	}
@@ -322,7 +321,6 @@ public class Session implements Serializable {
 			d.serverInfo.setHostname(uri.getHost());
 			int port = uri.getPort();
 			d.serverInfo.setPort(port == -1 ? 80 : port);
-			cl.setURL(url);
 			saveData();
 		} catch (MalformedURLException e) {
 			// Should never happen
